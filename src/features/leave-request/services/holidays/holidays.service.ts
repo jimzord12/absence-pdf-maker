@@ -1,8 +1,8 @@
-import { z } from 'zod';
+// import { z } from 'zod';
 
-const HolidayListSchema = z.array(
-  z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid ISO date format')
-);
+// const HolidayListSchema = z.array(
+//   z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid ISO date format')
+// );
 
 const toIsoDay = (date: Date): string => {
   return date.toISOString().split('T')[0];

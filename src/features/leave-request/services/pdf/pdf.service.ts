@@ -1,7 +1,8 @@
 export const generateLeaveRequestPdf = async (
-  data: unknown,
-  template: unknown
-): Promise<Blob | void> => {
+  _data: unknown,
+  _template: unknown
+): Promise<Blob | undefined> => {
   // Placeholder for PDF generation
-  return Promise.resolve();
+  return undefined;
 };
+
