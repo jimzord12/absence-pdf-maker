@@ -1,20 +1,21 @@
 {
+  "$schema": "./state.schema.json",
   "tasks": {
     "001-task-project-scaffolding": {
-      "state": "completed",
-      "lastUpdated": "2025-12-23T19:30:00Z"
+      "state": "committed",
+      "lastUpdated": "2025-12-23T19:40:00Z"
     },
     "002-task-folder-structure": {
-      "state": "not_started",
-      "lastUpdated": "2025-12-23T00:00:00Z"
+      "state": "committed",
+      "lastUpdated": "2025-12-23T22:00:00Z"
     },
     "003-task-install-dependencies": {
-      "state": "not_started",
-      "lastUpdated": "2025-12-23T00:00:00Z"
+      "state": "committed",
+      "lastUpdated": "2025-12-23T22:00:00Z"
     },
     "004-task-shared-ui-components": {
-      "state": "not_started",
-      "lastUpdated": "2025-12-23T00:00:00Z"
+      "state": "committed",
+      "lastUpdated": "2025-12-23T22:00:00Z"
     },
     "005-task-shared-utilities": {
       "state": "not_started",
@@ -122,3 +123,4 @@
     }
   }
 }
+
