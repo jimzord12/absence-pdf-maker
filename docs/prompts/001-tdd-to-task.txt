@@ -1,0 +1,1 @@
+Break this TD (Technical Document) into Tasks and place them here: `docs/tasks/TASKS.md`. Each Task MUST contain: a simple identifier (e.g., 001-task-<short-task-title>), a description, constraints, acceptance criteria. Also the Tasks must sequencial, therefore we do not need to have isBlocking or isBlockedBy properties.

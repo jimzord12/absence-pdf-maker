@@ -1,0 +1,124 @@
+{
+  "tasks": {
+    "001-task-project-scaffolding": {
+      "state": "completed",
+      "lastUpdated": "2025-12-23T19:30:00Z"
+    },
+    "002-task-folder-structure": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "003-task-install-dependencies": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "004-task-shared-ui-components": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "005-task-shared-utilities": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "006-task-global-styles": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "007-task-domain-models-and-schemas": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "008-task-zustand-store-setup": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "009-task-persistence-service": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "010-task-holiday-service": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "011-task-absence-calculator": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "012-task-date-utilities": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "013-task-signature-modal": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "014-task-leave-request-form": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "015-task-leave-request-page": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "016-task-personal-details-section": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "017-task-employment-details-section": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "018-task-leave-details-section": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "019-task-date-range-field": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "020-task-holidays-legend": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "021-task-review-and-generate": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "022-task-pdf-template-types": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "023-task-default-pdf-template": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "024-task-pdf-generation-service": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "025-task-styling-and-animations": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "026-task-pwa-configuration": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "027-task-integration-tests": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "028-task-unit-tests": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "029-task-accessibility": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    },
+    "030-task-build-and-deployment": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-23T00:00:00Z"
+    }
+  }
+}
