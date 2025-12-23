@@ -14,7 +14,7 @@ Each task can be in one of 7 states:
 | `review_fail` | Code review has been requested and failed        |
 | `review_pass` | Code review has been requested and passed        |
 | `completed`   | All work is done (implementation, tests, review) |
-| `commited`    | Changes have been committed to version control   |
+| `committed`   | Changes have been committed to version control   |
 
 ## Workflow Process
 
@@ -47,7 +47,7 @@ Once confirmed, the system will work through the task based on its current state
 #### State Transitions
 
 ```
-not_started → implemented → unit_tested → review_pass → completed → commited
+not_started → implemented → unit_tested → review_pass → completed → committed
                                 ↓
                             review_fail
 ```
@@ -84,14 +84,14 @@ not_started → implemented → unit_tested → review_pass → completed → co
 - Mark task as completed
 - Update `tasks/state.json` to `completed`
 
-**`completed` → `commited`**
+**`completed` → `committed`**
 
 - Commit all changes to version control (if requested by User)
-- Update `tasks/state.json` to `commited`
+- Update `tasks/state.json` to `committed`
 
 ### Step 4: Report Completion
 
-Once the task reaches `completed` or `commited` state, the system will provide:
+Once the task reaches `completed` or `committed` state, the system will provide:
 
 **Brief Summary:**
 
@@ -132,7 +132,7 @@ All task states are tracked in `tasks/state.json`:
 {
   "tasks": {
     "001-task-project-scaffolding": {
-      "state": "commited",
+      "state": "committed",
       "lastUpdated": "2024-01-15T10:30:00Z"
     },
     "002-task-folder-structure": {
@@ -154,7 +154,7 @@ All task states are tracked in `tasks/state.json`:
 
 1. **Always update `tasks/state.json`** when moving from one state to another
 2. **Stop and await User confirmation** before starting work on a task
-3. **Do NOT pause between state transitions** within a task (work through all states until `completed` or `commited`)
+3. **Do NOT pause between state transitions** within a task (work through all states until `completed` or `committed`)
 4. **Report completion** to the User with summary of files created/modified/deleted
 5. **Only commit when explicitly requested** by the User
 
@@ -170,7 +170,7 @@ All task states are tracked in `tasks/state.json`:
    - Marks completed → Updates state to `completed`
 5. System: Reports completion with file summary
 6. User: "Commit the changes"
-7. System: Commits → Updates state to `commited`
+7. System: Commits → Updates state to `committed`
 
 ## Recovery
 
