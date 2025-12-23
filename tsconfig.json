@@ -8,6 +8,7 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
+    "esModuleInterop": true,
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
@@ -22,5 +23,6 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src", "eslint.config.ts", "vite.config.ts", "vitest.config.ts"]
 }
+
