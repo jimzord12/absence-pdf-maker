@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Task State Schema",
+  "description": "Schema for tracking the state of implementation tasks",
+  "type": "object",
+  "required": ["tasks"],
+  "properties": {
+    "tasks": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["state", "lastUpdated"],
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "implemented",
+              "unit_tested",
+              "review_fail",
+              "review_pass",
+              "completed",
+              "committed"
+            ]
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}
