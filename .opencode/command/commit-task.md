@@ -10,8 +10,9 @@ You descriptive commit name for the Task, it must follow the pattern: `feat(<tas
 
 **CRITICAL**: Do NOT forget to update `docs/tasks/state.json` to mark the Task as `"state": "committed"` after the commit.
 
+**IMPORTANT**: `docs/tasks/state.json` must be committed along with the code changes!!!.
+
 ## Common issues
 
 - Forgetting to update `docs/tasks/state.json` to mark the Task as `"state": "committed"`.
 - Not committing the `docs/tasks/state.json` file along with the code changes.
-
