@@ -28,7 +28,9 @@ describe('downloadFile', () => {
     createObjectURLSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test-url');
 
     // Mock URL.revokeObjectURL
-    revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+    revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {
+      // Intentionally empty - URL.revokeObjectURL has void return type
+    });
   });
 
   afterEach(() => {

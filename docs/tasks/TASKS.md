@@ -239,15 +239,14 @@ Create the holiday loading service that imports holidays from JSON, validates th
 
 **Constraints:**
 
-- Load holidays from `holidays.json` at build time
+- Load holidays from `data/holidays.json` at build time
 - Validate against `HolidayListSchema`
 - Convert to Set for O(1) lookups
 - Provide Date object list for calendar highlighting
 
 **Acceptance Criteria:**
 
-- [ ] `holidays.json` created with sample ISO date strings
-- [ ] `holidays.service.ts` loads and validates holidays
+- [ ] `holidays.service.ts` loads and validates holidays from `data/holidays.json`
 - [ ] `holidaySet` contains dates as "YYYY-MM-DD" strings
 - [ ] `isHoliday(date: Date)` function returns true if date is a holiday
 - [ ] `getHolidayDates()` returns array of Date objects
