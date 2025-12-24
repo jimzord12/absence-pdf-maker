@@ -1,10 +1,7 @@
 import holidaysJson from '../../../../../data/holidays.json';
 
 import { HolidayListSchema } from '../../model/holidays.schema';
-
-const toIsoDay = (date: Date): string => {
-  return date.toISOString().split('T')[0];
-};
+import { toIsoDay } from '../../../../shared/lib/dates';
 
 /**
  * Transforms holidays from "DD-MM-YYYY" format to "YYYY-MM-DD" format
