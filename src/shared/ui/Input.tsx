@@ -1,6 +1,6 @@
 import React, { useId } from 'react';
 
-export type InputType = 'text' | 'email' | 'tel' | 'number' | 'password';
+export type InputType = 'text' | 'email' | 'tel' | 'number' | 'password' | 'date';
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label?: string;

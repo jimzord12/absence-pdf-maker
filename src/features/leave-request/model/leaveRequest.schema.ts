@@ -7,7 +7,32 @@ export const UserProfileSchema = z.object({
   employeeId: z.string().min(1, 'Employee ID is required'),
   department: z.string().min(1, 'Department is required'),
   position: z.string().min(1, 'Position is required'),
-});
+}).refine(
+  (data) => {
+    // Check for undefined or null values
+    const errors: { [key: string]: string } = {};
+    if (!data.fullName || data.fullName.trim() === '') {
+      errors.fullName = 'Full name is required';
+    }
+    if (!data.email || data.email.trim() === '') {
+      errors.email = 'Email is required';
+    }
+    if (!data.phone || data.phone.trim() === '') {
+      errors.phone = 'Phone number is required';
+    }
+    if (!data.employeeId || data.employeeId.trim() === '') {
+      errors.employeeId = 'Employee ID is required';
+    }
+    if (!data.department || data.department.trim() === '') {
+      errors.department = 'Department is required';
+    }
+    if (!data.position || data.position.trim() === '') {
+      errors.position = 'Position is required';
+    }
+    return Object.keys(errors).length === 0;
+  },
+  { message: 'Please fill in all required fields' }
+);
 
 export const LeaveRequestSchema = z.object({
   profile: UserProfileSchema,
@@ -21,3 +46,4 @@ export const LeaveRequestSchema = z.object({
   (data) => data.startDate <= data.endDate,
   { message: 'End date must be after start date', path: ['endDate'] }
 );
+
