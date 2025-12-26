@@ -5,6 +5,7 @@ import { useLeaveRequestStore } from '../state/leaveRequest.store';
 import { isHoliday } from '../services/holidays/holidays.service';
 import { calculateAbsenceDays } from '../services/absenceDays';
 import { isWeekend } from '../../../shared/lib/dates';
+import { HolidaysLegend } from './HolidaysLegend';
 import type { LeaveRequest } from '../model/leaveRequest.types';
 import type { FieldErrors } from 'react-hook-form';
 
@@ -23,8 +24,8 @@ interface AbsenceSummary {
 // Define styles outside component to avoid recreation on each render
 const MODIFIERS_STYLES = {
   holiday: {
-    backgroundColor: '#fee2e2',
-    color: '#b91c1c',
+    backgroundColor: 'var(--color-holiday-bg)',
+    color: 'var(--color-holiday-text)',
     fontWeight: 'bold' as const,
   },
   weekend: {
@@ -253,27 +254,28 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
   return (
     <div className="space-y-4">
       {methods ? (
-        <Controller
-          name="startDate"
-          control={methods.control}
-          render={() => (
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Select Date Range
-              </label>
-              <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
-                <DayPicker
-                  mode="range"
-                  selected={selectedRange}
-                  onSelect={handleDateChange}
-                  modifiers={modifiers}
-                  modifiersStyles={modifiersStyles}
-                  numberOfMonths={2}
-                  captionLayout="dropdown"
-                  className="rdp"
-                  styles={DAY_PICKER_STYLES as any}
-                />
-              </div>
+          <Controller
+            name="startDate"
+            control={methods.control}
+            render={() => (
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Select Date Range
+                </label>
+                <HolidaysLegend />
+                <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
+                  <DayPicker
+                    mode="range"
+                    selected={selectedRange}
+                    onSelect={handleDateChange}
+                    modifiers={modifiers}
+                    modifiersStyles={modifiersStyles}
+                    numberOfMonths={2}
+                    captionLayout="dropdown"
+                    className="rdp"
+                    styles={DAY_PICKER_STYLES as any}
+                  />
+                </div>
               {(errors?.startDate?.message || errors?.endDate?.message) && (
                 <div className="space-y-1">
                   {errors?.startDate?.message && (

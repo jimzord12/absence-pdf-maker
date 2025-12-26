@@ -37,6 +37,10 @@
   --color-info-bg: #eff6ff;
   --color-info-hover: #1d4ed8;
 
+  /* Holiday highlighting colors */
+  --color-holiday-bg: #fee2e2;
+  --color-holiday-text: #b91c1c;
+
   --color-border: #e2e8f0;
   --color-border-light: #f1f5f9;
   --color-border-dark: #cbd5e1;
