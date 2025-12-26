@@ -90,8 +90,8 @@
       "lastUpdated": "2025-12-26T11:00:00Z"
     },
     "023-task-default-pdf-template": {
-      "state": "not_started",
-      "lastUpdated": "2025-12-23T00:00:00Z"
+      "state": "committed",
+      "lastUpdated": "2025-12-26T11:50:00Z"
     },
     "024-task-pdf-generation-service": {
       "state": "not_started",
