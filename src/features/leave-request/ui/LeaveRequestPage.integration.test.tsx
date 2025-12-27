@@ -108,6 +108,7 @@ describe('Integration Tests - User Flows', () => {
 
   afterEach(() => {
     clearAllData();
+  });
 
   describe('New User Journey', () => {
     it('should complete the full new user journey: fill form, select dates, sign, and generate PDF', async () => {
@@ -570,68 +571,6 @@ describe('Integration Tests - User Flows', () => {
         const calculationTexts = screen.getAllByText(/absence days calculation/i);
         expect(calculationTexts.length).toBeGreaterThan(0);
       });
-    });
-  });
-});
-
-    it('should correctly calculate absence days excluding holidays and weekends', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <TestWrapper>
-          <LeaveRequestPage />
-        </TestWrapper>
-      );
-
-      // Select a leave type
-      const leaveTypeSelect = screen.getByLabelText(/leave type/i);
-      await user.selectOptions(leaveTypeSelect, 'annual');
-
-      // The absence days calculation should be present (initially 0)
-      // Note: DateRangeField is in LeaveDetailsSection which is not part of LeaveRequestForm
-      // This test verifies that selecting leave type works
-      expect(leaveTypeSelect).toHaveValue('annual');
-    });
-
-    it('should show absence breakdown when date range is selected', async () => {
-      render(
-        <TestWrapper>
-          <LeaveRequestPage />
-        </TestWrapper>
-      );
-
-      // Set a date range in the store
-      const startDate = new Date('2025-01-20'); // Monday (MLK Day - holiday)
-      const endDate = new Date('2025-01-25'); // Saturday
-
-      act(() => {
-        useLeaveRequestStore.getState().setLeaveDraft({
-          startDate,
-          endDate,
-          leaveType: 'annual',
-          reason: 'Test',
-        });
-      });
-
-      // Verify the store has the correct date range
-      const state = useLeaveRequestStore.getState();
-      expect(state.leaveDraft.startDate).toEqual(startDate);
-      expect(state.leaveDraft.endDate).toEqual(endDate);
-
-      // Verify the absence days calculation in the sidebar
-      // There may be multiple "absence days calculation" texts, so we just check they exist
-      await waitFor(() => {
-        const calculationTexts = screen.getAllByText(/absence days calculation/i);
-        expect(calculationTexts.length).toBeGreaterThan(0);
-      });
-    });
-  });
-});
-      await waitFor(() => {
-        const calculationTexts = screen.getAllByText(/absence days calculation/i);
-        expect(calculationTexts.length).toBeGreaterThan(0);
-      });
-    });
     });
   });
 });

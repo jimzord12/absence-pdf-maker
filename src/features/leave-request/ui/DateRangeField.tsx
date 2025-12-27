@@ -257,43 +257,42 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
   return (
     <div className="space-y-4">
       {methods ? (
-          <Controller
-            name="startDate"
-            control={methods.control}
-            render={() => (
-              <div className="space-y-2" role="group" aria-labelledby={`${dateFieldId}-label`}>
-                  <label id={`${dateFieldId}-label`} className="block text-sm font-medium text-gray-700">
-                    Select Date Range
-                  </label>
-                  <HolidaysLegend />
-                  <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm" role="region" aria-label="Calendar">
-                    <DayPicker
-                      mode="range"
-                      selected={selectedRange}
-                      onSelect={handleDateChange}
-                      modifiers={modifiers}
-                      modifiersStyles={modifiersStyles}
-                      numberOfMonths={2}
-                      captionLayout="dropdown"
-                      className="rdp"
-                      styles={DAY_PICKER_STYLES as any}
-                    />
-                  </div>
-                  {(errors?.startDate?.message || errors?.endDate?.message) && (
-                    <div className="space-y-1" role="alert" aria-live="polite">
-                      {errors?.startDate?.message && (
-                        <p className="text-sm text-red-600">{errors.startDate.message}</p>
-                      )}
-                      {errors?.endDate?.message && (
-                        <p className="text-sm text-red-600">{errors.endDate.message}</p>
-                      )}
-                    </div>
+        <Controller
+          name="startDate"
+          control={methods.control}
+          render={() => (
+            <div className="space-y-2" role="group" aria-labelledby={`${dateFieldId}-label`}>
+              <label id={`${dateFieldId}-label`} className="block text-sm font-medium text-gray-700">
+                Select Date Range
+              </label>
+              <HolidaysLegend />
+              <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm" role="region" aria-label="Calendar">
+                <DayPicker
+                  mode="range"
+                  selected={selectedRange}
+                  onSelect={handleDateChange}
+                  modifiers={modifiers}
+                  modifiersStyles={modifiersStyles}
+                  numberOfMonths={2}
+                  captionLayout="dropdown"
+                  className="rdp"
+                  styles={DAY_PICKER_STYLES as any}
+                />
+              </div>
+              {(errors?.startDate?.message || errors?.endDate?.message) && (
+                <div className="space-y-1" role="alert" aria-live="polite">
+                  {errors?.startDate?.message && (
+                    <p className="text-sm text-red-600">{errors.startDate.message}</p>
                   )}
-                  {absenceDaysCalculation.absenceDays > 0 && <Footer {...absenceDaysCalculation} />}
+                  {errors?.endDate?.message && (
+                    <p className="text-sm text-red-600">{errors.endDate.message}</p>
+                  )}
                 </div>
-              );
-            }}
-          />
+              )}
+              {absenceDaysCalculation.absenceDays > 0 && <Footer {...absenceDaysCalculation} />}
+            </div>
+          )}
+        />
       ) : (
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">
