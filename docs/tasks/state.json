@@ -106,8 +106,8 @@
       "lastUpdated": "2025-12-27T15:30:00Z"
     },
      "027-task-integration-tests": {
-      "state": "implemented",
-      "lastUpdated": "2025-12-27T15:10:00Z"
+      "state": "committed",
+      "lastUpdated": "2025-12-27T15:20:00Z"
     },
     "028-task-unit-tests": {
       "state": "not_started",
