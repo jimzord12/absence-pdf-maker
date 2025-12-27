@@ -2,33 +2,78 @@
 
 ## Commands
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production (outputs to `dist/`)
-- `npm run test` - Run all tests
+- `npm run dev` - Start development server (Vite)
+- `npm run build` - Build for production (outputs to `dist/`, runs `tsc -b && vite build`)
+- `npm run test` - Run all tests (Vitest)
 - `npm run test -- <file>` - Run single test file (e.g., `npm run test -- absenceDays.test.ts`)
-- `npm run lint` - Run linter
-- `npm run typecheck` - Run TypeScript type checking
+- `npm run test -- --reporter=verbose` - Run tests with verbose output
+- `npm run lint` - Run ESLint linter
+- `npm run typecheck` - Run TypeScript type checking (`tsc --noEmit`)
 
 ## Code Style
 
-**Architecture:** Vertical slice/feature-first. Each feature owns its UI, model, state, services. Shared primitives (Button, Input, Modal, etc.) in `src/shared/`.
+**Architecture:** Vertical slice/feature-first. Each feature (`src/features/<feature>/`) owns its UI, model, state, services. Shared primitives (Button, Input, Modal, etc.) in `src/shared/`. Feature structure:
+- `model/` - Zod schemas and TypeScript types
+- `services/` - Business logic, external integrations, utilities
+- `state/` - Zustand stores
+- `ui/` - React components
 
-**Imports:** Absolute imports preferred. Order: React/third-party → internal shared → feature modules.
+**Imports:** Absolute imports preferred. Order: React/third-party imports → internal shared imports → feature-specific imports. Group related imports together with blank lines between groups. Example:
+```tsx
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-**Formatting:** Consistent spacing, no trailing whitespace.
+import { Button } from '../../../shared/ui/Button';
+import { Card } from '../../../shared/ui/Card';
 
-**Types:** TypeScript strict mode enabled. Use Zod schemas for validation; infer types from schemas where possible.
+import { LeaveRequestSchema } from '../model/leaveRequest.schema';
+import { useLeaveRequestStore } from '../state/leaveRequest.store';
+```
 
-**Naming:** PascalCase for components, camelCase for variables/functions. Service files: `*.service.ts`, schemas: `*.schema.ts`, types: `*.types.ts`.
+**Formatting:** Consistent spacing, no trailing whitespace. Use 2-space indentation.
 
-**State:** Zustand with persist middleware. Persist only stable data (profile), not drafts/signature. Use `partialize` for selective persistence.
+**Types:** TypeScript strict mode enabled (`strict: true`, `noUnusedLocals`, `noUnusedParameters`). Use Zod schemas for validation; infer types from schemas where possible (`z.infer<typeof Schema>`). Define explicit types in `*.types.ts` files when schemas are insufficient or for clarity.
 
-**Forms:** React Hook Form with Zod resolver. Sync initial values from Zustand store.
+**Naming Conventions:**
+- Components: PascalCase (e.g., `LeaveRequestForm`, `PersonalDetailsSection`)
+- Variables/Functions: camelCase (e.g., `calculateAbsenceDays`, `setProfile`)
+- Constants: UPPER_SNAKE_CASE (e.g., `SIGNATURE_WIDTH`, `DATE_LOCALE`)
+- File naming:
+  - Components: `*.tsx`
+  - Schemas: `*.schema.ts`
+  - Types: `*.types.ts`
+  - Services: `*.service.ts`
+  - Tests: `*.test.ts` or `*.test.tsx` (colocated with source)
 
-**Dates:** Handle timezones consistently (use UTC or local and document choice). Return immutable Date objects.
+**State Management:** Zustand with persist middleware. Persist only stable data (profile), not drafts or signatures. Use `partialize` for selective persistence. Separate state concerns into logical slices (profile, leaveDraft, signature, ui, holidays). Export inferred types from store for external use. Use refs to prevent infinite loops when syncing form changes to store.
 
-**Error Handling:** Graceful errors with user-friendly messages. Validate JSON imports against schemas.
+**Forms:** React Hook Form with Zod resolver (`@hookform/resolvers/zod`). Sync initial values from Zustand store. Use `setValueAs` for date field transformations to Date objects. Use `watch()` to track changes and sync to store, with deep equality checks to prevent unnecessary updates.
 
-**PDF:** Template-based generation using jsPDF. Templates defined in `src/features/leave-request/services/pdf/templates/`.
+**Dates:** Handle timezones consistently (local time by default, documented in code). Return immutable Date objects. Use date-fns for date manipulations. Validate date ranges in Zod schemas (e.g., `startDate <= endDate`). Use `toLocaleDateString` with explicit locale for user-facing dates.
 
-**Tests:** Unit tests for schemas, services, calculations. Integration/E2E for user flows. Test with valid/invalid data.
+**Error Handling:** Graceful errors with user-friendly messages. Validate JSON/data imports against schemas before use. Use try-catch blocks with specific error handling. Log errors with context in development mode (`import.meta.env.DEV`). Display error messages via Alert components or user-friendly notifications. Throw descriptive errors from services for callers to handle.
+
+**React Conventions:**
+- Use functional components with hooks
+- Define constants outside components (e.g., arrays, objects)
+- Use refs to track previous values and prevent unnecessary effects
+- Clean up side effects in useEffect cleanup functions
+- Use proper dependency arrays in useEffect
+- Destructure props explicitly at component top
+- Use semantic HTML and ARIA attributes (e.g., `role="form"`)
+
+**PDF Generation:** Template-based generation using jsPDF. Templates defined in `src/features/leave-request/services/pdf/templates/`. Use `TemplateDefinition` types for type safety. Handle signature images with try-catch fallback to text. Generate filenames with sanitized employee ID and ISO date.
+
+**Testing:**
+- Unit tests for schemas, services, calculations (colocated with source)
+- Integration tests for component interactions and user flows
+- Use Vitest with jsdom environment
+- Test with valid data, invalid data, and edge cases
+- Mock external dependencies (localStorage, window.URL, etc.)
+- Use `@testing-library/react` for component testing
+- Use `describe`, `it`/`test` conventions
+- Test files should be `*.test.ts` or `*.test.tsx`
+- Setup file: `src/vitest.setup.ts` (configures @testing-library/jest-dom)
+- Test rules relaxed in test files (`@typescript-eslint/no-explicit-any: off`)
+
+**Linting & Type Checking:** Always run `npm run lint` and `npm run typecheck` before committing. ESLint config includes TypeScript strict mode, React Hooks rules, and React Refresh optimization. Fix all linting errors before submission.
