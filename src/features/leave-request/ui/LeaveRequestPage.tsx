@@ -3,6 +3,8 @@ import { LeaveRequestForm } from './LeaveRequestForm';
 import { ReviewAndGenerate } from './ReviewAndGenerate';
 import { useLeaveRequestStore } from '../state/leaveRequest.store';
 import { loadHolidays } from '../services/holidays/holidays.service';
+import { usePwaInstall } from '../../../app/providers/usePwaInstall';
+import { Button } from '../../../shared/ui/Button';
 
 /**
  * LeaveRequestPage - Page component that wraps the leave request form
@@ -10,6 +12,7 @@ import { loadHolidays } from '../services/holidays/holidays.service';
  */
 export const LeaveRequestPage: React.FC = () => {
   const setHolidays = useLeaveRequestStore((state) => state.setHolidays);
+  const { isInstallable, promptInstall } = usePwaInstall();
 
   // Load holidays on page mount
   useEffect(() => {
@@ -26,12 +29,26 @@ export const LeaveRequestPage: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Leave Request
-          </h1>
-          <p className="mt-2 text-sm text-gray-600">
-            Submit your leave request and generate a PDF document
-          </p>
+          <div className="flex items-start justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Leave Request
+              </h1>
+              <p className="mt-2 text-sm text-gray-600">
+                Submit your leave request and generate a PDF document
+              </p>
+            </div>
+            {isInstallable && (
+              <Button
+                variant="primary"
+                size="md"
+                onClick={() => promptInstall()}
+                className="mt-0 sm:mt-1"
+              >
+                Install App
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* Page Content - Responsive Layout */}

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { LeaveRequestPage } from './LeaveRequestPage';
 import { useLeaveRequestStore } from '../state/leaveRequest.store';
+import { usePwaInstall } from '../../../app/providers/usePwaInstall';
 
 // Mock the holidays service
 const mockHolidaySet = new Set<string>([
@@ -12,6 +13,16 @@ const mockHolidaySet = new Set<string>([
 
 vi.mock('../services/holidays/holidays.service', () => ({
   loadHolidays: () => mockHolidaySet,
+}));
+
+// Mock the usePwaInstall hook
+const mockPromptInstall = vi.fn().mockResolvedValue('accepted');
+
+vi.mock('../../../app/providers/usePwaInstall', () => ({
+  usePwaInstall: () => ({
+    isInstallable: false,
+    promptInstall: mockPromptInstall,
+  }),
 }));
 
 // Mock the child components
@@ -356,7 +367,54 @@ describe('LeaveRequestPage', () => {
     });
   });
 
-  describe('10. Edge cases and error handling', () => {
+  describe('10. PWA install button rendering and behavior', () => {
+    it('should not render install button when isInstallable is false', () => {
+      render(<LeaveRequestPage />);
+
+      const installButton = screen.queryByText('Install App');
+      expect(installButton).not.toBeInTheDocument();
+    });
+
+    it('should render install button when isInstallable is true', () => {
+      // Dynamically change the mock for this test
+      vi.mocked(usePwaInstall).mockReturnValue({
+        isInstallable: true,
+        promptInstall: mockPromptInstall,
+      });
+
+      render(<LeaveRequestPage />);
+
+      const installButton = screen.queryByText('Install App');
+      expect(installButton).toBeInTheDocument();
+    });
+
+    it('should call promptInstall when install button is clicked', () => {
+      vi.mocked(usePwaInstall).mockReturnValue({
+        isInstallable: true,
+        promptInstall: mockPromptInstall,
+      });
+
+      render(<LeaveRequestPage />);
+
+      const installButton = screen.getByText('Install App');
+      installButton.click();
+
+      expect(mockPromptInstall).toHaveBeenCalledTimes(1);
+    });
+
+    it('should integrate usePwaInstall hook', () => {
+      // This test verifies that the usePwaInstall hook is called
+      // The mock is set up at the top of the file to return isInstallable: false
+      render(<LeaveRequestPage />);
+
+      // Component should render without errors
+      expect(screen.getByText('Leave Request')).toBeInTheDocument();
+      // Install button should not be shown (since isInstallable is false)
+      expect(screen.queryByText('Install App')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('11. Edge cases and error handling', () => {
     it('should handle render when store has pre-existing holidays', () => {
       // Pre-populate store with holidays
       useLeaveRequestStore.setState({
