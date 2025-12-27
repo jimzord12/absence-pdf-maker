@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLeaveRequestStore } from '../state/leaveRequest.store';
 import { exportProfileToJson, importProfileFromJson } from '../services/persistence';
 import { calculateAbsenceDays } from '../services/absenceDays';
@@ -11,6 +11,14 @@ import type { LeaveType } from '../model/leaveRequest.types';
  * actions for exporting/importing profile data and generating the PDF document.
  */
 export const ReviewAndGenerate: React.FC = () => {
+  // Track if component has mounted to prevent animation replay on re-renders
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  // Set hasAnimated to true after animation completes (300ms + 100ms delay)
+  useEffect(() => {
+    const timer = setTimeout(() => setHasAnimated(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
   // Store selectors
   const profile = useLeaveRequestStore((state) => state.profile);
   const leaveDraft = useLeaveRequestStore((state) => state.leaveDraft);
@@ -144,7 +152,7 @@ export const ReviewAndGenerate: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className={`space-y-6 ${!hasAnimated ? 'animate-fade-in-up animate-stagger-1' : ''}`}>
       {/* Success/Error Messages */}
       {errorMessage && (
         <Alert variant="error" onDismiss={clearErrorMessage}>

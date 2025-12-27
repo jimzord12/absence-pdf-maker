@@ -328,6 +328,52 @@ describe('Global Styles', () => {
     });
   });
 
+  describe('Custom Animations', () => {
+    it('should define pulse-dot keyframe animation for spinner', () => {
+      expect(globalsCssContent).toContain('@keyframes pulse-dot');
+      expect(globalsCssContent).toMatch(/@keyframes pulse-dot\s*{[^}]*transform:\s*scale/);
+      expect(globalsCssContent).toMatch(/@keyframes pulse-dot\s*{[^}]*opacity:/);
+    });
+
+    it('should define fadeInUp keyframe animation for form entry', () => {
+      expect(globalsCssContent).toContain('@keyframes fadeInUp');
+      expect(globalsCssContent).toMatch(/@keyframes fadeInUp\s*{[^}]*opacity:\s*0/);
+      expect(globalsCssContent).toMatch(/@keyframes fadeInUp\s*{[^}]*transform:\s*translateY/);
+    });
+
+    it('should define animate-fade-in-up utility class', () => {
+      expect(globalsCssContent).toContain('.animate-fade-in-up');
+      expect(globalsCssContent).toMatch(/\.animate-fade-in-up\s*{[^}]*animation:\s*fadeInUp/);
+      expect(globalsCssContent).toMatch(/\.animate-fade-in-up\s*{[^}]*300ms/);
+    });
+
+    it('should define stagger animation classes', () => {
+      expect(globalsCssContent).toContain('.animate-stagger-1');
+      expect(globalsCssContent).toContain('.animate-stagger-2');
+      expect(globalsCssContent).toContain('.animate-stagger-3');
+      expect(globalsCssContent).toContain('.animate-stagger-4');
+      expect(globalsCssContent).toContain('.animate-stagger-5');
+      expect(globalsCssContent).toContain('.animate-stagger-6');
+    });
+
+    it('should have correct animation delays for stagger classes', () => {
+      expect(globalsCssContent).toMatch(/\.animate-stagger-1\s*{[^}]*animation-delay:\s*50ms/);
+      expect(globalsCssContent).toMatch(/\.animate-stagger-2\s*{[^}]*animation-delay:\s*100ms/);
+      expect(globalsCssContent).toMatch(/\.animate-stagger-3\s*{[^}]*animation-delay:\s*150ms/);
+      expect(globalsCssContent).toMatch(/\.animate-stagger-4\s*{[^}]*animation-delay:\s*200ms/);
+      expect(globalsCssContent).toMatch(/\.animate-stagger-5\s*{[^}]*animation-delay:\s*250ms/);
+      expect(globalsCssContent).toMatch(/\.animate-stagger-6\s*{[^}]*animation-delay:\s*300ms/);
+    });
+
+    it('should use ease-out timing for fadeInUp animation', () => {
+      expect(globalsCssContent).toMatch(/\.animate-fade-in-up\s*{[^}]*ease-out/);
+    });
+
+    it('should use forwards fill mode for fadeInUp animation', () => {
+      expect(globalsCssContent).toMatch(/\.animate-fade-in-up\s*{[^}]*forwards/);
+    });
+  });
+
   describe('CSS Variable Format', () => {
     it('should use kebab-case naming convention for variables', () => {
       const variablePattern = /--[\w-]+:/g;

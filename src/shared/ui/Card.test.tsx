@@ -118,6 +118,32 @@ describe('Card', () => {
     });
   });
 
+  describe('hoverable', () => {
+    it('should not have hover styles by default', () => {
+      const { container } = render(<Card>Content</Card>);
+      const card = container.firstChild;
+      expect(card).not.toHaveClass('hover:shadow-md', 'transition-shadow', 'duration-200');
+    });
+
+    it('should not have hover styles when hoverable is false', () => {
+      const { container } = render(<Card hoverable={false}>Content</Card>);
+      const card = container.firstChild;
+      expect(card).not.toHaveClass('hover:shadow-md', 'transition-shadow', 'duration-200');
+    });
+
+    it('should have hover styles when hoverable is true', () => {
+      const { container } = render(<Card hoverable>Content</Card>);
+      const card = container.firstChild;
+      expect(card).toHaveClass('hover:shadow-md', 'transition-shadow', 'duration-200');
+    });
+
+    it('should preserve other styles when hoverable is true', () => {
+      const { container } = render(<Card hoverable padding="lg" shadow="lg">Content</Card>);
+      const card = container.firstChild;
+      expect(card).toHaveClass('bg-white', 'rounded-lg', 'p-8', 'shadow-lg', 'hover:shadow-md', 'transition-shadow', 'duration-200');
+    });
+  });
+
   describe('base styles', () => {
     it('should have base card styles', () => {
       const { container } = render(<Card>Content</Card>);

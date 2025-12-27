@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LeaveRequestSchema } from '../model/leaveRequest.schema';
 import type { LeaveRequest } from '../model/leaveRequest.types';
 import { useLeaveRequestStore } from '../state/leaveRequest.store';
@@ -56,6 +56,15 @@ export const LeaveRequestForm: React.FC = () => {
     toggleSignatureModal,
     clearErrorMessage,
   } = useLeaveRequestStore();
+
+  // Track if component has mounted to prevent animation replay on re-renders
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  // Set hasAnimated to true after animation completes (300ms)
+  useEffect(() => {
+    const timer = setTimeout(() => setHasAnimated(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Calculate absence days when dates change
   const absenceDaysCalculation =
@@ -164,16 +173,16 @@ export const LeaveRequestForm: React.FC = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" role="form">
+      <form onSubmit={handleSubmit(onSubmit)} className={`space-y-6 ${!hasAnimated ? 'animate-fade-in-up' : ''}`} role="form">
         {/* Error Message */}
         {errorMessage && (
-          <Alert variant="error" onDismiss={clearErrorMessage}>
+          <Alert variant="error" onDismiss={clearErrorMessage} className="animate-stagger-1">
             {errorMessage}
           </Alert>
         )}
 
         {/* Personal Details Section */}
-        <Card>
+        <Card className="animate-stagger-2">
           <h2 className="text-xl font-semibold mb-4">Personal Details</h2>
           <div className="space-y-4">
             <Input
@@ -202,7 +211,7 @@ export const LeaveRequestForm: React.FC = () => {
         </Card>
 
         {/* Employment Details Section */}
-        <Card>
+        <Card className="animate-stagger-3">
           <h2 className="text-xl font-semibold mb-4">Employment Details</h2>
           <div className="space-y-4">
             <Input
@@ -229,7 +238,7 @@ export const LeaveRequestForm: React.FC = () => {
         </Card>
 
         {/* Leave Details Section */}
-        <Card>
+        <Card className="animate-stagger-4">
           <h2 className="text-xl font-semibold mb-4">Leave Details</h2>
           <div className="space-y-4">
             <Select
@@ -297,7 +306,7 @@ export const LeaveRequestForm: React.FC = () => {
         </Card>
 
         {/* Signature Section */}
-        <Card>
+        <Card className="animate-stagger-5">
           <h2 className="text-xl font-semibold mb-4">Signature</h2>
           <div className="space-y-4">
             {signature.signatureDataUrl ? (
@@ -335,7 +344,7 @@ export const LeaveRequestForm: React.FC = () => {
         </Card>
 
         {/* Form Actions */}
-        <div className="flex gap-3 justify-end">
+        <div className="flex gap-3 justify-end animate-stagger-6">
           <Button
             variant="secondary"
             type="button"

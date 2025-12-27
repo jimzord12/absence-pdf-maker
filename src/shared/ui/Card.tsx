@@ -4,6 +4,7 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   padding?: 'none' | 'sm' | 'md' | 'lg';
   bordered?: boolean;
   shadow?: 'none' | 'sm' | 'md' | 'lg';
+  hoverable?: boolean;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -11,6 +12,7 @@ export const Card: React.FC<CardProps> = ({
   padding = 'md',
   bordered = true,
   shadow = 'sm',
+  hoverable = false,
   className = '',
   ...props
 }) => {
@@ -29,6 +31,10 @@ export const Card: React.FC<CardProps> = ({
     lg: 'shadow-lg',
   };
 
+  const hoverStyles = hoverable
+    ? 'hover:shadow-md transition-shadow duration-200'
+    : '';
+
   return (
     <div
       className={`
@@ -36,6 +42,7 @@ export const Card: React.FC<CardProps> = ({
         ${paddingStyles[padding]}
         ${borderStyles}
         ${shadowStyles[shadow]}
+        ${hoverStyles}
         ${className}
       `}
       {...props}

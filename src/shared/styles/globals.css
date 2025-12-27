@@ -364,3 +364,54 @@ object {
 :focus:not(:focus-visible) {
   outline: none;
 }
+
+/* ===== Custom Animations ===== */
+
+/* Pulse dot animation for spinner */
+@keyframes pulse-dot {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Form enter animation - fade in with upward motion */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply form enter animation */
+.animate-fade-in-up {
+  animation: fadeInUp 300ms ease-out forwards;
+}
+
+/* Animation delay classes for staggered entrance animations */
+.animate-stagger-0 { animation-delay: 0ms; }
+.animate-stagger-1 { animation-delay: 50ms; }
+.animate-stagger-2 { animation-delay: 100ms; }
+.animate-stagger-3 { animation-delay: 150ms; }
+.animate-stagger-4 { animation-delay: 200ms; }
+.animate-stagger-5 { animation-delay: 250ms; }
+.animate-stagger-6 { animation-delay: 300ms; }
+
+/* Respect user's motion preferences for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

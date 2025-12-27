@@ -53,11 +53,13 @@ describe('Button', () => {
   describe('loading state', () => {
     it('should show loading spinner when isLoading is true', () => {
       render(<Button isLoading>Loading</Button>);
-      expect(screen.getByText('Loading...')).toBeInTheDocument();
-      // Check for SVG element inside button
+      // Check for Spinner component inside button (should have role="status")
       const button = screen.getByRole('button');
-      expect(button.querySelector('svg')).toBeInTheDocument();
-      expect(button.querySelector('svg')).toHaveClass('animate-spin', '-ml-1', 'mr-2', 'h-4', 'w-4');
+      const spinner = button.querySelector('[role="status"]');
+      expect(spinner).toBeInTheDocument();
+      expect(spinner).toHaveClass('mr-2');
+      // Button should display loading text (not the sr-only text)
+      expect(button).toHaveTextContent('Loading...');
     });
 
     it('should disable button when isLoading is true', () => {
@@ -69,6 +71,27 @@ describe('Button', () => {
     it('should not show children when isLoading is true', () => {
       render(<Button isLoading>Click me</Button>);
       expect(screen.queryByText('Click me')).not.toBeInTheDocument();
+    });
+
+    it('should show custom loading text when provided', () => {
+      render(<Button isLoading loadingText="Processing...">Submit</Button>);
+      const button = screen.getByRole('button');
+      expect(button).toHaveTextContent('Processing...');
+      expect(screen.queryByText('Submit')).not.toBeInTheDocument();
+    });
+
+    it('should use small spinner size for sm and md buttons', () => {
+      render(<Button isLoading size="sm">Button</Button>);
+      const button = screen.getByRole('button');
+      const spinner = button.querySelector('[role="status"]');
+      expect(spinner).toHaveClass('w-8', 'h-8');
+    });
+
+    it('should use medium spinner size for lg buttons', () => {
+      render(<Button isLoading size="lg">Button</Button>);
+      const button = screen.getByRole('button');
+      const spinner = button.querySelector('[role="status"]');
+      expect(spinner).toHaveClass('w-12', 'h-12');
     });
   });
 

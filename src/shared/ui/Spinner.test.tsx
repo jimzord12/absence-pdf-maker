@@ -16,9 +16,19 @@ describe('Spinner', () => {
       expect(spinner).toHaveAttribute('aria-label', 'Loading');
     });
 
-    it('should have screen reader only text', () => {
+    it('should render three dots for animation', () => {
       render(<Spinner />);
-      expect(screen.getByText('Loading...')).toBeInTheDocument();
+      const spinner = screen.getByRole('status');
+      const dots = spinner.querySelectorAll('div');
+      expect(dots.length).toBe(3);
+    });
+
+    it('should render three dots for animation', () => {
+      render(<Spinner />);
+      const spinner = screen.getByRole('status');
+      // Select only the dot divs, not the sr-only span
+      const dots = spinner.querySelectorAll('div:not(.sr-only)');
+      expect(dots.length).toBe(3);
     });
   });
 
@@ -26,33 +36,56 @@ describe('Spinner', () => {
     it('should render medium size by default', () => {
       render(<Spinner />);
       const spinner = screen.getByRole('status');
-      expect(spinner).toHaveClass('w-8', 'h-8', 'border-2');
+      expect(spinner).toHaveClass('w-12', 'h-12');
     });
 
     it('should render small size', () => {
       render(<Spinner size="sm" />);
       const spinner = screen.getByRole('status');
-      expect(spinner).toHaveClass('w-4', 'h-4', 'border-2');
+      expect(spinner).toHaveClass('w-8', 'h-8');
     });
 
     it('should render large size', () => {
       render(<Spinner size="lg" />);
       const spinner = screen.getByRole('status');
-      expect(spinner).toHaveClass('w-12', 'h-12', 'border-4');
+      expect(spinner).toHaveClass('w-16', 'h-16');
     });
   });
 
-  describe('base styles', () => {
-    it('should have base spinner styles', () => {
+  describe('dot sizes', () => {
+    it('should have dots with border-radius for circular shape', () => {
       render(<Spinner />);
       const spinner = screen.getByRole('status');
-      expect(spinner).toHaveClass(
-        'inline-block',
-        'rounded-full',
-        'border-gray-200',
-        'border-t-black',
-        'animate-spin'
-      );
+      const dots = Array.from(spinner.querySelectorAll('div'));
+
+      dots.forEach(dot => {
+        const style = dot.getAttribute('style');
+        expect(style).toContain('border-radius: 50%');
+      });
+    });
+
+    it('should have background color applied to dots', () => {
+      render(<Spinner />);
+      const spinner = screen.getByRole('status');
+      const dots = Array.from(spinner.querySelectorAll('div'));
+
+      dots.forEach(dot => {
+        const style = dot.getAttribute('style');
+        expect(style).toContain('background-color');
+        expect(style).toContain('var(--color-primary)');
+      });
+    });
+
+    it('should have animation applied to dots', () => {
+      render(<Spinner />);
+      const spinner = screen.getByRole('status');
+      const dots = Array.from(spinner.querySelectorAll('div'));
+
+      dots.forEach(dot => {
+        const style = dot.getAttribute('style');
+        expect(style).toContain('animation:');
+        expect(style).toContain('pulse-dot');
+      });
     });
   });
 
@@ -66,39 +99,77 @@ describe('Spinner', () => {
     it('should preserve base styles with custom className', () => {
       render(<Spinner className="custom-class" />);
       const spinner = screen.getByRole('status');
-      expect(spinner).toHaveClass('inline-block', 'animate-spin', 'custom-class');
+      expect(spinner).toHaveClass('w-12', 'h-12', 'custom-class');
     });
   });
 
-  describe('screen reader only text', () => {
-    it('should have sr-only class on loading text', () => {
-      render(<Spinner />);
-      const loadingText = screen.getByText('Loading...');
-      expect(loadingText).toHaveClass('sr-only');
-    });
-  });
-
-  describe('animation', () => {
-    it('should have animate-spin class', () => {
+  describe('animation styles', () => {
+    it('should have animation style applied to dots', () => {
       render(<Spinner />);
       const spinner = screen.getByRole('status');
-      expect(spinner).toHaveClass('animate-spin');
+      const dots = spinner.querySelectorAll('div');
+
+      dots.forEach(dot => {
+        const style = dot.getAttribute('style');
+        expect(style).toContain('animation');
+        expect(style).toContain('pulse-dot');
+      });
+    });
+
+    it('should have staggered animation delays for dots', () => {
+      render(<Spinner />);
+      const spinner = screen.getByRole('status');
+      const dots = Array.from(spinner.querySelectorAll('div'));
+
+      // First dot should have 0s delay
+      expect(dots[0].getAttribute('style')).toContain('animation-delay: 0s');
+      // Second dot should have 0.2s delay
+      expect(dots[1].getAttribute('style')).toContain('animation-delay: 0.2s');
+      // Third dot should have 0.4s delay
+      expect(dots[2].getAttribute('style')).toContain('animation-delay: 0.4s');
     });
   });
 
-  describe('border styles', () => {
-    it('should have border styles for loading animation', () => {
+  describe('dot styles', () => {
+    it('should have correct border radius for dots', () => {
       render(<Spinner />);
       const spinner = screen.getByRole('status');
-      expect(spinner).toHaveClass('border-gray-200', 'border-t-black');
+      const dots = spinner.querySelectorAll('div');
+
+      dots.forEach(dot => {
+        const style = dot.getAttribute('style');
+        expect(style).toContain('border-radius: 50%');
+      });
+    });
+
+    it('should have correct background color for dots', () => {
+      render(<Spinner />);
+      const spinner = screen.getByRole('status');
+      const dots = spinner.querySelectorAll('div');
+
+      dots.forEach(dot => {
+        const style = dot.getAttribute('style');
+        expect(style).toContain('background-color');
+        expect(style).toContain('var(--color-primary)');
+      });
     });
   });
 
-  describe('responsive behavior', () => {
-    it('should be inline-block', () => {
+  describe('flex layout', () => {
+    it('should use flexbox for centering dots', () => {
       render(<Spinner />);
       const spinner = screen.getByRole('status');
-      expect(spinner).toHaveClass('inline-block');
+      const style = spinner.getAttribute('style');
+      expect(style).toContain('display: flex');
+      expect(style).toContain('align-items: center');
+      expect(style).toContain('justify-content: center');
+    });
+
+    it('should have gap between dots', () => {
+      render(<Spinner />);
+      const spinner = screen.getByRole('status');
+      const style = spinner.getAttribute('style');
+      expect(style).toContain('gap: 4px');
     });
   });
 
@@ -111,15 +182,14 @@ describe('Spinner', () => {
           <Spinner size="lg" />
         </div>
       );
-      // Get all spinners by role
       const spinners = screen.getAllByRole('status');
       expect(spinners).toHaveLength(3);
 
       const [smallSpinner, mediumSpinner, largeSpinner] = spinners;
 
-      expect(smallSpinner).toHaveClass('w-4', 'h-4', 'border-2');
-      expect(mediumSpinner).toHaveClass('w-8', 'h-8', 'border-2');
-      expect(largeSpinner).toHaveClass('w-12', 'h-12', 'border-4');
+      expect(smallSpinner).toHaveClass('w-8', 'h-8');
+      expect(mediumSpinner).toHaveClass('w-12', 'h-12');
+      expect(largeSpinner).toHaveClass('w-16', 'h-16');
     });
   });
 });
