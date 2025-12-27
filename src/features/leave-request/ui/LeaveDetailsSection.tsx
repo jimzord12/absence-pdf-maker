@@ -57,27 +57,29 @@ export const LeaveDetailsSection: React.FC<LeaveDetailsSectionProps> = ({
   }, [leaveType, startDate, endDate, reason, setLeaveDraft]);
 
   return (
-    <Card>
-      <h2 className="text-xl font-semibold mb-4">Leave Details</h2>
-      <div className="space-y-4">
-        <Select
-          label="Leave Type"
-          options={leaveTypeOptions}
-          placeholder="Select leave type"
-          {...register?.('leaveType')}
-          error={errors?.leaveType?.message}
-        />
+    <section aria-labelledby="leave-details-heading">
+      <Card>
+        <h2 id="leave-details-heading" className="text-xl font-semibold mb-4">Leave Details</h2>
+        <div className="space-y-4">
+          <Select
+            label="Leave Type"
+            options={leaveTypeOptions}
+            placeholder="Select leave type"
+            {...register?.('leaveType')}
+            error={errors?.leaveType?.message}
+          />
 
-        <DateRangeField errors={errors} holidaySet={holidays} />
+          <DateRangeField errors={errors} holidaySet={holidays} />
 
-        <Textarea
-          label="Reason (Optional)"
-          placeholder="Please provide a reason for your leave request..."
-          rows={4}
-          {...register?.('reason')}
-          error={errors?.reason?.message}
-        />
-      </div>
-    </Card>
+          <Textarea
+            label="Reason (Optional)"
+            placeholder="Please provide a reason for your leave request..."
+            rows={4}
+            {...register?.('reason')}
+            error={errors?.reason?.message}
+          />
+        </div>
+      </Card>
+    </section>
   );
 };

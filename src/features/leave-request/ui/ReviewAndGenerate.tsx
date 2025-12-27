@@ -171,8 +171,9 @@ export const ReviewAndGenerate: React.FC = () => {
       )}
 
       {/* Profile Summary Section */}
-      <Card>
-        <h2 className="text-xl font-semibold mb-4">Personal Details</h2>
+      <section aria-labelledby="review-personal-details-heading">
+        <Card>
+          <h2 id="review-personal-details-heading" className="text-xl font-semibold mb-4">Personal Details</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <span className="text-sm text-gray-500">Full Name</span>
@@ -199,11 +200,13 @@ export const ReviewAndGenerate: React.FC = () => {
             <p className="font-medium">{profile.position || '—'}</p>
           </div>
         </div>
-      </Card>
+        </Card>
+      </section>
 
       {/* Leave Details Summary Section */}
-      <Card>
-        <h2 className="text-xl font-semibold mb-4">Leave Details</h2>
+      <section aria-labelledby="review-leave-details-heading">
+        <Card>
+          <h2 id="review-leave-details-heading" className="text-xl font-semibold mb-4">Leave Details</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <span className="text-sm text-gray-500">Leave Type</span>
@@ -257,13 +260,15 @@ export const ReviewAndGenerate: React.FC = () => {
             ) : (
               <span className="text-red-500">✗ Not signed</span>
             )}
-          </p>
-        </div>
-      </Card>
+            </p>
+          </div>
+        </Card>
+      </section>
 
       {/* Action Buttons Section */}
-      <Card>
-        <h2 className="text-xl font-semibold mb-4">Actions</h2>
+      <section aria-labelledby="review-actions-heading">
+        <Card>
+          <h2 id="review-actions-heading" className="text-xl font-semibold mb-4">Actions</h2>
         <div className="space-y-4">
           {/* Profile Management */}
           <div className="flex flex-wrap gap-3">
@@ -308,7 +313,8 @@ export const ReviewAndGenerate: React.FC = () => {
             </p>
           </div>
         </div>
-      </Card>
+        </Card>
+      </section>
     </div>
   );
 };

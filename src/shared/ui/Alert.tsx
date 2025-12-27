@@ -72,6 +72,7 @@ export const Alert: React.FC<AlertProps> = ({
 
   return (
     <div
+      role="alert"
       className={`
         flex items-start p-4 rounded-lg border
         ${variantStyles[variant]}

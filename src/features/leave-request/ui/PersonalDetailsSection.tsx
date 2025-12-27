@@ -30,33 +30,35 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({
   const { register } = methods || {};
 
   return (
-    <Card>
-      <h2 className="text-xl font-semibold mb-4">Personal Details</h2>
-      <div className="space-y-4">
-        <Input
-          label="Full Name"
-          placeholder="Enter your full name"
-          inputType="text"
-          {...register?.('profile.fullName')}
-          error={errors?.profile?.fullName?.message}
-        />
+    <section aria-labelledby="personal-details-heading">
+      <Card>
+        <h2 id="personal-details-heading" className="text-xl font-semibold mb-4">Personal Details</h2>
+        <div className="space-y-4">
+          <Input
+            label="Full Name"
+            placeholder="Enter your full name"
+            inputType="text"
+            {...register?.('profile.fullName')}
+            error={errors?.profile?.fullName?.message}
+          />
 
-        <Input
-          label="Email Address"
-          placeholder="your.email@company.com"
-          inputType="email"
-          {...register?.('profile.email')}
-          error={errors?.profile?.email?.message}
-        />
+          <Input
+            label="Email Address"
+            placeholder="your.email@company.com"
+            inputType="email"
+            {...register?.('profile.email')}
+            error={errors?.profile?.email?.message}
+          />
 
-        <Input
-          label="Phone Number"
-          placeholder="+1 (555) 123-4567"
-          inputType="tel"
-          {...register?.('profile.phone')}
-          error={errors?.profile?.phone?.message}
-        />
-      </div>
-    </Card>
+          <Input
+            label="Phone Number"
+            placeholder="+1 (555) 123-4567"
+            inputType="tel"
+            {...register?.('profile.phone')}
+            error={errors?.profile?.phone?.message}
+          />
+        </div>
+      </Card>
+    </section>
   );
 };

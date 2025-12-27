@@ -301,9 +301,10 @@ describe('SignatureModal', () => {
       renderComponent();
       openModal();
 
-      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Clear' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Save Signature' })).toBeInTheDocument();
+      const allButtons = screen.getAllByRole('button');
+      expect(allButtons.find(b => b.textContent === 'Cancel')).toBeInTheDocument();
+      expect(allButtons.find(b => b.textContent.trim() === 'Clear')).toBeInTheDocument();
+      expect(allButtons.find(b => b.textContent === 'Save Signature')).toBeInTheDocument();
     });
 
     it('should have alt text for signature preview', () => {

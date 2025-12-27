@@ -31,33 +31,35 @@ export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> =
   const { register } = methods || {};
 
   return (
-    <Card>
-      <h2 className="text-xl font-semibold mb-4">Employment Details</h2>
-      <div className="space-y-4">
-        <Input
-          label="Employee ID"
-          placeholder="EMP-12345"
-          inputType="text"
-          {...register?.('profile.employeeId')}
-          error={errors?.profile?.employeeId?.message}
-        />
+    <section aria-labelledby="employment-details-heading">
+      <Card>
+        <h2 id="employment-details-heading" className="text-xl font-semibold mb-4">Employment Details</h2>
+        <div className="space-y-4">
+          <Input
+            label="Employee ID"
+            placeholder="EMP-12345"
+            inputType="text"
+            {...register?.('profile.employeeId')}
+            error={errors?.profile?.employeeId?.message}
+          />
 
-        <Input
-          label="Department"
-          placeholder="Engineering"
-          inputType="text"
-          {...register?.('profile.department')}
-          error={errors?.profile?.department?.message}
-        />
+          <Input
+            label="Department"
+            placeholder="Engineering"
+            inputType="text"
+            {...register?.('profile.department')}
+            error={errors?.profile?.department?.message}
+          />
 
-        <Input
-          label="Position"
-          placeholder="Software Engineer"
-          inputType="text"
-          {...register?.('profile.position')}
-          error={errors?.profile?.position?.message}
-        />
-      </div>
-    </Card>
+          <Input
+            label="Position"
+            placeholder="Software Engineer"
+            inputType="text"
+            {...register?.('profile.position')}
+            error={errors?.profile?.position?.message}
+          />
+        </div>
+      </Card>
+    </section>
   );
 };

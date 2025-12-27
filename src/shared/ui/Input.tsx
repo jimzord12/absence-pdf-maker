@@ -37,10 +37,10 @@ export const Input: React.FC<InputProps> = ({
         aria-describedby={errorId}
         className={`
           w-full px-3 py-2 rounded-md border
-          focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:border-transparent
           disabled:opacity-50 disabled:cursor-not-allowed
           transition-colors
-          ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'}
+          ${error ? 'border-red-500 focus-visible:ring-red-500' : 'border-gray-300'}
           ${className}
         `}
         {...props}

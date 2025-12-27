@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useId } from 'react';
 import { DayPicker } from 'react-day-picker';
 import { useFormContext, Controller } from 'react-hook-form';
 import { useLeaveRequestStore } from '../state/leaveRequest.store';
@@ -124,24 +124,24 @@ const Footer: React.FC<AbsenceSummary> = ({
   absenceDays,
 }) => {
   return (
-    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg" role="region" aria-live="polite">
       <p className="text-sm text-blue-900 font-medium">Date Range Summary</p>
       <div className="mt-2 space-y-1 text-sm text-blue-800">
         <div className="flex justify-between">
           <span>Total Days:</span>
-          <span className="font-semibold">{totalDays}</span>
+          <span className="font-semibold" aria-label={`Total days in range: ${totalDays}`}>{totalDays}</span>
         </div>
         <div className="flex justify-between">
           <span>Holidays:</span>
-          <span className="font-semibold">{holidayDays}</span>
+          <span className="font-semibold" aria-label={`Holidays in range: ${holidayDays}`}>{holidayDays}</span>
         </div>
         <div className="flex justify-between">
           <span>Weekends:</span>
-          <span className="font-semibold">{weekendDays}</span>
+          <span className="font-semibold" aria-label={`Weekend days in range: ${weekendDays}`}>{weekendDays}</span>
         </div>
         <div className="flex justify-between border-t border-blue-200 pt-1">
           <span className="font-semibold">Absence Days:</span>
-          <span className="font-bold text-blue-700">{absenceDays}</span>
+          <span className="font-bold text-blue-700" aria-label={`Total absence days: ${absenceDays}`}>{absenceDays}</span>
         </div>
       </div>
     </div>
@@ -179,6 +179,9 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
 
   // Custom day styles for holidays and weekends
   const modifiersStyles = useMemo(() => MODIFIERS_STYLES, []);
+
+  // Generate ID for accessibility
+  const dateFieldId = useId();
 
   // Get selected range for the calendar
   const selectedRange = useMemo(() => {
@@ -258,38 +261,39 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
             name="startDate"
             control={methods.control}
             render={() => (
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  Select Date Range
-                </label>
-                <HolidaysLegend />
-                <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
-                  <DayPicker
-                    mode="range"
-                    selected={selectedRange}
-                    onSelect={handleDateChange}
-                    modifiers={modifiers}
-                    modifiersStyles={modifiersStyles}
-                    numberOfMonths={2}
-                    captionLayout="dropdown"
-                    className="rdp"
-                    styles={DAY_PICKER_STYLES as any}
-                  />
-                </div>
-              {(errors?.startDate?.message || errors?.endDate?.message) && (
-                <div className="space-y-1">
-                  {errors?.startDate?.message && (
-                    <p className="text-sm text-red-600">{errors.startDate.message}</p>
+              <div className="space-y-2" role="group" aria-labelledby={`${dateFieldId}-label`}>
+                  <label id={`${dateFieldId}-label`} className="block text-sm font-medium text-gray-700">
+                    Select Date Range
+                  </label>
+                  <HolidaysLegend />
+                  <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm" role="region" aria-label="Calendar">
+                    <DayPicker
+                      mode="range"
+                      selected={selectedRange}
+                      onSelect={handleDateChange}
+                      modifiers={modifiers}
+                      modifiersStyles={modifiersStyles}
+                      numberOfMonths={2}
+                      captionLayout="dropdown"
+                      className="rdp"
+                      styles={DAY_PICKER_STYLES as any}
+                    />
+                  </div>
+                  {(errors?.startDate?.message || errors?.endDate?.message) && (
+                    <div className="space-y-1" role="alert" aria-live="polite">
+                      {errors?.startDate?.message && (
+                        <p className="text-sm text-red-600">{errors.startDate.message}</p>
+                      )}
+                      {errors?.endDate?.message && (
+                        <p className="text-sm text-red-600">{errors.endDate.message}</p>
+                      )}
+                    </div>
                   )}
-                  {errors?.endDate?.message && (
-                    <p className="text-sm text-red-600">{errors.endDate.message}</p>
-                  )}
+                  {absenceDaysCalculation.absenceDays > 0 && <Footer {...absenceDaysCalculation} />}
                 </div>
-              )}
-              {absenceDaysCalculation.absenceDays > 0 && <Footer {...absenceDaysCalculation} />}
-            </div>
-          )}
-        />
+              );
+            }}
+          />
       ) : (
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">

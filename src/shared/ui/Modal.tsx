@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useId } from 'react';
 
 export interface ModalProps {
   isOpen: boolean;
@@ -18,6 +18,8 @@ export const Modal: React.FC<ModalProps> = ({
   showCloseButton = true,
 }) => {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -26,16 +28,44 @@ export const Modal: React.FC<ModalProps> = ({
       }
     };
 
+    const handleTab = (e: KeyboardEvent) => {
+      if (!isOpen || !modalRef.current) return;
+
+      const focusableElements = modalRef.current.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements[0] as HTMLElement;
+      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    };
+
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
+      document.addEventListener('keydown', handleTab);
       document.body.style.overflow = 'hidden';
-      // Focus close button when modal opens
+      document.body.setAttribute('aria-hidden', 'true');
+      modalRef.current?.setAttribute('aria-hidden', 'false');
       closeButtonRef.current?.focus();
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('keydown', handleTab);
       document.body.style.overflow = '';
+      document.body.removeAttribute('aria-hidden');
     };
   }, [isOpen, onClose]);
 
@@ -53,15 +83,20 @@ export const Modal: React.FC<ModalProps> = ({
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
       onClick={handleBackdropClick}
+      aria-hidden="true"
     >
       <div
+        ref={modalRef}
         className="relative w-full max-w-lg bg-white rounded-lg shadow-lg max-h-[90vh] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={title ? titleId : undefined}
       >
         {(title || showCloseButton) && (
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
             {title && (
-              <h2 className="text-xl font-semibold text-gray-900">
+              <h2 id={titleId} className="text-xl font-semibold text-gray-900">
                 {title}
               </h2>
             )}
@@ -69,7 +104,7 @@ export const Modal: React.FC<ModalProps> = ({
               <button
                 ref={closeButtonRef}
                 onClick={onClose}
-                className="p-2 text-gray-400 hover:text-gray-600 transition-colors rounded-full hover:bg-gray-100"
+                className="p-2 text-gray-400 hover:text-gray-600 transition-colors rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
                 aria-label="Close modal"
               >
                 <svg
@@ -77,6 +112,7 @@ export const Modal: React.FC<ModalProps> = ({
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
