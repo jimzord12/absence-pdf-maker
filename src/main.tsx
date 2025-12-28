@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
-import './shared/styles/globals.css';
+import './index.css';
 import { PwaProvider } from './app/providers/PwaProvider';
 import { StoreProvider } from './app/providers/StoreProvider';
 import { ThemeProvider } from './app/providers/ThemeProvider';

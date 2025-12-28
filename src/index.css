@@ -1,18 +1,175 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* Tailwind CSS Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== Tailwind Base Layer - Custom Reset & Base Styles ===== */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply min-h-100vh;
+  }
+
+  /* Remove default margins from headings */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply m-0 font-semibold leading-tight;
+  }
+
+  h1 { @apply text-3xl; }
+  h2 { @apply text-2xl; }
+  h3 { @apply text-xl; }
+  h4 { @apply text-lg; }
+  h5 { @apply text-md; }
+  h6 { @apply text-sm; }
+
+  /* Remove default margins from paragraphs */
+  p {
+    @apply m-0;
+  }
+
+  /* Remove default styling from lists */
+  ul,
+  ol {
+    @apply m-0 p-0 list-none;
+  }
+
+  /* Remove default styling from links */
+  a {
+    @apply text-primary no-underline;
+  }
+
+  a:hover {
+    @apply text-primary-hover;
+  }
+
+  /* Remove default styling from buttons */
+  button {
+    @apply font-inherit text-inherit bg-transparent border-none cursor-pointer;
+  }
+
+  /* Remove default styling from form elements */
+  input,
+  textarea,
+  select {
+    @apply font-inherit text-inherit bg-surface border border-border rounded-md;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: 2px solid rgba(37, 99, 235, 0.5);
+    outline-offset: 2px;
+  }
+
+  /* Remove default styling from tables */
+  table {
+    @apply border-collapse border-spacing-0;
+  }
+
+  /* Remove default styling from images */
+  img,
+  svg,
+  video,
+  canvas,
+  audio,
+  iframe,
+  embed,
+  object {
+    @apply block max-w-full;
+  }
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* ===== Tailwind Components Layer - Custom Components ===== */
+@layer components {
+  /* Container utility class with responsive padding and max-width */
+  .container {
+    @apply w-full mx-auto px-4;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      @apply max-w-sm;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .container {
+      @apply max-w-md px-6;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      @apply max-w-lg;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container {
+      @apply max-w-xl px-8;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .container {
+      @apply max-w-2xl;
+    }
+  }
 }
 
-#root {
-  width: 100%;
-  min-height: 100vh;
+/* ===== Tailwind Utilities Layer - Custom Utilities ===== */
+@layer utilities {
+  /* Accessibility: Screen reader only - Tailwind has sr-only built-in, keeping for reference */
+  .sr-only {
+    @apply absolute w-1 h-1 p-0 m-[-1px] overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  /* Focus visible for keyboard navigation */
+  .focus-visible {
+    outline: 2px solid rgba(37, 99, 235, 0.5);
+    outline-offset: 2px;
+  }
+
+  /* Remove focus outline when using mouse */
+  .focus\:not-focus-visible:focus:not(:focus-visible) {
+    @apply outline-none;
+  }
+
+  /* Animation delay classes for staggered entrance animations */
+  .animate-stagger-0 { animation-delay: 0ms; }
+  .animate-stagger-1 { animation-delay: 50ms; }
+  .animate-stagger-2 { animation-delay: 100ms; }
+  .animate-stagger-3 { animation-delay: 150ms; }
+  .animate-stagger-4 { animation-delay: 200ms; }
+  .animate-stagger-5 { animation-delay: 250ms; }
+  .animate-stagger-6 { animation-delay: 300ms; }
+
+  /* Respect user's motion preferences for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
