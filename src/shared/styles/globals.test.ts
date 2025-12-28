@@ -48,10 +48,7 @@ describe('Tailwind CSS Integration', () => {
   });
 
   describe('Tailwind Layers', () => {
-    it('should define @layer base for base styles', () => {
-      expect(indexCssContent).toContain('@layer base');
-    });
-
+    // After task 035, @layer base is not used as reset styles are in Tailwind Preflight
     it('should define @layer components for component styles', () => {
       expect(indexCssContent).toContain('@layer components');
     });
@@ -59,25 +56,33 @@ describe('Tailwind CSS Integration', () => {
     it('should define @layer utilities for utility styles', () => {
       expect(indexCssContent).toContain('@layer utilities');
     });
+
+    it('should NOT use @layer base (reset styles handled by Tailwind Preflight)', () => {
+      expect(indexCssContent).not.toMatch(/@layer\s+base/);
+    });
   });
 
-  describe('Reset/Normalize Styles', () => {
-    it('should apply box-sizing border-box to all elements', () => {
-      expect(indexCssContent).toContain('box-sizing: border-box');
+  describe('Reset/Normalize Styles (After Task 035)', () => {
+    // After task 035 cleanup, reset styles are now in Tailwind Preflight
+    it('should NOT have custom box-sizing reset (handled by Tailwind Preflight)', () => {
+      expect(indexCssContent).not.toMatch(/\*\s*{[^}]*box-sizing:\s*border-box/);
+      expect(indexCssContent).not.toMatch(/html\s*{[^}]*box-sizing:\s*border-box/);
     });
 
-    it('should reset html element styles', () => {
-      expect(indexCssContent).toContain('html');
-      expect(indexCssContent).toContain('font-size: 16px');
-      expect(indexCssContent).toContain('-webkit-font-smoothing: antialiased');
+    it('should NOT have custom html element reset (handled by Tailwind Preflight)', () => {
+      expect(indexCssContent).not.toMatch(/html\s*{[^}]*font-size:/);
+      expect(indexCssContent).not.toMatch(/html\s*{[^}]*line-height:/);
+      expect(indexCssContent).not.toMatch(/html\s*{[^}]*-webkit-font-smoothing:/);
     });
 
-    it('should reset body element styles', () => {
-      expect(indexCssContent).toMatch(/body\s*{[^}]*min-h-100vh/);
+    it('should NOT have custom body element reset (handled by Tailwind Preflight)', () => {
+      expect(indexCssContent).not.toMatch(/body\s*{[^}]*margin:\s*0/);
+      expect(indexCssContent).not.toMatch(/body\s*{[^}]*padding:\s*0/);
     });
 
-    it('should reset heading styles', () => {
-      expect(indexCssContent).toMatch(/h1,[^}]*h2,[^}]*h3,[^}]*h4,[^}]*h5,[^}]*h6/);
+    it('should NOT have custom heading resets (handled by Tailwind Preflight)', () => {
+      expect(indexCssContent).not.toMatch(/h1,\s*h2,\s*h3,\s*h4,\s*h5,\s*h6\s*{[^}]*margin:/);
+      expect(indexCssContent).not.toMatch(/h1\s*{[^}]*font-size:/);
     });
   });
 
@@ -141,8 +146,10 @@ describe('Tailwind CSS Integration', () => {
   describe('Tailwind Utility Classes', () => {
     it('should use Tailwind utility classes for styling', () => {
       expect(indexCssContent).toContain('@apply');
+      // After task 035, these utilities are still present in custom CSS
       expect(indexCssContent).toContain('mx-auto');
-      expect(indexCssContent).toContain('m-0');
+      expect(indexCssContent).toContain('w-full');
+      expect(indexCssContent).toContain('absolute');
     });
   });
 
@@ -160,6 +167,13 @@ describe('Tailwind CSS Integration', () => {
 
       expect(utilitiesMatches).toBeTruthy();
       if (utilitiesMatches) expect(utilitiesMatches.length).toBe(1);
+    });
+
+    it('should use Tailwind utility classes via @apply', () => {
+      expect(indexCssContent).toContain('@apply');
+      expect(indexCssContent).toContain('w-full');
+      expect(indexCssContent).toContain('mx-auto');
+      expect(indexCssContent).toContain('absolute');
     });
   });
 });
