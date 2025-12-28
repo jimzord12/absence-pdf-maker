@@ -804,3 +804,188 @@ Total Tasks: 30
 ### Task Dependencies
 
 Tasks are numbered sequentially to indicate build order. Each task should be completed before moving to the next one to ensure dependencies are available when needed.
+
+---
+
+### 031-task-tailwind-installation
+
+**Identifier:** `031-task-tailwind-installation`
+
+**Description:**
+Install TailwindCSS, PostCSS, and autoprefixer as development dependencies for the project.
+
+**Constraints:**
+
+- Use npm for package installation
+- Install latest stable versions compatible with Vite
+- Include types where available
+
+**Acceptance Criteria:**
+
+- [ ] `tailwindcss` package installed
+- [ ] `postcss` package installed
+- [ ] `autoprefixer` package installed
+- [ ] All packages listed in `package.json` devDependencies
+- [ ] No installation errors or conflicts
+
+---
+
+### 032-task-tailwind-configuration
+
+**Identifier:** `032-task-tailwind-configuration`
+
+**Description:**
+Configure TailwindCSS with PostCSS and integrate existing design tokens from globals.css into Tailwind theme configuration.
+
+**Constraints:**
+
+- Use existing CSS variables for theme configuration
+- Maintain current color scheme and spacing scale
+- Configure content paths for all source files
+- Use PostCSS with Tailwind and autoprefixer
+
+**Acceptance Criteria:**
+
+- [ ] `tailwind.config.js` created with theme configuration
+- [ ] `postcss.config.js` created with Tailwind and autoprefixer plugins
+- [ ] Colors from globals.css migrated to Tailwind theme
+- [ ] Spacing scale from globals.css migrated to Tailwind theme
+- [ ] Typography scale from globals.css migrated to Tailwind theme
+- [ ] Border radius from globals.css migrated to Tailwind theme
+- [ ] Content paths configured for `src/**/*.{js,jsx,ts,tsx}`
+- [ ] Configuration preserves existing design tokens
+
+---
+
+### 033-task-tailwind-css-import
+
+**Identifier:** `033-task-tailwind-css-import`
+
+**Description:**
+Replace existing CSS imports with Tailwind directives and ensure proper setup in main entry point.
+
+**Constraints:**
+
+- Replace globals.css with Tailwind directives
+- Keep essential CSS (custom animations, accessibility utilities)
+- Update main.tsx to import new CSS file
+
+**Acceptance Criteria:**
+
+- [ ] `src/index.css` updated with `@tailwind base`, `@tailwind components`, `@tailwind utilities`
+- [ ] Custom animations (fadeInUp, pulse-dot) preserved in Tailwind layer
+- [ ] Accessibility utilities (sr-only, focus-visible) preserved in Tailwind layer
+- [ ] Container utility class preserved
+- [ ] globals.css replaced with Tailwind version
+- [ ] main.tsx imports updated CSS file correctly
+- [ ] No duplicate CSS rules
+
+---
+
+### 034-task-tailwind-shared-components-migration
+
+**Identifier:** `034-task-tailwind-shared-components-migration`
+
+**Description:**
+Migrate all shared UI components (Button, Input, Select, Textarea, Modal, Spinner, Card, Alert) to use Tailwind utility classes instead of inline styles.
+
+**Constraints:**
+
+- Preserve all component variants and functionality
+- Use Tailwind utility classes for all styling
+- Remove inline style objects where possible
+- Maintain component prop interfaces
+
+**Acceptance Criteria:**
+
+- [ ] `Button.tsx` uses Tailwind utilities for variants and sizes
+- [ ] `Input.tsx` uses Tailwind utilities for styling and error states
+- [ ] `Select.tsx` uses Tailwind utilities for styling and error states
+- [ ] `Textarea.tsx` uses Tailwind utilities for styling and error states
+- [ ] `Modal.tsx` uses Tailwind utilities for backdrop and content styling
+- [ ] `Spinner.tsx` uses Tailwind utilities for animation
+- [ ] `Card.tsx` uses Tailwind utilities for container styling
+- [ ] `Alert.tsx` uses Tailwind utilities for variants (info, success, warning, error)
+- [ ] All components maintain previous functionality
+- [ ] No inline style objects remain (except for dynamic values)
+
+---
+
+### 035-task-tailwind-cleanup-globals
+
+**Identifier:** `035-task-tailwind-cleanup-globals`
+
+**Description:**
+Clean up and remove redundant CSS from globals.css that is now handled by Tailwind, keeping only necessary custom styles.
+
+**Constraints:**
+
+- Remove styles now covered by Tailwind
+- Keep custom animations and utilities
+- Keep reduced motion media query
+- Maintain accessibility utilities
+
+**Acceptance Criteria:**
+
+- [ ] Duplicate CSS variables removed (colors, spacing, typography now in Tailwind)
+- [ ] Reset styles removed (Tailwind Preflight handles this)
+- [ ] Custom animations (fadeInUp, pulse-dot) preserved
+- [ ] Accessibility utilities (sr-only, focus-visible) preserved
+- [ ] Container utility preserved
+- [ ] Reduced motion media query preserved
+- [ ] File is clean and well-documented
+- [ ] No unused CSS rules remain
+
+---
+
+### 036-task-tailwind-validation-and-testing
+
+**Identifier:** `036-task-tailwind-validation-and-testing`
+
+**Description:**
+Run tests and verify that the TailwindCSS migration is complete and all functionality works correctly.
+
+**Constraints:**
+
+- All existing tests must pass
+- Styling must match previous appearance
+- Responsive behavior must work correctly
+- No console errors related to styling
+
+**Acceptance Criteria:**
+
+- [ ] `npm run test` passes with all tests
+- [ ] `npm run lint` passes without new errors
+- [ ] `npm run typecheck` passes
+- [ ] Development server starts without errors
+- [ ] All components render with correct styling
+- [ ] Responsive layout works on mobile and desktop
+- [ ] Animations work smoothly
+- [ ] Form validation displays correctly
+- [ ] Modals open and close properly
+- [ ] No CSS conflicts or missing styles
+- [ ] Application works as expected visually
+
+---
+
+## Summary
+
+Total Tasks: 36 (including 6 new TailwindCSS tasks)
+
+### Task Categories
+
+- **Infrastructure & Setup:** Tasks 001-003
+- **Shared Layer:** Tasks 004-006
+- **Domain & State:** Tasks 007-009
+- **Holidays & Logic:** Tasks 010-012
+- **Form Features:** Tasks 013-021
+- **PDF Generation:** Tasks 022-024
+- **UX & PWA:** Tasks 025-026
+- **Testing & Quality:** Tasks 027-030
+- **TailwindCSS Migration:** Tasks 031-036
+
+### Task Dependencies
+
+Tasks are numbered sequentially to indicate build order. Each task should be completed before moving to the next one to ensure dependencies are available when needed.
+
+TailwindCSS migration tasks (031-036) should be completed in sequence to ensure proper setup and testing.
