@@ -87,7 +87,7 @@ describe('Input', () => {
     it('should apply error styling to input when error is present', () => {
       render(<Input error="Error message" />);
       const input = screen.getByRole('textbox');
-      expect(input).toHaveClass('border-red-500', 'focus:ring-red-500');
+      expect(input).toHaveClass('border-red-500', 'focus-visible:ring-red-500');
       expect(input).not.toHaveClass('border-gray-300');
     });
 
@@ -213,8 +213,8 @@ describe('Input', () => {
       const input = screen.getByRole('textbox');
       expect(input).toHaveClass(
         'w-full', 'px-3', 'py-2', 'rounded-md', 'border',
-        'focus:outline-none', 'focus:ring-2', 'focus:ring-black',
-        'focus:border-transparent', 'transition-colors'
+        'focus-visible:outline-none', 'focus-visible:ring-2', 'focus-visible:ring-black',
+        'focus-visible:border-transparent', 'transition-colors'
       );
     });
   });

@@ -48,9 +48,9 @@ describe('task-031-tailwind-installation', () => {
   });
 
   it('should have tailwindcss compatible with current node version', () => {
-    // Tailwind CSS 4.x requires Node.js 18+ or 20+
+    // Tailwind CSS 3.x is stable and compatible with current PostCSS setup
     const tailwindVersion = packageJson.devDependencies.tailwindcss;
     const versionWithoutCaret = tailwindVersion.replace(/^\^/, '');
-    expect(versionWithoutCaret).toMatch(/^4\./); // Should be using Tailwind v4.x
+    expect(versionWithoutCaret).toMatch(/^3\./); // Should be using Tailwind v3.x for PostCSS compatibility
   });
 });

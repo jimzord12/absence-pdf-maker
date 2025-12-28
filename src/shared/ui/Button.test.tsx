@@ -159,7 +159,7 @@ describe('Button', () => {
     it('should have focus ring styles', () => {
       render(<Button>Button</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('focus:outline-none', 'focus:ring-2', 'focus:ring-offset-2');
+      expect(button).toHaveClass('focus-visible:outline-none', 'focus-visible:ring-2', 'focus-visible:ring-offset-2');
     });
   });
 

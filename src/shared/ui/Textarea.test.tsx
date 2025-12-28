@@ -63,7 +63,7 @@ describe('Textarea', () => {
     it('should apply error styling to textarea when error is present', () => {
       render(<Textarea error="Error message" />);
       const textarea = screen.getByRole('textbox');
-      expect(textarea).toHaveClass('border-red-500', 'focus:ring-red-500');
+      expect(textarea).toHaveClass('border-red-500', 'focus-visible:ring-red-500');
       expect(textarea).not.toHaveClass('border-gray-300');
     });
 
@@ -228,8 +228,8 @@ describe('Textarea', () => {
       const textarea = screen.getByRole('textbox');
       expect(textarea).toHaveClass(
         'w-full', 'px-3', 'py-2', 'rounded-md', 'border',
-        'focus:outline-none', 'focus:ring-2', 'focus:ring-black',
-        'focus:border-transparent', 'transition-colors'
+        'focus-visible:outline-none', 'focus-visible:ring-2', 'focus-visible:ring-black',
+        'focus-visible:border-transparent', 'transition-colors'
       );
     });
   });

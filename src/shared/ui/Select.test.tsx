@@ -101,7 +101,7 @@ describe('Select', () => {
     it('should apply error styling to select when error is present', () => {
       render(<Select options={mockOptions} error="Error message" />);
       const select = screen.getByRole('combobox');
-      expect(select).toHaveClass('border-red-500', 'focus:ring-red-500');
+      expect(select).toHaveClass('border-red-500', 'focus-visible:ring-red-500');
       expect(select).not.toHaveClass('border-gray-300');
     });
 
@@ -207,8 +207,8 @@ describe('Select', () => {
       const select = screen.getByRole('combobox');
       expect(select).toHaveClass(
         'w-full', 'px-3', 'py-2', 'rounded-md', 'border', 'bg-white',
-        'focus:outline-none', 'focus:ring-2', 'focus:ring-black',
-        'focus:border-transparent', 'transition-colors'
+        'focus-visible:outline-none', 'focus-visible:ring-2', 'focus-visible:ring-black',
+        'focus-visible:border-transparent', 'transition-colors'
       );
     });
   });
