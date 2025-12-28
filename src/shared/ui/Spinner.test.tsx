@@ -22,14 +22,6 @@ describe('Spinner', () => {
       const dots = spinner.querySelectorAll('div');
       expect(dots.length).toBe(3);
     });
-
-    it('should render three dots for animation', () => {
-      render(<Spinner />);
-      const spinner = screen.getByRole('status');
-      // Select only the dot divs, not the sr-only span
-      const dots = spinner.querySelectorAll('div:not(.sr-only)');
-      expect(dots.length).toBe(3);
-    });
   });
 
   describe('size variants', () => {
@@ -82,9 +74,7 @@ describe('Spinner', () => {
       const dots = Array.from(spinner.querySelectorAll('div'));
 
       dots.forEach(dot => {
-        const style = dot.getAttribute('style');
-        expect(style).toContain('animation:');
-        expect(style).toContain('pulse-dot');
+        expect(dot).toHaveClass('animate-pulse-dot');
       });
     });
   });
@@ -104,15 +94,13 @@ describe('Spinner', () => {
   });
 
   describe('animation styles', () => {
-    it('should have animation style applied to dots', () => {
+    it('should have animation class applied to dots', () => {
       render(<Spinner />);
       const spinner = screen.getByRole('status');
       const dots = spinner.querySelectorAll('div');
 
       dots.forEach(dot => {
-        const style = dot.getAttribute('style');
-        expect(style).toContain('animation');
-        expect(style).toContain('pulse-dot');
+        expect(dot).toHaveClass('animate-pulse-dot');
       });
     });
 
@@ -159,17 +147,13 @@ describe('Spinner', () => {
     it('should use flexbox for centering dots', () => {
       render(<Spinner />);
       const spinner = screen.getByRole('status');
-      const style = spinner.getAttribute('style');
-      expect(style).toContain('display: flex');
-      expect(style).toContain('align-items: center');
-      expect(style).toContain('justify-content: center');
+      expect(spinner).toHaveClass('flex', 'items-center', 'justify-center');
     });
 
     it('should have gap between dots', () => {
       render(<Spinner />);
       const spinner = screen.getByRole('status');
-      const style = spinner.getAttribute('style');
-      expect(style).toContain('gap: 4px');
+      expect(spinner).toHaveClass('gap-1');
     });
   });
 

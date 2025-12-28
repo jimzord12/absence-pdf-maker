@@ -29,25 +29,19 @@ export const Spinner: React.FC<SpinnerProps> = ({ size = 'md', className = '' })
 
   return (
     <div
-      className={`${currentSize.container} ${className}`}
+      className={`${currentSize.container} flex items-center justify-center gap-1 ${className}`}
       role="status"
       aria-label="Loading"
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '4px',
-      }}
     >
       {[0, 1, 2].map((i) => (
         <div
           key={i}
+          className="animate-pulse-dot"
           style={{
             width: currentSize.dot,
             height: currentSize.dot,
             borderRadius: '50%',
             backgroundColor: 'var(--color-primary)',
-            animation: 'pulse-dot 1.4s ease-in-out infinite',
             animationDelay: `${i * 0.2}s`,
           }}
         />
