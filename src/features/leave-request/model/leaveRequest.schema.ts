@@ -1,45 +1,66 @@
 import { z } from 'zod';
 
-export const UserProfileSchema = z.object({
-  fullName: z.string().min(1, 'Full name is required'),
-  email: z.string().email('Invalid email format'),
-  phone: z.string().min(1, 'Phone number is required'),
-  employeeId: z.string().optional(),
-  department: z.string().min(1, 'Department is required'),
-  position: z.string().min(1, 'Position is required'),
-}).refine(
-  (data) => {
-    const errors: { [key: string]: string } = {};
-    if (!data.fullName || data.fullName.trim() === '') {
-      errors.fullName = 'Full name is required';
-    }
-    if (!data.email || data.email.trim() === '') {
-      errors.email = 'Email is required';
-    }
-    if (!data.phone || data.phone.trim() === '') {
-      errors.phone = 'Phone number is required';
-    }
-    if (!data.department || data.department.trim() === '') {
-      errors.department = 'Department is required';
-    }
-    if (!data.position || data.position.trim() === '') {
-      errors.position = 'Position is required';
-    }
-    return Object.keys(errors).length === 0;
-  },
-  { message: 'Please fill in all required fields' }
-);
+export const UserProfileSchema = z
+  .object({
+    fullName: z.string().min(1, 'Full name is required'),
+    fathersName: z.string().min(1, "Father's name is required"),
+    email: z.string().email('Invalid email format'),
+    phone: z.string().min(1, 'Phone number is required'),
+    identityNumber: z.string().min(1, 'Identity number is required'),
+    employeeId: z.string().optional(),
+    department: z.string().min(1, 'Department is required'),
+    position: z.string().min(1, 'Position is required'),
+    companyName: z.string().min(1, 'Company name is required'),
+    employerName: z.string().min(1, 'Employer name is required'),
+  })
+  .refine(
+    data => {
+      const errors: { [key: string]: string } = {};
+      if (!data.fullName || data.fullName.trim() === '') {
+        errors.fullName = 'Full name is required';
+      }
+      if (!data.fathersName || data.fathersName.trim() === '') {
+        errors.fathersName = "Father's name is required";
+      }
+      if (!data.email || data.email.trim() === '') {
+        errors.email = 'Email is required';
+      }
+      if (!data.phone || data.phone.trim() === '') {
+        errors.phone = 'Phone number is required';
+      }
+      if (!data.identityNumber || data.identityNumber.trim() === '') {
+        errors.identityNumber = 'Identity number is required';
+      }
+      if (!data.department || data.department.trim() === '') {
+        errors.department = 'Department is required';
+      }
+      if (!data.position || data.position.trim() === '') {
+        errors.position = 'Position is required';
+      }
+      if (!data.companyName || data.companyName.trim() === '') {
+        errors.companyName = 'Company name is required';
+      }
+      if (!data.employerName || data.employerName.trim() === '') {
+        errors.employerName = 'Employer name is required';
+      }
+      return Object.keys(errors).length === 0;
+    },
+    { message: 'Please fill in all required fields' }
+  );
 
-export const LeaveRequestSchema = z.object({
-  profile: UserProfileSchema,
-  leaveType: z.enum(['annual', 'sick', 'unpaid', 'other']),
-  startDate: z.date(),
-  endDate: z.date(),
-  reason: z.string().optional(),
-  createdAt: z.date(),
-  signatureDataUrl: z.string().optional(),
-}).refine(
-  (data) => data.startDate <= data.endDate,
-  { message: 'End date must be after start date', path: ['endDate'] }
-);
+export const LeaveRequestSchema = z
+  .object({
+    profile: UserProfileSchema,
+    leaveType: z.enum(['annual', 'sick', 'unpaid', 'other']),
+    leaveAllowance: z.boolean().default(false),
+    startDate: z.date(),
+    endDate: z.date(),
+    reason: z.string().optional(),
+    createdAt: z.date(),
+    signatureDataUrl: z.string().optional(),
+  })
+  .refine(data => data.startDate <= data.endDate, {
+    message: 'End date must be after start date',
+    path: ['endDate'],
+  });
 

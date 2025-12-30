@@ -13,9 +13,10 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@react-pdf/renderer": "^4.3.2",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.26",
-    "jspdf": "^3.0.4",
+    "pako": "^2.1.0",
     "react": "^19.2.3",
     "react-day-picker": "^9.13.0",
     "react-dom": "^19.2.3",

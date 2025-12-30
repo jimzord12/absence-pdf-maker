@@ -989,3 +989,89 @@ Total Tasks: 36 (including 6 new TailwindCSS tasks)
 Tasks are numbered sequentially to indicate build order. Each task should be completed before moving to the next one to ensure dependencies are available when needed.
 
 TailwindCSS migration tasks (031-036) should be completed in sequence to ensure proper setup and testing.
+
+---
+
+### 041-modern-pdf-setup-and-models
+
+**Identifier:** `041-modern-pdf-setup-and-models`
+
+**Description:**
+Set up the environment for modern PDF generation using `@react-pdf/renderer`. Update the data models to support new fields required by the Greek leave request template (Father's Name, Identity Number, etc.) and create the initial React-PDF component.
+
+**Constraints:**
+
+- Use `@react-pdf/renderer`
+- Support Greek characters (fonts)
+- Match the provided document layout
+
+**Acceptance Criteria:**
+
+- [x] `@react-pdf/renderer` installed
+- [x] `UserProfileSchema` updated with new fields
+- [x] `LeaveRequestSchema` updated with `leaveAllowance`
+- [x] `LeaveRequestPdf` component created and styled
+
+---
+
+### 042-modern-pdf-service-integration
+
+**Identifier:** `042-modern-pdf-service-integration`
+
+**Description:**
+Refactor the PDF service to use the new `@react-pdf/renderer` component instead of `jsPDF`. Implement the generation and download logic.
+
+**Constraints:**
+
+- Replace `jsPDF` implementation
+- Maintain existing function signatures where possible or update call sites
+- Ensure blob generation works correctly
+
+**Acceptance Criteria:**
+
+- [ ] `generateLeaveRequestPdf` uses `pdf()` from `@react-pdf/renderer`
+- [ ] `downloadLeaveRequestPdf` handles blob download correctly
+- [ ] Service tests updated or verified
+
+---
+
+### 043-modern-pdf-ui-updates
+
+**Identifier:** `043-modern-pdf-ui-updates`
+
+**Description:**
+Update the user interface to collect the new required fields (Father's Name, Identity Number, Company Name, Employer Name, Leave Allowance Preference) and ensure they are passed correctly to the PDF generation service.
+
+**Constraints:**
+
+- Add input fields to `PersonalDetailsSection`
+- Add allowance preference to `LeaveRequestForm`
+- Validate new fields
+
+**Acceptance Criteria:**
+
+- [ ] Input fields for new profile data added
+- [ ] Leave allowance checkbox/radio added
+- [ ] Form validation updated
+- [ ] `ReviewAndGenerate` component updated to pass correct data
+
+---
+
+### 044-modern-pdf-cleanup
+
+**Identifier:** `044-modern-pdf-cleanup`
+
+**Description:**
+Remove the old `jsPDF` dependencies and unused template code to keep the codebase clean.
+
+**Constraints:**
+
+- Remove `jspdf` package
+- Remove `src/features/leave-request/services/pdf/templates/`
+
+**Acceptance Criteria:**
+
+- [ ] `jspdf` uninstalled
+- [ ] Old template files deleted
+- [ ] No dead code related to old PDF generation remains
+
