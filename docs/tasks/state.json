@@ -181,7 +181,7 @@
       "description": "Update UI for new fields and PDF generation"
     },
     "044-modern-pdf-cleanup": {
-      "state": "not_started",
+      "state": "completed",
       "lastUpdated": "2025-12-30T14:00:00Z",
       "description": "Remove old jsPDF code"
     }

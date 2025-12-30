@@ -1071,7 +1071,7 @@ Remove the old `jsPDF` dependencies and unused template code to keep the codebas
 
 **Acceptance Criteria:**
 
-- [ ] `jspdf` uninstalled
-- [ ] Old template files deleted
-- [ ] No dead code related to old PDF generation remains
+- [x] `jspdf` uninstalled
+- [x] Old template files deleted
+- [x] No dead code related to old PDF generation remains
 
