@@ -1,8 +1,8 @@
 import React from 'react';
-import { Input } from '../../../shared/ui/Input';
-import { Card } from '../../../shared/ui/Card';
-import { useFormContext } from 'react-hook-form';
 import type { FieldErrors } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
+import { Card } from '../../../shared/ui/Card';
+import { Input } from '../../../shared/ui/Input';
 import type { LeaveRequest } from '../model/leaveRequest.types';
 
 interface PersonalDetailsSectionProps {
@@ -20,9 +20,7 @@ interface PersonalDetailsSectionProps {
  * Integrates with React Hook Form for validation and state management.
  * Uses shared UI components (Card, Input) for consistent styling.
  */
-export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({
-  errors,
-}) => {
+export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ errors }) => {
   // Access form context for register function if not passed directly
   // This allows the component to work both with and without FormContext
   const methods = useFormContext<LeaveRequest>();
@@ -32,7 +30,9 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({
   return (
     <section aria-labelledby="personal-details-heading">
       <Card>
-        <h2 id="personal-details-heading" className="text-xl font-semibold mb-4">Personal Details</h2>
+        <h2 id="personal-details-heading" className="text-xl font-semibold mb-4">
+          Personal Details
+        </h2>
         <div className="space-y-4">
           <Input
             label="Full Name"
@@ -78,3 +78,4 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({
     </section>
   );
 };
+

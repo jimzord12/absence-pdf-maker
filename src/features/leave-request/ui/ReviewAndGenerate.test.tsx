@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ReviewAndGenerate } from './ReviewAndGenerate';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useLeaveRequestStore } from '../state/leaveRequest.store';
+import { ReviewAndGenerate } from './ReviewAndGenerate';
 
 // Mock persistence services
 const mockExportProfileToJson = vi.fn();
@@ -86,7 +86,12 @@ afterEach(() => {
     leaveDraft: {},
     signature: { signatureDataUrl: '' },
     holidays: { holidaySet: new Set() },
-    ui: { isSignatureModalOpen: false, isGeneratingPdf: false, lastGeneratedFileName: '', errorMessage: null },
+    ui: {
+      isSignatureModalOpen: false,
+      isGeneratingPdf: false,
+      lastGeneratedFileName: '',
+      errorMessage: null,
+    },
   });
 });
 
@@ -143,7 +148,8 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe', fathersName: 'Father Doe',
+            fullName: 'John Doe',
+            fathersName: 'Father Doe',
             email: '',
             phone: '',
             employeeId: '',
@@ -185,7 +191,8 @@ describe('ReviewAndGenerate', () => {
           profile: {
             fullName: '',
             email: '',
-            phone: '123-456-7890', identityNumber: 'AB123456',
+            phone: '123-456-7890',
+            identityNumber: 'AB123456',
             employeeId: '',
             department: '',
             position: '',
@@ -248,7 +255,9 @@ describe('ReviewAndGenerate', () => {
             phone: '',
             employeeId: '',
             department: '',
-            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
+            position: 'Developer',
+            companyName: 'Acme Corp',
+            employerName: 'Jane Boss',
           },
         });
       });
@@ -672,12 +681,16 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe', fathersName: 'Father Doe',
+            fullName: 'John Doe',
+            fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890', identityNumber: 'AB123456',
+            phone: '123-456-7890',
+            identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
+            position: 'Developer',
+            companyName: 'Acme Corp',
+            employerName: 'Jane Boss',
           },
           signature: {
             signatureDataUrl: 'data:image/png;base64,test',
@@ -818,12 +831,16 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe', fathersName: 'Father Doe',
+            fullName: 'John Doe',
+            fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890', identityNumber: 'AB123456',
+            phone: '123-456-7890',
+            identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
+            position: 'Developer',
+            companyName: 'Acme Corp',
+            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -846,12 +863,16 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe', fathersName: 'Father Doe',
+            fullName: 'John Doe',
+            fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890', identityNumber: 'AB123456',
+            phone: '123-456-7890',
+            identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
+            position: 'Developer',
+            companyName: 'Acme Corp',
+            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -879,12 +900,16 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe', fathersName: 'Father Doe',
+            fullName: 'John Doe',
+            fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890', identityNumber: 'AB123456',
+            phone: '123-456-7890',
+            identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
+            position: 'Developer',
+            companyName: 'Acme Corp',
+            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -916,12 +941,16 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe', fathersName: 'Father Doe',
+            fullName: 'John Doe',
+            fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890', identityNumber: 'AB123456',
+            phone: '123-456-7890',
+            identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
+            position: 'Developer',
+            companyName: 'Acme Corp',
+            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -949,12 +978,16 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe', fathersName: 'Father Doe',
+            fullName: 'John Doe',
+            fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890', identityNumber: 'AB123456',
+            phone: '123-456-7890',
+            identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
+            position: 'Developer',
+            companyName: 'Acme Corp',
+            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -982,12 +1015,16 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe', fathersName: 'Father Doe',
+            fullName: 'John Doe',
+            fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890', identityNumber: 'AB123456',
+            phone: '123-456-7890',
+            identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
+            position: 'Developer',
+            companyName: 'Acme Corp',
+            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -1006,19 +1043,25 @@ describe('ReviewAndGenerate', () => {
 
       render(<ReviewAndGenerate />);
 
-      expect(screen.getByText('Please wait while we generate your PDF document...')).toBeInTheDocument();
+      expect(
+        screen.getByText('Please wait while we generate your PDF document...')
+      ).toBeInTheDocument();
     });
 
     it('should show default message when not generating', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe', fathersName: 'Father Doe',
+            fullName: 'John Doe',
+            fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890', identityNumber: 'AB123456',
+            phone: '123-456-7890',
+            identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
+            position: 'Developer',
+            companyName: 'Acme Corp',
+            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -1037,7 +1080,9 @@ describe('ReviewAndGenerate', () => {
 
       render(<ReviewAndGenerate />);
 
-      expect(screen.getByText('Click to generate and download your leave request PDF')).toBeInTheDocument();
+      expect(
+        screen.getByText('Click to generate and download your leave request PDF')
+      ).toBeInTheDocument();
     });
   });
 
@@ -1192,12 +1237,16 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe', fathersName: 'Father Doe',
+            fullName: 'John Doe',
+            fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890', identityNumber: 'AB123456',
+            phone: '123-456-7890',
+            identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
+            position: 'Developer',
+            companyName: 'Acme Corp',
+            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -1213,9 +1262,12 @@ describe('ReviewAndGenerate', () => {
       const generateButton = screen.getByRole('button', { name: 'Generate PDF' });
       await user.click(generateButton);
 
-      await waitFor(() => {
-        expect(screen.getByText('PDF generated successfully!')).toBeInTheDocument();
-      }, { timeout: 3000 });
+      await waitFor(
+        () => {
+          expect(screen.getByText('PDF generated successfully!')).toBeInTheDocument();
+        },
+        { timeout: 3000 }
+      );
     });
 
     it('should dismiss success message when dismiss button is clicked', async () => {
@@ -1282,7 +1334,9 @@ describe('ReviewAndGenerate', () => {
 
       render(<ReviewAndGenerate />);
 
-      expect(screen.getByText('An error occurred while processing your request')).toBeInTheDocument();
+      expect(
+        screen.getByText('An error occurred while processing your request')
+      ).toBeInTheDocument();
     });
 
     it('should dismiss errorMessage from store when dismiss button is clicked', () => {
@@ -1308,7 +1362,6 @@ describe('ReviewAndGenerate', () => {
   });
 
   describe('Edge cases and integration', () => {
-
     it('should call calculateAbsenceDays when dates are set', () => {
       // Clear the mock to check only this test's call
       mockCalculateAbsenceDays.mockClear();
@@ -1339,3 +1392,4 @@ describe('ReviewAndGenerate', () => {
     });
   });
 });
+

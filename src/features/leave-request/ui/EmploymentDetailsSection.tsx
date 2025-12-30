@@ -1,8 +1,8 @@
 import React from 'react';
-import { Input } from '../../../shared/ui/Input';
-import { Card } from '../../../shared/ui/Card';
-import { useFormContext } from 'react-hook-form';
 import type { FieldErrors } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
+import { Card } from '../../../shared/ui/Card';
+import { Input } from '../../../shared/ui/Input';
 import type { LeaveRequest } from '../model/leaveRequest.types';
 
 interface EmploymentDetailsSectionProps {
@@ -21,9 +21,7 @@ interface EmploymentDetailsSectionProps {
  * Uses shared UI components (Card, Input) for consistent styling.
  * Follows the same pattern as PersonalDetailsSection.
  */
-export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> = ({
-  errors,
-}) => {
+export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> = ({ errors }) => {
   // Access form context for register function if not passed directly
   // This allows the component to work both with and without FormContext
   const methods = useFormContext<LeaveRequest>();
@@ -33,7 +31,9 @@ export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> =
   return (
     <section aria-labelledby="employment-details-heading">
       <Card>
-        <h2 id="employment-details-heading" className="text-xl font-semibold mb-4">Employment Details</h2>
+        <h2 id="employment-details-heading" className="text-xl font-semibold mb-4">
+          Employment Details
+        </h2>
         <div className="space-y-4">
           <Input
             label="Employee ID (Optional)"
@@ -79,3 +79,4 @@ export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> =
     </section>
   );
 };
+

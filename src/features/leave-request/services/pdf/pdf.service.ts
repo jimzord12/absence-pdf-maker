@@ -1,8 +1,8 @@
 import { pdf } from '@react-pdf/renderer';
 import React from 'react';
-import { LeaveRequestPdf } from './LeaveRequestPdf';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
 import { calculateAbsenceDays } from '../absenceDays';
+import { LeaveRequestPdf } from './LeaveRequestPdf';
 
 /**
  * Generate a leave request PDF blob.
@@ -16,13 +16,13 @@ export const generateLeaveRequestPdf = async (
   holidays: Set<string>
 ): Promise<Blob> => {
   const absenceBreakdown = calculateAbsenceDays(data.startDate, data.endDate, holidays);
-  
+
   // Create the PDF document
   // We need to pass the component as a React element
   const blob = await pdf(
     React.createElement(LeaveRequestPdf, { data, absenceDays: absenceBreakdown.absenceDays })
   ).toBlob();
-  
+
   return blob;
 };
 

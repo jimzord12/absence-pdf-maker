@@ -13,12 +13,14 @@
 ## Code Style
 
 **Architecture:** Vertical slice/feature-first. Each feature (`src/features/<feature>/`) owns its UI, model, state, services. Shared primitives (Button, Input, Modal, etc.) in `src/shared/`. Feature structure:
+
 - `model/` - Zod schemas and TypeScript types
 - `services/` - Business logic, external integrations, utilities
 - `state/` - Zustand stores
 - `ui/` - React components
 
 **Imports:** Absolute imports preferred. Order: React/third-party imports → internal shared imports → feature-specific imports. Group related imports together with blank lines between groups. Example:
+
 ```tsx
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -35,6 +37,7 @@ import { useLeaveRequestStore } from '../state/leaveRequest.store';
 **Types:** TypeScript strict mode enabled (`strict: true`, `noUnusedLocals`, `noUnusedParameters`). Use Zod schemas for validation; infer types from schemas where possible (`z.infer<typeof Schema>`). Define explicit types in `*.types.ts` files when schemas are insufficient or for clarity.
 
 **Naming Conventions:**
+
 - Components: PascalCase (e.g., `LeaveRequestForm`, `PersonalDetailsSection`)
 - Variables/Functions: camelCase (e.g., `calculateAbsenceDays`, `setProfile`)
 - Constants: UPPER_SNAKE_CASE (e.g., `SIGNATURE_WIDTH`, `DATE_LOCALE`)
@@ -54,6 +57,7 @@ import { useLeaveRequestStore } from '../state/leaveRequest.store';
 **Error Handling:** Graceful errors with user-friendly messages. Validate JSON/data imports against schemas before use. Use try-catch blocks with specific error handling. Log errors with context in development mode (`import.meta.env.DEV`). Display error messages via Alert components or user-friendly notifications. Throw descriptive errors from services for callers to handle.
 
 **React Conventions:**
+
 - Use functional components with hooks
 - Define constants outside components (e.g., arrays, objects)
 - Use refs to track previous values and prevent unnecessary effects
@@ -65,6 +69,7 @@ import { useLeaveRequestStore } from '../state/leaveRequest.store';
 **PDF Generation:** Declarative generation using `@react-pdf/renderer`. PDF layout defined as React components (e.g., `src/features/leave-request/services/pdf/LeaveRequestPdf.tsx`). Register fonts (e.g., Roboto) for Greek character support. Handle signature images and dynamic data via props. Generate filenames with sanitized employee ID and ISO date.
 
 **Testing:**
+
 - Unit tests for schemas, services, calculations (colocated with source)
 - Integration tests for component interactions and user flows
 - Use Vitest with jsdom environment
@@ -77,3 +82,4 @@ import { useLeaveRequestStore } from '../state/leaveRequest.store';
 - Test rules relaxed in test files (`@typescript-eslint/no-explicit-any: off`)
 
 **Linting & Type Checking:** Always run `npm run lint` and `npm run typecheck` before committing. ESLint config includes TypeScript strict mode, React Hooks rules, and React Refresh optimization. Fix all linting errors before submission.
+
