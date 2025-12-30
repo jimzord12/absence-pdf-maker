@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LeaveRequestSchema } from '../model/leaveRequest.schema';
 import type { LeaveRequest } from '../model/leaveRequest.types';
 import { useLeaveRequestStore } from '../state/leaveRequest.store';
@@ -20,28 +20,6 @@ const leaveTypeOptions = [
   { value: 'unpaid', label: 'Unpaid Leave' },
   { value: 'other', label: 'Other' },
 ];
-
-// Deep comparison function to prevent unnecessary updates
-const deepEqual = (obj1: unknown, obj2: unknown): boolean => {
-  if (obj1 === obj2) return true;
-  if (typeof obj1 !== 'object' || typeof obj2 !== 'object' || obj1 === null || obj2 === null) {
-    return false;
-  }
-
-  const keys1 = Object.keys(obj1 as object);
-  const keys2 = Object.keys(obj2 as object);
-
-  if (keys1.length !== keys2.length) return false;
-
-  for (const key of keys1) {
-    if (!keys2.includes(key)) return false;
-    if (!deepEqual((obj1 as Record<string, unknown>)[key], (obj2 as Record<string, unknown>)[key])) {
-      return false;
-    }
-  }
-
-  return true;
-};
 
 export const LeaveRequestForm: React.FC = () => {
   const {
@@ -78,8 +56,7 @@ export const LeaveRequestForm: React.FC = () => {
   // Setup React Hook Form with Zod resolver
   const {
     register,
-    handleSubmit,
-    formState: { errors, isSubmitting, isDirty },
+    formState: { errors },
     watch,
     reset,
   } = useForm<LeaveRequest>({
@@ -103,68 +80,27 @@ export const LeaveRequestForm: React.FC = () => {
     },
   });
 
-  // Watch form fields to update Zustand store
-  const watchedFields = watch();
-
-  // Use ref to prevent infinite loops - only update store when values actually change
-  const prevWatchedFieldsRef = useRef(watchedFields);
-
   // Sync form changes to Zustand store
   useEffect(() => {
-    // Only update store if values have actually changed
-    if (!deepEqual(prevWatchedFieldsRef.current, watchedFields)) {
-      // Update profile data in store
-      setProfile(watchedFields.profile);
-
-      // Update leave draft in store
+    const subscription = watch((value) => {
+      if (value.profile) {
+        setProfile(value.profile);
+      }
       setLeaveDraft({
-        leaveType: watchedFields.leaveType,
-        startDate: watchedFields.startDate,
-        endDate: watchedFields.endDate,
-        reason: watchedFields.reason,
+        leaveType: value.leaveType,
+        startDate: value.startDate,
+        endDate: value.endDate,
+        reason: value.reason,
       });
-
-      // Update signature in store
-      if (watchedFields.signatureDataUrl) {
-        setSignature({ signatureDataUrl: watchedFields.signatureDataUrl });
+      if (value.signatureDataUrl) {
+        setSignature({ signatureDataUrl: value.signatureDataUrl });
       }
+    });
 
-      // Update ref to latest values
-      prevWatchedFieldsRef.current = watchedFields;
-    }
-  }, [watchedFields, setProfile, setLeaveDraft, setSignature]);
+    return () => subscription.unsubscribe();
+  }, [watch, setProfile, setLeaveDraft, setSignature]);
 
-  // Handle form submission
-  const onSubmit = async (data: LeaveRequest) => {
-    try {
-      clearErrorMessage();
-
-      // Validate that signature is captured
-      if (!data.signatureDataUrl) {
-        alert('Please capture your signature before submitting.');
-        return;
-      }
-
-      // Ensure dates are valid Date objects
-      if (!data.startDate || !data.endDate) {
-        alert('Please select both start and end dates.');
-        return;
-      }
-
-      // Persist profile data to store (already done via useEffect)
-      if (import.meta.env.DEV) {
-        console.log('Form submitted successfully:', data);
-      }
-
-      // Show success message
-      alert(
-        `Leave request submitted successfully!\n\nTotal days: ${absenceDaysCalculation.totalDays}\nHolidays: ${absenceDaysCalculation.holidayDays}\nWeekends: ${absenceDaysCalculation.weekendDays}\nAbsence days: ${absenceDaysCalculation.absenceDays}`
-      );
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('An error occurred while submitting the form. Please try again.');
-    }
-  };
+  // Handle signature modal open
 
   // Handle signature modal open
   const handleOpenSignature = () => {
@@ -173,7 +109,7 @@ export const LeaveRequestForm: React.FC = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className={`space-y-6 ${!hasAnimated ? 'animate-fade-in-up' : ''}`} role="form">
+      <form className={`space-y-6 ${!hasAnimated ? 'animate-fade-in-up' : ''}`} role="form">
         {/* Error Message */}
         {errorMessage && (
           <Alert variant="error" onDismiss={clearErrorMessage} className="animate-stagger-1">
@@ -215,8 +151,8 @@ export const LeaveRequestForm: React.FC = () => {
           <h2 className="text-xl font-semibold mb-4">Employment Details</h2>
           <div className="space-y-4">
             <Input
-              label="Employee ID"
-              placeholder="EMP-12345"
+              label="Employee ID (Optional)"
+              placeholder="Leave blank if not applicable"
               {...register('profile.employeeId')}
               error={errors.profile?.employeeId?.message}
             />
@@ -349,16 +285,8 @@ export const LeaveRequestForm: React.FC = () => {
             variant="secondary"
             type="button"
             onClick={() => reset()}
-            disabled={isSubmitting}
           >
             Reset Form
-          </Button>
-          <Button
-            variant="primary"
-            type="submit"
-            disabled={isSubmitting || !isDirty}
-          >
-            {isSubmitting ? 'Submitting...' : 'Submit Leave Request'}
           </Button>
         </div>
       </form>

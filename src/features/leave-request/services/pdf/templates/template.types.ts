@@ -2,6 +2,7 @@ export interface TemplateField {
   label: string;
   valuePath: string;
   position: { x: number; y: number };
+  conditionalRender?: (data: unknown) => boolean;
 }
 
 export interface TemplateSection {

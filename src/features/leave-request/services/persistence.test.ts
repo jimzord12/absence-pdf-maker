@@ -236,15 +236,26 @@ describe('persistence', () => {
       expect(mockSetProfile).not.toHaveBeenCalled();
     });
 
-    it('should throw error for missing required field - employeeId', async () => {
-      const invalidProfile = { ...validProfile, employeeId: '' };
-      const file = new File([JSON.stringify(invalidProfile)], 'user-details.json', {
+    it('should accept optional employeeId field', async () => {
+      const validProfileNoId = { ...validProfile, employeeId: '' };
+      const file = new File([JSON.stringify(validProfileNoId)], 'user-details.json', {
         type: 'application/json',
       });
-      (readFileAsText as any).mockResolvedValue(JSON.stringify(invalidProfile));
+      (readFileAsText as any).mockResolvedValue(JSON.stringify(validProfileNoId));
 
-      await expect(importProfileFromJson(file)).rejects.toThrow('Invalid profile data:');
-      expect(mockSetProfile).not.toHaveBeenCalled();
+      await importProfileFromJson(file);
+
+      expect(readFileAsText).toHaveBeenCalledWith(file);
+      expect(mockSetProfile).toHaveBeenCalledWith(
+        expect.objectContaining({
+          fullName: 'John Doe',
+          email: 'john.doe@example.com',
+          phone: '123-456-7890',
+          employeeId: '',
+          department: 'Engineering',
+          position: 'Software Developer',
+        })
+      );
     });
 
     it('should throw error for missing required field - department', async () => {

@@ -14,11 +14,10 @@ const SIGNATURE_WIDTH = 60;
 const SIGNATURE_HEIGHT = 30;
 const DATE_LOCALE = 'en-GB';
 
-// Schema for PDF data validation
 const PdfDataSchema = z.object({
   profile: z.object({
     fullName: z.string(),
-    employeeId: z.string(),
+    employeeId: z.string().optional(),
     email: z.string(),
     phone: z.string(),
     department: z.string(),
@@ -90,31 +89,28 @@ function renderSection(
   doc.setFontSize(fonts.sizes.small);
 
   fields.forEach((field) => {
+    if (field.conditionalRender && !field.conditionalRender(data)) {
+      return;
+    }
+
     const labelY = y + fonts.sizes.title + 5 + field.position.y;
     const valueY = labelY + 5;
 
-    // Render label
     doc.setFont(fonts.label, 'bold');
     doc.text(field.label, x + field.position.x, labelY);
 
-    // Render value
     const value = getValueByPath(data, field.valuePath);
     doc.setFont(fonts.body, 'normal');
 
-    // Check if this is a signature field
     if (field.valuePath === 'signatureDataUrl' && value && value.startsWith('data:image')) {
-      // Render signature image
       try {
         doc.addImage(value, 'PNG', x + field.position.x, valueY, SIGNATURE_WIDTH, SIGNATURE_HEIGHT);
-      } catch (error) {
-        // If image fails, render as text
+      } catch {
         doc.text('(Unable to render signature)', x + field.position.x, valueY);
       }
     } else {
-      // Render text value
       const maxWidth = width - field.position.x;
       const textLines = doc.splitTextToSize(value, maxWidth);
-      // Handle both string (single line) and array (multiple lines) returns
       if (Array.isArray(textLines)) {
         textLines.forEach((line: string, index: number) => {
           doc.text(line, x + field.position.x, valueY + (index * 4));
@@ -181,8 +177,7 @@ export const downloadLeaveRequestPdf = async (
   try {
     const blob = await generateLeaveRequestPdf(data, template);
 
-    // Generate filename
-    const employeeId = data.profile.employeeId.replace(/[^a-zA-Z0-9]/g, '_');
+    const employeeId = data.profile.employeeId?.replace(/[^a-zA-Z0-9]/g, '_') || 'unknown';
     const today = new Date().toISOString().split('T')[0];
     const filename = `LeaveRequest_${employeeId}_${today}.pdf`;
 

@@ -47,6 +47,10 @@ export const defaultTemplate: TemplateDefinition = {
           label: 'Employee ID',
           valuePath: 'profile.employeeId',
           position: { x: 0, y: 8 },
+          conditionalRender: (data) => {
+            const employeeId = (data as { profile: { employeeId?: string } }).profile?.employeeId;
+            return !!employeeId && employeeId.trim() !== '';
+          },
         },
         {
           label: 'Email',

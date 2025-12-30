@@ -36,8 +36,8 @@ export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> =
         <h2 id="employment-details-heading" className="text-xl font-semibold mb-4">Employment Details</h2>
         <div className="space-y-4">
           <Input
-            label="Employee ID"
-            placeholder="EMP-12345"
+            label="Employee ID (Optional)"
+            placeholder="Leave blank if not applicable"
             inputType="text"
             {...register?.('profile.employeeId')}
             error={errors?.profile?.employeeId?.message}

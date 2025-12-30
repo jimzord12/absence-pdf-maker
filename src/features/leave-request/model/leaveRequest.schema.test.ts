@@ -68,8 +68,8 @@ describe('UserProfileSchema', () => {
     }
   });
 
-  it('should reject profile with missing employeeId', () => {
-    const invalidProfile = {
+  it('should accept profile with missing employeeId', () => {
+    const validProfile = {
       fullName: 'John Doe',
       email: 'john.doe@example.com',
       phone: '+1 555-123-4567',
@@ -77,10 +77,10 @@ describe('UserProfileSchema', () => {
       department: 'Engineering',
       position: 'Senior Developer',
     };
-    const result = UserProfileSchema.safeParse(invalidProfile);
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.issues[0].path).toContain('employeeId');
+    const result = UserProfileSchema.safeParse(validProfile);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.employeeId).toBe('');
     }
   });
 

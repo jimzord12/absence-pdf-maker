@@ -141,10 +141,30 @@
       "state": "committed",
       "lastUpdated": "2025-12-28T17:20:00Z"
     },
-     "036-task-tailwind-validation-and-testing": {
-      "state": "committed",
-      "lastUpdated": "2025-12-28T20:10:00Z"
-    }
+      "036-task-tailwind-validation-and-testing": {
+        "state": "committed",
+        "lastUpdated": "2025-12-28T20:10:00Z"
+      },
+      "037-fix-issue-001-pdf-generation": {
+        "state": "completed",
+        "lastUpdated": "2025-12-29T00:00:00Z",
+        "description": "Fixed form sync to store and connected PDF generation"
+      },
+      "038-create-issue-002-remove-submit-button": {
+        "state": "committed",
+        "lastUpdated": "2025-12-30T13:00:00Z",
+        "description": "Remove or fix misleading Submit Leave Request button"
+      },
+      "039-create-issue-003-pdf-template-improvements": {
+        "state": "open",
+        "lastUpdated": "2025-12-29T00:00:00Z",
+        "description": "Investigate and improve PDF template layout and styling"
+      },
+      "040-create-issue-004-employee-id-optional": {
+        "state": "committed",
+        "lastUpdated": "2025-12-30T13:00:00Z",
+        "description": "Make Employee ID field optional in form and PDF"
+      }
   }
 }
 
