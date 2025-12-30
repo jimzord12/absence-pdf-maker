@@ -1029,9 +1029,9 @@ Refactor the PDF service to use the new `@react-pdf/renderer` component instead 
 
 **Acceptance Criteria:**
 
-- [ ] `generateLeaveRequestPdf` uses `pdf()` from `@react-pdf/renderer`
-- [ ] `downloadLeaveRequestPdf` handles blob download correctly
-- [ ] Service tests updated or verified
+- [x] `generateLeaveRequestPdf` uses `pdf()` from `@react-pdf/renderer`
+- [x] `downloadLeaveRequestPdf` handles blob download correctly
+- [x] Service tests updated or verified
 
 ---
 
