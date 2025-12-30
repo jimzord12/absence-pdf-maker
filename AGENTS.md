@@ -62,7 +62,7 @@ import { useLeaveRequestStore } from '../state/leaveRequest.store';
 - Destructure props explicitly at component top
 - Use semantic HTML and ARIA attributes (e.g., `role="form"`)
 
-**PDF Generation:** Template-based generation using jsPDF. Templates defined in `src/features/leave-request/services/pdf/templates/`. Use `TemplateDefinition` types for type safety. Handle signature images with try-catch fallback to text. Generate filenames with sanitized employee ID and ISO date.
+**PDF Generation:** Declarative generation using `@react-pdf/renderer`. PDF layout defined as React components (e.g., `src/features/leave-request/services/pdf/LeaveRequestPdf.tsx`). Register fonts (e.g., Roboto) for Greek character support. Handle signature images and dynamic data via props. Generate filenames with sanitized employee ID and ISO date.
 
 **Testing:**
 - Unit tests for schemas, services, calculations (colocated with source)
