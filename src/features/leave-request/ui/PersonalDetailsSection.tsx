@@ -43,6 +43,22 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({
           />
 
           <Input
+            label="Father's Name"
+            placeholder="Enter father's name"
+            inputType="text"
+            {...register?.('profile.fathersName')}
+            error={errors?.profile?.fathersName?.message}
+          />
+
+          <Input
+            label="Identity Number (ADT)"
+            placeholder="Enter identity number"
+            inputType="text"
+            {...register?.('profile.identityNumber')}
+            error={errors?.profile?.identityNumber?.message}
+          />
+
+          <Input
             label="Email Address"
             placeholder="your.email@company.com"
             inputType="email"

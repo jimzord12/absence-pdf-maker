@@ -1050,10 +1050,10 @@ Update the user interface to collect the new required fields (Father's Name, Ide
 
 **Acceptance Criteria:**
 
-- [ ] Input fields for new profile data added
-- [ ] Leave allowance checkbox/radio added
-- [ ] Form validation updated
-- [ ] `ReviewAndGenerate` component updated to pass correct data
+- [x] Input fields for new profile data added
+- [x] Leave allowance checkbox/radio added
+- [x] Form validation updated
+- [x] `ReviewAndGenerate` component updated to pass correct data
 
 ---
 

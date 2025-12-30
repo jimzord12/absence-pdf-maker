@@ -44,6 +44,22 @@ export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> =
           />
 
           <Input
+            label="Company Name"
+            placeholder="Enter company name"
+            inputType="text"
+            {...register?.('profile.companyName')}
+            error={errors?.profile?.companyName?.message}
+          />
+
+          <Input
+            label="Employer Name"
+            placeholder="Enter employer name"
+            inputType="text"
+            {...register?.('profile.employerName')}
+            error={errors?.profile?.employerName?.message}
+          />
+
+          <Input
             label="Department"
             placeholder="Engineering"
             inputType="text"

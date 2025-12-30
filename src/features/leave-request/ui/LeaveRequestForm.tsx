@@ -1,17 +1,17 @@
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
-import { LeaveRequestSchema } from '../model/leaveRequest.schema';
-import type { LeaveRequest } from '../model/leaveRequest.types';
-import { useLeaveRequestStore } from '../state/leaveRequest.store';
-import { calculateAbsenceDays } from '../services/absenceDays';
-import { SignatureModal } from './SignatureModal';
+import { useForm } from 'react-hook-form';
+import { Alert } from '../../../shared/ui/Alert';
 import { Button } from '../../../shared/ui/Button';
+import { Card } from '../../../shared/ui/Card';
 import { Input } from '../../../shared/ui/Input';
 import { Select } from '../../../shared/ui/Select';
 import { Textarea } from '../../../shared/ui/Textarea';
-import { Card } from '../../../shared/ui/Card';
-import { Alert } from '../../../shared/ui/Alert';
+import { LeaveRequestSchema } from '../model/leaveRequest.schema';
+import type { LeaveRequest } from '../model/leaveRequest.types';
+import { calculateAbsenceDays } from '../services/absenceDays';
+import { useLeaveRequestStore } from '../state/leaveRequest.store';
+import { SignatureModal } from './SignatureModal';
 
 // Leave type options for the select dropdown
 const leaveTypeOptions = [
@@ -65,13 +65,18 @@ export const LeaveRequestForm: React.FC = () => {
     defaultValues: {
       profile: {
         fullName: profile.fullName || '',
+        fathersName: profile.fathersName || '',
         email: profile.email || '',
         phone: profile.phone || '',
+        identityNumber: profile.identityNumber || '',
         employeeId: profile.employeeId || '',
         department: profile.department || '',
         position: profile.position || '',
+        companyName: profile.companyName || '',
+        employerName: profile.employerName || '',
       },
       leaveType: leaveDraft.leaveType || 'annual',
+      leaveAllowance: leaveDraft.leaveAllowance ?? false,
       startDate: leaveDraft.startDate ?? undefined,
       endDate: leaveDraft.endDate ?? undefined,
       reason: leaveDraft.reason || '',
@@ -82,12 +87,13 @@ export const LeaveRequestForm: React.FC = () => {
 
   // Sync form changes to Zustand store
   useEffect(() => {
-    const subscription = watch((value) => {
+    const subscription = watch(value => {
       if (value.profile) {
         setProfile(value.profile);
       }
       setLeaveDraft({
         leaveType: value.leaveType,
+        leaveAllowance: value.leaveAllowance,
         startDate: value.startDate,
         endDate: value.endDate,
         reason: value.reason,
@@ -129,6 +135,20 @@ export const LeaveRequestForm: React.FC = () => {
             />
 
             <Input
+              label="Father's Name"
+              placeholder="Enter father's name"
+              {...register('profile.fathersName')}
+              error={errors.profile?.fathersName?.message}
+            />
+
+            <Input
+              label="Identity Number (ADT)"
+              placeholder="Enter identity number"
+              {...register('profile.identityNumber')}
+              error={errors.profile?.identityNumber?.message}
+            />
+
+            <Input
               label="Email Address"
               inputType="email"
               placeholder="your.email@company.com"
@@ -158,6 +178,20 @@ export const LeaveRequestForm: React.FC = () => {
             />
 
             <Input
+              label="Company Name"
+              placeholder="Enter company name"
+              {...register('profile.companyName')}
+              error={errors.profile?.companyName?.message}
+            />
+
+            <Input
+              label="Employer Name"
+              placeholder="Enter employer name"
+              {...register('profile.employerName')}
+              error={errors.profile?.employerName?.message}
+            />
+
+            <Input
               label="Department"
               placeholder="Engineering"
               {...register('profile.department')}
@@ -184,12 +218,24 @@ export const LeaveRequestForm: React.FC = () => {
               error={errors.leaveType?.message}
             />
 
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="leaveAllowance"
+                className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                {...register('leaveAllowance')}
+              />
+              <label htmlFor="leaveAllowance" className="text-sm font-medium text-gray-700">
+                Request Leave Allowance (Επίδομα Αδείας)
+              </label>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input
                 label="Start Date"
                 inputType="date"
                 {...register('startDate', {
-                  setValueAs: (value) => (value ? new Date(value) : undefined),
+                  setValueAs: value => (value ? new Date(value) : undefined),
                 })}
                 error={errors.startDate?.message}
               />
@@ -198,7 +244,7 @@ export const LeaveRequestForm: React.FC = () => {
                 label="End Date"
                 inputType="date"
                 {...register('endDate', {
-                  setValueAs: (value) => (value ? new Date(value) : undefined),
+                  setValueAs: value => (value ? new Date(value) : undefined),
                 })}
                 error={errors.endDate?.message}
               />
@@ -248,17 +294,9 @@ export const LeaveRequestForm: React.FC = () => {
             {signature.signatureDataUrl ? (
               <div className="border border-gray-200 rounded-lg p-4">
                 <p className="text-sm text-gray-500 mb-2">Your Signature:</p>
-                <img
-                  src={signature.signatureDataUrl}
-                  alt="Signature"
-                  className="max-h-24"
-                />
+                <img src={signature.signatureDataUrl} alt="Signature" className="max-h-24" />
                 <div className="mt-2">
-                  <Button
-                    variant="secondary"
-                    type="button"
-                    onClick={handleOpenSignature}
-                  >
+                  <Button variant="secondary" type="button" onClick={handleOpenSignature}>
                     Update Signature
                   </Button>
                 </div>
@@ -281,11 +319,7 @@ export const LeaveRequestForm: React.FC = () => {
 
         {/* Form Actions */}
         <div className="flex gap-3 justify-end animate-stagger-6">
-          <Button
-            variant="secondary"
-            type="button"
-            onClick={() => reset()}
-          >
+          <Button variant="secondary" type="button" onClick={() => reset()}>
             Reset Form
           </Button>
         </div>
@@ -296,3 +330,4 @@ export const LeaveRequestForm: React.FC = () => {
     </>
   );
 };
+

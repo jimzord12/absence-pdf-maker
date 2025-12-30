@@ -19,6 +19,12 @@ vi.mock('../services/absenceDays', () => ({
   calculateAbsenceDays: (...args: any[]) => mockCalculateAbsenceDays(...args),
 }));
 
+// Mock PDF service
+const mockDownloadLeaveRequestPdf = vi.fn();
+vi.mock('../services/pdf/pdf.service', () => ({
+  downloadLeaveRequestPdf: (...args: any[]) => mockDownloadLeaveRequestPdf(...args),
+}));
+
 // Mock formatDate function
 vi.mock('../../../shared/lib/dates', () => ({
   formatDate: (date: Date) => {
@@ -37,11 +43,15 @@ beforeEach(() => {
   useLeaveRequestStore.setState({
     profile: {
       fullName: '',
+      fathersName: '',
       email: '',
       phone: '',
+      identityNumber: '',
       employeeId: '',
       department: '',
       position: '',
+      companyName: '',
+      employerName: '',
     },
     leaveDraft: {
       leaveType: undefined,
@@ -133,7 +143,7 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe',
+            fullName: 'John Doe', fathersName: 'Father Doe',
             email: '',
             phone: '',
             employeeId: '',
@@ -175,7 +185,7 @@ describe('ReviewAndGenerate', () => {
           profile: {
             fullName: '',
             email: '',
-            phone: '123-456-7890',
+            phone: '123-456-7890', identityNumber: 'AB123456',
             employeeId: '',
             department: '',
             position: '',
@@ -238,7 +248,7 @@ describe('ReviewAndGenerate', () => {
             phone: '',
             employeeId: '',
             department: '',
-            position: 'Developer',
+            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
           },
         });
       });
@@ -662,12 +672,12 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe',
+            fullName: 'John Doe', fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890',
+            phone: '123-456-7890', identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer',
+            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
           },
           signature: {
             signatureDataUrl: 'data:image/png;base64,test',
@@ -808,12 +818,12 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe',
+            fullName: 'John Doe', fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890',
+            phone: '123-456-7890', identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer',
+            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -836,12 +846,12 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe',
+            fullName: 'John Doe', fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890',
+            phone: '123-456-7890', identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer',
+            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -869,12 +879,12 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe',
+            fullName: 'John Doe', fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890',
+            phone: '123-456-7890', identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer',
+            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -906,12 +916,12 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe',
+            fullName: 'John Doe', fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890',
+            phone: '123-456-7890', identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer',
+            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -939,12 +949,12 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe',
+            fullName: 'John Doe', fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890',
+            phone: '123-456-7890', identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer',
+            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -972,12 +982,12 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe',
+            fullName: 'John Doe', fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890',
+            phone: '123-456-7890', identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer',
+            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -1003,12 +1013,12 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe',
+            fullName: 'John Doe', fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890',
+            phone: '123-456-7890', identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer',
+            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -1182,12 +1192,12 @@ describe('ReviewAndGenerate', () => {
       act(() => {
         useLeaveRequestStore.setState({
           profile: {
-            fullName: 'John Doe',
+            fullName: 'John Doe', fathersName: 'Father Doe',
             email: 'john@example.com',
-            phone: '123-456-7890',
+            phone: '123-456-7890', identityNumber: 'AB123456',
             employeeId: 'EMP001',
             department: 'Engineering',
-            position: 'Developer',
+            position: 'Developer', companyName: 'Acme Corp', employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
