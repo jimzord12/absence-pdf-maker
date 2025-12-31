@@ -3,7 +3,7 @@
 **Issue ID:** 002
 **Component:** LeaveRequestForm / UX
 **Date Discovered:** 2025-12-29
-**Status:** Open
+**Status:** Completed
 **Priority:** Medium
 
 ## Summary
@@ -32,6 +32,7 @@ The "Submit Leave Request" button in LeaveRequestForm is misleading and provides
 - **File:** `src/features/leave-request/ui/LeaveRequestForm.tsx:137-167`
 - **Issue:** The `onSubmit` function only validates signature and shows alerts
 - **Evidence:**
+
   ```typescript
   const onSubmit = async (data: LeaveRequest) => {
     try {
@@ -45,6 +46,7 @@ The "Submit Leave Request" button in LeaveRequestForm is misleading and provides
 
       // ... (rest of function just logs to console and shows alert)
   ```
+
 - **Root Cause:** The form submission workflow is not actually connected to any backend or meaningful action. PDF generation is handled separately in ReviewAndGenerate component, making "Submit Leave Request" redundant.
 
 #### 2. Submit Button is Always Visible
@@ -53,11 +55,7 @@ The "Submit Leave Request" button in LeaveRequestForm is misleading and provides
 - **Issue:** "Submit Leave Request" button is always visible in form actions
 - **Evidence:**
   ```typescript
-  <Button
-    variant="primary"
-    type="submit"
-    disabled={isSubmitting || !isDirty}
-  >
+  <Button variant="primary" type="submit" disabled={isSubmitting || !isDirty}>
     {isSubmitting ? 'Submitting...' : 'Submit Leave Request'}
   </Button>
   ```
@@ -114,10 +112,12 @@ The "Submit Leave Request" button in LeaveRequestForm is misleading and provides
 ### Relevant Files
 
 1. **`src/features/leave-request/ui/LeaveRequestForm.tsx`**
+
    - Line 137-167: `onSubmit` function
    - Line 346-362: "Submit Leave Request" button in JSX
 
 2. **`src/features/leave-request/ui/ReviewAndGenerate.tsx`**
+
    - Line 117-176: `handleGeneratePdf` function
    - Line 297-309: "Generate PDF" button in JSX
 
@@ -129,6 +129,7 @@ The "Submit Leave Request" button in LeaveRequestForm is misleading and provides
 ### 1. Legacy Workflow
 
 The application may have been designed with a traditional form submission workflow where:
+
 - Users fill out forms
 - Submit forms to backend API
 - Backend processes and responds
@@ -145,6 +146,7 @@ The "Review & Generate" section was added as a new feature but the original form
 ### Short Term (Immediate Fix)
 
 1. **Remove "Submit Leave Request" Button Entirely**
+
    - Remove the button from the form actions section
    - Remove the `onSubmit` function or replace with no-op
    - Simplify form to focus on data entry and real-time sync
@@ -164,18 +166,16 @@ The "Review & Generate" section was added as a new feature but the original form
 ### Medium Term (Proper Fix)
 
 1. **Conditional Signature Requirement in PDF Generation**
+
    - If "Submit Leave Request" is kept, only enable it when signature is captured
    - This validates the requirement at the right time
    - Remove signature alert if button is disabled
    - **Implementation:**
      ```typescript
      const hasSignature = !!data.signatureDataUrl;
-     <Button
-       type="submit"
-       disabled={isSubmitting || !isDirty || !hasSignature}
-     >
+     <Button type="submit" disabled={isSubmitting || !isDirty || !hasSignature}>
        {isSubmitting ? 'Submitting...' : 'Submit Leave Request'}
-     </Button>
+     </Button>;
      ```
 
 2. **Repurpose "Submit" as "Clear Form" Alternative**
@@ -186,6 +186,7 @@ The "Review & Generate" section was added as a new feature but the original form
 ### Long Term (Architectural)
 
 1. **Form State Management Review**
+
    - Consider if the form should have a "submit" workflow at all
    - Currently, the app functions as a live data entry form + PDF preview/generation
    - This is actually a valid pattern, just needs UI cleanup
@@ -203,10 +204,11 @@ The "Review & Generate" section was added as a new feature but the original form
 
 ## Related Issues
 
-- [#001 - PDF Generation Not Working](./001-pdf-generation-not-working.issue-rep.md) - Related because the submit workflow was added during investigation of PDF generation issue
+- [#001 - PDF Generation Not Working](./closed/001-pdf-generation-not-working.issue-rep.md) - Related because the submit workflow was added during investigation of PDF generation issue
 
 ## References
 
 - LeaveRequestForm implementation: `src/features/leave-request/ui/LeaveRequestForm.tsx`
 - PDF generation flow: `src/features/leave-request/ui/ReviewAndGenerate.tsx`
 - React Hook Form documentation: https://react-hook-form.com/
+
