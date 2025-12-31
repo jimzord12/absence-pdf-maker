@@ -204,7 +204,7 @@ The "Review & Generate" section was added as a new feature but the original form
 
 ## Related Issues
 
-- [#001 - PDF Generation Not Working](./closed/001-pdf-generation-not-working.issue-rep.md) - Related because the submit workflow was added during investigation of PDF generation issue
+- [#001 - PDF Generation Not Working](./001-pdf-generation-not-working.issue-rep.md) - Related because the submit workflow was added during investigation of PDF generation issue
 
 ## References
 

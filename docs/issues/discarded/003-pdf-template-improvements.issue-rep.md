@@ -9,6 +9,7 @@
 ## Summary
 
 The current PDF template (`default.template.ts`) has significant layout and styling issues that result in:
+
 - Overlapping text elements (words printed on top of other words)
 - Poor use of vertical space
 - Inconsistent spacing between sections
@@ -43,15 +44,15 @@ The current PDF template (`default.template.ts`) has significant layout and styl
     {
       label: 'Full Name',
       valuePath: 'profile.fullName',
-      position: { x: 0, y: 0 },   // Right on top of section title
+      position: { x: 0, y: 0 }, // Right on top of section title
     },
     {
       label: 'Employee ID',
       valuePath: 'profile.employeeId',
-      position: { x: 0, y: 8 },   // Only 8 pixels down
+      position: { x: 0, y: 8 }, // Only 8 pixels down
     },
     // ... more fields with 8px spacing
-  ]
+  ];
   ```
 - **Problem:** 8px spacing is too tight for business documents
 
@@ -66,9 +67,9 @@ The current PDF template (`default.template.ts`) has significant layout and styl
     { label: 'Employee ID', position: { x: 0, y: 8 } },
     { label: 'Email', position: { x: 0, y: 16 } },
     { label: 'Phone', position: { x: 0, y: 24 } },
-    { label: 'Department', position: { x: 80, y: 0 } },   // Second column starts at Y=0
+    { label: 'Department', position: { x: 80, y: 0 } }, // Second column starts at Y=0
     { label: 'Position', position: { x: 80, y: 8 } },
-  ]
+  ];
   ```
 - **Problem:** No visual separation between left and right columns, fields overlap in Y space
 
@@ -187,12 +188,14 @@ export const defaultTemplate: TemplateDefinition = {
 ### Relevant Files
 
 1. **`src/features/leave-request/services/pdf/templates/default.template.ts`**
+
    - Line 7-129: Template definition with hardcoded positions
    - Line 29-107: Employee Information fields (overlapping)
    - Line 79-106: Leave Details fields
    - Line 109-127: Signature section
 
 2. **`src/features/leave-request/services/pdf/pdf.service.ts`**
+
    - Line 74-127: `renderSection()` function that uses template positions
    - Line 88-103: `getValueByPath()` helper for data extraction
    - Line 105-125: Text rendering loop using fixed positions
@@ -205,6 +208,7 @@ export const defaultTemplate: TemplateDefinition = {
 ### 1. Manual Layout Design
 
 Template was designed using hardcoded pixel coordinates instead of dynamic layout calculation:
+
 - Hardcoded `position: { x: 0, y: 8 }` for each field
 - No automatic spacing calculation based on text height
 - No consideration for variable content length (reason field can be multiple lines)
@@ -212,6 +216,7 @@ Template was designed using hardcoded pixel coordinates instead of dynamic layou
 ### 2. Limited jsPDF Knowledge
 
 Current implementation may not leverage advanced jsPDF features:
+
 - No automatic line height calculation
 - No automatic text wrapping with position updates
 - No use of jsPDF's built-in document or table features
@@ -219,6 +224,7 @@ Current implementation may not leverage advanced jsPDF features:
 ### 3. No Professional Templates
 
 Template was created from scratch without referencing:
+
 - Professional leave request form examples
 - HR document best practices
 - Government or business form standards
@@ -228,6 +234,7 @@ Template was created from scratch without referencing:
 ### Short Term (Research)
 
 1. **Research PDF Generation Libraries**
+
    - Investigate modern alternatives to jsPDF:
      - `react-pdf` (React-specific PDF generation)
      - `pdf-lib` (More modern API)
@@ -240,6 +247,7 @@ Template was created from scratch without referencing:
      - Integration ease with current codebase
 
 2. **Research Professional Templates**
+
    - Search for professional leave request form templates
    - Analyze spacing, layout, and styling best practices
    - Document industry standards for HR documents
@@ -252,6 +260,7 @@ Template was created from scratch without referencing:
 ### Medium Term (Template Refactor)
 
 1. **Calculate Dynamic Field Positions**
+
    - Implement helper to calculate Y position based on previous field
    - Add spacing between fields based on line height
    - Support multi-line text (reason field) with height calculation
@@ -268,6 +277,7 @@ Template was created from scratch without referencing:
      ```
 
 2. **Implement Two-Column Layout Logic**
+
    - Group fields into logical columns
    - Calculate column positions to prevent overlap
    - Add visual separators between columns
@@ -275,11 +285,12 @@ Template was created from scratch without referencing:
      ```typescript
      const columns = [
        { fields: ['fullName', 'employeeId'], columnX: 20 },
-       { fields: ['department', 'position'], columnX: 100 }
+       { fields: ['department', 'position'], columnX: 100 },
      ];
      ```
 
 3. **Add Section Spacing**
+
    - Increase vertical space between sections (currently 45px)
    - Add horizontal divider lines between sections
    - Add more whitespace for professional appearance
@@ -292,6 +303,7 @@ Template was created from scratch without referencing:
 ### Long Term (Architecture)
 
 1. **Switch to Modern PDF Library**
+
    - Evaluate and potentially migrate from jsPDF to more modern library
    - Prioritize libraries with:
      - Built-in table support
@@ -300,6 +312,7 @@ Template was created from scratch without referencing:
      - Active maintenance and community
 
 2. **Template System Redesign**
+
    - Create a more flexible template system that:
      - Supports different layouts (single column, two column, etc.)
      - Allows custom styling per section
@@ -324,8 +337,8 @@ Template was created from scratch without referencing:
 
 ## Related Issues
 
-- [#001 - PDF Generation Not Working](./001-pdf-generation-not-working.issue-rep.md) - PDF generation functionality
-- [#002 - Remove Submit Button](./002-remove-submit-button.issue-rep.md) - UI cleanup related to form workflow
+- [#001 - PDF Generation Not Working](../closed/001-pdf-generation-not-working.issue-rep.md) - PDF generation functionality
+- [#002 - Remove Submit Button](../closed/002-remove-submit-button.issue-rep.md) - UI cleanup related to form workflow
 
 ## References
 
@@ -333,3 +346,4 @@ Template was created from scratch without referencing:
 - jsPDF Autotable Plugin: https://github.com/simonbengtsson/jsPDF-AutoTable
 - React PDF Libraries Comparison: https://www.npmjs.com/search?q=pdf
 - PDF Generation Best Practices: https://www.smashingmagazine.com/2022/05/pdf-generation/
+

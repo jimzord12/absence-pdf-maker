@@ -20,15 +20,26 @@
               "review_fail",
               "review_pass",
               "completed",
+              "cancelled",
               "committed"
             ]
           },
           "lastUpdated": {
             "type": "string",
             "format": "date-time"
+          },
+          "description": {
+            "type": "string"
+          },
+          "blockedBy": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       }
     }
   }
 }
+

@@ -3,7 +3,7 @@
 **Issue ID:** 004
 **Component:** LeaveRequestForm / Data Model
 **Date Discovered:** 2025-12-29
-**Status:** Open
+**Status:** Completed
 **Priority:** Low
 
 ## Summary
@@ -32,7 +32,7 @@ The Employee ID field is currently marked as required in the data model and vali
     fullName: z.string().min(1, 'Full name is required'),
     email: z.string().email('Invalid email format'),
     phone: z.string().min(1, 'Phone number is required'),
-    employeeId: z.string().min(1, 'Employee ID is required'),  // REQUIRED
+    employeeId: z.string().min(1, 'Employee ID is required'), // REQUIRED
     department: z.string().min(1, 'Department is required'),
     position: z.string().min(1, 'Position is required'),
   });
@@ -47,7 +47,7 @@ The Employee ID field is currently marked as required in the data model and vali
   const PdfDataSchema = z.object({
     profile: z.object({
       fullName: z.string(),
-      employeeId: z.string(),  // REQUIRED in PDF schema
+      employeeId: z.string(), // REQUIRED in PDF schema
       email: z.string(),
       phone: z.string(),
       department: z.string(),
@@ -67,6 +67,7 @@ The Employee ID field is currently marked as required in the data model and vali
 #### 4. Real-World Context
 
 Many companies and organizations do not use traditional employee ID systems:
+
 - Contractors and freelancers
 - Small companies with informal processes
 - Remote workers without company IDs
@@ -119,14 +120,17 @@ Many companies and organizations do not use traditional employee ID systems:
 ### Relevant Files
 
 1. **`src/features/leave-request/model/leaveRequest.schema.ts`**
+
    - Line 7: `employeeId: z.string().min(1, 'Employee ID is required')`
    - Line 38-44: Schema validation that checks for empty employee ID
 
 2. **`src/features/leave-request/services/pdf/pdf.service.ts`**
+
    - Line 18-25: PDF data schema with required employee ID
    - Line 143: PDF validation will fail if employee ID is missing
 
 3. **`src/features/leave-request/ui/EmploymentDetailsSection.tsx`**
+
    - Likely contains Employee ID input with required validation
 
 4. **`src/features/leave-request/ui/LeaveRequestForm.tsx`**
@@ -138,6 +142,7 @@ Many companies and organizations do not use traditional employee ID systems:
 ### 1. One-Size-Fits-All Assumption
 
 Application was designed assuming all users are traditional employees with company-provided IDs. Doesn't account for:
+
 - Contractors/freelancers
 - Users without formal employment
 - Small businesses without formal ID systems
@@ -151,6 +156,7 @@ PDF template may have been designed assuming complete employee information is al
 ### Short Term (Immediate Fix)
 
 1. **Make Employee ID Optional in Form Schema**
+
    - File: `src/features/leave-request/model/leaveRequest.schema.ts:7`
    - Change `z.string().min(1, 'Employee ID is required')` to `z.string().optional()`
    - Update error message to be informative if present
@@ -161,6 +167,7 @@ PDF template may have been designed assuming complete employee information is al
    - **Expected Outcome:** Users can submit form without employee ID
 
 2. **Remove Employee ID from PDF Validation**
+
    - File: `src/features/leave-request/services/pdf/pdf.service.ts:18-25`
    - Change `employeeId: z.string()` to `employeeId: z.string().optional()`
    - Update PDF rendering to handle missing employee ID
@@ -184,13 +191,14 @@ PDF template may have been designed assuming complete employee information is al
        label: 'Employee ID',
        valuePath: 'profile.employeeId',
        position: { x: 0, y: 8 },
-       conditionalRender: (data) => !!data.profile.employeeId  // New property
+       conditionalRender: data => !!data.profile.employeeId, // New property
      };
      ```
 
 ### Medium Term (UX Improvements)
 
 1. **Add Field Hint/Help Text**
+
    - Add helper text explaining that Employee ID is optional
    - Provide examples of when it's needed vs. optional
    - **Implementation:**
@@ -211,11 +219,13 @@ PDF template may have been designed assuming complete employee information is al
 ### Long Term (Flexibility)
 
 1. **Configurable Required Fields**
+
    - Make required fields configurable (could be set by company admin)
    - Different companies might have different requirements
    - Could be stored in user profile or preferences
 
 2. **Dynamic Form Fields**
+
    - Allow adding/removing fields based on configuration
    - More flexible than hardcoded schema
 
@@ -241,3 +251,4 @@ PDF template may have been designed assuming complete employee information is al
 - Zod documentation: https://zod.dev/
 - Form validation best practices: https://react-hook-form.com/get-started
 - PDF form design patterns: https://uxdesign.cc/form-design/
+

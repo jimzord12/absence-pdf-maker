@@ -156,7 +156,7 @@
       "description": "Remove or fix misleading Submit Leave Request button"
     },
     "039-create-issue-003-pdf-template-improvements": {
-      "state": "not_started",
+      "state": "cancelled",
       "lastUpdated": "2025-12-29T00:00:00Z",
       "description": "Investigate and improve PDF template layout and styling"
     },
@@ -166,22 +166,22 @@
       "description": "Make Employee ID field optional in form and PDF"
     },
     "041-modern-pdf-setup-and-models": {
-      "state": "completed",
+      "state": "committed",
       "lastUpdated": "2025-12-30T14:00:00Z",
       "description": "Setup @react-pdf/renderer and update data models"
     },
     "042-modern-pdf-service-integration": {
-      "state": "completed",
+      "state": "committed",
       "lastUpdated": "2025-12-30T14:00:00Z",
       "description": "Refactor PDF service to use new renderer"
     },
     "043-modern-pdf-ui-updates": {
-      "state": "completed",
+      "state": "committed",
       "lastUpdated": "2025-12-30T14:00:00Z",
       "description": "Update UI for new fields and PDF generation"
     },
     "044-modern-pdf-cleanup": {
-      "state": "completed",
+      "state": "committed",
       "lastUpdated": "2025-12-30T14:00:00Z",
       "description": "Remove old jsPDF code"
     },

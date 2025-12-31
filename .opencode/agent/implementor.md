@@ -30,16 +30,22 @@ Read and **STRICTLY** follow the project implementation workflow guide in `docs/
 
 When the user requests to work on a task:
 
-1. **Read the task state**: Read `docs/tasks/state.json` to find the current state of all tasks.
+1. **Read task state**: Read `docs/tasks/state.json` to find the current state of all tasks.
 2. **Identify the task**: Determine which task the user wants to work on based on their input.
-3. **Display task details**: Read `docs/tasks/TASKS.md` and display:
+3. **Check for blockers**: Check if the task has a `blockedBy` array in `docs/tasks/state.json`. If present:
+   - Check the state of each blocking task
+   - If any blocking task is not in `completed` or `committed` state, inform the user
+   - Provide list of incomplete blockers
+   - Do not proceed with blocked tasks until dependencies are resolved
+4. **Display task details**: Read `docs/tasks/TASKS.md` and display:
    - Task identifier (e.g., `001-task-project-scaffolding`)
    - Task description
    - Current state
    - Constraints
    - Acceptance criteria
+   - Blocking tasks (if any)
    - Next steps based on current state
-4. **AWAIT USER CONFIRMATION**: STOP and wait for the user to confirm before proceeding.
+5. **AWAIT USER CONFIRMATION**: STOP and wait for the user to confirm before proceeding.
 
 ### Phase 2: Execute Task State Transitions
 
@@ -193,12 +199,13 @@ The finisher subagent should:
 ## Important Rules
 
 1. **ALWAYS** update `docs/tasks/state.json` when moving from one state to another
-2. **STOP and AWAIT User confirmation** before starting work on a task
-3. **DO NOT SKIP STATE TRANSITIONS** - go through each state one at a time
-4. **DO NOT PAUSE** between state transitions within a task (work through all states until `completed` or `committed`)
-5. **ONLY COMMIT** when explicitly requested by the User
-6. **Update timestamps** with current ISO datetime on each state change
-7. **Use subagents** for testing and reviewing steps via the Task tool
+2. **CHECK FOR BLOCKERS** before starting work on a task - verify all blocking tasks are completed
+3. **STOP and AWAIT User confirmation** before starting work on a task
+4. **DO NOT SKIP STATE TRANSITIONS** - go through each state one at a time
+5. **DO NOT PAUSE** between state transitions within a task (work through all states until `completed` or `committed`)
+6. **ONLY COMMIT** when explicitly requested by the User
+7. **Update timestamps** with current ISO datetime on each state change
+8. **Use subagents** for testing and reviewing steps via the Task tool
 
 ## State File Structure
 
@@ -213,11 +220,26 @@ All task states are tracked in `docs/tasks/state.json`:
     },
     "002-task-folder-structure": {
       "state": "not_started",
-      "lastUpdated": "2025-12-23T00:00:00Z"
+      "lastUpdated": "2025-12-23T00:00:00Z",
+      "description": "Create the vertical slice folder structure",
+      "blockedBy": []
+    },
+    "047-fix-issue-008-update-import-export": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-31T00:00:00Z",
+      "description": "Update import/export for new user information",
+      "blockedBy": ["050-fix-issue-011-user-info-changes"]
     }
   }
 }
 ```
+
+### Valid Task Properties
+
+- **`state`** (required) - Current state of the task
+- **`lastUpdated`** (required) - ISO datetime timestamp of last state change
+- **`description`** (optional) - Brief description of the task
+- **`blockedBy`** (optional) - Array of task identifiers that must complete before this task can start
 
 ### Valid States
 
@@ -228,6 +250,12 @@ All task states are tracked in `docs/tasks/state.json`:
 - `review_pass` - Code review has been requested and passed
 - `completed` - All work is done (implementation, tests, review)
 - `committed` - Changes have been committed to version control
+
+### Task Blocking Rules
+
+- A task with a `blockedBy` array can only proceed to `implemented` state when all tasks in the array have `completed` or `committed` state
+- Tasks without `blockedBy` array (or with empty array) have no dependencies
+- Always check blocking tasks before confirming work on a task
 
 ## Example Workflow
 

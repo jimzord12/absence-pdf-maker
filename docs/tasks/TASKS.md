@@ -1075,3 +1075,183 @@ Remove the old `jsPDF` dependencies and unused template code to keep the codebas
 - [x] Old template files deleted
 - [x] No dead code related to old PDF generation remains
 
+---
+
+### 045-fix-issue-006-ui-fixes
+
+**Identifier:** `045-fix-issue-006-ui-fixes`
+
+**Description:**
+Fix text wrapping issues in Personal Details section and make Absence Days calculation section always visible to prevent UI layout shifts.
+
+**Constraints:**
+
+- Must maintain existing form functionality
+- Should not break responsive design
+- Must work with Tailwind CSS
+
+**Acceptance Criteria:**
+
+- [ ] Input fields in `PersonalDetailsSection` have proper text wrapping styling
+- [ ] Long text wraps within input boxes without overflow
+- [ ] Absence Days calculation section always visible (not conditionally rendered)
+- [ ] Absence Days displays '—' when no dates are selected
+- [ ] UI layout remains consistent before and after selecting dates
+- [ ] No CSS conflicts with existing Tailwind classes
+- [ ] All tests pass with changes
+
+---
+
+### 046-fix-issue-007-pdf-generation-failure
+
+**Identifier:** `046-fix-issue-007-pdf-generation-failure`
+
+**Description:**
+Fix PDF generation failures by registering all required Roboto font variants, fixing invalid text element warnings, and adding Buffer polyfill for browser support.
+
+**Constraints:**
+
+- Must use `@react-pdf/renderer`
+- Must support Greek characters
+- Must maintain existing PDF layout
+
+**Acceptance Criteria:**
+
+- [ ] All Roboto font variants (400, 700 with normal and italic styles) properly registered
+- [ ] No "Could not resolve font" errors during PDF generation
+- [ ] No invalid text element warnings in console
+- [ ] All text content properly wrapped in `<Text>` components
+- [ ] Buffer polyfill added to Vite configuration
+- [ ] No "Buffer is not defined" warnings
+- [ ] PDF generation succeeds for all valid form inputs
+- [ ] Tests for PDF service pass
+
+---
+
+### 047-fix-issue-008-update-import-export
+
+**Identifier:** `047-fix-issue-008-update-import-export`
+
+**Description:**
+Update import/export profile functionality to include new user information fields, remove deprecated fields, and maintain data consistency with current form structure.
+
+**Constraints:**
+
+- Must work with current Zustand store structure
+- Must validate against current schema
+- Should handle migration from old profiles gracefully
+
+**Acceptance Criteria:**
+
+- [ ] Import/export service updated with current field set
+- [ ] Deprecated fields (Employer ID, Employer Name) removed from exported profiles
+- [ ] New fields included in exported profiles
+- [ ] Company Name defaults to "ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε" on import
+- [ ] Imported data validated against current schema
+- [ ] Error handling for invalid profile data
+- [ ] All existing tests pass
+- [ ] New tests for import/export with updated schema
+
+---
+
+### 048-fix-issue-009-datepicker-locale
+
+**Identifier:** `048-fix-issue-009-datepicker-locale`
+
+**Description:**
+Update DatePicker components to display dates in locale-specific format: "DD/MM/YYYY" for Greek (gr) and "MM/DD/YYYY" for English (en) users.
+
+**Constraints:**
+
+- Must integrate with existing locale system
+- Must use date-fns for formatting
+- Must maintain existing date validation
+
+**Acceptance Criteria:**
+
+- [ ] DatePicker reads current locale from app state
+- [ ] Greek locale displays dates as "DD/MM/YYYY"
+- [ ] English locale displays dates as "MM/dd/yyyy"
+- [ ] Date input validation respects locale format
+- [ ] Format switches dynamically when locale changes
+- [ ] All date-related components updated (DateRangeField, LeaveDetailsSection)
+- [ ] Tests for locale-specific date formatting
+
+---
+
+### 049-fix-issue-010-signature-persistence
+
+**Identifier:** `049-fix-issue-010-signature-persistence`
+
+**Description:**
+Fix signature persistence by including signature field in persisted store data and ensuring it survives page refreshes and navigation.
+
+**Constraints:**
+
+- Must work with localStorage size limits
+- Must handle Base64 data properly
+- Should consider privacy implications
+
+**Acceptance Criteria:**
+
+- [ ] Signature field included in store's `partialize` function
+- [ ] Signature data persists to localStorage after saving
+- [ ] Signature loads correctly on page refresh
+- [ ] Storage quota errors handled gracefully
+- [ ] Signature data validated before storage
+- [ ] Option to clear persisted signature for privacy
+- [ ] Tests for signature persistence
+
+---
+
+### 050-fix-issue-011-user-info-changes
+
+**Identifier:** `050-fix-issue-011-user-info-changes`
+
+**Description:**
+Remove duplicate Employer ID and Employer Name fields from Employment Details section and set default Company Name to "ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε".
+
+**Constraints:**
+
+- Must maintain existing form validation
+- Must update all related files (UI, schema, store)
+- Should not break existing functionality
+
+**Acceptance Criteria:**
+
+- [ ] Employer ID field removed from `EmploymentDetailsSection`
+- [ ] Employer Name field removed from `EmploymentDetailsSection`
+- [ ] Fields removed from `leaveRequest.schema.ts`
+- [ ] Company Name field defaults to "ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε" in store
+- [ ] Default value applied on form initialization
+- [ ] Field remains editable for users who need to change it
+- [ ] All existing tests updated or pass
+- [ ] Tests for new default value behavior
+
+---
+
+## Summary
+
+Total Tasks: 50 (including 6 new issue fix tasks)
+
+### Task Categories
+
+- **Infrastructure & Setup:** Tasks 001-003
+- **Shared Layer:** Tasks 004-006
+- **Domain & State:** Tasks 007-009
+- **Holidays & Logic:** Tasks 010-012
+- **Form Features:** Tasks 013-021
+- **PDF Generation:** Tasks 022-024
+- **UX & PWA:** Tasks 025-026
+- **Testing & Quality:** Tasks 027-030
+- **TailwindCSS Migration:** Tasks 031-036
+- **Modern PDF:** Tasks 041-044
+- **Issue Fixes:** Tasks 045-050
+
+### Task Dependencies
+
+Tasks are numbered sequentially to indicate build order. Each task should be completed before moving to the next one to ensure dependencies are available when needed.
+
+Issue fix tasks (045-050) should be prioritized based on issue severity and dependencies:
+- Task 050 (Issue 011) blocks Task 047 (Issue 008)
+- Task 046 (Issue 007) is high priority (PDF generation failure)
