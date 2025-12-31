@@ -212,8 +212,8 @@
       "description": "Fix signature persistence in store"
     },
     "050-fix-issue-011-user-info-changes": {
-      "state": "completed",
-      "lastUpdated": "2025-12-31T21:55:00Z",
+      "state": "committed",
+      "lastUpdated": "2025-12-31T21:57:00Z",
       "description": "Remove duplicate fields and set default company name"
     }
   }
