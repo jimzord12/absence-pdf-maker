@@ -117,31 +117,46 @@ const DAY_PICKER_STYLES = {
 } as const;
 
 // Footer component for absence calculation display
-const Footer: React.FC<AbsenceSummary> = ({
+const Footer: React.FC<AbsenceSummary & { hasDates: boolean }> = ({
   totalDays,
   holidayDays,
   weekendDays,
   absenceDays,
+  hasDates,
 }) => {
+  // Helper to display value or em dash when no dates are selected
+  const displayValue = (value: number) => (hasDates ? value : '—');
+
   return (
     <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg" role="region" aria-live="polite">
       <p className="text-sm text-blue-900 font-medium">Date Range Summary</p>
       <div className="mt-2 space-y-1 text-sm text-blue-800">
         <div className="flex justify-between">
           <span>Total Days:</span>
-          <span className="font-semibold" aria-label={`Total days in range: ${totalDays}`}>{totalDays}</span>
+          <span className="font-semibold" aria-label={`Total days in range: ${displayValue(totalDays)}`}>
+            {displayValue(totalDays)}
+          </span>
         </div>
         <div className="flex justify-between">
           <span>Holidays:</span>
-          <span className="font-semibold" aria-label={`Holidays in range: ${holidayDays}`}>{holidayDays}</span>
+          <span className="font-semibold" aria-label={`Holidays in range: ${displayValue(holidayDays)}`}>
+            {displayValue(holidayDays)}
+          </span>
         </div>
         <div className="flex justify-between">
           <span>Weekends:</span>
-          <span className="font-semibold" aria-label={`Weekend days in range: ${weekendDays}`}>{weekendDays}</span>
+          <span className="font-semibold" aria-label={`Weekend days in range: ${displayValue(weekendDays)}`}>
+            {displayValue(weekendDays)}
+          </span>
         </div>
         <div className="flex justify-between border-t border-blue-200 pt-1">
           <span className="font-semibold">Absence Days:</span>
-          <span className="font-bold text-blue-700" aria-label={`Total absence days: ${absenceDays}`}>{absenceDays}</span>
+          <span
+            className="font-bold text-blue-700"
+            aria-label={`Total absence days: ${displayValue(absenceDays)}`}
+          >
+            {displayValue(absenceDays)}
+          </span>
         </div>
       </div>
     </div>
@@ -289,7 +304,7 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
                   )}
                 </div>
               )}
-              {absenceDaysCalculation.absenceDays > 0 && <Footer {...absenceDaysCalculation} />}
+              <Footer {...absenceDaysCalculation} hasDates={!!startDate && !!endDate} />
             </div>
           )}
         />

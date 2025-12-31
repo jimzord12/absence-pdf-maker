@@ -348,8 +348,9 @@ describe('DateRangeField', () => {
         </NoDatesWrapper>
       );
 
-      // Footer should not render when dates are not selected
-      expect(screen.queryByText('Date Range Summary')).not.toBeInTheDocument();
+      // Footer should always be visible and display em dash when no dates are selected
+      expect(screen.getByText('Date Range Summary')).toBeInTheDocument();
+      expect(screen.getAllByText('—').length).toBe(4); // 4 fields with em dash
     });
   });
 
