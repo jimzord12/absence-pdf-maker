@@ -8,8 +8,26 @@ import { LeaveRequest } from '../../model/leaveRequest.types';
 Font.register({
   family: 'Roboto',
   fonts: [
-    { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxP.ttf' }, // Regular
-    { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOlCnqEu92Fr1MmWUlfBBc9.ttf', fontWeight: 700 }, // Bold
+    {
+      src: 'https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxP.ttf',
+      fontWeight: 400,
+      fontStyle: 'normal',
+    }, // Regular
+    {
+      src: 'https://fonts.gstatic.com/s/roboto/v27/KFOkCnqEu92Fr1Mu51xMIzIFKw.ttf',
+      fontWeight: 400,
+      fontStyle: 'italic',
+    }, // Regular Italic
+    {
+      src: 'https://fonts.gstatic.com/s/roboto/v27/KFOlCnqEu92Fr1MmWUlfBBc9.ttf',
+      fontWeight: 700,
+      fontStyle: 'normal',
+    }, // Bold
+    {
+      src: 'https://fonts.gstatic.com/s/roboto/v27/KFOjCnqEu92Fr1Mu51TzBic3CsTKlA.ttf',
+      fontWeight: 700,
+      fontStyle: 'italic',
+    }, // Bold Italic
   ],
 });
 
@@ -211,7 +229,8 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({ data, absenceD
 
               <Text style={styles.paragraph}>
                 Παρακαλώ να μου χορηγήσετε κανονική άδεια απουσίας{' '}
-                <Text style={{ fontWeight: 'bold' }}>{absenceDays}</Text> εργάσιμων ημερών.
+                <Text style={{ fontWeight: 'bold' }}>{absenceDays}</Text>{' '}
+                εργάσιμων ημερών.
               </Text>
 
               <View style={styles.row}>

@@ -191,8 +191,8 @@
       "description": "Fix text wrapping and section visibility in UI"
     },
     "046-fix-issue-007-pdf-generation-failure": {
-      "state": "not_started",
-      "lastUpdated": "2025-12-31T00:00:00Z",
+      "state": "committed",
+      "lastUpdated": "2025-12-31T19:45:00Z",
       "description": "Fix PDF font resolution, text warnings, and Buffer polyfill"
     },
     "047-fix-issue-008-update-import-export": {
