@@ -106,10 +106,9 @@ export const ReviewAndGenerate: React.FC = () => {
       phone: '',
       identityNumber: '',
       employeeId: '',
+      companyName: '',
       department: '',
       position: '',
-      companyName: '',
-      employerName: '',
     });
     clearSignature();
     setSuccessMessage('Profile cleared successfully!');
@@ -127,8 +126,7 @@ export const ReviewAndGenerate: React.FC = () => {
       !profile.fathersName ||
       !profile.email ||
       !profile.identityNumber ||
-      !profile.companyName ||
-      !profile.employerName
+      !profile.companyName
     ) {
       setImportError(
         'Please fill in all required personal and employment details before generating.'
@@ -231,10 +229,6 @@ export const ReviewAndGenerate: React.FC = () => {
             <div>
               <span className="text-sm text-gray-500">Company Name</span>
               <p className="font-medium">{profile.companyName || '—'}</p>
-            </div>
-            <div>
-              <span className="text-sm text-gray-500">Employer Name</span>
-              <p className="font-medium">{profile.employerName || '—'}</p>
             </div>
             <div>
               <span className="text-sm text-gray-500">Department</span>

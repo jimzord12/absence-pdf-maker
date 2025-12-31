@@ -49,10 +49,9 @@ describe('LeaveRequestPdf', () => {
       phone: '1234567890',
       identityNumber: 'AB123456',
       employeeId: 'EMP123',
+      companyName: 'Acme Corp',
       department: 'Engineering',
       position: 'Developer',
-      companyName: 'Acme Corp',
-      employerName: 'Jane Boss',
     },
     leaveType: 'annual',
     leaveAllowance: true,
@@ -128,20 +127,6 @@ describe('LeaveRequestPdf', () => {
         .join(' ');
 
       expect(allText).toContain('Test Company');
-    });
-
-    it('should render employer name', () => {
-      const data = createMockLeaveRequest({ profile: { ...createMockLeaveRequest().profile, employerName: 'Employer Name' } });
-      const absenceDays = 5;
-
-      const { container } = render(<LeaveRequestPdf data={data} absenceDays={absenceDays} />);
-      const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
-
-      const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
-        .join(' ');
-
-      expect(allText).toContain('Employer Name');
     });
 
     it('should render document title', () => {
@@ -551,7 +536,6 @@ describe('LeaveRequestPdf', () => {
           department: 'IT',
           position: 'Engineer',
           companyName: 'Complete Corp',
-          employerName: 'Complete Boss',
         },
         leaveType: 'annual',
         leaveAllowance: true,

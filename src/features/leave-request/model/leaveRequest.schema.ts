@@ -8,10 +8,9 @@ export const UserProfileSchema = z
     phone: z.string().min(1, 'Phone number is required'),
     identityNumber: z.string().min(1, 'Identity number is required'),
     employeeId: z.string().optional(),
+    companyName: z.string().min(1, 'Company name is required'),
     department: z.string().min(1, 'Department is required'),
     position: z.string().min(1, 'Position is required'),
-    companyName: z.string().min(1, 'Company name is required'),
-    employerName: z.string().min(1, 'Employer name is required'),
   })
   .refine(
     data => {
@@ -31,17 +30,14 @@ export const UserProfileSchema = z
       if (!data.identityNumber || data.identityNumber.trim() === '') {
         errors.identityNumber = 'Identity number is required';
       }
+      if (!data.companyName || data.companyName.trim() === '') {
+        errors.companyName = 'Company name is required';
+      }
       if (!data.department || data.department.trim() === '') {
         errors.department = 'Department is required';
       }
       if (!data.position || data.position.trim() === '') {
         errors.position = 'Position is required';
-      }
-      if (!data.companyName || data.companyName.trim() === '') {
-        errors.companyName = 'Company name is required';
-      }
-      if (!data.employerName || data.employerName.trim() === '') {
-        errors.employerName = 'Employer name is required';
       }
       return Object.keys(errors).length === 0;
     },

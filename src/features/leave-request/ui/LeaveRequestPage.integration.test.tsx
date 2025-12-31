@@ -260,9 +260,12 @@ describe('Integration Tests - User Flows', () => {
       // Pre-populate localStorage
       const savedProfile: UserProfile = {
         fullName: 'Alice Johnson',
+        fathersName: 'James Johnson',
         email: 'alice.j@company.com',
         phone: '+1 (555) 555-1234',
+        identityNumber: 'AL789012',
         employeeId: 'EMP-99999',
+        companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
         department: 'Finance',
         position: 'Financial Analyst',
       };

@@ -10,6 +10,7 @@ interface LeaveDraft {
   startDate: Date | null;
   endDate: Date | null;
   reason: string;
+  leaveAllowance: boolean;
 }
 
 // Signature state contains the captured signature data URL
@@ -60,6 +61,7 @@ export const initialState: LeaveRequestState = {
     email: '',
     phone: '',
     employeeId: '',
+    companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
     department: '',
     position: '',
   },
@@ -68,6 +70,7 @@ export const initialState: LeaveRequestState = {
     startDate: null,
     endDate: null,
     reason: '',
+    leaveAllowance: false,
   },
   signature: {
     signatureDataUrl: '',

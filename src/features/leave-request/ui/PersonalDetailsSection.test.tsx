@@ -429,9 +429,12 @@ describe('PersonalDetailsSection', () => {
           defaultValues={{
             profile: {
               fullName: 'Jane Smith',
+              fathersName: 'Jane Smith',
               email: 'jane.smith@company.com',
               phone: '+1 (555) 987-6543',
+              identityNumber: 'JS789012',
               employeeId: 'EMP123',
+              companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
               department: 'Engineering',
               position: 'Senior Developer',
             },

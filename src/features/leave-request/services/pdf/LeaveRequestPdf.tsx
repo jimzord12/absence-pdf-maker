@@ -61,10 +61,6 @@ const styles = StyleSheet.create({
     color: '#1a73e8',
     textTransform: 'uppercase',
   },
-  employerName: {
-    fontSize: 12,
-    color: '#555',
-  },
   documentTitle: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -173,7 +169,6 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({ data, absenceD
           <View style={styles.headerLeft}>
             <Text style={{ fontSize: 10, color: '#666' }}>ΠΡΟΣ Τον εργοδότη:</Text>
             <Text style={styles.companyName}>{data.profile.companyName}</Text>
-            <Text style={styles.employerName}>Κο. {data.profile.employerName}</Text>
           </View>
           <View style={styles.headerRight}>
             <Text style={styles.documentTitle}>ΑΙΤΗΣΗ</Text>

@@ -70,10 +70,9 @@ export const LeaveRequestForm: React.FC = () => {
         phone: profile.phone || '',
         identityNumber: profile.identityNumber || '',
         employeeId: profile.employeeId || '',
+        companyName: profile.companyName || 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
         department: profile.department || '',
         position: profile.position || '',
-        companyName: profile.companyName || '',
-        employerName: profile.employerName || '',
       },
       leaveType: leaveDraft.leaveType || 'annual',
       leaveAllowance: leaveDraft.leaveAllowance ?? false,
@@ -182,13 +181,6 @@ export const LeaveRequestForm: React.FC = () => {
               placeholder="Enter company name"
               {...register('profile.companyName')}
               error={errors.profile?.companyName?.message}
-            />
-
-            <Input
-              label="Employer Name"
-              placeholder="Enter employer name"
-              {...register('profile.employerName')}
-              error={errors.profile?.employerName?.message}
             />
 
             <Input

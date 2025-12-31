@@ -16,9 +16,12 @@ describe('useLeaveRequestStore', () => {
     useLeaveRequestStore.setState({
       profile: {
         fullName: '',
+        fathersName: '',
         email: '',
         phone: '',
+        identityNumber: '',
         employeeId: '',
+        companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
         department: '',
         position: '',
       },
@@ -56,9 +59,12 @@ describe('useLeaveRequestStore', () => {
 
       expect(state.profile).toEqual({
         fullName: '',
+        fathersName: '',
         email: '',
         phone: '',
+        identityNumber: '',
         employeeId: '',
+        companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
         department: '',
         position: '',
       });
@@ -80,6 +86,12 @@ describe('useLeaveRequestStore', () => {
         lastGeneratedFileName: '',
         errorMessage: null,
       });
+    });
+
+    it('should initialize with default company name', () => {
+      const state = useLeaveRequestStore.getState();
+
+      expect(state.profile.companyName).toBe('ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε');
     });
 
     it('should export inferred types', () => {
@@ -157,7 +169,10 @@ describe('useLeaveRequestStore', () => {
       expect(state.profile.fullName).toBe('Jane Smith');
       expect(state.profile.email).toBe('jane@example.com');
       expect(state.profile.phone).toBe('');
+      expect(state.profile.fathersName).toBe('');
+      expect(state.profile.identityNumber).toBe('');
       expect(state.profile.employeeId).toBe('');
+      expect(state.profile.companyName).toBe('ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε');
       expect(state.profile.department).toBe('');
       expect(state.profile.position).toBe('');
     });
@@ -167,9 +182,12 @@ describe('useLeaveRequestStore', () => {
 
       store.setProfile({
         fullName: 'Bob Johnson',
+        fathersName: 'George Johnson',
         email: 'bob@example.com',
         phone: '+1 555-987-6543',
+        identityNumber: 'AB123456',
         employeeId: 'EMP002',
+        companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
         department: 'Marketing',
         position: 'Manager',
       });
@@ -177,9 +195,12 @@ describe('useLeaveRequestStore', () => {
       const state = useLeaveRequestStore.getState();
       expect(state.profile).toEqual({
         fullName: 'Bob Johnson',
+        fathersName: 'George Johnson',
         email: 'bob@example.com',
         phone: '+1 555-987-6543',
+        identityNumber: 'AB123456',
         employeeId: 'EMP002',
+        companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
         department: 'Marketing',
         position: 'Manager',
       });
@@ -542,9 +563,12 @@ describe('useLeaveRequestStore', () => {
       // Set values in all state slices
       store.setProfile({
         fullName: 'John Doe',
+        fathersName: 'George Doe',
         email: 'john@example.com',
         phone: '+1 555-123-4567',
+        identityNumber: 'AB123456',
         employeeId: 'EMP001',
+        companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
         department: 'Engineering',
         position: 'Developer',
       });
@@ -576,9 +600,12 @@ describe('useLeaveRequestStore', () => {
         // Verify only profile is persisted
         expect(state.profile).toEqual({
           fullName: 'John Doe',
+          fathersName: 'George Doe',
           email: 'john@example.com',
           phone: '+1 555-123-4567',
+          identityNumber: 'AB123456',
           employeeId: 'EMP001',
+          companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
           department: 'Engineering',
           position: 'Developer',
         });

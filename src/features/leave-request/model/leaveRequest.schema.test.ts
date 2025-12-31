@@ -6,9 +6,12 @@ describe('UserProfileSchema', () => {
   it('should validate a valid user profile', () => {
     const validProfile = {
       fullName: 'John Doe',
+      fathersName: 'George Doe',
       email: 'john.doe@example.com',
       phone: '+1 555-123-4567',
+      identityNumber: 'AB123456',
       employeeId: 'EMP001',
+      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
       department: 'Engineering',
       position: 'Senior Developer',
     };
@@ -22,9 +25,12 @@ describe('UserProfileSchema', () => {
   it('should reject profile with missing fullName', () => {
     const invalidProfile = {
       fullName: '',
+      fathersName: 'George Doe',
       email: 'john.doe@example.com',
       phone: '+1 555-123-4567',
+      identityNumber: 'AB123456',
       employeeId: 'EMP001',
+      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
       department: 'Engineering',
       position: 'Senior Developer',
     };
@@ -38,9 +44,12 @@ describe('UserProfileSchema', () => {
   it('should reject profile with invalid email format', () => {
     const invalidProfile = {
       fullName: 'John Doe',
+      fathersName: 'George Doe',
       email: 'invalid-email',
       phone: '+1 555-123-4567',
+      identityNumber: 'AB123456',
       employeeId: 'EMP001',
+      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
       department: 'Engineering',
       position: 'Senior Developer',
     };
@@ -55,9 +64,12 @@ describe('UserProfileSchema', () => {
   it('should reject profile with missing phone', () => {
     const invalidProfile = {
       fullName: 'John Doe',
+      fathersName: 'George Doe',
       email: 'john.doe@example.com',
       phone: '',
+      identityNumber: 'AB123456',
       employeeId: 'EMP001',
+      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
       department: 'Engineering',
       position: 'Senior Developer',
     };
@@ -71,9 +83,12 @@ describe('UserProfileSchema', () => {
   it('should accept profile with missing employeeId', () => {
     const validProfile = {
       fullName: 'John Doe',
+      fathersName: 'George Doe',
       email: 'john.doe@example.com',
       phone: '+1 555-123-4567',
+      identityNumber: 'AB123456',
       employeeId: '',
+      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
       department: 'Engineering',
       position: 'Senior Developer',
     };
@@ -87,9 +102,12 @@ describe('UserProfileSchema', () => {
   it('should reject profile with missing department', () => {
     const invalidProfile = {
       fullName: 'John Doe',
+      fathersName: 'George Doe',
       email: 'john.doe@example.com',
       phone: '+1 555-123-4567',
+      identityNumber: 'AB123456',
       employeeId: 'EMP001',
+      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
       department: '',
       position: 'Senior Developer',
     };
@@ -103,9 +121,12 @@ describe('UserProfileSchema', () => {
   it('should reject profile with missing position', () => {
     const invalidProfile = {
       fullName: 'John Doe',
+      fathersName: 'George Doe',
       email: 'john.doe@example.com',
       phone: '+1 555-123-4567',
+      identityNumber: 'AB123456',
       employeeId: 'EMP001',
+      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
       department: 'Engineering',
       position: '',
     };
@@ -119,9 +140,12 @@ describe('UserProfileSchema', () => {
   it('should accept profile with unicode characters in name', () => {
     const validProfile = {
       fullName: 'Jürgen Müller',
+      fathersName: 'George Müller',
       email: 'juergen@example.com',
       phone: '+49 123 456789',
+      identityNumber: 'AB123456',
       employeeId: 'EMP002',
+      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
       department: 'Marketing',
       position: 'Manager',
     };
@@ -132,9 +156,12 @@ describe('UserProfileSchema', () => {
   it('should reject profile with extra fields', () => {
     const profileWithExtraField = {
       fullName: 'John Doe',
+      fathersName: 'George Doe',
       email: 'john.doe@example.com',
       phone: '+1 555-123-4567',
+      identityNumber: 'AB123456',
       employeeId: 'EMP001',
+      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
       department: 'Engineering',
       position: 'Senior Developer',
       extraField: 'should be stripped',
@@ -145,14 +172,75 @@ describe('UserProfileSchema', () => {
       expect('extraField' in result.data).toBe(false);
     }
   });
+
+  it('should reject profile with missing companyName', () => {
+    const invalidProfile = {
+      fullName: 'John Doe',
+      fathersName: 'George Doe',
+      email: 'john.doe@example.com',
+      phone: '+1 555-123-4567',
+      identityNumber: 'AB123456',
+      employeeId: 'EMP001',
+      companyName: '',
+      department: 'Engineering',
+      position: 'Senior Developer',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('companyName');
+    }
+  });
+
+  it('should validate profile with companyName', () => {
+    const validProfile = {
+      fullName: 'John Doe',
+      fathersName: 'George Doe',
+      email: 'john.doe@example.com',
+      phone: '+1 555-123-4567',
+      identityNumber: 'AB123456',
+      employeeId: 'EMP001',
+      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
+      department: 'Engineering',
+      position: 'Senior Developer',
+    };
+    const result = UserProfileSchema.safeParse(validProfile);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.companyName).toBe('ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε');
+    }
+  });
+
+  it('should strip employerName field if provided', () => {
+    const profileWithEmployerName = {
+      fullName: 'John Doe',
+      fathersName: 'George Doe',
+      email: 'john.doe@example.com',
+      phone: '+1 555-123-4567',
+      identityNumber: 'AB123456',
+      employeeId: 'EMP001',
+      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
+      department: 'Engineering',
+      position: 'Senior Developer',
+      employerName: 'Should be stripped',
+    } as any;
+    const result = UserProfileSchema.safeParse(profileWithEmployerName);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect('employerName' in result.data).toBe(false);
+    }
+  });
 });
 
 describe('LeaveRequestSchema', () => {
   const validProfile = {
     fullName: 'John Doe',
+    fathersName: 'George Doe',
     email: 'john.doe@example.com',
     phone: '+1 555-123-4567',
+    identityNumber: 'AB123456',
     employeeId: 'EMP001',
+    companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
     department: 'Engineering',
     position: 'Senior Developer',
   };

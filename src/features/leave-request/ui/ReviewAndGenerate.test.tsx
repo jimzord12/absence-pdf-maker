@@ -48,10 +48,9 @@ beforeEach(() => {
       phone: '',
       identityNumber: '',
       employeeId: '',
+      companyName: '',
       department: '',
       position: '',
-      companyName: '',
-      employerName: '',
     },
     leaveDraft: {
       leaveType: undefined,
@@ -257,7 +256,6 @@ describe('ReviewAndGenerate', () => {
             department: '',
             position: 'Developer',
             companyName: 'Acme Corp',
-            employerName: 'Jane Boss',
           },
         });
       });
@@ -690,7 +688,6 @@ describe('ReviewAndGenerate', () => {
             department: 'Engineering',
             position: 'Developer',
             companyName: 'Acme Corp',
-            employerName: 'Jane Boss',
           },
           signature: {
             signatureDataUrl: 'data:image/png;base64,test',
@@ -840,7 +837,6 @@ describe('ReviewAndGenerate', () => {
             department: 'Engineering',
             position: 'Developer',
             companyName: 'Acme Corp',
-            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -872,7 +868,6 @@ describe('ReviewAndGenerate', () => {
             department: 'Engineering',
             position: 'Developer',
             companyName: 'Acme Corp',
-            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -909,7 +904,6 @@ describe('ReviewAndGenerate', () => {
             department: 'Engineering',
             position: 'Developer',
             companyName: 'Acme Corp',
-            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -950,7 +944,6 @@ describe('ReviewAndGenerate', () => {
             department: 'Engineering',
             position: 'Developer',
             companyName: 'Acme Corp',
-            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -987,7 +980,6 @@ describe('ReviewAndGenerate', () => {
             department: 'Engineering',
             position: 'Developer',
             companyName: 'Acme Corp',
-            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -1024,7 +1016,6 @@ describe('ReviewAndGenerate', () => {
             department: 'Engineering',
             position: 'Developer',
             companyName: 'Acme Corp',
-            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -1061,7 +1052,6 @@ describe('ReviewAndGenerate', () => {
             department: 'Engineering',
             position: 'Developer',
             companyName: 'Acme Corp',
-            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',
@@ -1246,7 +1236,6 @@ describe('ReviewAndGenerate', () => {
             department: 'Engineering',
             position: 'Developer',
             companyName: 'Acme Corp',
-            employerName: 'Jane Boss',
           },
           leaveDraft: {
             leaveType: 'annual',

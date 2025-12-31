@@ -76,7 +76,6 @@ describe('PDF Service', () => {
       department: 'Engineering',
       position: 'Developer',
       companyName: 'Acme Corp',
-      employerName: 'Jane Boss',
     },
     leaveType: 'annual',
     leaveAllowance: true,

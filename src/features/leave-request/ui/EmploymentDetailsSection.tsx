@@ -13,7 +13,8 @@ interface EmploymentDetailsSectionProps {
  * EmploymentDetailsSection component
  *
  * Displays form fields for employment information:
- * - Employee ID (text input)
+ * - Employee ID (text input, optional)
+ * - Company Name (text input, with default value)
  * - Department (text input)
  * - Position (text input)
  *
@@ -49,14 +50,6 @@ export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> =
             inputType="text"
             {...register?.('profile.companyName')}
             error={errors?.profile?.companyName?.message}
-          />
-
-          <Input
-            label="Employer Name"
-            placeholder="Enter employer name"
-            inputType="text"
-            {...register?.('profile.employerName')}
-            error={errors?.profile?.employerName?.message}
           />
 
           <Input

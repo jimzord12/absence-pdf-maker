@@ -38,9 +38,12 @@ describe('persistence', () => {
   describe('exportProfileToJson', () => {
     const validProfile: UserProfile = {
       fullName: 'John Doe',
+      fathersName: 'George Doe',
       email: 'john.doe@example.com',
       phone: '123-456-7890',
+      identityNumber: 'AB123456',
       employeeId: 'EMP001',
+      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
       department: 'Engineering',
       position: 'Software Developer',
     };
@@ -184,9 +187,12 @@ describe('persistence', () => {
       expect(mockSetProfile).toHaveBeenCalledWith(
         expect.objectContaining({
           fullName: 'John Doe',
+          fathersName: 'George Doe',
           email: 'john.doe@example.com',
           phone: '123-456-7890',
+          identityNumber: 'AB123456',
           employeeId: 'EMP001',
+          companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
           department: 'Engineering',
           position: 'Software Developer',
         })
