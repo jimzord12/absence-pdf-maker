@@ -41,14 +41,21 @@ export const exportProfileToJson = (): void => {
  */
 export const importProfileFromJson = async (file: File): Promise<void> => {
   try {
-    // Read the file content
+    // Read file content
     const jsonContent = await readFileAsText(file);
 
-    // Parse the JSON
+    // Parse JSON
     const parsedData = JSON.parse(jsonContent);
 
+    // Apply default values before validation
+    const dataWithDefaults = {
+      ...parsedData,
+      // Ensure Company Name has default if not provided
+      companyName: parsedData.companyName || 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
+    };
+
     // Validate against UserProfileSchema
-    const validationResult = UserProfileSchema.safeParse(parsedData);
+    const validationResult = UserProfileSchema.safeParse(dataWithDefaults);
 
     if (!validationResult.success) {
       // Build a descriptive error message from Zod validation errors
@@ -58,11 +65,19 @@ export const importProfileFromJson = async (file: File): Promise<void> => {
       throw new Error(
         `Invalid profile data:\n${errorMessages.join('\n')}`
       );
-    }
+  }
 
-    // Update the Zustand store with the validated profile
-    const { setProfile } = useLeaveRequestStore.getState();
-    setProfile(validationResult.data);
+  // Update Zustand store with validated profile
+  const { setProfile } = useLeaveRequestStore.getState();
+  
+  // Apply default values for missing fields
+  const profileWithDefaults = {
+    ...validationResult.data,
+    // Ensure Company Name has default if not provided
+    companyName: validationResult.data.companyName || 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
+  };
+  
+  setProfile(profileWithDefaults);
   } catch (error) {
     if (error instanceof SyntaxError) {
       throw new Error('Invalid JSON format. Please check the file and try again.');
