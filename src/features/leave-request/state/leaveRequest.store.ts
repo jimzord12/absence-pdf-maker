@@ -163,7 +163,7 @@ export const useLeaveRequestStore = create<LeaveRequestState & LeaveRequestActio
     }),
     {
       name: 'leave-request-storage',
-      partialize: (state) => ({ profile: state.profile }),
+      partialize: (state) => ({ profile: state.profile, signature: state.signature }),
       storage: customStorage,
       skipHydration: false,
       onRehydrateStorage: () => (state) => {
