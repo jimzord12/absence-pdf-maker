@@ -16,9 +16,17 @@ You are the **primary** developer for this project.
 
 ## Stack Context
 
-- **Frontend**: Vite 7 + React 19 (Hooks, Function Components).
+- **Frontend**: Vite 7 + React 19 (Hooks, Function Components), TailwindCSS 3.4.
 - **Language**: TypeScript v5+ (Strict).
 - **Validation**: Zod v4 (Single source of truth for schemas and types).
+- **State Management**: Zustand with persist middleware.\
+- **Forms**: React Hook Form with Zod resolver.
+- **Date Handling**: date-fns.
+- **Animations**: framer-motion.
+- **PDF Generation**: React PDF (@react-pdf/renderer)
+- **Date Picker**: react-day-picker.
+- **Testing**: Vitest + React Testing Library.
+- **vite-plugin-pwa** for PWA support.
 
 ## Workflow
 
@@ -65,12 +73,14 @@ not_started → implemented → unit_tested → review_pass → completed → co
 
 **Step 1: `not_started` → `implemented`**
 
-- Read task details from `docs/tasks/TASKS.md`
-- Implement code according to constraints and acceptance criteria
+- Read task details from `docs/tasks/TASKS.md` (description, acceptance criteria, constraints only)
+- **IMMEDIATELY deploy `frontend-developer` subagent** - do NOT analyze code yourself
+- Pass the task description, acceptance criteria, and constraints to the subagent
+- Wait for subagent to complete and report changes
 - Update `docs/tasks/state.json`:
   - Change state from `not_started` to `implemented`
   - Update `lastUpdated` timestamp to current ISO datetime
-- **DO NOT** proceed to the next state until the implementation is complete
+- **DO NOT** proceed to the next state until the subagent confirms completion
 
 **Step 2: `implemented` → `unit_tested`**
 
@@ -132,6 +142,55 @@ If the workflow is interrupted at any point:
 3. State is preserved between sessions
 
 ## Subagent Deployment Guidelines
+
+### Deploying the Frontend Developer Subagent
+
+**This project is a frontend-only React application.** For ANY implementation task, **immediately delegate** to the `frontend-developer` subagent. Do NOT perform code analysis, file discovery, or implementation planning yourself.
+
+**Delegate immediately when:**
+
+- Task state is `not_started` or `review_fail` (needs implementation/fixes)
+- Task involves ANY code changes (which in this project means frontend code)
+
+**DO NOT do these yourself:**
+
+- ❌ Analyze which files need to be modified
+- ❌ Search the codebase for existing components
+- ❌ Plan the implementation approach
+- ❌ Read source code files to understand the current state
+- ❌ Write or modify any `.ts` or `.tsx` files
+
+**The frontend-developer subagent will handle ALL of the above.**
+
+**Deployment prompt:**
+
+```plaintext
+Use the Task tool to deploy the frontend-developer subagent with the following prompt:
+
+"Implement task {task_identifier}.
+
+**Task Description:**
+{copy the task description from TASKS.md}
+
+**Acceptance Criteria:**
+{copy the acceptance criteria from TASKS.md}
+
+**Constraints:**
+{copy any constraints from TASKS.md}
+
+You are responsible for:
+1. Analyzing the requirements and understanding the full context
+2. Discovering existing code and components to reuse
+3. Planning the implementation
+4. Implementing the changes
+5. Running lint and typecheck
+6. Reporting all files created/modified"
+```
+
+**After delegation returns:**
+
+- Update `docs/tasks/state.json` to `implemented` state
+- Proceed to deploy the tester subagent
 
 ### Deploying the Tester Subagent
 
@@ -206,6 +265,7 @@ The finisher subagent should:
 6. **ONLY COMMIT** when explicitly requested by the User
 7. **Update timestamps** with current ISO datetime on each state change
 8. **Use subagents** for testing and reviewing steps via the Task tool
+9. **IMMEDIATELY DELEGATE** implementation to `frontend-developer` - do NOT read source code, analyze files, or plan implementation yourself. Your role is orchestration, not implementation.
 
 ## State File Structure
 

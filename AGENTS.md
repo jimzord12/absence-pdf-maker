@@ -83,3 +83,95 @@ import { useLeaveRequestStore } from '../state/leaveRequest.store';
 
 **Linting & Type Checking:** Always run `npm run lint` and `npm run typecheck` before committing. ESLint config includes TypeScript strict mode, React Hooks rules, and React Refresh optimization. Fix all linting errors before submission.
 
+## Available MCP Servers
+
+I have access to **7 Model Context Protocol (MCP) servers** that provide specialized capabilities:
+
+### 1. zai-mcp-server
+
+AI-powered image and video analysis:
+
+- `ui_to_artifact` - Convert UI screenshots to code, prompts, design specs, or natural language descriptions
+- `extract_text_from_screenshot` - OCR for extracting text from screenshots (code, terminal, docs)
+- `diagnose_error_screenshot` - Analyze error messages, stack traces, and exception screenshots
+- `understand_technical_diagram` - Explain architecture diagrams, flowcharts, UML, ER diagrams
+- `analyze_data_visualization` - Extract insights from charts, graphs, dashboards, and data visualizations
+- `ui_diff_check` - Compare expected vs actual UI screenshots for QA
+- `analyze_image` - General-purpose image analysis (fallback when specialized tools don't fit)
+- `analyze_video` - Analyze video content, extract key moments, identify actions/objects
+
+**Use cases:** Debugging from screenshots, generating code from UI designs, analyzing error screenshots, understanding documentation diagrams, data viz insights, UI regression testing
+
+### 2. web-search-prime
+
+Web search with filtering capabilities:
+
+- `webSearchPrime` - Search web with optional filters for:
+  - Search domain (limit to specific websites)
+  - Time range (oneDay, oneWeek, oneMonth, oneYear, noLimit)
+  - Content size (medium=400-600 words, high=2500 words)
+  - Location (cn=Chinese, us=non-Chinese)
+
+**Use cases:** Finding documentation, researching solutions, checking latest information
+
+### 3. web-reader
+
+Content fetching and conversion:
+
+- `webReader` - Fetch URLs and convert to markdown/text with:
+  - Retain or strip images
+  - Include or exclude links summary
+  - Preserve GitHub Flavored Markdown
+  - Keep image data URLs if needed
+
+**Use cases:** Reading documentation, fetching web content, analyzing external resources
+
+### 4. zread
+
+GitHub repository exploration:
+
+- `search_doc` - Search docs, issues, commits in GitHub repos (supports Greek/English)
+- `read_file` - Read full code content from specific files in GitHub repos
+- `get_repo_structure` - Get directory structure and file listings from GitHub repos
+
+**Use cases:** Exploring open-source codebases, researching implementations, finding patterns
+
+### 5. context7
+
+Documentation and code examples for programming libraries and frameworks:
+
+- `resolve-library-id` - Resolves package/product names to Context7-compatible library IDs. Returns matching libraries ranked by relevance, name similarity, description, documentation coverage, and benchmark score
+- `query-docs` - Retrieves up-to-date documentation and code examples from Context7 for any programming library. Requires a valid Context7 library ID (in format `/org/project` or `/org/project/version`)
+
+**Usage pattern:** Always call `resolve-library-id` first to obtain the exact Context7 library ID before calling `query-docs`, unless the user explicitly provides a library ID in the correct format. Do not call more than 3 times per question.
+
+**Use cases:** Finding documentation for React, TypeScript, Zustand, or any other library/framework; getting code examples; learning API usage patterns
+
+### 6. chrome-devtools
+
+Browser interaction and debugging via Chrome DevTools:
+
+- Page management: list, new, navigate, select, close tabs
+- Interaction: click, hover, drag, type, fill forms, press keys, upload files
+- Data capture: take snapshots, take screenshots, list console messages, list network requests
+- Scripting: evaluate JavaScript
+- Testing: handle dialogs, emulate (geolocation, network, CPU throttling), resize window
+- Performance: start/stop trace recording, analyze performance insights
+
+**Use cases:** Manual testing, debugging web apps, capturing screenshots, network debugging
+
+### 7. playwright
+
+Cross-browser automation and testing:
+
+- Navigation: navigate, go back
+- Page management: list, new, close, select browser tabs
+- Interaction: click, hover, drag, type, fill forms, select options, press keys, upload files
+- Data capture: take snapshots, take screenshots, get console messages, get network requests
+- Scripting: evaluate JavaScript, run Playwright code snippets
+- Advanced: handle dialogs, wait for elements/text/time, resize browser window
+
+**Use cases:** Automated testing, cross-browser testing, end-to-end testing, UI automation
+
+**Tool selection:** Playwright is test-focused with cross-browser support; Chrome DevTools provides deeper debugging and performance analysis. Choose based on task requirements.
+
