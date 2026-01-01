@@ -6,6 +6,8 @@ import { calculateAbsenceDays } from '../services/absenceDays';
 import { downloadLeaveRequestPdf } from '../services/pdf/pdf.service';
 import { exportProfileToJson, importProfileFromJson } from '../services/persistence';
 import { useLeaveRequestStore } from '../state/leaveRequest.store';
+import { useLocaleStore } from '../state/locale.store';
+import type { Locale } from '../state/locale.store';
 
 /**
  * ReviewAndGenerate component displays a summary of the form data and provides
@@ -27,6 +29,7 @@ export const ReviewAndGenerate: React.FC = () => {
   const holidays = useLeaveRequestStore(state => state.holidays);
   const isGeneratingPdf = useLeaveRequestStore(state => state.ui.isGeneratingPdf);
   const errorMessage = useLeaveRequestStore(state => state.ui.errorMessage);
+  const { locale } = useLocaleStore(state => state);
 
   // Store actions
   const setProfile = useLeaveRequestStore(state => state.setProfile);
@@ -259,18 +262,18 @@ export const ReviewAndGenerate: React.FC = () => {
               <span className="text-sm text-gray-500">Leave Allowance</span>
               <p className="font-medium">{leaveDraft.leaveAllowance ? 'Yes' : 'No'}</p>
             </div>
-            <div>
-              <span className="text-sm text-gray-500">Start Date</span>
-              <p className="font-medium">
-                {leaveDraft.startDate ? formatDate(leaveDraft.startDate) : '—'}
-              </p>
-            </div>
-            <div>
-              <span className="text-sm text-gray-500">End Date</span>
-              <p className="font-medium">
-                {leaveDraft.endDate ? formatDate(leaveDraft.endDate) : '—'}
-              </p>
-            </div>
+             <div>
+               <span className="text-sm text-gray-500">Start Date</span>
+               <p className="font-medium">
+                 {leaveDraft.startDate ? formatDate(leaveDraft.startDate, locale) : '—'}
+               </p>
+             </div>
+             <div>
+               <span className="text-sm text-gray-500">End Date</span>
+               <p className="font-medium">
+                 {leaveDraft.endDate ? formatDate(leaveDraft.endDate, locale) : '—'}
+               </p>
+             </div>
             <div>
               <span className="text-sm text-gray-500">Reason</span>
               <p className="font-medium">{leaveDraft.reason || '—'}</p>
