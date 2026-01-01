@@ -49,13 +49,19 @@ export const LeaveRequestSchema = z
     profile: UserProfileSchema,
     leaveType: z.enum(['annual', 'sick', 'unpaid', 'other']),
     leaveAllowance: z.boolean().default(false),
-    startDate: z.date(),
-    endDate: z.date(),
+    startDate: z.date().optional(),
+    endDate: z.date().optional(),
     reason: z.string().optional(),
     createdAt: z.date(),
     signatureDataUrl: z.string().optional(),
   })
-  .refine(data => data.startDate <= data.endDate, {
+  .refine(data => {
+    // Only validate date order if both dates are present
+    if (data.startDate && data.endDate) {
+      return data.startDate <= data.endDate;
+    }
+    return true;
+  }, {
     message: 'End date must be after start date',
     path: ['endDate'],
   });

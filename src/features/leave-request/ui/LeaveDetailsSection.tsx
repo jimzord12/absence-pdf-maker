@@ -6,6 +6,7 @@ import { Textarea } from '../../../shared/ui/Textarea';
 import { Card } from '../../../shared/ui/Card';
 import { DateRangeField } from './DateRangeField';
 import { useLeaveRequestStore } from '../state/leaveRequest.store';
+import { useLocaleStore } from '../state/locale.store';
 import type { LeaveRequest } from '../model/leaveRequest.types';
 
 interface LeaveDetailsSectionProps {
@@ -39,6 +40,7 @@ export const LeaveDetailsSection: React.FC<LeaveDetailsSectionProps> = ({
   const { register, watch } = methods || {};
   const holidays = useLeaveRequestStore((state) => state.holidays.holidaySet);
   const setLeaveDraft = useLeaveRequestStore((state) => state.setLeaveDraft);
+  const { locale } = useLocaleStore();
 
   // Watch form fields to update Zustand store when they change
   const startDate = watch?.('startDate');
@@ -69,7 +71,7 @@ export const LeaveDetailsSection: React.FC<LeaveDetailsSectionProps> = ({
             error={errors?.leaveType?.message}
           />
 
-          <DateRangeField errors={errors} holidaySet={holidays} />
+          <DateRangeField errors={errors} holidaySet={holidays} locale={locale} />
 
           <Textarea
             label="Reason (Optional)"

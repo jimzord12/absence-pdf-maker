@@ -15,12 +15,17 @@ export const generateLeaveRequestPdf = async (
   data: LeaveRequest,
   holidays: Set<string>
 ): Promise<Blob> => {
+  // Validate dates before generating PDF
+  if (!data.startDate || !data.endDate) {
+    throw new Error('Start date and end date are required for PDF generation');
+  }
+
   const absenceBreakdown = calculateAbsenceDays(data.startDate, data.endDate, holidays);
 
-  // Create the PDF document
-  // We need to pass the component as a React element
+  // Create PDF document
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const blob = await pdf(
-    React.createElement(LeaveRequestPdf, { data, absenceDays: absenceBreakdown.absenceDays })
+    React.createElement(LeaveRequestPdf as any, { data, absenceDays: absenceBreakdown.absenceDays }) as any
   ).toBlob();
 
   return blob;

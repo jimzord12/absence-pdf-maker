@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { Alert } from '../../../shared/ui/Alert';
 import { Button } from '../../../shared/ui/Button';
 import { Card } from '../../../shared/ui/Card';
@@ -9,8 +9,9 @@ import { Select } from '../../../shared/ui/Select';
 import { Textarea } from '../../../shared/ui/Textarea';
 import { LeaveRequestSchema } from '../model/leaveRequest.schema';
 import type { LeaveRequest } from '../model/leaveRequest.types';
-import { calculateAbsenceDays } from '../services/absenceDays';
 import { useLeaveRequestStore } from '../state/leaveRequest.store';
+import { useLocaleStore } from '../state/locale.store';
+import { DateRangeField } from './DateRangeField';
 import { SignatureModal } from './SignatureModal';
 
 // Leave type options for the select dropdown
@@ -34,6 +35,7 @@ export const LeaveRequestForm: React.FC = () => {
     toggleSignatureModal,
     clearErrorMessage,
   } = useLeaveRequestStore();
+  const { locale } = useLocaleStore();
 
   // Track if component has mounted to prevent animation replay on re-renders
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -44,23 +46,11 @@ export const LeaveRequestForm: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Calculate absence days when dates change
-  const absenceDaysCalculation =
-    leaveDraft.startDate &&
-    leaveDraft.endDate &&
-    leaveDraft.startDate instanceof Date &&
-    leaveDraft.endDate instanceof Date
-      ? calculateAbsenceDays(leaveDraft.startDate, leaveDraft.endDate, holidaySet)
-      : { totalDays: 0, holidayDays: 0, weekendDays: 0, absenceDays: 0 };
 
-  // Setup React Hook Form with Zod resolver
-  const {
-    register,
-    formState: { errors },
-    watch,
-    reset,
-  } = useForm<LeaveRequest>({
-    resolver: zodResolver(LeaveRequestSchema),
+
+  const methods = useForm<LeaveRequest>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(LeaveRequestSchema) as any,
     mode: 'onSubmit',
     defaultValues: {
       profile: {
@@ -84,6 +74,13 @@ export const LeaveRequestForm: React.FC = () => {
     },
   });
 
+  const {
+    register,
+    formState: { errors },
+    watch,
+    reset,
+  } = methods;
+
   // Sync form changes to Zustand store
   useEffect(() => {
     const subscription = watch(value => {
@@ -106,15 +103,14 @@ export const LeaveRequestForm: React.FC = () => {
   }, [watch, setProfile, setLeaveDraft, setSignature]);
 
   // Handle signature modal open
-
-  // Handle signature modal open
   const handleOpenSignature = () => {
     toggleSignatureModal();
   };
 
   return (
     <>
-      <form className={`space-y-6 ${!hasAnimated ? 'animate-fade-in-up' : ''}`} role="form">
+      <FormProvider {...methods}>
+        <form className={`space-y-6 ${!hasAnimated ? 'animate-fade-in-up' : ''}`} role="form">
         {/* Error Message */}
         {errorMessage && (
           <Alert variant="error" onDismiss={clearErrorMessage} className="animate-stagger-1">
@@ -222,55 +218,14 @@ export const LeaveRequestForm: React.FC = () => {
               </label>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                label="Start Date"
-                inputType="date"
-                {...register('startDate', {
-                  setValueAs: value => (value ? new Date(value) : undefined),
-                })}
-                error={errors.startDate?.message}
-              />
-
-              <Input
-                label="End Date"
-                inputType="date"
-                {...register('endDate', {
-                  setValueAs: value => (value ? new Date(value) : undefined),
-                })}
-                error={errors.endDate?.message}
-              />
-            </div>
-
-            {/* Absence Days Calculation Display */}
-            {absenceDaysCalculation.totalDays > 0 && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h3 className="font-medium text-blue-900 mb-2">Absence Days Calculation</h3>
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-blue-700">Total Days:</span>
-                    <span className="font-medium">{absenceDaysCalculation.totalDays}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-blue-700">Holidays:</span>
-                    <span className="font-medium">{absenceDaysCalculation.holidayDays}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-blue-700">Weekends:</span>
-                    <span className="font-medium">{absenceDaysCalculation.weekendDays}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-blue-700 font-semibold">Absence Days:</span>
-                    <span className="font-bold text-blue-900">
-                      {absenceDaysCalculation.absenceDays}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
+            <DateRangeField
+              errors={errors}
+              holidaySet={holidaySet}
+              locale={locale}
+            />
 
             <Textarea
-              label="Reason (Optional)"
+              label="Reason"
               placeholder="Provide a reason for your leave request..."
               {...register('reason')}
               error={errors.reason?.message}
@@ -315,7 +270,8 @@ export const LeaveRequestForm: React.FC = () => {
             Reset Form
           </Button>
         </div>
-      </form>
+        </form>
+      </FormProvider>
 
       {/* Signature Modal */}
       <SignatureModal />

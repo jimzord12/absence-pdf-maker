@@ -159,7 +159,10 @@ interface LeaveRequestPdfProps {
 }
 
 export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({ data, absenceDays }) => {
-  const formatDate = (date: Date) => format(date, 'dd/MM/yyyy', { locale: el });
+  const formatDate = (date: Date | undefined) => {
+    if (!date) return '—';
+    return format(date, 'dd/MM/yyyy', { locale: el });
+  };
 
   return (
     <Document>
@@ -247,7 +250,9 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({ data, absenceD
                 <Text style={styles.label}>Ημερομηνία Επιστροφής:</Text>
                 {/* Assuming return date is the day after end date, or just leave it as end date + 1 */}
                 <Text style={styles.value}>
-                  {formatDate(new Date(data.endDate.getTime() + 24 * 60 * 60 * 1000))}
+                  {data.endDate
+                    ? formatDate(new Date(data.endDate.getTime() + 24 * 60 * 60 * 1000))
+                    : '—'}
                 </Text>
               </View>
             </View>

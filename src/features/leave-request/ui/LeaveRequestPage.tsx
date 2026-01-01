@@ -5,6 +5,7 @@ import { useLeaveRequestStore } from '../state/leaveRequest.store';
 import { loadHolidays } from '../services/holidays/holidays.service';
 import { usePwaInstall } from '../../../app/providers/usePwaInstall';
 import { Button } from '../../../shared/ui/Button';
+import { LocaleSelector } from './LocaleSelector.tsx';
 
 /**
  * LeaveRequestPage - Page component that wraps the leave request form
@@ -38,16 +39,19 @@ export const LeaveRequestPage: React.FC = () => {
                 Submit your leave request and generate a PDF document
               </p>
             </div>
-            {isInstallable && (
-              <Button
-                variant="primary"
-                size="md"
-                onClick={() => promptInstall()}
-                className="mt-0 sm:mt-1"
-              >
-                Install App
-              </Button>
-            )}
+            <div className="flex items-center gap-4">
+              {isInstallable && (
+                <Button
+                  variant="primary"
+                  size="md"
+                  onClick={() => promptInstall()}
+                  className="mt-0 sm:mt-1"
+                >
+                  Install App
+                </Button>
+              )}
+              <LocaleSelector />
+            </div>
           </div>
         </div>
 
