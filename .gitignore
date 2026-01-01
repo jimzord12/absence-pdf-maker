@@ -3,3 +3,4 @@ dist
 build
 opencode.jsonc
 dev-dist
+*.bak
