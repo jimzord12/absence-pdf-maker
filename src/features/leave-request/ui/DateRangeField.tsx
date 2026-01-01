@@ -1,17 +1,20 @@
-import React, { useMemo, useCallback, useId } from 'react';
+import React, { useMemo, useId } from 'react';
 import { DayPicker } from 'react-day-picker';
-import { useFormContext, Controller } from 'react-hook-form';
-import { useLeaveRequestStore } from '../state/leaveRequest.store';
+import 'react-day-picker/style.css';
+import { useFormContext } from 'react-hook-form';
 import { isHoliday } from '../services/holidays/holidays.service';
 import { calculateAbsenceDays } from '../services/absenceDays';
 import { isWeekend } from '../../../shared/lib/dates';
 import { HolidaysLegend } from './HolidaysLegend';
 import type { LeaveRequest } from '../model/leaveRequest.types';
 import type { FieldErrors } from 'react-hook-form';
+import type { Locale } from '../state/locale.store';
+import { el } from 'date-fns/locale';
 
 interface DateRangeFieldProps {
   errors?: FieldErrors<LeaveRequest>;
   holidaySet: Set<string>;
+  locale?: Locale;
 }
 
 interface AbsenceSummary {
@@ -19,101 +22,20 @@ interface AbsenceSummary {
   holidayDays: number;
   weekendDays: number;
   absenceDays: number;
+  hasDates?: boolean;
 }
 
-// Define styles outside component to avoid recreation on each render
+// Define modifiers styles outside component to avoid recreation on each render
 const MODIFIERS_STYLES = {
   holiday: {
-    backgroundColor: 'var(--color-holiday-bg)',
-    color: 'var(--color-holiday-text)',
+    backgroundColor: '#fef3c7',
+    color: '#92400e',
     fontWeight: 'bold' as const,
   },
   weekend: {
     backgroundColor: '#f3f4f6',
     color: '#6b7280',
   },
-} as const;
-
-const DAY_PICKER_STYLES = {
-  root: { display: 'flex', flexDirection: 'column' } as const,
-  months: { display: 'flex', gap: '1rem', flexWrap: 'wrap' } as const,
-  month: { display: 'flex', flexDirection: 'column', gap: '0.5rem' } as const,
-  table: { borderCollapse: 'collapse', width: '100%' } as const,
-  head_row: { display: 'flex', justifyContent: 'space-between' } as const,
-  head_cell: {
-    fontWeight: 'bold',
-    fontSize: '0.875rem',
-    width: '100%',
-    padding: '0.5rem 0',
-  } as const,
-  row: { display: 'flex', justifyContent: 'space-between' } as const,
-  cell: {
-    width: '100%',
-    padding: '0',
-    margin: '0',
-  } as const,
-  day: {
-    width: '100%',
-    height: '2.5rem',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '0.875rem',
-    cursor: 'pointer',
-    borderRadius: '0.25rem',
-  } as const,
-  selected: {
-    backgroundColor: '#2563eb',
-    color: 'white',
-    fontWeight: 'bold',
-  } as const,
-  range_start: {
-    backgroundColor: '#2563eb',
-    color: 'white',
-    borderTopLeftRadius: '0.25rem',
-    borderBottomLeftRadius: '0.25rem',
-  } as const,
-  range_middle: {
-    backgroundColor: '#dbeafe',
-    color: '#1e40af',
-  } as const,
-  range_end: {
-    backgroundColor: '#2563eb',
-    color: 'white',
-    borderTopRightRadius: '0.25rem',
-    borderBottomRightRadius: '0.25rem',
-  } as const,
-  today: {
-    border: '2px solid #2563eb',
-  } as const,
-  outside: {
-    color: '#9ca3af',
-    opacity: 0.5,
-  } as const,
-  disabled: {
-    color: '#9ca3af',
-    cursor: 'not-allowed',
-  } as const,
-  hidden: {
-    visibility: 'hidden',
-  } as const,
-  nav_button: {
-    border: 'none',
-    backgroundColor: 'transparent',
-    cursor: 'pointer',
-    padding: '0.5rem',
-    borderRadius: '0.25rem',
-  } as const,
-  dropdown: {
-    border: '1px solid #d1d5db',
-    borderRadius: '0.25rem',
-    padding: '0.25rem',
-    fontSize: '0.875rem',
-  } as const,
-  caption_label: {
-    fontSize: '0.875rem',
-    fontWeight: 'bold',
-  } as const,
 } as const;
 
 // Footer component for absence calculation display
@@ -167,21 +89,39 @@ const Footer: React.FC<AbsenceSummary & { hasDates: boolean }> = ({
  * DateRangeField component
  *
  * Displays a calendar-based date range picker with:
- * - Start and end date selection
+ * - Start and end date selection using react-day-picker
  * - Holiday highlighting with distinct style
  * - Weekend visual distinction
  * - Date range validation (start <= end)
  * - Automatic absence days calculation
- * - Integration with React Hook Form and Zustand store
+ * - Locale-aware date formatting (Greek shows DD/MM/YYYY, English shows MM/DD/YYYY)
  *
- * Uses react-day-picker for the calendar UI and integrates with
- * the holiday service and absence calculator.
+ * Props:
+ * - holidaySet: Set of holiday dates for highlighting
+ * - locale: Current locale ('gr' or 'en')
+ * - errors: Form validation errors
+ *
+ * Component uses useFormContext to access form methods (watch, setValue) for reactive updates.
  */
-export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidaySet }) => {
+export const DateRangeField: React.FC<DateRangeFieldProps> = ({
+  errors,
+  holidaySet,
+  locale,
+}) => {
   const methods = useFormContext<LeaveRequest>();
-  const setLeaveDraft = useLeaveRequestStore((state) => state.setLeaveDraft);
-  const startDate = methods?.watch('startDate');
-  const endDate = methods?.watch('endDate');
+  const { watch, setValue } = methods || {
+    watch: () => undefined,
+    setValue: () => {
+      /* no-op when form context is not available */
+    },
+  };
+
+  // Generate ID for accessibility
+  const dateFieldId = useId();
+
+  // Get reactive form values via watch
+  const startDate = watch('startDate');
+  const endDate = watch('endDate');
 
   // Custom day modifier for holidays
   const modifiers = useMemo(
@@ -193,12 +133,9 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
   );
 
   // Custom day styles for holidays and weekends
-  const modifiersStyles = useMemo(() => MODIFIERS_STYLES, []);
+  // MODIFIERS_STYLES is already defined as a constant outside the component
 
-  // Generate ID for accessibility
-  const dateFieldId = useId();
-
-  // Get selected range for the calendar
+  // Get selected range for calendar
   const selectedRange = useMemo(() => {
     if (!startDate || !endDate) {
       return undefined;
@@ -245,77 +182,91 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
     return calculateAbsenceDays(calcStart, calcEnd, holidaySet);
   }, [startDate, endDate, holidaySet]);
 
-  // Handle date range changes
-  const handleDateChange = useCallback(
-    (range: { from?: Date; to?: Date } | undefined) => {
-      if (!range?.from) {
-        setLeaveDraft({ startDate: null, endDate: null });
-        return;
+  // Handle date range selection using form's setValue for proper React re-renders
+  const handleSelect = (range: { from?: Date; to?: Date } | undefined) => {
+    if (import.meta.env.DEV) {
+      console.log('[DateRangeField] handleSelect called with:', range);
+    }
+
+    if (!range) {
+      if (import.meta.env.DEV) {
+        console.log('[DateRangeField] Clearing dates via setValue');
       }
+      setValue('startDate', undefined, { shouldDirty: true, shouldValidate: false });
+      setValue('endDate', undefined, { shouldDirty: true, shouldValidate: false });
+      return;
+    }
 
-      const dateFrom = range.from instanceof Date ? new Date(range.from) : range.from;
-      const dateTo = range.to ? new Date(range.to) : range.from;
+    const { from, to } = range;
 
-      if (!dateFrom || !dateTo) {
-        return;
-      }
+    // Normalize dates to midnight to avoid time component issues
+    let startDateValue: Date | undefined = undefined;
+    let endDateValue: Date | undefined = undefined;
 
-      // Normalize dates to midnight
-      dateFrom.setHours(0, 0, 0, 0);
-      dateTo.setHours(0, 0, 0, 0);
+    if (from) {
+      startDateValue = new Date(from);
+      startDateValue.setHours(0, 0, 0, 0);
+    }
 
-      setLeaveDraft({ startDate: dateFrom, endDate: dateTo });
-    },
-    [setLeaveDraft]
-  );
+    if (to) {
+      endDateValue = new Date(to);
+      endDateValue.setHours(0, 0, 0, 0);
+    }
+
+    if (import.meta.env.DEV) {
+      console.log('[DateRangeField] Setting dates via setValue:', {
+        startDate: startDateValue,
+        endDate: endDateValue,
+      });
+    }
+
+    // Use setValue to update form state - this will trigger watch() to re-render
+    setValue('startDate', startDateValue, { shouldDirty: true, shouldValidate: false });
+    setValue('endDate', endDateValue, { shouldDirty: true, shouldValidate: false });
+  };
+
+  // Handle empty form context gracefully
+  if (!methods) {
+    return (
+      <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <p className="text-sm text-yellow-800">Form context not available</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-4">
-      {methods ? (
-        <Controller
-          name="startDate"
-          control={methods.control}
-          render={() => (
-            <div className="space-y-2" role="group" aria-labelledby={`${dateFieldId}-label`}>
-              <label id={`${dateFieldId}-label`} className="block text-sm font-medium text-gray-700">
-                Select Date Range
-              </label>
-              <HolidaysLegend />
-              <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm" role="region" aria-label="Calendar">
-                <DayPicker
-                  mode="range"
-                  selected={selectedRange}
-                  onSelect={handleDateChange}
-                  modifiers={modifiers}
-                  modifiersStyles={modifiersStyles}
-                  numberOfMonths={2}
-                  captionLayout="dropdown"
-                  className="rdp"
-                  styles={DAY_PICKER_STYLES as any}
-                />
-              </div>
-              {(errors?.startDate?.message || errors?.endDate?.message) && (
-                <div className="space-y-1" role="alert" aria-live="polite">
-                  {errors?.startDate?.message && (
-                    <p className="text-sm text-red-600">{errors.startDate.message}</p>
-                  )}
-                  {errors?.endDate?.message && (
-                    <p className="text-sm text-red-600">{errors.endDate.message}</p>
-                  )}
-                </div>
-              )}
-              <Footer {...absenceDaysCalculation} hasDates={!!startDate && !!endDate} />
-            </div>
-          )}
+    <div className="space-y-2" role="group" aria-labelledby={`${dateFieldId}-label`}>
+      <label id={`${dateFieldId}-label`} className="block text-sm font-medium text-gray-700">
+        Select Date Range
+      </label>
+      <HolidaysLegend />
+      <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm" role="region" aria-label="Calendar">
+        <DayPicker
+          mode="range"
+          selected={selectedRange}
+          onSelect={handleSelect}
+          modifiers={modifiers}
+          modifiersStyles={MODIFIERS_STYLES}
+          numberOfMonths={2}
+          captionLayout="dropdown"
+          className="rdp"
+          locale={locale === 'gr' ? el : undefined}
         />
-      ) : (
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
-            Select Date Range
-          </label>
-          <p className="text-sm text-gray-500">Form context not available</p>
+      </div>
+      {(errors?.startDate?.message || errors?.endDate?.message) && (
+        <div className="space-y-1" role="alert" aria-live="polite">
+          {errors?.startDate?.message && (
+            <p className="text-sm text-red-600">{errors.startDate.message}</p>
+          )}
+          {errors?.endDate?.message && (
+            <p className="text-sm text-red-600">{errors.endDate.message}</p>
+          )}
         </div>
       )}
+      <Footer
+        {...absenceDaysCalculation}
+        hasDates={!!startDate && !!endDate}
+      />
     </div>
   );
 };

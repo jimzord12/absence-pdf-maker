@@ -1,21 +1,24 @@
+import { format } from 'date-fns';
+import { el } from 'date-fns/locale';
+
+export type Locale = 'en' | 'gr';
+
 /**
- * Formats a Date object to a readable string in local format (YYYY-MM-DD).
+ * Formats a Date object to a locale-specific date string.
  * Handles edge cases like invalid dates and timezone issues.
  *
  * @param date - The date to format
- * @returns Formatted date string (YYYY-MM-DD) or empty string if invalid
+ * @param localeParam - The locale for formatting ('en' or 'gr')
+ * @returns Formatted date string or empty string if invalid
  */
-export const formatDate = (date: Date): string => {
+export const formatDate = (date: Date, localeParam: Locale = 'en'): string => {
   if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
     return '';
   }
 
-  // Use local date components to ensure consistent format regardless of timezone
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
+  // Use date-fns with locale for proper formatting
+  const dateLocale = localeParam === 'gr' ? el : undefined; // undefined uses default (en) format
+  return format(date, localeParam === 'gr' ? 'dd/MM/yyyy' : 'MM/dd/yyyy', { locale: dateLocale });
 };
 
 /**
