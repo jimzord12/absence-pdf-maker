@@ -22,22 +22,22 @@ const nameRegex = new RegExp('^[' + GREEK_LETTERS + LATIN_LETTERS + ' \\-]+$');
  */
 
 /**
- * Validates Greek Identity Number (ADT) format
- * Standard ADT: LLLDDDDD where LLL = 3 Greek uppercase letters, DDDDD = 5 digits
+ * Validates Greek Identity Number (ADT) format - OLD FORMAT
+ * Old ADT: LL-DDDDDD or LLDDDDDD where LL = 2 uppercase letters from ABEZHIKMNOPTYX, optional hyphen, DDDDDD = 6 digits
  */
-const greekAdtRegex = /^[ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ]{3}\d{5}$/;
+const greekAdtOldRegex = /^[ABEZHIKMNOPTYX]{2}-?\d{6}$/;
 
 /**
- * Validates AMKA (Greek Social Security Number)
- * AMKA: 11 digits
+ * Validates Greek Identity Number - NEW FORMAT
+ * New format: 12-character alphanumeric identifier (EU digital identity aligned)
  */
-const amkaRegex = /^\d{11}$/;
+const greekAdtNewRegex = /^[A-Z0-9]{12}$/;
 
 /**
- * Validates Passport number
- * Passport: 2 letters + 7 digits (international format)
+ * Validates Greek Passport number
+ * Passport: 2 letters + 7 digits, no spaces or delimiters (e.g., AB1234567)
  */
-const passportRegex = /^[A-Za-z]{2}\d{7}$/;
+const greekPassportRegex = /^[A-Za-z]{2}\d{7}$/;
 
 /**
  * Validates if a string is a valid name (Greek or Latin letters)
@@ -81,20 +81,21 @@ export const isValidSingleName = (value: string): boolean => {
 };
 
 /**
- * Validates if a string is a valid phone number (simplified)
+ * Validates if a string is a valid phone number
+ * Accepts:
+ * - 10 digits: 1234567890
+ * - With country code: +XX followed by 10 digits (e.g., +30 6901234567)
+ * - Spaces and hyphens are stripped before validation
  * - Trims leading/trailing whitespace
- * - Removes all spaces before validation
- * - Removes country codes (e.g., +30)
- * - Requires exactly 10 digits after stripping country code and spaces
  */
 export const isValidGreekPhone = (value: string): boolean => {
-  // Trim and remove all spaces
-  const processed = value.trim().replace(/\s/g, '');
+  // Trim and remove all spaces and hyphens
+  const processed = value.trim().replace(/[\s-]/g, '');
 
-  // Remove country code if present and extract last 10 digits
+  // Check for country code format: +XX followed by 10 digits
   if (processed.startsWith('+')) {
-    const final = processed.slice(-10); // Take last 10 characters
-    return /^\d{10}$/.test(final);
+    // Match +XX (2 digits) followed by exactly 10 digits
+    return /^\+\d{2}\d{10}$/.test(processed);
   }
 
   // No country code, must be exactly 10 digits
@@ -102,88 +103,63 @@ export const isValidGreekPhone = (value: string): boolean => {
 };
 
 /**
- * Validates if a string is a valid Greek ADT
+ * Validates if a string is a valid Greek ADT (old format)
+ * Format: LL-DDDDDD (e.g., AB-123456)
  */
-export const isValidGreekAdt = (value: string): boolean => {
-  return greekAdtRegex.test(value);
+export const isValidGreekAdtOld = (value: string): boolean => {
+  return greekAdtOldRegex.test(value);
 };
 
 /**
- * Validates if a string is a valid AMKA number
- * AMKA checksum validation algorithm:
- * 1. Multiply each digit by alternating weights (2, 1, 2, 1, ...)
- * 2. If result > 9, add the digits together
- * 3. Sum all results
- * 4. Last digit should make the total divisible by 10
+ * Validates if a string is a valid Greek ADT (new format)
+ * Format: 12 alphanumeric characters (e.g., A1B2C3D4E5F6)
  */
-export const isValidAmka = (value: string): boolean => {
-  if (!amkaRegex.test(value)) return false;
-
-  const digits = value.split('').map(Number);
-  let sum = 0;
-
-  for (let i = 0; i < 10; i++) {
-    let result = digits[i] * (i % 2 === 0 ? 2 : 1);
-    if (result > 9) {
-      result = Math.floor(result / 10) + (result % 10);
-    }
-    sum += result;
-  }
-
-  const checksum = (10 - (sum % 10)) % 10;
-  return checksum === digits[10];
+export const isValidGreekAdtNew = (value: string): boolean => {
+  return greekAdtNewRegex.test(value.toUpperCase());
 };
 
 /**
- * Validates if a string is a valid Passport number
+ * Validates if a string is a valid Greek Passport number
+ * Format: 2 letters + 7 digits (e.g., AB1234567)
  */
-export const isValidPassport = (value: string): boolean => {
-  return passportRegex.test(value);
+export const isValidGreekPassport = (value: string): boolean => {
+  return greekPassportRegex.test(value);
 };
 
 /**
  * Validates if a string is a valid Greek identity number
- * Supports: ADT, AMKA, or Passport format
+ * Supports: Old ADT (LL-DDDDDD), New ADT (12 alphanumeric), or Greek Passport (LL1234567)
  */
 export const isValidGreekIdentityNumber = (value: string): boolean => {
-  return isValidGreekAdt(value) || isValidAmka(value) || isValidPassport(value);
+  return isValidGreekAdtOld(value) || isValidGreekAdtNew(value) || isValidGreekPassport(value);
 };
 
-export const UserProfileSchema = z
-  .object({
-    fullName: z
-      .string()
-      .min(1, 'Full name is required')
-      .refine(isValidName, {
-        message: 'Full name must contain at least 2 words (Greek or Latin letters only)',
-      }),
-    fathersName: z
-      .string()
-      .min(1, "Father's name is required")
-      .refine(isValidSingleName, {
-        message: "Father's name must contain at least 2 characters (Greek or Latin letters only)",
-      }),
-    email: z
-      .string()
-      .min(1, 'Email is required')
-      .email('Please enter a valid email address (e.g., name@example.com)'),
-    phone: z
-      .string()
-      .min(1, 'Phone number is required')
-      .refine(isValidGreekPhone, {
-        message: 'Please enter a valid phone number (10 digits, spaces allowed)',
-      }),
-    identityNumber: z
-      .string()
-      .min(1, 'Identity number is required')
-      .refine(isValidGreekIdentityNumber, {
-        message: 'Identity number must be valid Greek ADT (e.g., ΑΒΓ12345), AMKA (11 digits), or Passport (AB1234567)',
-      }),
-    employeeId: z.string().optional(),
-    companyName: z.string().min(1, 'Company name is required'),
-    department: z.string().min(1, 'Department is required'),
-    position: z.string().min(1, 'Position is required'),
-  });
+export const UserProfileSchema = z.object({
+  fullName: z.string().min(1, 'Full name is required').refine(isValidName, {
+    message: 'Full name must contain at least 2 words (Greek or Latin letters only)',
+  }),
+  fathersName: z.string().min(1, "Father's name is required").refine(isValidSingleName, {
+    message: "Father's name must contain at least 2 characters (Greek or Latin letters only)",
+  }),
+  email: z
+    .string()
+    .min(1, 'Email is required')
+    .email('Please enter a valid email address (e.g., name@example.com)'),
+  phone: z.string().min(1, 'Phone number is required').refine(isValidGreekPhone, {
+    message: 'Please enter a valid phone number (10 digits, spaces allowed)',
+  }),
+  identityNumber: z
+    .string()
+    .min(1, 'Identity number is required')
+    .refine(isValidGreekIdentityNumber, {
+      message:
+        'Identity number must be valid: Old ADT (e.g., AB-123456), New ID (12 alphanumeric), or Passport (e.g., AB1234567)',
+    }),
+  employeeId: z.string().optional(),
+  companyName: z.string().min(1, 'Company name is required'),
+  department: z.string().min(1, 'Department is required'),
+  position: z.string().min(1, 'Position is required'),
+});
 
 export const LeaveRequestSchema = z
   .object({
@@ -196,14 +172,17 @@ export const LeaveRequestSchema = z
     createdAt: z.date(),
     signatureDataUrl: z.string().optional(),
   })
-  .refine(data => {
-    // Only validate date order if both dates are present
-    if (data.startDate && data.endDate) {
-      return data.startDate <= data.endDate;
+  .refine(
+    data => {
+      // Only validate date order if both dates are present
+      if (data.startDate && data.endDate) {
+        return data.startDate <= data.endDate;
+      }
+      return true;
+    },
+    {
+      message: 'End date must be after start date',
+      path: ['endDate'],
     }
-    return true;
-  }, {
-    message: 'End date must be after start date',
-    path: ['endDate'],
-  });
+  );
 

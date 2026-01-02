@@ -1,16 +1,16 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
+import { HolidayListSchema } from './holidays.schema';
 import {
-  UserProfileSchema,
   LeaveRequestSchema,
+  UserProfileSchema,
+  isValidGreekAdtNew,
+  isValidGreekAdtOld,
+  isValidGreekIdentityNumber,
+  isValidGreekPassport,
+  isValidGreekPhone,
   isValidName,
   isValidSingleName,
-  isValidGreekPhone,
-  isValidGreekAdt,
-  isValidAmka,
-  isValidPassport,
-  isValidGreekIdentityNumber,
 } from './leaveRequest.schema';
-import { HolidayListSchema } from './holidays.schema';
 
 describe('Name Validation', () => {
   describe('isValidName', () => {
@@ -136,28 +136,49 @@ describe('Phone Validation', () => {
       expect(isValidGreekPhone('690 123 4567')).toBe(true);
     });
 
-    it('should accept phone numbers with country code (country code is stripped)', () => {
-      expect(isValidGreekPhone('+301234567890')).toBe(true);
-      expect(isValidGreekPhone('+306901234567')).toBe(true);
-      expect(isValidGreekPhone('+302101234567')).toBe(true);
+    it('should accept phone numbers with hyphens (they will be stripped)', () => {
+      expect(isValidGreekPhone('123-456-7890')).toBe(true);
+      expect(isValidGreekPhone('690-123-4567')).toBe(true);
     });
 
-    it('should reject phone numbers with wrong length', () => {
+    it('should accept phone numbers with mixed spaces and hyphens', () => {
+      expect(isValidGreekPhone('123 456-7890')).toBe(true);
+      expect(isValidGreekPhone('690-123 4567')).toBe(true);
+    });
+
+    it('should accept phone numbers with +XX country code format', () => {
+      expect(isValidGreekPhone('+301234567890')).toBe(true);
+      expect(isValidGreekPhone('+306901234567')).toBe(true);
+      expect(isValidGreekPhone('+442071234567')).toBe(true); // UK format
+    });
+
+    it('should accept phone numbers with +XX country code and spaces', () => {
+      expect(isValidGreekPhone('+30 690 123 4567')).toBe(true);
+      expect(isValidGreekPhone('+30 210 123 4567')).toBe(true);
+    });
+
+    it('should accept phone numbers with +XX country code and hyphens', () => {
+      expect(isValidGreekPhone('+30-690-123-4567')).toBe(true);
+      expect(isValidGreekPhone('+30-210-123-4567')).toBe(true);
+    });
+
+    it('should reject phone numbers with wrong length (no country code)', () => {
       expect(isValidGreekPhone('690123456')).toBe(false); // 9 digits
       expect(isValidGreekPhone('69012345678')).toBe(false); // 11 digits
+    });
+
+    it('should reject phone numbers with wrong country code length', () => {
+      expect(isValidGreekPhone('+3061234567890')).toBe(false); // 1 digit country code + 11 digits
+      expect(isValidGreekPhone('+3006901234567')).toBe(false); // 3 digit country code + 10 digits
     });
 
     it('should reject phone numbers with letters', () => {
       expect(isValidGreekPhone('69012a4567')).toBe(false);
     });
 
-    it('should reject phone numbers with dashes', () => {
-      expect(isValidGreekPhone('123-456-7890')).toBe(false);
-    });
-
-    it('should reject phone numbers with special characters', () => {
+    it('should reject phone numbers with special characters (other than spaces/hyphens)', () => {
       expect(isValidGreekPhone('1234567890!')).toBe(false);
-      expect(isValidGreekPhone('(123) 456-7890')).toBe(false);
+      expect(isValidGreekPhone('(123) 456 7890')).toBe(false);
     });
 
     it('should trim whitespace before validation', () => {
@@ -176,99 +197,176 @@ describe('Phone Validation', () => {
   });
 });
 
-describe('Greek ADT Validation', () => {
-  describe('isValidGreekAdt', () => {
-    it('should accept valid Greek ADT', () => {
-      expect(isValidGreekAdt('ΑΒΓ12345')).toBe(true);
-      expect(isValidGreekAdt('ΜΠΑ67890')).toBe(true);
-      expect(isValidGreekAdt('ΚΩΝ11111')).toBe(true);
+describe('Greek ADT Validation - Old Format', () => {
+  describe('isValidGreekAdtOld', () => {
+    it('should accept valid old format Greek ADT with hyphen (LL-DDDDDD)', () => {
+      expect(isValidGreekAdtOld('AB-123456')).toBe(true);
+      expect(isValidGreekAdtOld('XY-987654')).toBe(true);
+      expect(isValidGreekAdtOld('AE-000001')).toBe(true);
     });
 
-    it('should reject ADT with Latin letters', () => {
-      expect(isValidGreekAdt('ABC12345')).toBe(false);
-      expect(isValidGreekAdt('abγ12345')).toBe(false);
+    it('should accept valid old format Greek ADT without hyphen (LLDDDDDD)', () => {
+      expect(isValidGreekAdtOld('AB123456')).toBe(true);
+      expect(isValidGreekAdtOld('XY987654')).toBe(true);
+      expect(isValidGreekAdtOld('AE000001')).toBe(true);
+    });
+
+    it('should accept all valid letters from ABEZHIKMNOPTYX set (with hyphen)', () => {
+      expect(isValidGreekAdtOld('AE-123456')).toBe(true);
+      expect(isValidGreekAdtOld('ZH-123456')).toBe(true);
+      expect(isValidGreekAdtOld('IK-123456')).toBe(true);
+      expect(isValidGreekAdtOld('MN-123456')).toBe(true);
+      expect(isValidGreekAdtOld('OP-123456')).toBe(true);
+      expect(isValidGreekAdtOld('TY-123456')).toBe(true);
+      expect(isValidGreekAdtOld('XB-123456')).toBe(true);
+    });
+
+    it('should accept all valid letters from ABEZHIKMNOPTYX set (without hyphen)', () => {
+      expect(isValidGreekAdtOld('AE123456')).toBe(true);
+      expect(isValidGreekAdtOld('ZH123456')).toBe(true);
+      expect(isValidGreekAdtOld('IK123456')).toBe(true);
+      expect(isValidGreekAdtOld('MN123456')).toBe(true);
+    });
+
+    it('should reject ADT with invalid letters (not in ABEZHIKMNOPTYX)', () => {
+      expect(isValidGreekAdtOld('CD-123456')).toBe(false); // C and D not in set
+      expect(isValidGreekAdtOld('QR-123456')).toBe(false); // Q and R not in set
+      expect(isValidGreekAdtOld('UV-123456')).toBe(false); // U and V not in set
+      expect(isValidGreekAdtOld('CD123456')).toBe(false); // without hyphen
+    });
+
+    it('should reject ADT with lowercase letters', () => {
+      expect(isValidGreekAdtOld('ab-123456')).toBe(false);
+      expect(isValidGreekAdtOld('ab123456')).toBe(false);
     });
 
     it('should reject ADT with wrong letter count', () => {
-      expect(isValidGreekAdt('ΑΒ12345')).toBe(false); // 2 letters
-      expect(isValidGreekAdt('ΑΒΓΔ12345')).toBe(false); // 4 letters
+      expect(isValidGreekAdtOld('A-123456')).toBe(false); // 1 letter
+      expect(isValidGreekAdtOld('ABE-123456')).toBe(false); // 3 letters
+      expect(isValidGreekAdtOld('A123456')).toBe(false); // 1 letter without hyphen
     });
 
     it('should reject ADT with wrong digit count', () => {
-      expect(isValidGreekAdt('ΑΒΓ1234')).toBe(false); // 4 digits
-      expect(isValidGreekAdt('ΑΒΓ123456')).toBe(false); // 6 digits
+      expect(isValidGreekAdtOld('AB-12345')).toBe(false); // 5 digits
+      expect(isValidGreekAdtOld('AB-1234567')).toBe(false); // 7 digits
+      expect(isValidGreekAdtOld('AB12345')).toBe(false); // 5 digits without hyphen
+      expect(isValidGreekAdtOld('AB1234567')).toBe(false); // 7 digits without hyphen
     });
 
-    it('should reject ADT with special characters', () => {
-      expect(isValidGreekAdt('ΑΒΓ-12345')).toBe(false);
-      expect(isValidGreekAdt('ΑΒΓ 12345')).toBe(false);
-    });
-  });
-});
-
-describe('AMKA Validation', () => {
-  describe('isValidAmka', () => {
-    it('should accept valid AMKA with correct checksum', () => {
-      // Valid AMKA: 01013000002
-      // Checksum calculation: (10 - (8 % 10)) % 10 = 2
-      expect(isValidAmka('01013000002')).toBe(true);
+    it('should reject ADT with special characters in digits', () => {
+      expect(isValidGreekAdtOld('AB-12345a')).toBe(false);
+      expect(isValidGreekAdtOld('AB-12 456')).toBe(false);
     });
 
-    it('should reject AMKA with invalid length', () => {
-      expect(isValidAmka('0101300000')).toBe(false); // 10 digits
-      expect(isValidAmka('010130000012')).toBe(false); // 12 digits
-    });
-
-    it('should reject AMKA with letters', () => {
-      expect(isValidAmka('0101300000a')).toBe(false);
-    });
-
-    it('should reject AMKA with invalid checksum', () => {
-      expect(isValidAmka('01013000001')).toBe(false); // Wrong checksum
+    it('should reject Greek letters (this is Latin-only format)', () => {
+      expect(isValidGreekAdtOld('ΑΒ-123456')).toBe(false);
+      expect(isValidGreekAdtOld('ΑΒ123456')).toBe(false);
     });
   });
 });
 
-describe('Passport Validation', () => {
-  describe('isValidPassport', () => {
-    it('should accept valid passport numbers', () => {
-      expect(isValidPassport('AB1234567')).toBe(true);
-      expect(isValidPassport('XY9876543')).toBe(true);
-      expect(isValidPassport('ab1234567')).toBe(true); // lowercase accepted
+describe('Greek ADT Validation - New Format', () => {
+  describe('isValidGreekAdtNew', () => {
+    it('should accept valid 12-character alphanumeric identifiers', () => {
+      expect(isValidGreekAdtNew('A1B2C3D4E5F6')).toBe(true);
+      expect(isValidGreekAdtNew('ABCDEF123456')).toBe(true);
+      expect(isValidGreekAdtNew('123456ABCDEF')).toBe(true);
+      expect(isValidGreekAdtNew('111111111111')).toBe(true);
+      expect(isValidGreekAdtNew('AAAAAAAAAAAA')).toBe(true);
     });
 
-    it('should reject passport with wrong format', () => {
-      expect(isValidPassport('A1234567')).toBe(false); // 1 letter
-      expect(isValidPassport('ABC1234567')).toBe(false); // 3 letters
-      expect(isValidPassport('AB123456')).toBe(false); // 6 digits
-      expect(isValidPassport('AB12345678')).toBe(false); // 8 digits
+    it('should be case-insensitive', () => {
+      expect(isValidGreekAdtNew('abcdef123456')).toBe(true);
+      expect(isValidGreekAdtNew('AbCdEf123456')).toBe(true);
     });
 
-    it('should reject passport with special characters', () => {
-      expect(isValidPassport('AB-1234567')).toBe(false);
-      expect(isValidPassport('AB 1234567')).toBe(false);
+    it('should reject identifiers with wrong length', () => {
+      expect(isValidGreekAdtNew('A1B2C3D4E5F')).toBe(false); // 11 chars
+      expect(isValidGreekAdtNew('A1B2C3D4E5F67')).toBe(false); // 13 chars
+      expect(isValidGreekAdtNew('ABCDE12345')).toBe(false); // 10 chars
+    });
+
+    it('should reject identifiers with special characters', () => {
+      expect(isValidGreekAdtNew('A1B2C3D4E5F-')).toBe(false);
+      expect(isValidGreekAdtNew('A1B2C3D4E5 6')).toBe(false);
+      expect(isValidGreekAdtNew('A1B2-C3D4E56')).toBe(false);
+    });
+
+    it('should reject identifiers with Greek letters', () => {
+      expect(isValidGreekAdtNew('ΑΒΓ123456789')).toBe(false);
+    });
+
+    it('should reject empty string', () => {
+      expect(isValidGreekAdtNew('')).toBe(false);
     });
   });
 });
 
-describe('Greek Identity Number Validation', () => {
+describe('Greek Passport Validation', () => {
+  describe('isValidGreekPassport', () => {
+    it('should accept valid Greek passport numbers (2 letters + 7 digits)', () => {
+      expect(isValidGreekPassport('AB1234567')).toBe(true);
+      expect(isValidGreekPassport('XY9876543')).toBe(true);
+      expect(isValidGreekPassport('ZZ0000000')).toBe(true);
+    });
+
+    it('should accept lowercase letters', () => {
+      expect(isValidGreekPassport('ab1234567')).toBe(true);
+      expect(isValidGreekPassport('Ab1234567')).toBe(true);
+    });
+
+    it('should reject passport with wrong letter count', () => {
+      expect(isValidGreekPassport('A1234567')).toBe(false); // 1 letter
+      expect(isValidGreekPassport('ABC1234567')).toBe(false); // 3 letters
+    });
+
+    it('should reject passport with wrong digit count', () => {
+      expect(isValidGreekPassport('AB123456')).toBe(false); // 6 digits
+      expect(isValidGreekPassport('AB12345678')).toBe(false); // 8 digits
+    });
+
+    it('should reject passport with delimiters', () => {
+      expect(isValidGreekPassport('AB-1234567')).toBe(false);
+      expect(isValidGreekPassport('AB 1234567')).toBe(false);
+    });
+
+    it('should reject passport with Greek letters', () => {
+      expect(isValidGreekPassport('ΑΒ1234567')).toBe(false);
+    });
+
+    it('should reject empty string', () => {
+      expect(isValidGreekPassport('')).toBe(false);
+    });
+  });
+});
+
+describe('Greek Identity Number Validation (Combined)', () => {
   describe('isValidGreekIdentityNumber', () => {
-    it('should accept valid Greek ADT', () => {
-      expect(isValidGreekIdentityNumber('ΑΒΓ12345')).toBe(true);
+    it('should accept valid old format Greek ADT', () => {
+      expect(isValidGreekIdentityNumber('AB-123456')).toBe(true);
+      expect(isValidGreekIdentityNumber('XY-987654')).toBe(true);
     });
 
-    it('should accept valid AMKA', () => {
-      expect(isValidGreekIdentityNumber('01013000002')).toBe(true);
+    it('should accept valid new format Greek ADT (12 alphanumeric)', () => {
+      expect(isValidGreekIdentityNumber('A1B2C3D4E5F6')).toBe(true);
+      expect(isValidGreekIdentityNumber('ABCDEF123456')).toBe(true);
     });
 
-    it('should accept valid passport', () => {
+    it('should accept valid Greek passport', () => {
       expect(isValidGreekIdentityNumber('AB1234567')).toBe(true);
+      expect(isValidGreekIdentityNumber('xy9876543')).toBe(true);
     });
 
-    it('should reject invalid identity number', () => {
+    it('should reject invalid identity numbers', () => {
       expect(isValidGreekIdentityNumber('INVALID')).toBe(false);
       expect(isValidGreekIdentityNumber('12345')).toBe(false);
-      expect(isValidGreekIdentityNumber('ABC123456')).toBe(false);
+      expect(isValidGreekIdentityNumber('ABC123456')).toBe(false); // 3 letters + 6 digits
+      expect(isValidGreekIdentityNumber('')).toBe(false);
+    });
+
+    it('should reject old Greek ADT format (3 Greek letters + 5 digits)', () => {
+      // The old format with Greek letters is no longer supported
+      expect(isValidGreekIdentityNumber('ΑΒΓ12345')).toBe(false);
     });
   });
 });
@@ -301,21 +399,21 @@ describe('UserProfileSchema', () => {
     expect(result.success).toBe(true);
   });
 
-  it('should validate profile with Greek ADT', () => {
+  it('should validate profile with old format Greek ADT', () => {
     const adtProfile = {
       ...baseProfile,
-      identityNumber: 'ΑΒΓ12345',
+      identityNumber: 'AB-123456',
     };
     const result = UserProfileSchema.safeParse(adtProfile);
     expect(result.success).toBe(true);
   });
 
-  it('should validate profile with AMKA', () => {
-    const amkaProfile = {
+  it('should validate profile with new format Greek ADT (12 alphanumeric)', () => {
+    const adtProfile = {
       ...baseProfile,
-      identityNumber: '01013000002',
+      identityNumber: 'A1B2C3D4E5F6',
     };
-    const result = UserProfileSchema.safeParse(amkaProfile);
+    const result = UserProfileSchema.safeParse(adtProfile);
     expect(result.success).toBe(true);
   });
 
@@ -328,6 +426,15 @@ describe('UserProfileSchema', () => {
     expect(result.success).toBe(true);
   });
 
+  it('should reject profile with old Greek letter ADT format (no longer supported)', () => {
+    const invalidProfile = {
+      ...baseProfile,
+      identityNumber: 'ΑΒΓ12345',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+  });
+
   it('should validate profile with 10-digit phone', () => {
     const phoneProfile = {
       ...baseProfile,
@@ -337,18 +444,18 @@ describe('UserProfileSchema', () => {
     expect(result.success).toBe(true);
   });
 
-    it('should reject profile with short fullName', () => {
-      const invalidProfile = {
-        ...baseProfile,
-        fullName: 'J',
-      };
-      const result = UserProfileSchema.safeParse(invalidProfile);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain('fullName');
-        expect(result.error.issues[0].message).toContain('at least 2 words');
-      }
-    });
+  it('should reject profile with short fullName', () => {
+    const invalidProfile = {
+      ...baseProfile,
+      fullName: 'J',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('fullName');
+      expect(result.error.issues[0].message).toContain('at least 2 words');
+    }
+  });
 
   it('should reject profile with fullName containing numbers', () => {
     const invalidProfile = {
@@ -415,18 +522,18 @@ describe('UserProfileSchema', () => {
     }
   });
 
-    it('should reject profile with invalid phone number', () => {
-      const invalidProfile = {
-        ...baseProfile,
-        phone: '123456789', // Only 9 digits
-      };
-      const result = UserProfileSchema.safeParse(invalidProfile);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain('phone');
-        expect(result.error.issues[0].message).toContain('valid phone number');
-      }
-    });
+  it('should reject profile with invalid phone number', () => {
+    const invalidProfile = {
+      ...baseProfile,
+      phone: '123456789', // Only 9 digits
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('phone');
+      expect(result.error.issues[0].message).toContain('valid phone number');
+    }
+  });
 
   it('should accept profile with phone containing spaces', () => {
     const validProfile = {
@@ -437,18 +544,23 @@ describe('UserProfileSchema', () => {
     expect(result.success).toBe(true);
   });
 
-    it('should reject profile with phone containing dashes', () => {
-      const invalidProfile = {
-        ...baseProfile,
-        phone: '123-456-7890',
-      };
-      const result = UserProfileSchema.safeParse(invalidProfile);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain('phone');
-        expect(result.error.issues[0].message).toContain('valid phone number');
-      }
-    });
+  it('should accept profile with phone containing hyphens', () => {
+    const validProfile = {
+      ...baseProfile,
+      phone: '690-123-4567', // Hyphens are now allowed
+    };
+    const result = UserProfileSchema.safeParse(validProfile);
+    expect(result.success).toBe(true);
+  });
+
+  it('should accept profile with phone containing country code', () => {
+    const validProfile = {
+      ...baseProfile,
+      phone: '+30 690 123 4567', // +XX country code format
+    };
+    const result = UserProfileSchema.safeParse(validProfile);
+    expect(result.success).toBe(true);
+  });
 
   it('should reject profile with invalid identity number', () => {
     const invalidProfile = {
@@ -459,8 +571,8 @@ describe('UserProfileSchema', () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error.issues[0].path).toContain('identityNumber');
-      expect(result.error.issues[0].message).toContain('Greek ADT');
-      expect(result.error.issues[0].message).toContain('AMKA');
+      expect(result.error.issues[0].message).toContain('Old ADT');
+      expect(result.error.issues[0].message).toContain('New ID');
       expect(result.error.issues[0].message).toContain('Passport');
     }
   });
@@ -765,11 +877,7 @@ describe('LeaveRequestSchema', () => {
 
 describe('HolidayListSchema', () => {
   it('should validate a valid array of ISO date strings', () => {
-    const validHolidays = [
-      '2025-01-01',
-      '2025-12-25',
-      '2025-07-04',
-    ];
+    const validHolidays = ['2025-01-01', '2025-12-25', '2025-07-04'];
     const result = HolidayListSchema.safeParse(validHolidays);
     expect(result.success).toBe(true);
     if (result.success) {
@@ -792,75 +900,51 @@ describe('HolidayListSchema', () => {
   });
 
   it('should reject array with invalid ISO date format', () => {
-    const invalidHolidays = [
-      '2025-01-01',
-      '2025/12/25',
-      '2025-07-04',
-    ];
+    const invalidHolidays = ['2025-01-01', '2025/12/25', '2025-07-04'];
     const result = HolidayListSchema.safeParse(invalidHolidays);
     expect(result.success).toBe(false);
   });
 
   it('should reject array with incomplete date', () => {
-    const invalidHolidays = [
-      '2025-01-01',
-      '2025-12',
-    ];
+    const invalidHolidays = ['2025-01-01', '2025-12'];
     const result = HolidayListSchema.safeParse(invalidHolidays);
     expect(result.success).toBe(false);
   });
 
   it('should reject array with non-string elements', () => {
-    const invalidHolidays = [
-      '2025-01-01',
-      20251225,
-      '2025-07-04',
-    ] as any;
+    const invalidHolidays = ['2025-01-01', 20251225, '2025-07-04'] as any;
     const result = HolidayListSchema.safeParse(invalidHolidays);
     expect(result.success).toBe(false);
   });
 
   it('should reject array with gibberish strings', () => {
-    const invalidHolidays = [
-      'not-a-date',
-      'also-not-a-date',
-    ];
+    const invalidHolidays = ['not-a-date', 'also-not-a-date'];
     const result = HolidayListSchema.safeParse(invalidHolidays);
     expect(result.success).toBe(false);
   });
 
   it('should accept leap year dates', () => {
-    const leapYearHolidays = [
-      '2024-02-29',
-    ];
+    const leapYearHolidays = ['2024-02-29'];
     const result = HolidayListSchema.safeParse(leapYearHolidays);
     expect(result.success).toBe(true);
   });
 
   it('should accept end of month dates', () => {
-    const endOfMonthHolidays = [
-      '2025-01-31',
-      '2025-03-31',
-      '2025-04-30',
-    ];
+    const endOfMonthHolidays = ['2025-01-31', '2025-03-31', '2025-04-30'];
     const result = HolidayListSchema.safeParse(endOfMonthHolidays);
     expect(result.success).toBe(true);
   });
 
   it('should reject array with mixed separators', () => {
-    const invalidHolidays = [
-      '2025-01-01',
-      '2025-12/25',
-    ];
+    const invalidHolidays = ['2025-01-01', '2025-12/25'];
     const result = HolidayListSchema.safeParse(invalidHolidays);
     expect(result.success).toBe(false);
   });
 
   it('should reject date with time component', () => {
-    const invalidHolidays = [
-      '2025-01-01T00:00:00Z',
-    ];
+    const invalidHolidays = ['2025-01-01T00:00:00Z'];
     const result = HolidayListSchema.safeParse(invalidHolidays);
     expect(result.success).toBe(false);
   });
 });
+
