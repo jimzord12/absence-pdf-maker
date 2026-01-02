@@ -1,9 +1,9 @@
 ---
 description: Start the implementation of the next Task.
-agent: orchestrator
+agent: implementor
 subtask: true
 ---
 
 # Implement Task
 
-Implement the next not completed task.
+Implement the next task.

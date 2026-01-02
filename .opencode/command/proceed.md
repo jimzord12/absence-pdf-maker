@@ -1,9 +1,11 @@
 ---
-description: Start Task Implementation.
-agent: implementor
+description: Continue Task Implementation.
+agent: orchestrator
 subtask: true
 ---
 
-# Start Implementation
+# Continue Implementation
 
-Proceed with the implementation of the Task.
+Continue with the implementation of the current Task from where it was left off.
+
+Check `docs/tasks/state.json` to determine the current state and proceed accordingly.

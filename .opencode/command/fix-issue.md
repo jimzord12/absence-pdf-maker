@@ -1,6 +1,6 @@
 ---
 description: Fix a reported issue by analyzing the report, creating a fix plan, implementing the fix, and updating the issue status.
-agent: implementor
+agent: orchestrator
 subtask: false
 ---
 
