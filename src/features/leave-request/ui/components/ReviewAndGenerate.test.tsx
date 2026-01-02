@@ -1,32 +1,32 @@
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { useLeaveRequestStore } from '../state/leaveRequest.store';
+import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { ReviewAndGenerate } from './ReviewAndGenerate';
 
 // Mock persistence services
 const mockExportProfileToJson = vi.fn();
 const mockImportProfileFromJson = vi.fn();
 
-vi.mock('../services/persistence', () => ({
+vi.mock('../../services/persistence', () => ({
   exportProfileToJson: () => mockExportProfileToJson(),
   importProfileFromJson: (file: File) => mockImportProfileFromJson(file),
 }));
 
 // Mock calculateAbsenceDays function
 const mockCalculateAbsenceDays = vi.fn();
-vi.mock('../services/absenceDays', () => ({
+vi.mock('../../services/absenceDays', () => ({
   calculateAbsenceDays: (...args: any[]) => mockCalculateAbsenceDays(...args),
 }));
 
 // Mock PDF service
 const mockDownloadLeaveRequestPdf = vi.fn();
-vi.mock('../services/pdf/pdf.service', () => ({
+vi.mock('../../services/pdf/pdf.service', () => ({
   downloadLeaveRequestPdf: (...args: any[]) => mockDownloadLeaveRequestPdf(...args),
 }));
 
 // Mock formatDate function
-vi.mock('../../../shared/lib/dates', () => ({
+vi.mock('../../../../shared/lib/dates', () => ({
   formatDate: (date: Date) => {
     if (!date) return '—';
     return date.toISOString().split('T')[0];
@@ -65,11 +65,11 @@ beforeEach(() => {
       holidaySet: new Set<string>(),
     },
     ui: {
-        triggerValidation: null,
       isSignatureModalOpen: false,
       isGeneratingPdf: false,
       lastGeneratedFileName: '',
       errorMessage: null,
+      triggerValidation: null,
     },
   });
 
@@ -91,6 +91,7 @@ afterEach(() => {
       isGeneratingPdf: false,
       lastGeneratedFileName: '',
       errorMessage: null,
+      triggerValidation: null,
     },
   });
 });
@@ -957,6 +958,7 @@ describe('ReviewAndGenerate', () => {
             isGeneratingPdf: true,
             lastGeneratedFileName: '',
             errorMessage: null,
+            triggerValidation: null,
           },
         });
       });
@@ -993,6 +995,7 @@ describe('ReviewAndGenerate', () => {
             isGeneratingPdf: false,
             lastGeneratedFileName: '',
             errorMessage: null,
+            triggerValidation: null,
           },
         });
       });
@@ -1029,6 +1032,7 @@ describe('ReviewAndGenerate', () => {
             isGeneratingPdf: true,
             lastGeneratedFileName: '',
             errorMessage: null,
+            triggerValidation: null,
           },
         });
       });
@@ -1065,6 +1069,7 @@ describe('ReviewAndGenerate', () => {
             isGeneratingPdf: false,
             lastGeneratedFileName: '',
             errorMessage: null,
+            triggerValidation: null,
           },
         });
       });
@@ -1318,6 +1323,7 @@ describe('ReviewAndGenerate', () => {
             isGeneratingPdf: false,
             lastGeneratedFileName: '',
             errorMessage: 'An error occurred while processing your request',
+            triggerValidation: null,
           },
         });
       });
@@ -1341,6 +1347,7 @@ describe('ReviewAndGenerate', () => {
             isGeneratingPdf: false,
             lastGeneratedFileName: '',
             errorMessage: 'Test error from store',
+            triggerValidation: null,
           },
         });
       });

@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
 import type { FieldErrors } from 'react-hook-form';
-import { Select } from '../../../shared/ui/Select';
-import { Textarea } from '../../../shared/ui/Textarea';
-import { Card } from '../../../shared/ui/Card';
-import { DateRangeField } from './DateRangeField';
-import { useLeaveRequestStore } from '../state/leaveRequest.store';
-import { useLocaleStore } from '../state/locale.store';
-import type { LeaveRequest } from '../model/leaveRequest.types';
+import { useFormContext } from 'react-hook-form';
+
+import { Card, Select, Textarea } from '../../../../shared/ui';
+import type { LeaveRequest } from '../../model/leaveRequest.types';
+import { useLeaveRequestStore } from '../../state/leaveRequest.store';
+import { useLocaleStore } from '../../state/locale.store';
+import { DateRangeField } from '../components/DateRangeField';
 
 interface LeaveDetailsSectionProps {
   errors?: FieldErrors<LeaveRequest>;
@@ -33,13 +32,11 @@ const leaveTypeOptions = [
  * Uses shared UI components (Select, Textarea, Card) for consistent styling.
  * The DateRangeField component now handles absence calculation display.
  */
-export const LeaveDetailsSection: React.FC<LeaveDetailsSectionProps> = ({
-  errors,
-}) => {
+export const LeaveDetailsSection: React.FC<LeaveDetailsSectionProps> = ({ errors }) => {
   const methods = useFormContext<LeaveRequest>();
   const { register, watch } = methods || {};
-  const holidays = useLeaveRequestStore((state) => state.holidays.holidaySet);
-  const setLeaveDraft = useLeaveRequestStore((state) => state.setLeaveDraft);
+  const holidays = useLeaveRequestStore(state => state.holidays.holidaySet);
+  const setLeaveDraft = useLeaveRequestStore(state => state.setLeaveDraft);
   const { locale } = useLocaleStore();
 
   // Watch form fields to update Zustand store when they change
@@ -61,7 +58,9 @@ export const LeaveDetailsSection: React.FC<LeaveDetailsSectionProps> = ({
   return (
     <section aria-labelledby="leave-details-heading">
       <Card>
-        <h2 id="leave-details-heading" className="text-xl font-semibold mb-4">Leave Details</h2>
+        <h2 id="leave-details-heading" className="text-xl font-semibold mb-4">
+          Leave Details
+        </h2>
         <div className="space-y-4">
           <Select
             label="Leave Type"
@@ -85,3 +84,4 @@ export const LeaveDetailsSection: React.FC<LeaveDetailsSectionProps> = ({
     </section>
   );
 };
+

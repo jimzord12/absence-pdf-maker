@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { formatDate } from '../../../shared/lib/dates';
-import { Alert, Button, Card } from '../../../shared/ui';
-import type { LeaveType } from '../model/leaveRequest.types';
-import { calculateAbsenceDays } from '../services/absenceDays';
-import { downloadLeaveRequestPdf } from '../services/pdf/pdf.service';
-import { exportProfileToJson, importProfileFromJson } from '../services/persistence';
-import { useLeaveRequestStore } from '../state/leaveRequest.store';
-import { useLocaleStore } from '../state/locale.store';
-import type { Locale } from '../state/locale.store';
+import { formatDate } from '../../../../shared/lib/dates';
+import { Alert, Button, Card } from '../../../../shared/ui';
+import type { LeaveType } from '../../model/leaveRequest.types';
+import { calculateAbsenceDays } from '../../services/absenceDays';
+import { downloadLeaveRequestPdf } from '../../services/pdf/pdf.service';
+import { exportProfileToJson, importProfileFromJson } from '../../services/persistence';
+import { useLeaveRequestStore } from '../../state/leaveRequest.store';
+import { useLocaleStore } from '../../state/locale.store';
 
 /**
  * ReviewAndGenerate component displays a summary of the form data and provides
@@ -37,6 +36,7 @@ export const ReviewAndGenerate: React.FC = () => {
   const setIsGeneratingPdf = useLeaveRequestStore(state => state.setIsGeneratingPdf);
   const clearSignature = useLeaveRequestStore(state => state.clearSignature);
   const clearErrorMessage = useLeaveRequestStore(state => state.clearErrorMessage);
+  const toggleSignatureModal = useLeaveRequestStore(state => state.toggleSignatureModal);
 
   // Component state
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -129,9 +129,7 @@ export const ReviewAndGenerate: React.FC = () => {
     if (triggerValidation) {
       const isValid = await triggerValidation();
       if (!isValid) {
-        setImportError(
-          'Please correct the validation errors before generating the PDF.'
-        );
+        setImportError('Please correct the validation errors before generating the PDF.');
         setTimeout(() => setImportError(null), 5000);
         return;
       }
@@ -194,7 +192,11 @@ export const ReviewAndGenerate: React.FC = () => {
   };
 
   return (
-    <div className={`space-y-6 ${!hasAnimated ? 'animate-fade-in-up animate-stagger-1' : ''}`}>
+    <aside
+      role="complementary"
+      aria-label="Review and Generate"
+      className={`space-y-6 ${!hasAnimated ? 'animate-fade-in-up animate-stagger-1' : ''}`}
+    >
       {/* Success/Error Messages */}
       {errorMessage && (
         <Alert variant="error" onDismiss={clearErrorMessage}>
@@ -276,18 +278,18 @@ export const ReviewAndGenerate: React.FC = () => {
               <span className="text-sm text-gray-500">Leave Allowance</span>
               <p className="font-medium">{leaveDraft.leaveAllowance ? 'Yes' : 'No'}</p>
             </div>
-             <div>
-               <span className="text-sm text-gray-500">Start Date</span>
-               <p className="font-medium">
-                 {leaveDraft.startDate ? formatDate(leaveDraft.startDate, locale) : '—'}
-               </p>
-             </div>
-             <div>
-               <span className="text-sm text-gray-500">End Date</span>
-               <p className="font-medium">
-                 {leaveDraft.endDate ? formatDate(leaveDraft.endDate, locale) : '—'}
-               </p>
-             </div>
+            <div>
+              <span className="text-sm text-gray-500">Start Date</span>
+              <p className="font-medium">
+                {leaveDraft.startDate ? formatDate(leaveDraft.startDate, locale) : '—'}
+              </p>
+            </div>
+            <div>
+              <span className="text-sm text-gray-500">End Date</span>
+              <p className="font-medium">
+                {leaveDraft.endDate ? formatDate(leaveDraft.endDate, locale) : '—'}
+              </p>
+            </div>
             <div>
               <span className="text-sm text-gray-500">Reason</span>
               <p className="font-medium">{leaveDraft.reason || '—'}</p>
@@ -328,13 +330,18 @@ export const ReviewAndGenerate: React.FC = () => {
           {/* Signature Status */}
           <div className="mt-4">
             <span className="text-sm text-gray-500">Signature</span>
-            <p className="font-medium">
-              {signature.signatureDataUrl ? (
-                <span className="text-green-600">✓ Signed</span>
-              ) : (
-                <span className="text-red-500">✗ Not signed</span>
-              )}
-            </p>
+            <div className="flex items-center justify-between mt-1">
+              <p className="font-medium">
+                {signature.signatureDataUrl ? (
+                  <span className="text-green-600">✓ Signed</span>
+                ) : (
+                  <span className="text-red-500">✗ Not signed</span>
+                )}
+              </p>
+              <Button variant="secondary" size="sm" onClick={toggleSignatureModal}>
+                {signature.signatureDataUrl ? 'Update Signature' : 'Add Signature'}
+              </Button>
+            </div>
           </div>
         </Card>
       </section>
@@ -396,7 +403,7 @@ export const ReviewAndGenerate: React.FC = () => {
           </div>
         </Card>
       </section>
-    </div>
+    </aside>
   );
 };
 

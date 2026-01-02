@@ -1,17 +1,29 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
-import { LeaveDetailsSection } from './LeaveDetailsSection';
-import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LeaveRequestSchema } from '../model/leaveRequest.schema';
-import type { LeaveRequest } from '../model/leaveRequest.types';
-import { useLeaveRequestStore } from '../state/leaveRequest.store';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
+import type { LeaveRequest } from '../../model/leaveRequest.types';
+import { calculateAbsenceDays } from '../../services/absenceDays';
+import { useLeaveRequestStore } from '../../state/leaveRequest.store';
+import { DateRangeField } from '../components/DateRangeField';
+import { LeaveDetailsSection } from './LeaveDetailsSection';
 
 // Mock the calculateAbsenceDays function
-const mockCalculateAbsenceDays = vi.fn();
-vi.mock('../services/absenceDays', () => ({
-  calculateAbsenceDays: () => mockCalculateAbsenceDays(),
+const mockCalculateAbsenceDays = vi.fn().mockReturnValue({
+  totalDays: 0,
+  holidayDays: 0,
+  weekendDays: 0,
+  absenceDays: 0,
+});
+vi.mock('../../services/absenceDays', () => ({
+  calculateAbsenceDays: (...args: any[]) => mockCalculateAbsenceDays(...args),
+}));
+
+// Mock DateRangeField
+vi.mock('../components/DateRangeField', () => ({
+  DateRangeField: vi.fn(),
 }));
 
 // Wrapper component to provide form context
@@ -23,7 +35,8 @@ const FormWrapper = ({
   defaultValues?: Partial<LeaveRequest>;
 }) => {
   const methods = useForm<LeaveRequest>({
-    resolver: zodResolver(LeaveRequestSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(LeaveRequestSchema) as any,
     mode: 'onTouched',
     defaultValues: defaultValues as any,
   });
@@ -34,6 +47,76 @@ const FormWrapper = ({
 describe('LeaveDetailsSection', () => {
   // Reset store and mocks before each test
   beforeEach(() => {
+    vi.mocked(DateRangeField).mockImplementation(({ errors, holidaySet }: any) => {
+      const context = useFormContext();
+      if (!context) return <div data-testid="mock-date-range-field-no-context" />;
+
+      const { register, watch } = context;
+      const startDate = watch('startDate');
+      const endDate = watch('endDate');
+
+      let summary = { totalDays: 0, holidayDays: 0, weekendDays: 0, absenceDays: 0 };
+      if (startDate && endDate) {
+        summary = calculateAbsenceDays(startDate, endDate, holidaySet);
+      }
+
+      const hasDates = !!startDate && !!endDate;
+
+      return (
+        <div data-testid="mock-date-range-field">
+          <div>
+            <label htmlFor="startDate">Start Date</label>
+            <input
+              id="startDate"
+              {...register('startDate', { setValueAs: (v: any) => (v ? new Date(v) : null) })}
+            />
+            {errors?.startDate?.message && <span>{errors.startDate.message}</span>}
+          </div>
+          <div>
+            <label htmlFor="endDate">End Date</label>
+            <input
+              id="endDate"
+              {...register('endDate', { setValueAs: (v: any) => (v ? new Date(v) : null) })}
+            />
+            {errors?.endDate?.message && <span>{errors.endDate.message}</span>}
+          </div>
+          {hasDates && (
+            <div>
+              <h3>Absence Calculation</h3>
+              <div>
+                Total Days: <span>{summary.totalDays}</span>
+              </div>
+              <div>
+                Holiday Days: <span>{summary.holidayDays}</span>
+              </div>
+              <div>
+                Weekend Days: <span>{summary.weekendDays}</span>
+              </div>
+              <div>
+                Actual Absence: <span className="text-green-600">{summary.absenceDays}</span>
+              </div>
+            </div>
+          )}
+          {!hasDates && (
+            <div>
+              <div>
+                Total Days: <span>0</span>
+              </div>
+              <div>
+                Holiday Days: <span>0</span>
+              </div>
+              <div>
+                Weekend Days: <span>0</span>
+              </div>
+              <div>
+                Actual Absence: <span>0</span>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    });
+
     localStorage.clear();
     useLeaveRequestStore.setState({
       profile: {
@@ -57,11 +140,11 @@ describe('LeaveDetailsSection', () => {
         holidaySet: new Set<string>(),
       },
       ui: {
-        triggerValidation: null,
         isSignatureModalOpen: false,
         isGeneratingPdf: false,
         lastGeneratedFileName: '',
         errorMessage: null,
+        triggerValidation: null,
       },
     });
     vi.clearAllMocks();
@@ -104,9 +187,9 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      expect(screen.getByLabelText('Leave Type')).toBeInTheDocument();
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
-      expect(screen.getByLabelText('End Date')).toBeInTheDocument();
+      expect(screen.getByLabelText(/Leave Type/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/Start Date/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/End Date/i)).toBeInTheDocument();
       expect(screen.getByLabelText('Reason (Optional)')).toBeInTheDocument();
     });
 
@@ -144,7 +227,7 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const leaveTypeSelect = screen.getByLabelText('Leave Type');
+      const leaveTypeSelect = screen.getByLabelText(/Leave Type/i);
       const user = userEvent.setup();
 
       await user.selectOptions(leaveTypeSelect, 'sick');
@@ -158,7 +241,7 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const leaveTypeSelect = screen.getByLabelText('Leave Type');
+      const leaveTypeSelect = screen.getByLabelText(/Leave Type/i);
       const user = userEvent.setup();
 
       await user.selectOptions(leaveTypeSelect, 'annual');
@@ -181,7 +264,7 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const leaveTypeSelect = screen.getByLabelText('Leave Type');
+      const leaveTypeSelect = screen.getByLabelText(/Leave Type/i);
       const user = userEvent.setup();
 
       await user.selectOptions(leaveTypeSelect, 'sick');
@@ -216,8 +299,8 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
-      expect(screen.getByLabelText('End Date')).toBeInTheDocument();
+      expect(screen.getByLabelText(/Start Date/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/End Date/i)).toBeInTheDocument();
     });
 
     it('should allow setting start date', async () => {
@@ -227,7 +310,7 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
+      const startDateInput = screen.getByLabelText(/Start Date/i);
       const user = userEvent.setup();
 
       await user.type(startDateInput, '2025-12-25');
@@ -241,7 +324,7 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const endDateInput = screen.getByLabelText('End Date');
+      const endDateInput = screen.getByLabelText(/End Date/i);
       const user = userEvent.setup();
 
       await user.type(endDateInput, '2025-12-31');
@@ -255,8 +338,8 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
-      const endDateInput = screen.getByLabelText('End Date');
+      const startDateInput = screen.getByLabelText(/Start Date/i);
+      const endDateInput = screen.getByLabelText(/End Date/i);
       const user = userEvent.setup();
 
       await user.type(startDateInput, '2025-12-25');
@@ -391,8 +474,8 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
-      const endDateInput = screen.getByLabelText('End Date');
+      const startDateInput = screen.getByLabelText(/Start Date/i);
+      const endDateInput = screen.getByLabelText(/End Date/i);
       const user = userEvent.setup();
 
       await user.type(startDateInput, '2025-12-20');
@@ -417,8 +500,8 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
-      const endDateInput = screen.getByLabelText('End Date');
+      const startDateInput = screen.getByLabelText(/Start Date/i);
+      const endDateInput = screen.getByLabelText(/End Date/i);
       const user = userEvent.setup();
 
       await user.type(startDateInput, '2025-12-20');
@@ -444,8 +527,8 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
-      const endDateInput = screen.getByLabelText('End Date');
+      const startDateInput = screen.getByLabelText(/Start Date/i);
+      const endDateInput = screen.getByLabelText(/End Date/i);
       const user = userEvent.setup();
 
       await user.type(startDateInput, '2025-12-20');
@@ -470,8 +553,8 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
-      const endDateInput = screen.getByLabelText('End Date');
+      const startDateInput = screen.getByLabelText(/Start Date/i);
+      const endDateInput = screen.getByLabelText(/End Date/i);
       const user = userEvent.setup();
 
       await user.type(startDateInput, '2025-12-20');
@@ -496,8 +579,8 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
-      const endDateInput = screen.getByLabelText('End Date');
+      const startDateInput = screen.getByLabelText(/Start Date/i);
+      const endDateInput = screen.getByLabelText(/End Date/i);
       const user = userEvent.setup();
 
       await user.type(startDateInput, '2025-12-20');
@@ -522,8 +605,8 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
-      const endDateInput = screen.getByLabelText('End Date');
+      const startDateInput = screen.getByLabelText(/Start Date/i);
+      const endDateInput = screen.getByLabelText(/End Date/i);
       const user = userEvent.setup();
 
       await user.type(startDateInput, '2025-12-20');
@@ -554,8 +637,8 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
-      const endDateInput = screen.getByLabelText('End Date');
+      const startDateInput = screen.getByLabelText(/Start Date/i);
+      const endDateInput = screen.getByLabelText(/End Date/i);
       const user = userEvent.setup();
 
       await user.type(startDateInput, '2025-12-24');
@@ -719,7 +802,7 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const leaveTypeSelect = screen.getByLabelText('Leave Type');
+      const leaveTypeSelect = screen.getByLabelText(/Leave Type/i);
       expect(leaveTypeSelect).toBeInTheDocument();
       expect(leaveTypeSelect.tagName).toBe('SELECT');
     });
@@ -731,7 +814,7 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
+      const startDateInput = screen.getByLabelText(/Start Date/i);
       expect(startDateInput).toBeInTheDocument();
       expect(startDateInput.tagName).toBe('INPUT');
     });
@@ -743,7 +826,7 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const endDateInput = screen.getByLabelText('End Date');
+      const endDateInput = screen.getByLabelText(/End Date/i);
       expect(endDateInput).toBeInTheDocument();
       expect(endDateInput.tagName).toBe('INPUT');
     });
@@ -781,8 +864,8 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
-      const endDateInput = screen.getByLabelText('End Date');
+      const startDateInput = screen.getByLabelText(/Start Date/i);
+      const endDateInput = screen.getByLabelText(/End Date/i);
       const user = userEvent.setup();
 
       await user.type(startDateInput, '2025-12-24');
@@ -814,8 +897,8 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
-      const endDateInput = screen.getByLabelText('End Date');
+      const startDateInput = screen.getByLabelText(/Start Date/i);
+      const endDateInput = screen.getByLabelText(/End Date/i);
       const user = userEvent.setup();
 
       await user.type(startDateInput, '2025-12-01');
@@ -862,8 +945,8 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
-      const endDateInput = screen.getByLabelText('End Date');
+      const startDateInput = screen.getByLabelText(/Start Date/i);
+      const endDateInput = screen.getByLabelText(/End Date/i);
       const user = userEvent.setup();
 
       const initialCallCount = mockCalculateAbsenceDays.mock.calls.length;
@@ -892,7 +975,7 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
+      const startDateInput = screen.getByLabelText(/Start Date/i);
       const user = userEvent.setup();
 
       // Type invalid date
@@ -903,3 +986,4 @@ describe('LeaveDetailsSection', () => {
     });
   });
 });
+

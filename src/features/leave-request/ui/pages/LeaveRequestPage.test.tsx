@@ -1,36 +1,32 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { usePwaInstall } from '../../../../app/providers/usePwaInstall';
+import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { LeaveRequestPage } from './LeaveRequestPage';
-import { useLeaveRequestStore } from '../state/leaveRequest.store';
-import { usePwaInstall } from '../../../app/providers/usePwaInstall';
 
 // Mock the holidays service
-const mockHolidaySet = new Set<string>([
-  '2025-01-01',
-  '2025-12-25',
-  '2025-07-04',
-]);
+const mockHolidaySet = new Set<string>(['2025-01-01', '2025-12-25', '2025-07-04']);
 
-vi.mock('../services/holidays/holidays.service', () => ({
+vi.mock('../../services/holidays/holidays.service', () => ({
   loadHolidays: () => mockHolidaySet,
 }));
 
 // Mock the usePwaInstall hook
 const mockPromptInstall = vi.fn().mockResolvedValue('accepted');
 
-vi.mock('../../../app/providers/usePwaInstall', () => ({
-  usePwaInstall: () => ({
+vi.mock('../../../../app/providers/usePwaInstall', () => ({
+  usePwaInstall: vi.fn(() => ({
     isInstallable: false,
     promptInstall: mockPromptInstall,
-  }),
+  })),
 }));
 
 // Mock the child components
-vi.mock('./LeaveRequestForm', () => ({
+vi.mock('../components/LeaveRequestForm', () => ({
   LeaveRequestForm: () => <div data-testid="leave-request-form">Leave Request Form</div>,
 }));
 
-vi.mock('./ReviewAndGenerate', () => ({
+vi.mock('../components/ReviewAndGenerate', () => ({
   ReviewAndGenerate: () => <div data-testid="review-and-generate">Review and Generate</div>,
 }));
 
@@ -67,7 +63,7 @@ describe('LeaveRequestPage', () => {
         triggerValidation: null,
       },
     });
-    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   afterEach(() => {
@@ -310,8 +306,12 @@ describe('LeaveRequestPage', () => {
       const reviewAndGenerate = screen.getByTestId('review-and-generate');
 
       // Both components should be within the grid
-      expect(gridContainer).toContainElement(leaveRequestForm.parentElement?.parentElement as HTMLElement);
-      expect(gridContainer).toContainElement(reviewAndGenerate.parentElement?.parentElement as HTMLElement);
+      expect(gridContainer).toContainElement(
+        leaveRequestForm.parentElement?.parentElement as HTMLElement
+      );
+      expect(gridContainer).toContainElement(
+        reviewAndGenerate.parentElement?.parentElement as HTMLElement
+      );
     });
   });
 
@@ -468,3 +468,4 @@ describe('LeaveRequestPage', () => {
     });
   });
 });
+

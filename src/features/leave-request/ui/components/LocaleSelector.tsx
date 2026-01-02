@@ -1,7 +1,8 @@
 import React from 'react';
-import { Select } from '../../../shared/ui/Select';
-import { useLocaleStore } from '../state/locale.store';
-import type { Locale } from '../state/locale.store';
+
+import { Select } from '../../../../shared/ui';
+import type { Locale } from '../../state/locale.store';
+import { useLocaleStore } from '../../state/locale.store';
 
 // Locale display labels and flag emojis
 const localeOptions = [
@@ -25,9 +26,10 @@ export const LocaleSelector: React.FC<LocaleSelectorProps> = ({ className = '' }
         id="locale-selector"
         options={localeOptions}
         value={locale}
-        onChange={(value) => setLocale(value as Locale)}
+        onChange={e => setLocale(e.target.value as Locale)}
         className="w-32"
       />
     </div>
   );
 };
+

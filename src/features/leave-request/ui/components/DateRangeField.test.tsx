@@ -2,11 +2,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { DateRangeField } from './DateRangeField';
-import type { LeaveRequest } from '../model/leaveRequest.types';
+import type { LeaveRequest } from '../../model/leaveRequest.types';
 
 // Mock the Zustand store
 const mockSetLeaveDraft = vi.fn();
-vi.mock('../state/leaveRequest.store', () => ({
+vi.mock('../../state/leaveRequest.store', () => ({
   useLeaveRequestStore: (selector: any) =>
     selector({
       setLeaveDraft: mockSetLeaveDraft,

@@ -1,18 +1,19 @@
 import { useEffect } from 'react';
-import { LeaveRequestForm } from './LeaveRequestForm';
-import { ReviewAndGenerate } from './ReviewAndGenerate';
-import { useLeaveRequestStore } from '../state/leaveRequest.store';
-import { loadHolidays } from '../services/holidays/holidays.service';
-import { usePwaInstall } from '../../../app/providers/usePwaInstall';
-import { Button } from '../../../shared/ui/Button';
-import { LocaleSelector } from './LocaleSelector.tsx';
+import { usePwaInstall } from '../../../../app/providers/usePwaInstall';
+import { Button } from '../../../../shared/ui';
+import { loadHolidays } from '../../services/holidays/holidays.service';
+import { useLeaveRequestStore } from '../../state/leaveRequest.store';
+import { LeaveRequestForm } from '../components/LeaveRequestForm';
+import { LocaleSelector } from '../components/LocaleSelector';
+import { ReviewAndGenerate } from '../components/ReviewAndGenerate';
+import { SignatureModal } from '../components/SignatureModal';
 
 /**
  * LeaveRequestPage - Page component that wraps the leave request form
  * and manages overall layout, header, and page-level state.
  */
 export const LeaveRequestPage: React.FC = () => {
-  const setHolidays = useLeaveRequestStore((state) => state.setHolidays);
+  const setHolidays = useLeaveRequestStore(state => state.setHolidays);
   const { isInstallable, promptInstall } = usePwaInstall();
 
   // Load holidays on page mount
@@ -32,9 +33,7 @@ export const LeaveRequestPage: React.FC = () => {
         <div className="mb-8">
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Leave Request
-              </h1>
+              <h1 className="text-3xl font-bold text-gray-900">Leave Request</h1>
               <p className="mt-2 text-sm text-gray-600">
                 Submit your leave request and generate a PDF document
               </p>
@@ -68,6 +67,8 @@ export const LeaveRequestPage: React.FC = () => {
           </div>
         </div>
       </div>
+      <SignatureModal />
     </div>
   );
 };
+

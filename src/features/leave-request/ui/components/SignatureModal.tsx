@@ -1,9 +1,8 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import SignatureCanvas from 'react-signature-canvas';
-import { Modal } from '../../../shared/ui/Modal';
-import { Button } from '../../../shared/ui/Button';
-import { Input } from '../../../shared/ui/Input';
-import { useLeaveRequestStore } from '../state/leaveRequest.store';
+
+import { Button, Input, Modal } from '../../../../shared/ui';
+import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 
 // Constants
 const CANVAS_HEIGHT = 200;
@@ -129,7 +128,7 @@ export const SignatureModal: React.FC = () => {
             placeholder="John Doe"
             inputType="text"
             value={typedName}
-            onChange={(e) => {
+            onChange={e => {
               setTypedName(e.target.value);
               setHasSignature(e.target.value.trim().length > 0);
             }}
@@ -146,38 +145,20 @@ export const SignatureModal: React.FC = () => {
                 {signatureDataUrl.replace('text:', '')}
               </p>
             ) : (
-              <img
-                src={signatureDataUrl}
-                alt="Captured signature"
-                className="max-h-24"
-              />
+              <img src={signatureDataUrl} alt="Captured signature" className="max-h-24" />
             )}
           </div>
         )}
 
         {/* Action Buttons */}
         <div className="flex gap-3 justify-end pt-4">
-          <Button
-            variant="secondary"
-            onClick={handleCancel}
-            type="button"
-          >
+          <Button variant="secondary" onClick={handleCancel} type="button">
             Cancel
           </Button>
-          <Button
-            variant="secondary"
-            onClick={handleClear}
-            type="button"
-            disabled={!hasSignature}
-          >
+          <Button variant="secondary" onClick={handleClear} type="button" disabled={!hasSignature}>
             Clear
           </Button>
-          <Button
-            variant="primary"
-            onClick={handleSave}
-            type="button"
-            disabled={isSaveDisabled}
-          >
+          <Button variant="primary" onClick={handleSave} type="button" disabled={isSaveDisabled}>
             Save Signature
           </Button>
         </div>
@@ -185,3 +166,4 @@ export const SignatureModal: React.FC = () => {
     </Modal>
   );
 };
+

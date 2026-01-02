@@ -1,9 +1,9 @@
 import React from 'react';
 import type { FieldErrors } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
-import { Card } from '../../../shared/ui/Card';
-import { Input } from '../../../shared/ui/Input';
-import type { LeaveRequest } from '../model/leaveRequest.types';
+
+import { Card, Input } from '../../../../shared/ui';
+import type { LeaveRequest } from '../../model/leaveRequest.types';
 
 interface EmploymentDetailsSectionProps {
   errors?: FieldErrors<LeaveRequest>;

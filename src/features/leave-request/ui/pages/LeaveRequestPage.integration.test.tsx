@@ -8,17 +8,17 @@
  * - Holiday highlighting and counting
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { StoreProvider } from '../../../../app/providers/StoreProvider';
+import { ThemeProvider } from '../../../../app/providers/ThemeProvider';
+import type { UserProfile } from '../../model/leaveRequest.types';
+import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { LeaveRequestPage } from './LeaveRequestPage';
-import { StoreProvider } from '../../../app/providers/StoreProvider';
-import { ThemeProvider } from '../../../app/providers/ThemeProvider';
-import { useLeaveRequestStore } from '../state/leaveRequest.store';
-import type { UserProfile } from '../model/leaveRequest.types';
 
 // Mock the holidays data
-vi.mock('../services/holidays/holidays.service', () => ({
+vi.mock('../../services/holidays/holidays.service', () => ({
   loadHolidays: () => {
     const holidaySet = new Set<string>();
     // Add some test holidays
@@ -39,7 +39,7 @@ const mockDownloadFile = vi.fn();
 const mockReadFileAsText = vi.fn();
 
 // Mock the file utilities using a factory function
-vi.mock('../../../shared/lib/file', () => ({
+vi.mock('../../../../shared/lib/file', () => ({
   downloadFile: (...args: any[]) => mockDownloadFile(...args),
   readFileAsText: (...args: any[]) => mockReadFileAsText(...args),
   toIsoString: (date: Date) => date.toISOString().split('T')[0],
@@ -59,9 +59,7 @@ vi.mock('jspdf', () => ({
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <ThemeProvider>
-      <StoreProvider>
-        {children}
-      </StoreProvider>
+      <StoreProvider>{children}</StoreProvider>
     </ThemeProvider>
   );
 };
@@ -100,6 +98,7 @@ const clearAllData = () => {
       isGeneratingPdf: false,
       lastGeneratedFileName: '',
       errorMessage: null,
+      triggerValidation: null,
     },
   }));
 };
@@ -126,15 +125,18 @@ describe('Integration Tests - User Flows', () => {
 
       // Step 1: Fill in personal details
       const fullNameInput = screen.getByLabelText(/full name/i);
+      const fathersNameInput = screen.getByLabelText(/father's name/i);
       const emailInput = screen.getByLabelText(/email/i);
       const phoneInput = screen.getByLabelText(/phone/i);
 
       await user.type(fullNameInput, 'John Doe');
+      await user.type(fathersNameInput, 'Richard Doe');
       await user.type(emailInput, 'john.doe@company.com');
       await user.type(phoneInput, '+1 (555) 123-4567');
 
       // Verify the values are entered
       expect(fullNameInput).toHaveValue('John Doe');
+      expect(fathersNameInput).toHaveValue('Richard Doe');
       expect(emailInput).toHaveValue('john.doe@company.com');
       expect(phoneInput).toHaveValue('+1 (555) 123-4567');
 
@@ -165,7 +167,8 @@ describe('Integration Tests - User Flows', () => {
       // Skip opening the modal to avoid canvas issues in jsdom
       await act(async () => {
         useLeaveRequestStore.getState().setSignature({
-          signatureDataUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
+          signatureDataUrl:
+            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
         });
       });
 
@@ -176,18 +179,20 @@ describe('Integration Tests - User Flows', () => {
 
       // Step 6: Verify the profile summary in the sidebar
       await waitFor(() => {
-        expect(screen.getByText('John Doe')).toBeInTheDocument();
-        expect(screen.getByText('john.doe@company.com')).toBeInTheDocument();
-        expect(screen.getByText('EMP-12345')).toBeInTheDocument();
-        expect(screen.getByText('Engineering')).toBeInTheDocument();
-        expect(screen.getByText('Software Engineer')).toBeInTheDocument();
+        const sidebar = screen.getByRole('complementary', { name: /review/i });
+        expect(within(sidebar).getByText('John Doe')).toBeInTheDocument();
+        expect(within(sidebar).getByText('Richard Doe')).toBeInTheDocument();
+        expect(within(sidebar).getByText('john.doe@company.com')).toBeInTheDocument();
+        expect(within(sidebar).getByText('EMP-12345')).toBeInTheDocument();
+        expect(within(sidebar).getByText('Engineering')).toBeInTheDocument();
+        expect(within(sidebar).getByText('Software Engineer')).toBeInTheDocument();
       });
 
       // Verify signature status shows "Signed"
       expect(screen.getByText(/✓ signed/i)).toBeInTheDocument();
     });
 
-    it('should show validation feedback when form is submitted', async () => {
+    it('should show validation feedback when form is reset', async () => {
       const user = userEvent.setup();
 
       render(
@@ -196,22 +201,18 @@ describe('Integration Tests - User Flows', () => {
         </TestWrapper>
       );
 
-      // Verify submit button exists
-      const submitButton = screen.getByRole('button', { name: /submit leave request/i });
-      expect(submitButton).toBeInTheDocument();
+      // Verify reset button exists
+      const resetButton = screen.getByRole('button', { name: /reset form/i });
+      expect(resetButton).toBeInTheDocument();
 
-      // Submit button should be disabled until form is dirty (isDirty)
-      // Initially it should be disabled
-      expect(submitButton).toBeDisabled();
-
-      // Fill in a required field to make form dirty
+      // Fill in a field
       const fullNameInput = screen.getByLabelText(/full name/i);
       await user.type(fullNameInput, 'Test User');
+      expect(fullNameInput).toHaveValue('Test User');
 
-      // Now submit button should be enabled
-      await waitFor(() => {
-        expect(submitButton).not.toBeDisabled();
-      });
+      // Reset form
+      await user.click(resetButton);
+      expect(fullNameInput).toHaveValue('');
     });
   });
 
@@ -227,7 +228,7 @@ describe('Integration Tests - User Flows', () => {
         fullName: 'Jane Smith',
         fathersName: 'Maria Smith',
         email: 'jane.smith@company.com',
-        phone: '6901234567',
+        phone: '+1 (555) 987-6543',
         identityNumber: 'ΑΒΓ54321',
         employeeId: 'EMP-67890',
         companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
@@ -245,6 +246,9 @@ describe('Integration Tests - User Flows', () => {
         })
       );
 
+      // Force rehydration to pick up the manual localStorage changes
+      await useLeaveRequestStore.persist.rehydrate();
+
       render(
         <TestWrapper>
           <LeaveRequestPage />
@@ -252,15 +256,18 @@ describe('Integration Tests - User Flows', () => {
       );
 
       // Wait a moment for store to hydrate
-      await waitFor(() => {
-        const storeState = useLeaveRequestStore.getState();
-        expect(storeState.profile.fullName).toBe('Jane Smith');
-        expect(storeState.profile.email).toBe('jane.smith@company.com');
-        expect(storeState.profile.phone).toBe('+1 (555) 987-6543');
-        expect(storeState.profile.employeeId).toBe('EMP-67890');
-        expect(storeState.profile.department).toBe('Marketing');
-        expect(storeState.profile.position).toBe('Marketing Manager');
-      }, { timeout: 3000 });
+      await waitFor(
+        () => {
+          const storeState = useLeaveRequestStore.getState();
+          expect(storeState.profile.fullName).toBe('Jane Smith');
+          expect(storeState.profile.email).toBe('jane.smith@company.com');
+          expect(storeState.profile.phone).toBe('+1 (555) 987-6543');
+          expect(storeState.profile.employeeId).toBe('EMP-67890');
+          expect(storeState.profile.department).toBe('Marketing');
+          expect(storeState.profile.position).toBe('Marketing Manager');
+        },
+        { timeout: 3000 }
+      );
     });
 
     it('should display the saved profile in the review sidebar', async () => {
@@ -287,19 +294,25 @@ describe('Integration Tests - User Flows', () => {
         })
       );
 
+      // Force rehydration to pick up the manual localStorage changes
+      await useLeaveRequestStore.persist.rehydrate();
+
       render(
         <TestWrapper>
           <LeaveRequestPage />
         </TestWrapper>
       );
 
-      await waitFor(() => {
-        expect(screen.getByText('Alice Johnson')).toBeInTheDocument();
-        expect(screen.getByText('alice.j@company.com')).toBeInTheDocument();
-        expect(screen.getByText('EMP-99999')).toBeInTheDocument();
-        expect(screen.getByText('Finance')).toBeInTheDocument();
-        expect(screen.getByText('Financial Analyst')).toBeInTheDocument();
-      }, { timeout: 3000 });
+      await waitFor(
+        () => {
+          expect(screen.getByText('Alice Johnson')).toBeInTheDocument();
+          expect(screen.getByText('alice.j@company.com')).toBeInTheDocument();
+          expect(screen.getByText('EMP-99999')).toBeInTheDocument();
+          expect(screen.getByText('Finance')).toBeInTheDocument();
+          expect(screen.getByText('Financial Analyst')).toBeInTheDocument();
+        },
+        { timeout: 3000 }
+      );
     });
   });
 
@@ -314,7 +327,7 @@ describe('Integration Tests - User Flows', () => {
           fathersName: 'John Doe',
           email: 'test@company.com',
           phone: '6901234567',
-          identityNumber: 'ΑΒΓ12345',
+          identityNumber: 'ΑΒ-123456',
           employeeId: 'EMP-TEST',
           companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
           department: 'Test Dept',
@@ -333,9 +346,12 @@ describe('Integration Tests - User Flows', () => {
       await user.click(exportButton);
 
       // Verify success message - this confirms export was triggered
-      await waitFor(() => {
-        expect(screen.getByText(/profile exported successfully/i)).toBeInTheDocument();
-      }, { timeout: 3000 });
+      await waitFor(
+        () => {
+          expect(screen.getByText(/profile exported successfully/i)).toBeInTheDocument();
+        },
+        { timeout: 3000 }
+      );
 
       // The mock downloadFile should have been called
       // Note: We're testing the user flow, not the implementation details
@@ -431,7 +447,9 @@ describe('Integration Tests - User Flows', () => {
 
       // Verify error message
       await waitFor(() => {
-        expect(screen.getByText(/invalid json format/i) || screen.getByText(/failed to import/i)).toBeInTheDocument();
+        expect(
+          screen.getByText(/invalid json format/i) || screen.getByText(/failed to import/i)
+        ).toBeInTheDocument();
       });
     });
 
@@ -475,7 +493,9 @@ describe('Integration Tests - User Flows', () => {
 
       // Verify error message about invalid data
       await waitFor(() => {
-        expect(screen.getByText(/invalid profile data/i) || screen.getByText(/failed to import/i)).toBeInTheDocument();
+        expect(
+          screen.getByText(/invalid profile data/i) || screen.getByText(/failed to import/i)
+        ).toBeInTheDocument();
       });
     });
 
@@ -489,7 +509,7 @@ describe('Integration Tests - User Flows', () => {
           fathersName: 'John Doe',
           email: 'test@company.com',
           phone: '6901234567',
-          identityNumber: 'ΑΒΓ12345',
+          identityNumber: 'ΑΒ-123456',
           employeeId: 'EMP-TEST',
           companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
           department: 'Test Dept',
@@ -531,18 +551,17 @@ describe('Integration Tests - User Flows', () => {
         </TestWrapper>
       );
 
-      // Verify leave details section is rendered
-      expect(screen.getByText(/leave details/i)).toBeInTheDocument();
+      // Verify leave details section is rendered (use heading to be specific)
+      const form = screen.getByRole('form');
+      expect(within(form).getByRole('heading', { name: /^leave details$/i })).toBeInTheDocument();
 
       // Select leave type
       const leaveTypeSelect = screen.getByLabelText(/leave type/i);
       expect(leaveTypeSelect).toBeInTheDocument();
 
-      // Date inputs should be present
-      const startDateInput = screen.getByLabelText(/start date/i);
-      const endDateInput = screen.getByLabelText(/end date/i);
-      expect(startDateInput).toBeInTheDocument();
-      expect(endDateInput).toBeInTheDocument();
+      // Date range selection should be present
+      expect(screen.getByText(/select date range/i)).toBeInTheDocument();
+      expect(screen.getByRole('region', { name: /calendar/i })).toBeInTheDocument();
     });
 
     it('should correctly calculate absence days excluding holidays and weekends', async () => {
@@ -579,6 +598,7 @@ describe('Integration Tests - User Flows', () => {
           endDate,
           leaveType: 'annual',
           reason: 'Test',
+          leaveAllowance: false,
         });
       });
 
@@ -596,3 +616,4 @@ describe('Integration Tests - User Flows', () => {
     });
   });
 });
+

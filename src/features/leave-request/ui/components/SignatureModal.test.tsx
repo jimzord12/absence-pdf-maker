@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SignatureModal } from './SignatureModal';
-import { useLeaveRequestStore } from '../state/leaveRequest.store';
+import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 
 // Create a proper mock for SignatureCanvas
 const mockClear = vi.fn();

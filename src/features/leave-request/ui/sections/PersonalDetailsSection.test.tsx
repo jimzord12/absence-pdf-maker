@@ -1,11 +1,11 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { PersonalDetailsSection } from './PersonalDetailsSection';
-import { useLeaveRequestStore } from '../state/leaveRequest.store';
-import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LeaveRequestSchema } from '../model/leaveRequest.schema';
-import type { LeaveRequest } from '../model/leaveRequest.types';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
+import type { LeaveRequest } from '../../model/leaveRequest.types';
+import { useLeaveRequestStore } from '../../state/leaveRequest.store';
+import { PersonalDetailsSection } from './PersonalDetailsSection';
 
 // Wrapper component to provide form context
 const FormWrapper = ({
@@ -16,7 +16,8 @@ const FormWrapper = ({
   defaultValues?: Partial<LeaveRequest>;
 }) => {
   const methods = useForm<LeaveRequest>({
-    resolver: zodResolver(LeaveRequestSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(LeaveRequestSchema) as any,
     mode: 'onTouched',
     defaultValues: defaultValues as any,
   });
@@ -54,11 +55,11 @@ describe('PersonalDetailsSection', () => {
         holidaySet: new Set<string>(),
       },
       ui: {
-        triggerValidation: null,
         isSignatureModalOpen: false,
         isGeneratingPdf: false,
         lastGeneratedFileName: '',
         errorMessage: null,
+        triggerValidation: null,
       },
     });
     vi.clearAllMocks();
@@ -82,9 +83,9 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      expect(screen.getByLabelText('Full Name')).toBeInTheDocument();
-      expect(screen.getByLabelText('Email Address')).toBeInTheDocument();
-      expect(screen.getByLabelText('Phone Number')).toBeInTheDocument();
+      expect(screen.getByLabelText(/Full Name/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/Email Address/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/Phone Number/i)).toBeInTheDocument();
     });
 
     it('should render fields with correct input types', () => {
@@ -94,9 +95,9 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const fullNameInput = screen.getByLabelText('Full Name') as HTMLInputElement;
-      const emailInput = screen.getByLabelText('Email Address') as HTMLInputElement;
-      const phoneInput = screen.getByLabelText('Phone Number') as HTMLInputElement;
+      const fullNameInput = screen.getByLabelText(/Full Name/i) as HTMLInputElement;
+      const emailInput = screen.getByLabelText(/Email Address/i) as HTMLInputElement;
+      const phoneInput = screen.getByLabelText(/Phone Number/i) as HTMLInputElement;
 
       expect(fullNameInput.type).toBe('text');
       expect(emailInput.type).toBe('email');
@@ -141,7 +142,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const fullNameInput = screen.getByLabelText('Full Name');
+      const fullNameInput = screen.getByLabelText(/Full Name/i);
       fireEvent.change(fullNameInput, { target: { value: 'John Doe' } });
 
       expect(fullNameInput).toHaveValue('John Doe');
@@ -154,7 +155,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const emailInput = screen.getByLabelText('Email Address');
+      const emailInput = screen.getByLabelText(/Email Address/i);
       fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
 
       expect(emailInput).toHaveValue('john@example.com');
@@ -167,7 +168,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const phoneInput = screen.getByLabelText('Phone Number');
+      const phoneInput = screen.getByLabelText(/Phone Number/i);
       fireEvent.change(phoneInput, { target: { value: '+1 (555) 123-4567' } });
 
       expect(phoneInput).toHaveValue('+1 (555) 123-4567');
@@ -181,9 +182,9 @@ describe('PersonalDetailsSection', () => {
       );
 
       // Fields should have labels associated with them
-      const fullNameInput = screen.getByLabelText('Full Name') as HTMLInputElement;
-      const emailInput = screen.getByLabelText('Email Address') as HTMLInputElement;
-      const phoneInput = screen.getByLabelText('Phone Number') as HTMLInputElement;
+      const fullNameInput = screen.getByLabelText(/Full Name/i) as HTMLInputElement;
+      const emailInput = screen.getByLabelText(/Email Address/i) as HTMLInputElement;
+      const phoneInput = screen.getByLabelText(/Phone Number/i) as HTMLInputElement;
 
       // Initially, fields should not be marked as invalid
       expect(fullNameInput.getAttribute('aria-invalid')).toBe('false');
@@ -200,7 +201,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const emailInput = screen.getByLabelText('Email Address');
+      const emailInput = screen.getByLabelText(/Email Address/i);
       fireEvent.change(emailInput, { target: { value: 'valid.email@company.com' } });
       fireEvent.blur(emailInput);
 
@@ -217,7 +218,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const emailInput = screen.getByLabelText('Email Address');
+      const emailInput = screen.getByLabelText(/Email Address/i);
       fireEvent.change(emailInput, { target: { value: 'invalidemail.com' } });
       fireEvent.blur(emailInput);
 
@@ -233,7 +234,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const emailInput = screen.getByLabelText('Email Address');
+      const emailInput = screen.getByLabelText(/Email Address/i);
       fireEvent.change(emailInput, { target: { value: 'user@' } });
       fireEvent.blur(emailInput);
 
@@ -248,7 +249,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const emailInput = screen.getByLabelText('Email Address');
+      const emailInput = screen.getByLabelText(/Email Address/i);
       fireEvent.change(emailInput, { target: { value: '@company.com' } });
       fireEvent.blur(emailInput);
 
@@ -263,7 +264,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const emailInput = screen.getByLabelText('Email Address');
+      const emailInput = screen.getByLabelText(/Email Address/i);
       fireEvent.change(emailInput, { target: { value: 'user@company' } });
       fireEvent.blur(emailInput);
 
@@ -278,7 +279,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const emailInput = screen.getByLabelText('Email Address');
+      const emailInput = screen.getByLabelText(/Email Address/i);
       fireEvent.change(emailInput, { target: { value: 'user.name+tag@company.com' } });
       fireEvent.blur(emailInput);
 
@@ -294,7 +295,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const emailInput = screen.getByLabelText('Email Address');
+      const emailInput = screen.getByLabelText(/Email Address/i);
 
       // Enter initial value
       fireEvent.change(emailInput, { target: { value: 'invalid' } });
@@ -318,9 +319,9 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const fullNameInput = screen.getByLabelText('Full Name');
-      const emailInput = screen.getByLabelText('Email Address');
-      const phoneInput = screen.getByLabelText('Phone Number');
+      const fullNameInput = screen.getByLabelText(/Full Name/i);
+      const emailInput = screen.getByLabelText(/Email Address/i);
+      const phoneInput = screen.getByLabelText(/Phone Number/i);
 
       // Touch all fields (focus and blur)
       fullNameInput.focus();
@@ -373,7 +374,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const fullNameInput = screen.getByLabelText('Full Name') as HTMLInputElement;
+      const fullNameInput = screen.getByLabelText(/Full Name/i) as HTMLInputElement;
       expect(screen.getByText('Full name is required')).toBeInTheDocument();
       expect(fullNameInput.getAttribute('aria-invalid')).toBe('true');
       expect(fullNameInput).toHaveClass('border-red-500');
@@ -406,7 +407,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const fullNameInput = screen.getByLabelText('Full Name') as HTMLInputElement;
+      const fullNameInput = screen.getByLabelText(/Full Name/i) as HTMLInputElement;
       const errorElement = screen.getByText('Full name is required');
       const errorId = errorElement.id;
 
@@ -449,9 +450,9 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      expect(screen.getByLabelText('Full Name')).toHaveValue('Jane Smith');
-      expect(screen.getByLabelText('Email Address')).toHaveValue('jane.smith@company.com');
-      expect(screen.getByLabelText('Phone Number')).toHaveValue('+1 (555) 987-6543');
+      expect(screen.getByLabelText(/Full Name/i)).toHaveValue('Jane Smith');
+      expect(screen.getByLabelText(/Email Address/i)).toHaveValue('jane.smith@company.com');
+      expect(screen.getByLabelText(/Phone Number/i)).toHaveValue('+1 (555) 987-6543');
     });
 
     it('should use empty string as default when store has empty values', () => {
@@ -472,9 +473,9 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      expect(screen.getByLabelText('Full Name')).toHaveValue('');
-      expect(screen.getByLabelText('Email Address')).toHaveValue('');
-      expect(screen.getByLabelText('Phone Number')).toHaveValue('');
+      expect(screen.getByLabelText(/Full Name/i)).toHaveValue('');
+      expect(screen.getByLabelText(/Email Address/i)).toHaveValue('');
+      expect(screen.getByLabelText(/Phone Number/i)).toHaveValue('');
     });
   });
 
@@ -548,7 +549,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const label = screen.getByLabelText('Full Name');
+      const label = screen.getByLabelText(/Full Name/i);
       expect(label).toBeInTheDocument();
     });
 
@@ -559,7 +560,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const label = screen.getByLabelText('Email Address');
+      const label = screen.getByLabelText(/Email Address/i);
       expect(label).toBeInTheDocument();
     });
 
@@ -570,7 +571,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const label = screen.getByLabelText('Phone Number');
+      const label = screen.getByLabelText(/Phone Number/i);
       expect(label).toBeInTheDocument();
     });
 
@@ -584,7 +585,7 @@ describe('PersonalDetailsSection', () => {
       // Check label text elements (they're label elements)
       const labelElements = document.querySelectorAll('label');
 
-      labelElements.forEach((label) => {
+      labelElements.forEach(label => {
         expect(label).toHaveClass('text-sm');
         expect(label).toHaveClass('font-medium');
         expect(label).toHaveClass('text-gray-700');
@@ -616,7 +617,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const fullNameInput = screen.getByLabelText('Full Name');
+      const fullNameInput = screen.getByLabelText(/Full Name/i);
       fireEvent.change(fullNameInput, { target: { value: '   ' } });
       fireEvent.blur(fullNameInput);
 
@@ -631,7 +632,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const phoneInput = screen.getByLabelText('Phone Number');
+      const phoneInput = screen.getByLabelText(/Phone Number/i);
       fireEvent.change(phoneInput, { target: { value: '   ' } });
       fireEvent.blur(phoneInput);
 
@@ -647,9 +648,9 @@ describe('PersonalDetailsSection', () => {
       );
 
       expect(screen.getByText('Personal Details')).toBeInTheDocument();
-      expect(screen.getByLabelText('Full Name')).toBeInTheDocument();
-      expect(screen.getByLabelText('Email Address')).toBeInTheDocument();
-      expect(screen.getByLabelText('Phone Number')).toBeInTheDocument();
+      expect(screen.getByLabelText(/Full Name/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/Email Address/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/Phone Number/i)).toBeInTheDocument();
     });
 
     it('should handle null errors prop gracefully', () => {
@@ -669,7 +670,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const phoneInput = screen.getByLabelText('Phone Number');
+      const phoneInput = screen.getByLabelText(/Phone Number/i);
 
       // Test various phone number formats
       const validFormats = [
@@ -693,7 +694,7 @@ describe('PersonalDetailsSection', () => {
       }
     });
 
-    it('should render in correct order: Full Name, Father\'s Name, Identity Number, Email, Phone', () => {
+    it("should render in correct order: Full Name, Father's Name, Identity Number, Email, Phone", () => {
       render(
         <FormWrapper>
           <PersonalDetailsSection />
@@ -703,7 +704,7 @@ describe('PersonalDetailsSection', () => {
       const inputs = screen.getAllByRole('textbox');
 
       expect(inputs[0]).toHaveAttribute('placeholder', 'Enter your full name');
-      expect(inputs[1]).toHaveAttribute('placeholder', 'Enter father\'s name');
+      expect(inputs[1]).toHaveAttribute('placeholder', "Enter father's name");
       expect(inputs[2]).toHaveAttribute('placeholder', 'Enter identity number');
       expect(inputs[3]).toHaveAttribute('placeholder', 'your.email@company.com');
       expect(inputs[4]).toHaveAttribute('placeholder', '+1 (555) 123-4567');
@@ -716,9 +717,9 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const fullNameInput = screen.getByLabelText('Full Name');
-      const emailInput = screen.getByLabelText('Email Address');
-      const phoneInput = screen.getByLabelText('Phone Number');
+      const fullNameInput = screen.getByLabelText(/Full Name/i);
+      const emailInput = screen.getByLabelText(/Email Address/i);
+      const phoneInput = screen.getByLabelText(/Phone Number/i);
 
       fullNameInput.focus();
       expect(document.activeElement).toBe(fullNameInput);
@@ -731,3 +732,4 @@ describe('PersonalDetailsSection', () => {
     });
   });
 });
+
