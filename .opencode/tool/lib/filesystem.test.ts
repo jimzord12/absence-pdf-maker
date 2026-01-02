@@ -1,10 +1,9 @@
-import { describe, it } from 'node:test';
-import assert from 'node:assert';
+import { assert, describe, it } from 'vitest';
 import {
-  readStateFile,
-  readTasksFile,
   getDefaultPaths,
   readFileErrorResult,
+  readStateFile,
+  readTasksFile,
 } from './filesystem.js';
 
 describe('readStateFile', () => {
@@ -93,7 +92,9 @@ describe('readFileErrorResult', () => {
     const result = readFileErrorResult(error, 'state');
 
     assert.strictEqual(result.success, false);
-    assert.strictEqual(result.error, 'Failed to read or parse state file: File not found');
+    if (!result.success) {
+      assert.strictEqual(result.error, 'Failed to read or parse state file: File not found');
+    }
   });
 
   it('should create error result for tasks file', () => {
@@ -101,7 +102,9 @@ describe('readFileErrorResult', () => {
     const result = readFileErrorResult(error, 'tasks');
 
     assert.strictEqual(result.success, false);
-    assert.strictEqual(result.error, 'Failed to read or parse tasks file: Read error');
+    if (!result.success) {
+      assert.strictEqual(result.error, 'Failed to read or parse tasks file: Read error');
+    }
   });
 
   it('should handle non-Error objects', () => {
@@ -109,6 +112,9 @@ describe('readFileErrorResult', () => {
     const result = readFileErrorResult(error, 'state');
 
     assert.strictEqual(result.success, false);
-    assert.strictEqual(result.error, 'Failed to read or parse state file: String error');
+    if (!result.success) {
+      assert.strictEqual(result.error, 'Failed to read or parse state file: String error');
+    }
   });
 });
+

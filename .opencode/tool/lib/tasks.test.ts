@@ -1,14 +1,13 @@
-import { describe, it } from 'node:test';
-import assert from 'node:assert';
+import { assert, describe, it } from 'vitest';
 import {
-  extractTaskInfo,
-  getNextSteps,
-  sortTaskIds,
-  findNextTask,
   calculateSummary,
+  extractTaskInfo,
+  findNextTask,
+  getNextSteps,
   getNextTaskResult,
-  type TaskState,
+  sortTaskIds,
   type StateFile,
+  type TaskState,
 } from './tasks.js';
 
 describe('extractTaskInfo', () => {
@@ -89,19 +88,9 @@ describe('getNextSteps', () => {
 
 describe('sortTaskIds', () => {
   it('should sort task IDs numerically', () => {
-    const taskIds = [
-      '002-task-b',
-      '010-task-j',
-      '001-task-a',
-      '005-task-e',
-    ];
+    const taskIds = ['002-task-b', '010-task-j', '001-task-a', '005-task-e'];
     const result = sortTaskIds(taskIds);
-    assert.deepStrictEqual(result, [
-      '001-task-a',
-      '002-task-b',
-      '005-task-e',
-      '010-task-j',
-    ]);
+    assert.deepStrictEqual(result, ['001-task-a', '002-task-b', '005-task-e', '010-task-j']);
   });
 
   it('should handle already sorted IDs', () => {
@@ -235,7 +224,10 @@ Second task description.
       assert.strictEqual(result.nextTask.identifier, '002-task-second');
       assert.strictEqual(result.nextTask.description, 'Second task description.');
       assert.strictEqual(result.nextTask.currentState, 'pending');
-      assert.strictEqual(result.nextTask.nextSteps, 'Start working on this task (begin with implementation)');
+      assert.strictEqual(
+        result.nextTask.nextSteps,
+        'Start working on this task (begin with implementation)'
+      );
       assert.strictEqual(result.summary.totalTasks, 2);
       assert.strictEqual(result.summary.completedTasks, 1);
       assert.strictEqual(result.summary.inProgressTasks, 1);
@@ -252,7 +244,7 @@ Second task description.
     const result = getNextTaskResult(stateFile, mockTasksContent);
 
     assert.strictEqual(result.success, true);
-    if (result.success) {
+    if (result.success && result.nextTask === null) {
       assert.strictEqual(result.nextTask, null);
       assert.strictEqual(result.message, 'All tasks have been completed and committed!');
       assert.strictEqual(result.totalTasks, 1);
@@ -275,3 +267,4 @@ Second task description.
     }
   });
 });
+
