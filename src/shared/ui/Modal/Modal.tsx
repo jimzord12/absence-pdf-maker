@@ -56,7 +56,6 @@ export const Modal: React.FC<ModalProps> = ({
       document.addEventListener('keydown', handleEscape);
       document.addEventListener('keydown', handleTab);
       document.body.style.overflow = 'hidden';
-      document.body.setAttribute('aria-hidden', 'true');
       modalRef.current?.setAttribute('aria-hidden', 'false');
       closeButtonRef.current?.focus();
     }
@@ -65,7 +64,6 @@ export const Modal: React.FC<ModalProps> = ({
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('keydown', handleTab);
       document.body.style.overflow = '';
-      document.body.removeAttribute('aria-hidden');
     };
   }, [isOpen, onClose]);
 
@@ -83,7 +81,6 @@ export const Modal: React.FC<ModalProps> = ({
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
       onClick={handleBackdropClick}
-      aria-hidden="true"
     >
       <div
         ref={modalRef}

@@ -33,15 +33,14 @@ export const Spinner: React.FC<SpinnerProps> = ({ size = 'md', className = '' })
       role="status"
       aria-label="Loading"
     >
-      {[0, 1, 2].map((i) => (
+      {[0, 1, 2].map(i => (
         <div
           key={i}
-          className="animate-pulse-dot"
+          className="animate-pulse-dot bg-primary"
           style={{
             width: currentSize.dot,
             height: currentSize.dot,
             borderRadius: '50%',
-            backgroundColor: 'var(--color-primary)',
             animationDelay: `${i * 0.2}s`,
           }}
         />
@@ -49,3 +48,4 @@ export const Spinner: React.FC<SpinnerProps> = ({ size = 'md', className = '' })
     </div>
   );
 };
+

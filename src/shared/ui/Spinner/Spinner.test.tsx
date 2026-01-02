@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 import { Spinner } from './Spinner';
 
 describe('Spinner', () => {
@@ -62,9 +62,7 @@ describe('Spinner', () => {
       const dots = Array.from(spinner.querySelectorAll('div'));
 
       dots.forEach(dot => {
-        const style = dot.getAttribute('style');
-        expect(style).toContain('background-color');
-        expect(style).toContain('var(--color-primary)');
+        expect(dot).toHaveClass('bg-primary');
       });
     });
 
@@ -136,9 +134,7 @@ describe('Spinner', () => {
       const dots = spinner.querySelectorAll('div');
 
       dots.forEach(dot => {
-        const style = dot.getAttribute('style');
-        expect(style).toContain('background-color');
-        expect(style).toContain('var(--color-primary)');
+        expect(dot).toHaveClass('bg-primary');
       });
     });
   });
@@ -177,3 +173,4 @@ describe('Spinner', () => {
     });
   });
 });
+
