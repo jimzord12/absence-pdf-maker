@@ -252,9 +252,9 @@ Implement a handover protocol for cross-session context. This ensures that if on
 
 **Acceptance Criteria:**
 
-- [ ] `state.schema.json` updated with an optional `notes` field.
-- [ ] `docs/templates/HANDOVER-TEMPLATE.md` created.
-- [ ] `AGENTS.md` updated to require a handover note for unfinished tasks.
+- [x] `state.schema.json` updated with an optional `notes` field.
+- [x] `docs/templates/HANDOVER-TEMPLATE.md` created.
+- [x] `AGENTS.md` updated to require a handover note for unfinished tasks.
 
 ---
 

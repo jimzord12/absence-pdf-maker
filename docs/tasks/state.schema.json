@@ -31,6 +31,9 @@
           "description": {
             "type": "string"
           },
+          "notes": {
+            "type": "string"
+          },
           "blockedBy": {
             "type": "array",
             "items": {

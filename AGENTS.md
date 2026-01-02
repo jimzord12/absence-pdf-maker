@@ -233,3 +233,11 @@ To ensure efficient and autonomous operation, use the following heuristics to se
 - **External Patterns:** When looking for implementation patterns in other open-source repositories.
 - **Documentation Search:** When searching for specific issues or commits in external GitHub repos.
 
+## Handover Protocol
+
+To ensure continuity across sessions, agents must provide a handover note for any task that is not yet `committed`.
+
+1. **Update Task State:** Use `npm run task -- <id> <state>` to update the task status.
+2. **Write Handover Note:** If a task is in-progress or blocked, add a summary of the current state to the `notes` field in `docs/tasks/state.json`.
+3. **Template:** For complex handovers, refer to the structure in `docs/templates/HANDOVER-TEMPLATE.md`.
+
