@@ -278,7 +278,7 @@ describe('usePwaInstall', () => {
 
       const mockPromptEvent = new Event('beforeinstallprompt') as BeforeInstallPromptEvent;
       mockPromptEvent.prompt = vi.fn().mockRejectedValue(new Error('Test error'));
-      mockPromptEvent.userChoice = Promise.reject(new Error('Test error'));
+      mockPromptEvent.userChoice = Promise.reject(new Error('Test error')); mockPromptEvent.userChoice.catch(() => {});
 
       act(() => {
         window.dispatchEvent(mockPromptEvent);
@@ -299,7 +299,7 @@ describe('usePwaInstall', () => {
 
       const mockPromptEvent = new Event('beforeinstallprompt') as BeforeInstallPromptEvent;
       mockPromptEvent.prompt = vi.fn().mockRejectedValue(new Error('Test error'));
-      mockPromptEvent.userChoice = Promise.reject(new Error('Test error'));
+      mockPromptEvent.userChoice = Promise.reject(new Error('Test error')); mockPromptEvent.userChoice.catch(() => {});
 
       act(() => {
         window.dispatchEvent(mockPromptEvent);

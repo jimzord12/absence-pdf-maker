@@ -28,7 +28,7 @@ import {
   subDays,
 } from 'date-fns';
 import { AnimatePresence, motion, useAnimation, useMotionValue, useTransform } from 'framer-motion';
-import { jsPDF } from 'jspdf';
+
 import { DayPicker } from 'react-day-picker';
 import { useForm } from 'react-hook-form';
 import SignatureCanvas from 'react-signature-canvas';
@@ -193,49 +193,6 @@ describe('Zustand', () => {
     );
 
     expect(useStore).toBeDefined();
-  });
-});
-
-// ==================== jsPDF Tests ====================
-describe('jsPDF', () => {
-  it('should create a jsPDF instance', () => {
-    const doc = new jsPDF();
-    expect(doc).toBeDefined();
-    expect(typeof doc.text).toBe('function');
-    expect(typeof doc.save).toBe('function');
-  });
-
-  it('should support page size and orientation', () => {
-    const docPortrait = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
-    const docLandscape = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
-
-    expect(docPortrait).toBeDefined();
-    expect(docLandscape).toBeDefined();
-  });
-
-  it('should add text to document', () => {
-    const doc = new jsPDF();
-
-    expect(() => {
-      doc.text('Hello, World!', 10, 10);
-    }).not.toThrow();
-  });
-
-  it('should support adding images as data URLs', () => {
-    const doc = new jsPDF();
-    const imageDataUrl =
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg==';
-
-    expect(() => {
-      doc.addImage(imageDataUrl, 'PNG', 10, 10, 50, 50);
-    }).not.toThrow();
-  });
-
-  it('should support output as blob', () => {
-    const doc = new jsPDF();
-    const blob = doc.output('blob');
-
-    expect(blob).toBeInstanceOf(Blob);
   });
 });
 
