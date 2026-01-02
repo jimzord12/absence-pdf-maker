@@ -1,5 +1,18 @@
 # AGENTS.md
 
+## Project Overview
+
+This project is a **Leave Request Application** built with **React**, **TypeScript**, and **Zustand** for state management. It allows employees to submit leave requests, manage their profile information, and generate PDF documents of their requests. The application uses **React Hook Form** for form handling and validation with **Zod** schemas. PDF generation is handled using `@react-pdf/renderer`.
+
+The application is a PWA (Progressive Web App) that works offline and persists user data in local storage. It many features including:
+
+- Employee profile management
+- Leave request form with date range selection and absence days calculation
+- PDF generation of leave requests with digital signatures
+- State persistence with selective data storage
+- Import/Export and Clear of permanent data
+- Greek and English localization
+
 ## Commands
 
 - `npm run dev` - Start development server (Vite)
@@ -174,4 +187,39 @@ Cross-browser automation and testing:
 **Use cases:** Automated testing, cross-browser testing, end-to-end testing, UI automation
 
 **Tool selection:** Playwright is test-focused with cross-browser support; Chrome DevTools provides deeper debugging and performance analysis. Choose based on task requirements.
+
+## Tool Selection Heuristics
+
+To ensure efficient and autonomous operation, use the following heuristics to select the appropriate tool for a given task.
+
+### 1. UI Interaction & Debugging (Chrome DevTools / Playwright)
+**Triggers:**
+- **Visual Verification:** When a task involves UI changes, layout fixes, or styling updates.
+- **Runtime Debugging:** When investigating console errors, network request failures, or state synchronization issues in the browser.
+- **Form Automation:** When testing complex form flows, validation triggers, or multi-step interactions.
+- **Performance Analysis:** When a task specifically mentions performance bottlenecks or slow UI responsiveness.
+
+**Selection:**
+- Use **Chrome DevTools** for deep debugging, performance tracing, and real-time DOM/CSS inspection.
+- Use **Playwright** for automated end-to-end flows, cross-browser verification, and repeatable UI tests.
+
+### 2. Library & Framework Research (Context7)
+**Triggers:**
+- **API Reference:** When using a library for the first time or needing specific method signatures (e.g., `zod`, `zustand`, `react-hook-form`).
+- **Best Practices:** When implementing a new pattern and needing authoritative examples from official documentation.
+- **Version Migration:** When upgrading libraries (e.g., `react-day-picker` v8 to v9) to understand breaking changes.
+
+**Heuristic:**
+- Always call `resolve-library-id` first to get the correct ID before querying documentation.
+
+### 3. Visual Analysis & OCR (ZAI)
+**Triggers:**
+- **UI-to-Code:** When given a screenshot of a design or an existing UI and asked to replicate it or extract its structure.
+- **Error Diagnosis:** When provided with a screenshot of an error message or a broken UI state that is hard to describe in text.
+- **Technical Diagrams:** When needing to understand architecture diagrams, flowcharts, or ERDs provided as images.
+
+### 4. Repository Exploration (Zread)
+**Triggers:**
+- **External Patterns:** When looking for implementation patterns in other open-source repositories.
+- **Documentation Search:** When searching for specific issues or commits in external GitHub repos.
 

@@ -58,7 +58,7 @@ Implement validation for Employment Details section fields, ensuring Company Nam
 - [ ] Validation errors display below each field in red text
 - [ ] Form cannot submit with empty required employment fields
 - [ ] All validation messages are user-friendly
-- [ ] Asterisk (*) displayed on required fields
+- [ ] Asterisk (\*) displayed on required fields
 - [ ] Tests for employment field validation
 - [ ] Tests for default company name behavior
 
@@ -184,6 +184,7 @@ Total New Tasks: 5
 ### Task Dependencies
 
 Tasks should be completed in this order:
+
 1. **Task 055** (High Priority) - Update outdated tests for new schema
 2. **Task 054** (Critical Priority) - Date Picker UI completely broken, calendar grid not displaying
 3. **Task 053** (Critical Priority) - Leave Details section is completely broken
@@ -191,3 +192,146 @@ Tasks should be completed in this order:
 5. **Task 052** (Medium Priority) - Employment Details validation missing
 
 Task 055 should be completed first to ensure test suite is green.
+
+---
+
+### 056-ai-tool-heuristics-matrix
+
+**Identifier:** `056-ai-tool-heuristics-matrix`
+
+**Description:**
+Update `AGENTS.md` with a "Tool Selection & Heuristics" section to guide autonomous tool use. This ensures agents know _when_ to use Playwright, DevTools, or Context7 without being explicitly told.
+
+**Constraints:**
+
+- Define specific triggers for UI changes, library research, and visual analysis.
+- Must not conflict with existing architecture rules.
+
+**Acceptance Criteria:**
+
+- [x] New section "Tool Selection Heuristics" added to `AGENTS.md`.
+- [x] Triggers defined for UI changes (DevTools/Playwright).
+- [x] Triggers defined for library research (Context7).
+- [x] Triggers defined for visual analysis (ZAI).
+
+---
+
+### 057-task-state-automation-cli
+
+**Identifier:** `057-task-state-automation-cli`
+
+**Description:**
+Create a Node.js script to automate `state.json` updates. This prevents manual editing errors and ensures consistent timestamps and valid state transitions.
+
+**Constraints:**
+
+- Use TypeScript.
+- Handle ISO timestamps.
+- Validate state transitions (e.g., cannot skip `unit_tested`).
+
+**Acceptance Criteria:**
+
+- [ ] Script created at `scripts/task-cli.ts`.
+- [ ] Command `npm run task -- <id> <state>` works.
+- [ ] Updates `lastUpdated` automatically.
+- [ ] Prevents invalid state transitions.
+
+---
+
+### 058-ai-handover-protocol
+
+**Identifier:** `058-ai-handover-protocol`
+
+**Description:**
+Implement a handover protocol for cross-session context. This ensures that if one agent stops, the next one knows exactly where to pick up.
+
+**Constraints:**
+
+- Update `state.schema.json` to include a `notes` field.
+- Create a standardized handover template.
+
+**Acceptance Criteria:**
+
+- [ ] `state.schema.json` updated with an optional `notes` field.
+- [ ] `docs/templates/HANDOVER-TEMPLATE.md` created.
+- [ ] `AGENTS.md` updated to require a handover note for unfinished tasks.
+
+---
+
+### 059-feature-context-mapping
+
+**Identifier:** `059-feature-context-mapping`
+
+**Description:**
+Implement "Context Layering" to reduce token usage. Move static rules (Stack, Naming, Imports) from individual agent files to `AGENTS.md` and create feature-specific `CONTEXT.md` files.
+
+**Constraints:**
+
+- De-clutter `frontend-dev.md`, `tester.md`, and `reviewer.md`.
+- Follow a standard `CONTEXT.md` structure.
+
+**Acceptance Criteria:**
+
+- [ ] `src/features/leave-request/CONTEXT.md` created with feature-specific rules.
+- [ ] `src/shared/CONTEXT.md` created for UI primitives.
+- [ ] Subagent files (`.opencode/agent/*.md`) stripped of redundant static rules.
+- [ ] `AGENTS.md` updated to instruct agents to look for local `CONTEXT.md` files.
+
+---
+
+### 060-ai-review-workflow
+
+**Identifier:** `060-ai-review-workflow`
+
+**Description:**
+Integrate the dedicated `reviewer` agent into the core workflow and implement mandatory self-reflection steps for all developer subagents.
+
+**Constraints:**
+
+- Update `docs/tasks/README.md` and subagent definitions.
+
+**Acceptance Criteria:**
+
+- [ ] `frontend-dev.md` and `tester.md` updated with a "Self-Reflection Checklist".
+- [ ] `orchestrator.md` updated to automatically deploy the `reviewer` agent after `unit_tested`.
+- [ ] `README.md` updated to reflect that `review_pass/fail` is determined by the `reviewer` agent.
+- [ ] Reviewer output is summarized in the task's `notes` field.
+
+---
+
+### 061-issue-to-task-prompt
+
+**Identifier:** `061-issue-to-task-prompt`
+
+**Description:**
+Create a high-fidelity prompt template for converting Issue Reports into structured Tasks in `TASKS.md`.
+
+**Constraints:**
+
+- Must output valid Markdown matching the existing `TASKS.md` structure.
+
+**Acceptance Criteria:**
+
+- [ ] `docs/prompts/003-issue-to-task.txt` created.
+- [ ] Prompt handles parsing "Technical Details" and "Requirements" from issue reports.
+- [ ] Output format matches the existing `TASKS.md` structure.
+
+---
+
+### 062-visual-regression-baseline
+
+**Identifier:** `062-visual-regression-baseline`
+
+**Description:**
+Setup a script for AI-driven visual verification using Playwright to capture UI baselines and verify changes.
+
+**Constraints:**
+
+- Use Playwright to capture screenshots of key components.
+
+**Acceptance Criteria:**
+
+- [ ] `scripts/capture-baselines.ts` created.
+- [ ] Captures screenshots of Personal Details, Employment Details, and Leave Details.
+- [ ] `AGENTS.md` updated to require a `ui_diff_check` after UI modifications.
+
