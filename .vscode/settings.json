@@ -1,3 +1,10 @@
 {
-  "cSpell.words": ["opencode", "partialize", "zhipuai", "zread"]
+  "cSpell.words": ["opencode", "partialize", "zhipuai", "zread"],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "tailwindCSS.experimental.classRegex": [["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*)[\"'`]"]],
+  "github.copilot.chat.scope": "workspace"
 }
