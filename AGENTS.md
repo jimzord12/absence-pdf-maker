@@ -23,6 +23,14 @@ To reduce token usage and maintain focus, this project uses **Context Layering**
 
 **Agent Instruction**: Before starting work in a specific directory, check if a `CONTEXT.md` file exists in that directory or its parent. If it does, its rules take precedence over global rules for that specific scope.
 
+## GitHub Copilot Integration
+
+This repository is optimized for GitHub Copilot.
+
+- **Custom Instructions**: See [.github/copilot-instructions.md](.github/copilot-instructions.md) for project-specific guidance.
+- **VS Code Recommendations**: See [.vscode/extensions.json](.vscode/extensions.json) for recommended extensions.
+- **Workspace Settings**: See [.vscode/settings.json](.vscode/settings.json) for optimized editor settings.
+
 ## Commands
 
 - `npm run dev` - Start development server (Vite)
