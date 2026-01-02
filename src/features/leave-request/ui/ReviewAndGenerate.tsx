@@ -29,6 +29,7 @@ export const ReviewAndGenerate: React.FC = () => {
   const holidays = useLeaveRequestStore(state => state.holidays);
   const isGeneratingPdf = useLeaveRequestStore(state => state.ui.isGeneratingPdf);
   const errorMessage = useLeaveRequestStore(state => state.ui.errorMessage);
+  const triggerValidation = useLeaveRequestStore(state => state.ui.triggerValidation);
   const { locale } = useLocaleStore(state => state);
 
   // Store actions
@@ -123,7 +124,20 @@ export const ReviewAndGenerate: React.FC = () => {
    * Shows a loading state for at least 2 seconds to ensure the spinner is visible.
    */
   const handleGeneratePdf = async () => {
-    // Validation: Check if required fields are filled
+    // Validate all fields using the form's trigger function
+    // This ensures validation runs on all fields, even untouched ones
+    if (triggerValidation) {
+      const isValid = await triggerValidation();
+      if (!isValid) {
+        setImportError(
+          'Please correct the validation errors before generating the PDF.'
+        );
+        setTimeout(() => setImportError(null), 5000);
+        return;
+      }
+    }
+
+    // Fallback validation if trigger is not available
     if (
       !profile.fullName ||
       !profile.fathersName ||

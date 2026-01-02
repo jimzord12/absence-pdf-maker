@@ -6,6 +6,7 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   label?: string;
   error?: string;
   inputType?: InputType;
+  required?: boolean;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -14,6 +15,7 @@ export const Input: React.FC<InputProps> = ({
   inputType = 'text',
   className = '',
   id,
+  required = false,
   ...props
 }) => {
   const generatedId = useId();
@@ -28,6 +30,7 @@ export const Input: React.FC<InputProps> = ({
           className="text-sm font-medium text-gray-700"
         >
           {label}
+          {required && <span className="text-red-500 ml-1" aria-label="required">*</span>}
         </label>
       )}
       <input

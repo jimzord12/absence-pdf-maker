@@ -53,6 +53,7 @@ describe('EmploymentDetailsSection', () => {
         isGeneratingPdf: false,
         lastGeneratedFileName: '',
         errorMessage: null,
+        triggerValidation: null,
       },
     });
     vi.clearAllMocks();
@@ -77,9 +78,9 @@ describe('EmploymentDetailsSection', () => {
       );
 
       expect(screen.getByLabelText('Employee ID (Optional)')).toBeInTheDocument();
-      expect(screen.getByLabelText('Company Name')).toBeInTheDocument();
-      expect(screen.getByLabelText('Department')).toBeInTheDocument();
-      expect(screen.getByLabelText('Position')).toBeInTheDocument();
+      expect(screen.getByLabelText('Company Name*')).toBeInTheDocument();
+      expect(screen.getByLabelText('Department*') ).toBeInTheDocument();
+      expect(screen.getByLabelText('Position*')).toBeInTheDocument();
     });
 
     it('should render fields with correct input types', () => {
@@ -90,8 +91,8 @@ describe('EmploymentDetailsSection', () => {
       );
 
       const employeeIdInput = screen.getByLabelText('Employee ID (Optional)') as HTMLInputElement;
-      const departmentInput = screen.getByLabelText('Department') as HTMLInputElement;
-      const positionInput = screen.getByLabelText('Position') as HTMLInputElement;
+      const departmentInput = screen.getByLabelText('Department*')  as HTMLInputElement;
+      const positionInput = screen.getByLabelText('Position*') as HTMLInputElement;
 
       expect(employeeIdInput.type).toBe('text');
       expect(departmentInput.type).toBe('text');
@@ -151,7 +152,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const departmentInput = screen.getByLabelText('Department');
+      const departmentInput = screen.getByLabelText('Department*') ;
       fireEvent.change(departmentInput, { target: { value: 'Engineering' } });
 
       expect(departmentInput).toHaveValue('Engineering');
@@ -164,7 +165,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const positionInput = screen.getByLabelText('Position');
+      const positionInput = screen.getByLabelText('Position*');
       fireEvent.change(positionInput, { target: { value: 'Software Engineer' } });
 
       expect(positionInput).toHaveValue('Software Engineer');
@@ -179,8 +180,8 @@ describe('EmploymentDetailsSection', () => {
 
       // Fields should have labels associated with them
       const employeeIdInput = screen.getByLabelText('Employee ID (Optional)') as HTMLInputElement;
-      const departmentInput = screen.getByLabelText('Department') as HTMLInputElement;
-      const positionInput = screen.getByLabelText('Position') as HTMLInputElement;
+      const departmentInput = screen.getByLabelText('Department*')  as HTMLInputElement;
+      const positionInput = screen.getByLabelText('Position*') as HTMLInputElement;
 
       // Initially, fields should not be marked as invalid
       expect(employeeIdInput.getAttribute('aria-invalid')).toBe('false');
@@ -214,13 +215,13 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const companyNameInput = screen.getByLabelText('Company Name');
+      const companyNameInput = screen.getByLabelText('Company Name*');
       fireEvent.change(companyNameInput, { target: { value: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε' } });
       fireEvent.blur(companyNameInput);
 
       // Valid input should not trigger validation error
       await waitFor(() => {
-        expect(screen.queryByText('Company name is required')).not.toBeInTheDocument();
+        expect(screen.queryByText('Company name is required (minimum 2 characters)')).not.toBeInTheDocument();
       });
     });
 
@@ -231,13 +232,13 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const departmentInput = screen.getByLabelText('Department');
+      const departmentInput = screen.getByLabelText('Department*') ;
       fireEvent.change(departmentInput, { target: { value: 'Marketing' } });
       fireEvent.blur(departmentInput);
 
       // Valid input should not trigger validation error
       await waitFor(() => {
-        expect(screen.queryByText('Department is required')).not.toBeInTheDocument();
+        expect(screen.queryByText('Department is required (minimum 2 characters)')).not.toBeInTheDocument();
       });
     });
 
@@ -248,13 +249,13 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const positionInput = screen.getByLabelText('Position');
+      const positionInput = screen.getByLabelText('Position*');
       fireEvent.change(positionInput, { target: { value: 'Product Manager' } });
       fireEvent.blur(positionInput);
 
       // Valid input should not trigger validation error
       await waitFor(() => {
-        expect(screen.queryByText('Position is required')).not.toBeInTheDocument();
+        expect(screen.queryByText('Position is required (minimum 2 characters)')).not.toBeInTheDocument();
       });
     });
 
@@ -287,7 +288,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const companyNameInput = screen.getByLabelText('Company Name');
+      const companyNameInput = screen.getByLabelText('Company Name*');
 
       // Enter initial value
       fireEvent.change(companyNameInput, { target: { value: 'Test Company' } });
@@ -298,7 +299,7 @@ describe('EmploymentDetailsSection', () => {
       expect(companyNameInput).toHaveValue('ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε');
 
       await waitFor(() => {
-        expect(screen.queryByText('Company name is required')).not.toBeInTheDocument();
+        expect(screen.queryByText('Company name is required (minimum 2 characters)')).not.toBeInTheDocument();
       });
     });
   });
@@ -312,15 +313,15 @@ describe('EmploymentDetailsSection', () => {
       );
 
       expect(screen.queryByText('Employee ID is required')).not.toBeInTheDocument();
-      expect(screen.queryByText('Department is required')).not.toBeInTheDocument();
-      expect(screen.queryByText('Position is required')).not.toBeInTheDocument();
+      expect(screen.queryByText('Department is required (minimum 2 characters)')).not.toBeInTheDocument();
+      expect(screen.queryByText('Position is required (minimum 2 characters)')).not.toBeInTheDocument();
     });
 
     it('should display error message when errors prop is passed', () => {
       const mockErrors = {
         profile: {
           employeeId: { type: 'required', message: 'Custom error message' },
-          department: { type: 'required', message: 'Department is required' },
+          department: { type: 'required', message: 'Department is required (minimum 2 characters)' },
           position: undefined,
         },
       } as any;
@@ -332,7 +333,7 @@ describe('EmploymentDetailsSection', () => {
       );
 
       expect(screen.getByText('Custom error message')).toBeInTheDocument();
-      expect(screen.getByText('Department is required')).toBeInTheDocument();
+      expect(screen.getByText('Department is required (minimum 2 characters)')).toBeInTheDocument();
     });
 
     it('should apply error styling when errors are provided', () => {
@@ -360,8 +361,8 @@ describe('EmploymentDetailsSection', () => {
       const mockErrors = {
         profile: {
           employeeId: { type: 'required', message: 'Employee ID is required' },
-          department: { type: 'required', message: 'Department is required' },
-          position: { type: 'required', message: 'Position is required' },
+          department: { type: 'required', message: 'Department is required (minimum 2 characters)' },
+          position: { type: 'required', message: 'Position is required (minimum 2 characters)' },
         },
       } as any;
 
@@ -372,8 +373,8 @@ describe('EmploymentDetailsSection', () => {
       );
 
       expect(screen.getByText('Employee ID is required')).toBeInTheDocument();
-      expect(screen.getByText('Department is required')).toBeInTheDocument();
-      expect(screen.getByText('Position is required')).toBeInTheDocument();
+      expect(screen.getByText('Department is required (minimum 2 characters)')).toBeInTheDocument();
+      expect(screen.getByText('Position is required (minimum 2 characters)')).toBeInTheDocument();
     });
 
     it('should show aria-describedby attribute when error is present via errors prop', () => {
@@ -422,8 +423,8 @@ describe('EmploymentDetailsSection', () => {
 
       // Set values directly using register and setValue if needed
       const employeeIdInput = screen.getByLabelText('Employee ID (Optional)');
-      const departmentInput = screen.getByLabelText('Department');
-      const positionInput = screen.getByLabelText('Position');
+      const departmentInput = screen.getByLabelText('Department*') ;
+      const positionInput = screen.getByLabelText('Position*');
 
       // Verify fields are rendered
       expect(employeeIdInput).toBeInTheDocument();
@@ -450,8 +451,8 @@ describe('EmploymentDetailsSection', () => {
       );
 
       expect(screen.getByLabelText('Employee ID (Optional)')).toHaveValue('');
-      expect(screen.getByLabelText('Department')).toHaveValue('');
-      expect(screen.getByLabelText('Position')).toHaveValue('');
+      expect(screen.getByLabelText('Department*') ).toHaveValue('');
+      expect(screen.getByLabelText('Position*')).toHaveValue('');
     });
   });
 
@@ -536,7 +537,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const label = screen.getByLabelText('Company Name');
+      const label = screen.getByLabelText('Company Name*');
       expect(label).toBeInTheDocument();
     });
 
@@ -547,7 +548,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const label = screen.getByLabelText('Department');
+      const label = screen.getByLabelText('Department*') ;
       expect(label).toBeInTheDocument();
     });
 
@@ -558,7 +559,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const label = screen.getByLabelText('Position');
+      const label = screen.getByLabelText('Position*');
       expect(label).toBeInTheDocument();
     });
 
@@ -621,7 +622,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const departmentInput = screen.getByLabelText('Department');
+      const departmentInput = screen.getByLabelText('Department*') ;
       fireEvent.change(departmentInput, { target: { value: '   ' } });
       fireEvent.blur(departmentInput);
 
@@ -636,7 +637,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const positionInput = screen.getByLabelText('Position');
+      const positionInput = screen.getByLabelText('Position*');
       fireEvent.change(positionInput, { target: { value: '   ' } });
       fireEvent.blur(positionInput);
 
@@ -653,8 +654,8 @@ describe('EmploymentDetailsSection', () => {
 
       expect(screen.getByText('Employment Details')).toBeInTheDocument();
       expect(screen.getByLabelText('Employee ID (Optional)')).toBeInTheDocument();
-      expect(screen.getByLabelText('Department')).toBeInTheDocument();
-      expect(screen.getByLabelText('Position')).toBeInTheDocument();
+      expect(screen.getByLabelText('Department*') ).toBeInTheDocument();
+      expect(screen.getByLabelText('Position*')).toBeInTheDocument();
     });
 
     it('should handle null errors prop gracefully', () => {
@@ -699,7 +700,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const departmentInput = screen.getByLabelText('Department');
+      const departmentInput = screen.getByLabelText('Department*') ;
 
       // Test various department names
       const departments = ['Engineering', 'Marketing', 'Sales', 'Human Resources', 'Finance', 'IT'];
@@ -710,7 +711,7 @@ describe('EmploymentDetailsSection', () => {
 
         // Input should accept the value
         expect(departmentInput).toHaveValue(dept);
-        expect(screen.queryByText('Department is required')).not.toBeInTheDocument();
+        expect(screen.queryByText('Department is required (minimum 2 characters)')).not.toBeInTheDocument();
 
         // Clear for next test
         fireEvent.change(departmentInput, { target: { value: '' } });
@@ -724,7 +725,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const positionInput = screen.getByLabelText('Position');
+      const positionInput = screen.getByLabelText('Position*');
 
       // Test various position titles
       const positions = [
@@ -742,7 +743,7 @@ describe('EmploymentDetailsSection', () => {
 
         // Input should accept the value
         expect(positionInput).toHaveValue(pos);
-        expect(screen.queryByText('Position is required')).not.toBeInTheDocument();
+        expect(screen.queryByText('Position is required (minimum 2 characters)')).not.toBeInTheDocument();
 
         // Clear for next test
         fireEvent.change(positionInput, { target: { value: '' } });
@@ -772,8 +773,8 @@ describe('EmploymentDetailsSection', () => {
       );
 
       const employeeIdInput = screen.getByLabelText('Employee ID (Optional)');
-      const departmentInput = screen.getByLabelText('Department');
-      const positionInput = screen.getByLabelText('Position');
+      const departmentInput = screen.getByLabelText('Department*') ;
+      const positionInput = screen.getByLabelText('Position*');
 
       employeeIdInput.focus();
       expect(document.activeElement).toBe(employeeIdInput);
@@ -792,13 +793,13 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const departmentInput = screen.getByLabelText('Department');
+      const departmentInput = screen.getByLabelText('Department*') ;
       fireEvent.change(departmentInput, { target: { value: 'R&D / Innovation' } });
       fireEvent.blur(departmentInput);
 
       // Should accept special characters
       expect(departmentInput).toHaveValue('R&D / Innovation');
-      expect(screen.queryByText('Department is required')).not.toBeInTheDocument();
+      expect(screen.queryByText('Department is required (minimum 2 characters)')).not.toBeInTheDocument();
     });
 
     it('should handle special characters in Position title', async () => {
@@ -808,13 +809,13 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const positionInput = screen.getByLabelText('Position');
+      const positionInput = screen.getByLabelText('Position*');
       fireEvent.change(positionInput, { target: { value: 'Sr. Software Engineer (Lead)' } });
       fireEvent.blur(positionInput);
 
       // Should accept special characters
       expect(positionInput).toHaveValue('Sr. Software Engineer (Lead)');
-      expect(screen.queryByText('Position is required')).not.toBeInTheDocument();
+      expect(screen.queryByText('Position is required (minimum 2 characters)')).not.toBeInTheDocument();
     });
   });
 

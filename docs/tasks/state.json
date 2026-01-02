@@ -221,8 +221,8 @@
       "description": "Implement comprehensive field validation for Personal Details section, including Greek Identity Number (ADT) format validation with support for multiple valid formats."
     },
     "052-fix-issue-013-employment-details-validation": {
-      "state": "not_started",
-      "lastUpdated": "2025-12-31T15:00:00Z",
+      "state": "committed",
+      "lastUpdated": "2026-01-02T00:00:00Z",
       "description": "Implement validation for Employment Details section fields, ensuring Company Name, Department, and Position are required with appropriate error handling."
     },
     "053-fix-issue-014-leave-details-broken": {

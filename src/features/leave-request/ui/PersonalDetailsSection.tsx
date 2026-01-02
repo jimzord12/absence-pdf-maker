@@ -38,6 +38,7 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ 
             label="Full Name"
             placeholder="Enter your full name"
             inputType="text"
+            required
             {...register?.('profile.fullName')}
             error={errors?.profile?.fullName?.message}
           />
@@ -46,6 +47,7 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ 
             label="Father's Name"
             placeholder="Enter father's name"
             inputType="text"
+            required
             {...register?.('profile.fathersName')}
             error={errors?.profile?.fathersName?.message}
           />
@@ -54,6 +56,7 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ 
             label="Identity Number (ADT)"
             placeholder="Enter identity number"
             inputType="text"
+            required
             {...register?.('profile.identityNumber')}
             error={errors?.profile?.identityNumber?.message}
           />
@@ -62,6 +65,7 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ 
             label="Email Address"
             placeholder="your.email@company.com"
             inputType="email"
+            required
             {...register?.('profile.email')}
             error={errors?.profile?.email?.message}
           />
@@ -70,6 +74,7 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ 
             label="Phone Number"
             placeholder="+1 (555) 123-4567"
             inputType="tel"
+            required
             {...register?.('profile.phone')}
             error={errors?.profile?.phone?.message}
           />

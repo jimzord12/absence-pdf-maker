@@ -6,15 +6,20 @@ const GREEK_LETTERS = 'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩΆΈΉΊ�
 const LATIN_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 /**
- * Validates Greek and Latin letters only, with spaces allowed
+ * Validates Greek and Latin letters only, with spaces and hyphens allowed
  */
-const nameRegex = new RegExp(`^[${GREEK_LETTERS}${LATIN_LETTERS} ]+$`);
+const nameRegex = new RegExp('^[' + GREEK_LETTERS + LATIN_LETTERS + ' \\-]+$');
 
 /**
- * Validates Greek phone numbers
- * Accepts: +30XXXXXXXXX (11 digits with +30) or 10 digits starting with 6, 2, or 9
+ * Validates phone numbers (simplified - accepts any 10-digit number)
+ * Accepts:
+ * - 10 digits: 1234567890
+ * - With spaces: 123 456 7890
+ * - With country code (stripped): +301234567890
+ * - Trims whitespace before validation
+ * - Strips all spaces and country codes before validation
+ * - Requires exactly 10 digits after stripping
  */
-const greekPhoneRegex = /^(\+30[1-9]\d{9}|[269]\d{9})$/;
 
 /**
  * Validates Greek Identity Number (ADT) format
@@ -36,17 +41,64 @@ const passportRegex = /^[A-Za-z]{2}\d{7}$/;
 
 /**
  * Validates if a string is a valid name (Greek or Latin letters)
+ * - Requires at least 2 words (e.g., "John Doe", "Γιάννης Παπαδόπουλος")
+ * - Hyphens are treated as word separators (e.g., "John-Doe" = 2 words)
+ * - Each word must be at least 2 characters
+ * - Allows hyphens for compound names (e.g., "Mary-Jane Smith")
+ * - Trims whitespace
  */
 export const isValidName = (value: string): boolean => {
-  if (value.length < 2) return false;
-  return nameRegex.test(value);
+  const trimmed = value.trim();
+  if (trimmed.length < 2) return false;
+
+  if (!nameRegex.test(trimmed)) return false;
+
+  // Split by spaces and hyphens to treat hyphenated parts as separate words
+  const words = trimmed.split(/[\s-]+/);
+
+  // Require at least 2 words
+  if (words.length < 2) return false;
+
+  // Each word must be at least 2 characters
+  for (const word of words) {
+    if (word.length < 2) return false;
+  }
+
+  return true;
 };
 
 /**
- * Validates if a string is a valid Greek phone number
+ * Validates if a string is a valid single name (Greek or Latin letters)
+ * - Requires at least 2 characters
+ * - Allows hyphens for compound names (e.g., Jean-Pierre)
+ * - Accepts spaces for multi-word names (flexible for various use cases)
+ * - Trims whitespace
+ */
+export const isValidSingleName = (value: string): boolean => {
+  const trimmed = value.trim();
+  if (trimmed.length < 2) return false;
+  return nameRegex.test(trimmed);
+};
+
+/**
+ * Validates if a string is a valid phone number (simplified)
+ * - Trims leading/trailing whitespace
+ * - Removes all spaces before validation
+ * - Removes country codes (e.g., +30)
+ * - Requires exactly 10 digits after stripping country code and spaces
  */
 export const isValidGreekPhone = (value: string): boolean => {
-  return greekPhoneRegex.test(value);
+  // Trim and remove all spaces
+  const processed = value.trim().replace(/\s/g, '');
+
+  // Remove country code if present and extract last 10 digits
+  if (processed.startsWith('+')) {
+    const final = processed.slice(-10); // Take last 10 characters
+    return /^\d{10}$/.test(final);
+  }
+
+  // No country code, must be exactly 10 digits
+  return /^\d{10}$/.test(processed);
 };
 
 /**
@@ -103,12 +155,12 @@ export const UserProfileSchema = z
       .string()
       .min(1, 'Full name is required')
       .refine(isValidName, {
-        message: 'Full name must contain at least 2 characters (Greek or Latin letters only)',
+        message: 'Full name must contain at least 2 words (Greek or Latin letters only)',
       }),
     fathersName: z
       .string()
       .min(1, "Father's name is required")
-      .refine(isValidName, {
+      .refine(isValidSingleName, {
         message: "Father's name must contain at least 2 characters (Greek or Latin letters only)",
       }),
     email: z
@@ -119,7 +171,7 @@ export const UserProfileSchema = z
       .string()
       .min(1, 'Phone number is required')
       .refine(isValidGreekPhone, {
-        message: 'Please enter a valid Greek phone number (+30XXXXXXXXX or 10 digits)',
+        message: 'Please enter a valid phone number (10 digits, spaces allowed)',
       }),
     identityNumber: z
       .string()

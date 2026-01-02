@@ -47,6 +47,7 @@ describe('LeaveRequestForm', () => {
         isGeneratingPdf: false,
         lastGeneratedFileName: '',
         errorMessage: null,
+        triggerValidation: null,
       },
     });
     vi.clearAllMocks();
@@ -759,7 +760,7 @@ describe('LeaveRequestForm', () => {
 
     it('should display error message from store', () => {
       useLeaveRequestStore.setState({
-        ui: { errorMessage: 'An error occurred while loading data', isSignatureModalOpen: false, isGeneratingPdf: false, lastGeneratedFileName: '' },
+        ui: { errorMessage: 'An error occurred while loading data', isSignatureModalOpen: false, isGeneratingPdf: false, lastGeneratedFileName: '', triggerValidation: null },
       });
 
       render(<LeaveRequestForm />);
@@ -769,7 +770,7 @@ describe('LeaveRequestForm', () => {
 
     it('should dismiss error message when dismiss button is clicked', () => {
       useLeaveRequestStore.setState({
-        ui: { errorMessage: 'Test error', isSignatureModalOpen: false, isGeneratingPdf: false, lastGeneratedFileName: '' },
+        ui: { errorMessage: 'Test error', isSignatureModalOpen: false, isGeneratingPdf: false, lastGeneratedFileName: '', triggerValidation: null },
       });
 
       render(<LeaveRequestForm />);

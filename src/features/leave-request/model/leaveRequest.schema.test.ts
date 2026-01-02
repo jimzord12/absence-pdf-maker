@@ -3,6 +3,7 @@ import {
   UserProfileSchema,
   LeaveRequestSchema,
   isValidName,
+  isValidSingleName,
   isValidGreekPhone,
   isValidGreekAdt,
   isValidAmka,
@@ -26,7 +27,8 @@ describe('Name Validation', () => {
     it('should reject names with special characters', () => {
       expect(isValidName('John@Doe')).toBe(false);
       expect(isValidName('John123')).toBe(false);
-      expect(isValidName('John-Doe')).toBe(false);
+      // Hyphens are now allowed for compound names like Mary-Jane
+      expect(isValidName('John-Doe')).toBe(true);
     });
 
     it('should reject names with less than 2 characters', () => {
@@ -38,26 +40,106 @@ describe('Name Validation', () => {
       expect(isValidName('John Michael Doe')).toBe(true);
       expect(isValidName('Γιάννης Αντώνιος Παπαδόπουλος')).toBe(true);
     });
+
+    it('should require at least 2 words in full name', () => {
+      expect(isValidName('John')).toBe(false); // Only 1 word
+      expect(isValidName('Γιάννης')).toBe(false); // Only 1 word
+    });
+
+    it('should require each word to be at least 2 characters', () => {
+      expect(isValidName('J D')).toBe(false); // Words too short
+      expect(isValidName('A B')).toBe(false); // Words too short
+      expect(isValidName('Γ Π')).toBe(false); // Greek words too short
+    });
+
+    it('should accept hyphens in names for compound names', () => {
+      expect(isValidName('Mary-Jane Smith')).toBe(true);
+      expect(isValidName('Jean-Pierre Duval')).toBe(true);
+      expect(isValidName('Μαρία-Ελένη Κωνσταντίνου')).toBe(true);
+    });
+
+    it('should accept Greek characters in full name', () => {
+      expect(isValidName('Γιώργος Παπαδόπουλος')).toBe(true);
+      expect(isValidName('Ελένη Δημητρίου')).toBe(true);
+      expect(isValidName('Αλέξανδρος Παπαδόπουλος')).toBe(true);
+    });
+  });
+
+  describe('isValidSingleName', () => {
+    it('should accept single word with 2+ characters', () => {
+      expect(isValidSingleName('Georgios')).toBe(true);
+      expect(isValidSingleName('Γεώργιος')).toBe(true);
+      expect(isValidSingleName('Nikolaos')).toBe(true);
+      expect(isValidSingleName('Νικόλαος')).toBe(true);
+    });
+
+    it('should accept compound names with hyphens', () => {
+      expect(isValidSingleName('Jean-Pierre')).toBe(true);
+      expect(isValidSingleName('Mary-Jane')).toBe(true);
+      expect(isValidSingleName('Μαρία-Ελένη')).toBe(true);
+    });
+
+    it('should accept multi-word names (for flexibility)', () => {
+      expect(isValidSingleName('John Smith')).toBe(true);
+      expect(isValidSingleName('Γεώργιος Παπαδόπουλος')).toBe(true);
+    });
+
+    it('should reject single word with 1 character', () => {
+      expect(isValidSingleName('G')).toBe(false);
+      expect(isValidSingleName('Γ')).toBe(false);
+    });
+
+    it('should reject empty string', () => {
+      expect(isValidSingleName('')).toBe(false);
+    });
+
+    it('should reject names with special characters', () => {
+      expect(isValidSingleName('John@')).toBe(false);
+      expect(isValidSingleName('George123')).toBe(false);
+      expect(isValidSingleName('Παπαδόπουλος!')).toBe(false);
+    });
+
+    it('should reject names with numbers', () => {
+      expect(isValidSingleName('John1')).toBe(false);
+      expect(isValidSingleName('Γεώργιος2')).toBe(false);
+    });
+
+    it('should accept Greek characters', () => {
+      expect(isValidSingleName('Γιώργος')).toBe(true);
+      expect(isValidSingleName('Ελένη')).toBe(true);
+      expect(isValidSingleName('Αλέξανδρος')).toBe(true);
+      expect(isValidSingleName('Μαρία')).toBe(true);
+    });
+
+    it('should accept Latin characters', () => {
+      expect(isValidSingleName('George')).toBe(true);
+      expect(isValidSingleName('Nicholas')).toBe(true);
+      expect(isValidSingleName('Alexander')).toBe(true);
+      expect(isValidSingleName('Maria')).toBe(true);
+    });
+
+    it('should handle spaces at edges', () => {
+      expect(isValidSingleName('  Georgios  ')).toBe(true);
+    });
   });
 });
 
 describe('Phone Validation', () => {
   describe('isValidGreekPhone', () => {
-    it('should accept valid Greek phone numbers with +30 prefix', () => {
+    it('should accept any valid 10-digit phone number', () => {
+      expect(isValidGreekPhone('1234567890')).toBe(true);
+      expect(isValidGreekPhone('6901234567')).toBe(true);
+    });
+
+    it('should accept phone numbers with spaces (they will be stripped)', () => {
+      expect(isValidGreekPhone('123 456 7890')).toBe(true);
+      expect(isValidGreekPhone('690 123 4567')).toBe(true);
+    });
+
+    it('should accept phone numbers with country code (country code is stripped)', () => {
+      expect(isValidGreekPhone('+301234567890')).toBe(true);
       expect(isValidGreekPhone('+306901234567')).toBe(true);
       expect(isValidGreekPhone('+302101234567')).toBe(true);
-      expect(isValidGreekPhone('+306990123456')).toBe(true);
-    });
-
-    it('should accept valid Greek phone numbers without prefix', () => {
-      expect(isValidGreekPhone('6901234567')).toBe(true);
-      expect(isValidGreekPhone('2101234567')).toBe(true);
-      expect(isValidGreekPhone('6990123456')).toBe(true);
-    });
-
-    it('should reject phone numbers with invalid prefix', () => {
-      expect(isValidGreekPhone('+31123456789')).toBe(false);
-      expect(isValidGreekPhone('3123456789')).toBe(false);
     });
 
     it('should reject phone numbers with wrong length', () => {
@@ -69,12 +151,27 @@ describe('Phone Validation', () => {
       expect(isValidGreekPhone('69012a4567')).toBe(false);
     });
 
-    it('should reject phone numbers with spaces', () => {
-      expect(isValidGreekPhone('690 123 4567')).toBe(false);
+    it('should reject phone numbers with dashes', () => {
+      expect(isValidGreekPhone('123-456-7890')).toBe(false);
     });
 
-    it('should reject phone numbers with dashes', () => {
-      expect(isValidGreekPhone('690-123-4567')).toBe(false);
+    it('should reject phone numbers with special characters', () => {
+      expect(isValidGreekPhone('1234567890!')).toBe(false);
+      expect(isValidGreekPhone('(123) 456-7890')).toBe(false);
+    });
+
+    it('should trim whitespace before validation', () => {
+      expect(isValidGreekPhone('  1234567890  ')).toBe(true);
+      expect(isValidGreekPhone('  +301234567890  ')).toBe(true);
+      expect(isValidGreekPhone('  123 456 7890  ')).toBe(true);
+    });
+
+    it('should reject empty string', () => {
+      expect(isValidGreekPhone('')).toBe(false);
+    });
+
+    it('should reject strings with no digits', () => {
+      expect(isValidGreekPhone('abcdefghij')).toBe(false);
     });
   });
 });
@@ -240,18 +337,18 @@ describe('UserProfileSchema', () => {
     expect(result.success).toBe(true);
   });
 
-  it('should reject profile with short fullName', () => {
-    const invalidProfile = {
-      ...baseProfile,
-      fullName: 'J',
-    };
-    const result = UserProfileSchema.safeParse(invalidProfile);
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.issues[0].path).toContain('fullName');
-      expect(result.error.issues[0].message).toContain('at least 2 characters');
-    }
-  });
+    it('should reject profile with short fullName', () => {
+      const invalidProfile = {
+        ...baseProfile,
+        fullName: 'J',
+      };
+      const result = UserProfileSchema.safeParse(invalidProfile);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toContain('fullName');
+        expect(result.error.issues[0].message).toContain('at least 2 words');
+      }
+    });
 
   it('should reject profile with fullName containing numbers', () => {
     const invalidProfile = {
@@ -269,7 +366,7 @@ describe('UserProfileSchema', () => {
   it('should reject profile with fullName containing special characters', () => {
     const invalidProfile = {
       ...baseProfile,
-      fullName: 'John-Doe',
+      fullName: 'John@Doe', // @ is not allowed
     };
     const result = UserProfileSchema.safeParse(invalidProfile);
     expect(result.success).toBe(false);
@@ -318,44 +415,40 @@ describe('UserProfileSchema', () => {
     }
   });
 
-  it('should reject profile with non-Greek phone', () => {
-    const invalidProfile = {
+    it('should reject profile with invalid phone number', () => {
+      const invalidProfile = {
+        ...baseProfile,
+        phone: '123456789', // Only 9 digits
+      };
+      const result = UserProfileSchema.safeParse(invalidProfile);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toContain('phone');
+        expect(result.error.issues[0].message).toContain('valid phone number');
+      }
+    });
+
+  it('should accept profile with phone containing spaces', () => {
+    const validProfile = {
       ...baseProfile,
-      phone: '+1 555-123-4567',
+      phone: '690 123 4567', // Spaces are now allowed
     };
-    const result = UserProfileSchema.safeParse(invalidProfile);
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.issues[0].path).toContain('phone');
-      expect(result.error.issues[0].message).toContain('Greek phone number');
-    }
+    const result = UserProfileSchema.safeParse(validProfile);
+    expect(result.success).toBe(true);
   });
 
-  it('should reject profile with phone containing spaces', () => {
-    const invalidProfile = {
-      ...baseProfile,
-      phone: '690 123 4567',
-    };
-    const result = UserProfileSchema.safeParse(invalidProfile);
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.issues[0].path).toContain('phone');
-      expect(result.error.issues[0].message).toContain('Greek phone number');
-    }
-  });
-
-  it('should reject profile with phone containing dashes', () => {
-    const invalidProfile = {
-      ...baseProfile,
-      phone: '690-123-4567',
-    };
-    const result = UserProfileSchema.safeParse(invalidProfile);
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.issues[0].path).toContain('phone');
-      expect(result.error.issues[0].message).toContain('Greek phone number');
-    }
-  });
+    it('should reject profile with phone containing dashes', () => {
+      const invalidProfile = {
+        ...baseProfile,
+        phone: '123-456-7890',
+      };
+      const result = UserProfileSchema.safeParse(invalidProfile);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toContain('phone');
+        expect(result.error.issues[0].message).toContain('valid phone number');
+      }
+    });
 
   it('should reject profile with invalid identity number', () => {
     const invalidProfile = {

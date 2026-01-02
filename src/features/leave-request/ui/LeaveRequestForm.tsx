@@ -34,6 +34,7 @@ export const LeaveRequestForm: React.FC = () => {
     setSignature,
     toggleSignatureModal,
     clearErrorMessage,
+    setTriggerValidation,
   } = useLeaveRequestStore();
   const { locale } = useLocaleStore();
 
@@ -51,7 +52,7 @@ export const LeaveRequestForm: React.FC = () => {
   const methods = useForm<LeaveRequest>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(LeaveRequestSchema) as any,
-    mode: 'onSubmit',
+    mode: 'onTouched',
     defaultValues: {
       profile: {
         fullName: profile.fullName || '',
@@ -101,6 +102,14 @@ export const LeaveRequestForm: React.FC = () => {
 
     return () => subscription.unsubscribe();
   }, [watch, setProfile, setLeaveDraft, setSignature]);
+
+  // Expose validation trigger function to store for PDF generation
+  useEffect(() => {
+    setTriggerValidation(async () => {
+      const result = await methods.trigger();
+      return result;
+    });
+  }, [methods, setTriggerValidation]);
 
   // Handle signature modal open
   const handleOpenSignature = () => {
@@ -175,6 +184,7 @@ export const LeaveRequestForm: React.FC = () => {
             <Input
               label="Company Name"
               placeholder="Enter company name"
+              required
               {...register('profile.companyName')}
               error={errors.profile?.companyName?.message}
             />
@@ -182,6 +192,7 @@ export const LeaveRequestForm: React.FC = () => {
             <Input
               label="Department"
               placeholder="Engineering"
+              required
               {...register('profile.department')}
               error={errors.profile?.department?.message}
             />
@@ -189,6 +200,7 @@ export const LeaveRequestForm: React.FC = () => {
             <Input
               label="Position"
               placeholder="Software Engineer"
+              required
               {...register('profile.position')}
               error={errors.profile?.position?.message}
             />

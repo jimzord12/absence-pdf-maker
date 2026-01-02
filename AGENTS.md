@@ -48,7 +48,7 @@ import { useLeaveRequestStore } from '../state/leaveRequest.store';
   - Services: `*.service.ts`
   - Tests: `*.test.ts` or `*.test.tsx` (colocated with source)
 
-**State Management:** Zustand with persist middleware. Persist only stable data (profile), not drafts or signatures. Use `partialize` for selective persistence. Separate state concerns into logical slices (profile, leaveDraft, signature, ui, holidays). Export inferred types from store for external use. Use refs to prevent infinite loops when syncing form changes to store.
+**State Management:** Zustand with persist middleware. Persist only stable data (profile data and signature data), not the leaveDraft data. Use `partialize` for selective persistence. Separate state concerns into logical slices (profile, leaveDraft, signature, ui, holidays). Export inferred types from store for external use. Use refs to prevent infinite loops when syncing form changes to store.
 
 **Forms:** React Hook Form with Zod resolver (`@hookform/resolvers/zod`). Sync initial values from Zustand store. Use `setValueAs` for date field transformations to Date objects. Use `watch()` to track changes and sync to store, with deep equality checks to prevent unnecessary updates.
 

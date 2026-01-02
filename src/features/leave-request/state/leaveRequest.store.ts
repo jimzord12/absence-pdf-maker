@@ -29,6 +29,7 @@ interface Ui {
   isGeneratingPdf: boolean;
   lastGeneratedFileName: string;
   errorMessage: string | null;
+  triggerValidation: (() => Promise<boolean>) | null;
 }
 
 // Complete state interface for the leave request store
@@ -52,6 +53,7 @@ interface LeaveRequestActions {
   clearErrorMessage: () => void;
   toggleSignatureModal: () => void;
   setIsGeneratingPdf: (isGenerating: boolean) => void;
+  setTriggerValidation: (trigger: (() => Promise<boolean>) | null) => void;
 }
 
 // Initial state values - exported for reuse in reset actions
@@ -83,6 +85,7 @@ export const initialState: LeaveRequestState = {
     isGeneratingPdf: false,
     lastGeneratedFileName: '',
     errorMessage: null,
+    triggerValidation: null,
   },
 };
 
@@ -160,6 +163,9 @@ export const useLeaveRequestStore = create<LeaveRequestState & LeaveRequestActio
 
       setIsGeneratingPdf: (isGenerating) =>
         set((state) => ({ ui: { ...state.ui, isGeneratingPdf: isGenerating } })),
+
+      setTriggerValidation: (trigger) =>
+        set((state) => ({ ui: { ...state.ui, triggerValidation: trigger } })),
     }),
     {
       name: 'leave-request-storage',

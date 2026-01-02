@@ -48,6 +48,7 @@ export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> =
             label="Company Name"
             placeholder="Enter company name"
             inputType="text"
+            required
             {...register?.('profile.companyName')}
             error={errors?.profile?.companyName?.message}
           />
@@ -56,6 +57,7 @@ export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> =
             label="Department"
             placeholder="Engineering"
             inputType="text"
+            required
             {...register?.('profile.department')}
             error={errors?.profile?.department?.message}
           />
@@ -64,6 +66,7 @@ export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> =
             label="Position"
             placeholder="Software Engineer"
             inputType="text"
+            required
             {...register?.('profile.position')}
             error={errors?.profile?.position?.message}
           />

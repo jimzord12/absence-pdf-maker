@@ -42,6 +42,7 @@ describe('useLeaveRequestStore', () => {
         isGeneratingPdf: false,
         lastGeneratedFileName: '',
         errorMessage: null,
+        triggerValidation: null,
       },
     });
     // Clear console call counts
@@ -85,6 +86,7 @@ describe('useLeaveRequestStore', () => {
         isGeneratingPdf: false,
         lastGeneratedFileName: '',
         errorMessage: null,
+        triggerValidation: null,
       });
     });
 
@@ -129,6 +131,7 @@ describe('useLeaveRequestStore', () => {
         isGeneratingPdf: false,
         lastGeneratedFileName: '',
         errorMessage: null,
+        triggerValidation: null,
       };
       expect(ui).toBeDefined();
     });
