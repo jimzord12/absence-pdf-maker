@@ -64,6 +64,7 @@ describe('LeaveRequestPage', () => {
         isGeneratingPdf: false,
         lastGeneratedFileName: '',
         errorMessage: null,
+        triggerValidation: null,
       },
     });
     vi.clearAllMocks();
@@ -456,6 +457,7 @@ describe('LeaveRequestPage', () => {
           isGeneratingPdf: false,
           lastGeneratedFileName: '',
           errorMessage: 'Test error message',
+          triggerValidation: null,
         },
       });
 

@@ -57,6 +57,7 @@ describe('LeaveDetailsSection', () => {
         holidaySet: new Set<string>(),
       },
       ui: {
+        triggerValidation: null,
         isSignatureModalOpen: false,
         isGeneratingPdf: false,
         lastGeneratedFileName: '',
