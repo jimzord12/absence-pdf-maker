@@ -1,38 +1,381 @@
 import { describe, it, expect } from 'vitest';
-import { UserProfileSchema, LeaveRequestSchema } from './leaveRequest.schema';
+import {
+  UserProfileSchema,
+  LeaveRequestSchema,
+  isValidName,
+  isValidGreekPhone,
+  isValidGreekAdt,
+  isValidAmka,
+  isValidPassport,
+  isValidGreekIdentityNumber,
+} from './leaveRequest.schema';
 import { HolidayListSchema } from './holidays.schema';
 
+describe('Name Validation', () => {
+  describe('isValidName', () => {
+    it('should accept valid Latin names', () => {
+      expect(isValidName('John Doe')).toBe(true);
+      expect(isValidName('George Papadopoulos')).toBe(true);
+    });
+
+    it('should accept valid Greek names', () => {
+      expect(isValidName('Γιάννης Παπαδόπουλος')).toBe(true);
+      expect(isValidName('Μαρία Δημητρίου')).toBe(true);
+    });
+
+    it('should reject names with special characters', () => {
+      expect(isValidName('John@Doe')).toBe(false);
+      expect(isValidName('John123')).toBe(false);
+      expect(isValidName('John-Doe')).toBe(false);
+    });
+
+    it('should reject names with less than 2 characters', () => {
+      expect(isValidName('J')).toBe(false);
+      expect(isValidName('')).toBe(false);
+    });
+
+    it('should accept names with spaces', () => {
+      expect(isValidName('John Michael Doe')).toBe(true);
+      expect(isValidName('Γιάννης Αντώνιος Παπαδόπουλος')).toBe(true);
+    });
+  });
+});
+
+describe('Phone Validation', () => {
+  describe('isValidGreekPhone', () => {
+    it('should accept valid Greek phone numbers with +30 prefix', () => {
+      expect(isValidGreekPhone('+306901234567')).toBe(true);
+      expect(isValidGreekPhone('+302101234567')).toBe(true);
+      expect(isValidGreekPhone('+306990123456')).toBe(true);
+    });
+
+    it('should accept valid Greek phone numbers without prefix', () => {
+      expect(isValidGreekPhone('6901234567')).toBe(true);
+      expect(isValidGreekPhone('2101234567')).toBe(true);
+      expect(isValidGreekPhone('6990123456')).toBe(true);
+    });
+
+    it('should reject phone numbers with invalid prefix', () => {
+      expect(isValidGreekPhone('+31123456789')).toBe(false);
+      expect(isValidGreekPhone('3123456789')).toBe(false);
+    });
+
+    it('should reject phone numbers with wrong length', () => {
+      expect(isValidGreekPhone('690123456')).toBe(false); // 9 digits
+      expect(isValidGreekPhone('69012345678')).toBe(false); // 11 digits
+    });
+
+    it('should reject phone numbers with letters', () => {
+      expect(isValidGreekPhone('69012a4567')).toBe(false);
+    });
+
+    it('should reject phone numbers with spaces', () => {
+      expect(isValidGreekPhone('690 123 4567')).toBe(false);
+    });
+
+    it('should reject phone numbers with dashes', () => {
+      expect(isValidGreekPhone('690-123-4567')).toBe(false);
+    });
+  });
+});
+
+describe('Greek ADT Validation', () => {
+  describe('isValidGreekAdt', () => {
+    it('should accept valid Greek ADT', () => {
+      expect(isValidGreekAdt('ΑΒΓ12345')).toBe(true);
+      expect(isValidGreekAdt('ΜΠΑ67890')).toBe(true);
+      expect(isValidGreekAdt('ΚΩΝ11111')).toBe(true);
+    });
+
+    it('should reject ADT with Latin letters', () => {
+      expect(isValidGreekAdt('ABC12345')).toBe(false);
+      expect(isValidGreekAdt('abγ12345')).toBe(false);
+    });
+
+    it('should reject ADT with wrong letter count', () => {
+      expect(isValidGreekAdt('ΑΒ12345')).toBe(false); // 2 letters
+      expect(isValidGreekAdt('ΑΒΓΔ12345')).toBe(false); // 4 letters
+    });
+
+    it('should reject ADT with wrong digit count', () => {
+      expect(isValidGreekAdt('ΑΒΓ1234')).toBe(false); // 4 digits
+      expect(isValidGreekAdt('ΑΒΓ123456')).toBe(false); // 6 digits
+    });
+
+    it('should reject ADT with special characters', () => {
+      expect(isValidGreekAdt('ΑΒΓ-12345')).toBe(false);
+      expect(isValidGreekAdt('ΑΒΓ 12345')).toBe(false);
+    });
+  });
+});
+
+describe('AMKA Validation', () => {
+  describe('isValidAmka', () => {
+    it('should accept valid AMKA with correct checksum', () => {
+      // Valid AMKA: 01013000002
+      // Checksum calculation: (10 - (8 % 10)) % 10 = 2
+      expect(isValidAmka('01013000002')).toBe(true);
+    });
+
+    it('should reject AMKA with invalid length', () => {
+      expect(isValidAmka('0101300000')).toBe(false); // 10 digits
+      expect(isValidAmka('010130000012')).toBe(false); // 12 digits
+    });
+
+    it('should reject AMKA with letters', () => {
+      expect(isValidAmka('0101300000a')).toBe(false);
+    });
+
+    it('should reject AMKA with invalid checksum', () => {
+      expect(isValidAmka('01013000001')).toBe(false); // Wrong checksum
+    });
+  });
+});
+
+describe('Passport Validation', () => {
+  describe('isValidPassport', () => {
+    it('should accept valid passport numbers', () => {
+      expect(isValidPassport('AB1234567')).toBe(true);
+      expect(isValidPassport('XY9876543')).toBe(true);
+      expect(isValidPassport('ab1234567')).toBe(true); // lowercase accepted
+    });
+
+    it('should reject passport with wrong format', () => {
+      expect(isValidPassport('A1234567')).toBe(false); // 1 letter
+      expect(isValidPassport('ABC1234567')).toBe(false); // 3 letters
+      expect(isValidPassport('AB123456')).toBe(false); // 6 digits
+      expect(isValidPassport('AB12345678')).toBe(false); // 8 digits
+    });
+
+    it('should reject passport with special characters', () => {
+      expect(isValidPassport('AB-1234567')).toBe(false);
+      expect(isValidPassport('AB 1234567')).toBe(false);
+    });
+  });
+});
+
+describe('Greek Identity Number Validation', () => {
+  describe('isValidGreekIdentityNumber', () => {
+    it('should accept valid Greek ADT', () => {
+      expect(isValidGreekIdentityNumber('ΑΒΓ12345')).toBe(true);
+    });
+
+    it('should accept valid AMKA', () => {
+      expect(isValidGreekIdentityNumber('01013000002')).toBe(true);
+    });
+
+    it('should accept valid passport', () => {
+      expect(isValidGreekIdentityNumber('AB1234567')).toBe(true);
+    });
+
+    it('should reject invalid identity number', () => {
+      expect(isValidGreekIdentityNumber('INVALID')).toBe(false);
+      expect(isValidGreekIdentityNumber('12345')).toBe(false);
+      expect(isValidGreekIdentityNumber('ABC123456')).toBe(false);
+    });
+  });
+});
+
 describe('UserProfileSchema', () => {
-  it('should validate a valid user profile', () => {
-    const validProfile = {
-      fullName: 'John Doe',
-      fathersName: 'George Doe',
-      email: 'john.doe@example.com',
-      phone: '+1 555-123-4567',
-      identityNumber: 'AB123456',
-      employeeId: 'EMP001',
-      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
-      department: 'Engineering',
-      position: 'Senior Developer',
-    };
-    const result = UserProfileSchema.safeParse(validProfile);
+  const baseProfile = {
+    fullName: 'John Doe',
+    fathersName: 'George Doe',
+    email: 'john.doe@example.com',
+    phone: '+306901234567',
+    identityNumber: 'AB1234567',
+    employeeId: 'EMP001',
+    companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
+    department: 'Engineering',
+    position: 'Senior Developer',
+  };
+
+  it('should validate a valid user profile with Greek phone', () => {
+    const result = UserProfileSchema.safeParse(baseProfile);
     expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data).toEqual(validProfile);
+  });
+
+  it('should validate a valid user profile with Greek name', () => {
+    const greekProfile = {
+      ...baseProfile,
+      fullName: 'Γιάννης Παπαδόπουλος',
+      fathersName: 'Γεώργιος Παπαδόπουλος',
+    };
+    const result = UserProfileSchema.safeParse(greekProfile);
+    expect(result.success).toBe(true);
+  });
+
+  it('should validate profile with Greek ADT', () => {
+    const adtProfile = {
+      ...baseProfile,
+      identityNumber: 'ΑΒΓ12345',
+    };
+    const result = UserProfileSchema.safeParse(adtProfile);
+    expect(result.success).toBe(true);
+  });
+
+  it('should validate profile with AMKA', () => {
+    const amkaProfile = {
+      ...baseProfile,
+      identityNumber: '01013000002',
+    };
+    const result = UserProfileSchema.safeParse(amkaProfile);
+    expect(result.success).toBe(true);
+  });
+
+  it('should validate profile with passport', () => {
+    const passportProfile = {
+      ...baseProfile,
+      identityNumber: 'AB1234567',
+    };
+    const result = UserProfileSchema.safeParse(passportProfile);
+    expect(result.success).toBe(true);
+  });
+
+  it('should validate profile with 10-digit phone', () => {
+    const phoneProfile = {
+      ...baseProfile,
+      phone: '6901234567',
+    };
+    const result = UserProfileSchema.safeParse(phoneProfile);
+    expect(result.success).toBe(true);
+  });
+
+  it('should reject profile with short fullName', () => {
+    const invalidProfile = {
+      ...baseProfile,
+      fullName: 'J',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('fullName');
+      expect(result.error.issues[0].message).toContain('at least 2 characters');
     }
   });
 
-  it('should reject profile with missing fullName', () => {
+  it('should reject profile with fullName containing numbers', () => {
     const invalidProfile = {
-      fullName: '',
-      fathersName: 'George Doe',
-      email: 'john.doe@example.com',
+      ...baseProfile,
+      fullName: 'John123',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('fullName');
+      expect(result.error.issues[0].message).toContain('Greek or Latin letters only');
+    }
+  });
+
+  it('should reject profile with fullName containing special characters', () => {
+    const invalidProfile = {
+      ...baseProfile,
+      fullName: 'John-Doe',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('fullName');
+      expect(result.error.issues[0].message).toContain('Greek or Latin letters only');
+    }
+  });
+
+  it('should reject profile with short fathersName', () => {
+    const invalidProfile = {
+      ...baseProfile,
+      fathersName: 'G',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('fathersName');
+      expect(result.error.issues[0].message).toContain('at least 2 characters');
+    }
+  });
+
+  it('should reject profile with fathersName containing numbers', () => {
+    const invalidProfile = {
+      ...baseProfile,
+      fathersName: 'George123',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('fathersName');
+      expect(result.error.issues[0].message).toContain('Greek or Latin letters only');
+    }
+  });
+
+  it('should reject profile with invalid email format', () => {
+    const invalidProfile = {
+      ...baseProfile,
+      email: 'invalid-email',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('email');
+      expect(result.error.issues[0].message).toContain('valid email');
+    }
+  });
+
+  it('should reject profile with non-Greek phone', () => {
+    const invalidProfile = {
+      ...baseProfile,
       phone: '+1 555-123-4567',
-      identityNumber: 'AB123456',
-      employeeId: 'EMP001',
-      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
-      department: 'Engineering',
-      position: 'Senior Developer',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('phone');
+      expect(result.error.issues[0].message).toContain('Greek phone number');
+    }
+  });
+
+  it('should reject profile with phone containing spaces', () => {
+    const invalidProfile = {
+      ...baseProfile,
+      phone: '690 123 4567',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('phone');
+      expect(result.error.issues[0].message).toContain('Greek phone number');
+    }
+  });
+
+  it('should reject profile with phone containing dashes', () => {
+    const invalidProfile = {
+      ...baseProfile,
+      phone: '690-123-4567',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('phone');
+      expect(result.error.issues[0].message).toContain('Greek phone number');
+    }
+  });
+
+  it('should reject profile with invalid identity number', () => {
+    const invalidProfile = {
+      ...baseProfile,
+      identityNumber: 'INVALID123',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('identityNumber');
+      expect(result.error.issues[0].message).toContain('Greek ADT');
+      expect(result.error.issues[0].message).toContain('AMKA');
+      expect(result.error.issues[0].message).toContain('Passport');
+    }
+  });
+
+  it('should reject profile with empty fullName', () => {
+    const invalidProfile = {
+      ...baseProfile,
+      fullName: '',
     };
     const result = UserProfileSchema.safeParse(invalidProfile);
     expect(result.success).toBe(false);
@@ -41,37 +384,34 @@ describe('UserProfileSchema', () => {
     }
   });
 
-  it('should reject profile with invalid email format', () => {
+  it('should reject profile with empty fathersName', () => {
     const invalidProfile = {
-      fullName: 'John Doe',
-      fathersName: 'George Doe',
-      email: 'invalid-email',
-      phone: '+1 555-123-4567',
-      identityNumber: 'AB123456',
-      employeeId: 'EMP001',
-      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
-      department: 'Engineering',
-      position: 'Senior Developer',
+      ...baseProfile,
+      fathersName: '',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('fathersName');
+    }
+  });
+
+  it('should reject profile with empty email', () => {
+    const invalidProfile = {
+      ...baseProfile,
+      email: '',
     };
     const result = UserProfileSchema.safeParse(invalidProfile);
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error.issues[0].path).toContain('email');
-      expect(result.error.issues[0].message).toContain('email');
     }
   });
 
-  it('should reject profile with missing phone', () => {
+  it('should reject profile with empty phone', () => {
     const invalidProfile = {
-      fullName: 'John Doe',
-      fathersName: 'George Doe',
-      email: 'john.doe@example.com',
+      ...baseProfile,
       phone: '',
-      identityNumber: 'AB123456',
-      employeeId: 'EMP001',
-      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
-      department: 'Engineering',
-      position: 'Senior Developer',
     };
     const result = UserProfileSchema.safeParse(invalidProfile);
     expect(result.success).toBe(false);
@@ -80,17 +420,22 @@ describe('UserProfileSchema', () => {
     }
   });
 
+  it('should reject profile with empty identityNumber', () => {
+    const invalidProfile = {
+      ...baseProfile,
+      identityNumber: '',
+    };
+    const result = UserProfileSchema.safeParse(invalidProfile);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].path).toContain('identityNumber');
+    }
+  });
+
   it('should accept profile with missing employeeId', () => {
     const validProfile = {
-      fullName: 'John Doe',
-      fathersName: 'George Doe',
-      email: 'john.doe@example.com',
-      phone: '+1 555-123-4567',
-      identityNumber: 'AB123456',
+      ...baseProfile,
       employeeId: '',
-      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
-      department: 'Engineering',
-      position: 'Senior Developer',
     };
     const result = UserProfileSchema.safeParse(validProfile);
     expect(result.success).toBe(true);
@@ -101,15 +446,8 @@ describe('UserProfileSchema', () => {
 
   it('should reject profile with missing department', () => {
     const invalidProfile = {
-      fullName: 'John Doe',
-      fathersName: 'George Doe',
-      email: 'john.doe@example.com',
-      phone: '+1 555-123-4567',
-      identityNumber: 'AB123456',
-      employeeId: 'EMP001',
-      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
+      ...baseProfile,
       department: '',
-      position: 'Senior Developer',
     };
     const result = UserProfileSchema.safeParse(invalidProfile);
     expect(result.success).toBe(false);
@@ -120,14 +458,7 @@ describe('UserProfileSchema', () => {
 
   it('should reject profile with missing position', () => {
     const invalidProfile = {
-      fullName: 'John Doe',
-      fathersName: 'George Doe',
-      email: 'john.doe@example.com',
-      phone: '+1 555-123-4567',
-      identityNumber: 'AB123456',
-      employeeId: 'EMP001',
-      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
-      department: 'Engineering',
+      ...baseProfile,
       position: '',
     };
     const result = UserProfileSchema.safeParse(invalidProfile);
@@ -137,53 +468,10 @@ describe('UserProfileSchema', () => {
     }
   });
 
-  it('should accept profile with unicode characters in name', () => {
-    const validProfile = {
-      fullName: 'Jürgen Müller',
-      fathersName: 'George Müller',
-      email: 'juergen@example.com',
-      phone: '+49 123 456789',
-      identityNumber: 'AB123456',
-      employeeId: 'EMP002',
-      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
-      department: 'Marketing',
-      position: 'Manager',
-    };
-    const result = UserProfileSchema.safeParse(validProfile);
-    expect(result.success).toBe(true);
-  });
-
-  it('should reject profile with extra fields', () => {
-    const profileWithExtraField = {
-      fullName: 'John Doe',
-      fathersName: 'George Doe',
-      email: 'john.doe@example.com',
-      phone: '+1 555-123-4567',
-      identityNumber: 'AB123456',
-      employeeId: 'EMP001',
-      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
-      department: 'Engineering',
-      position: 'Senior Developer',
-      extraField: 'should be stripped',
-    } as any;
-    const result = UserProfileSchema.safeParse(profileWithExtraField);
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect('extraField' in result.data).toBe(false);
-    }
-  });
-
   it('should reject profile with missing companyName', () => {
     const invalidProfile = {
-      fullName: 'John Doe',
-      fathersName: 'George Doe',
-      email: 'john.doe@example.com',
-      phone: '+1 555-123-4567',
-      identityNumber: 'AB123456',
-      employeeId: 'EMP001',
+      ...baseProfile,
       companyName: '',
-      department: 'Engineering',
-      position: 'Senior Developer',
     };
     const result = UserProfileSchema.safeParse(invalidProfile);
     expect(result.success).toBe(false);
@@ -192,42 +480,15 @@ describe('UserProfileSchema', () => {
     }
   });
 
-  it('should validate profile with companyName', () => {
-    const validProfile = {
-      fullName: 'John Doe',
-      fathersName: 'George Doe',
-      email: 'john.doe@example.com',
-      phone: '+1 555-123-4567',
-      identityNumber: 'AB123456',
-      employeeId: 'EMP001',
-      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
-      department: 'Engineering',
-      position: 'Senior Developer',
-    };
-    const result = UserProfileSchema.safeParse(validProfile);
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data.companyName).toBe('ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε');
-    }
-  });
-
-  it('should strip employerName field if provided', () => {
-    const profileWithEmployerName = {
-      fullName: 'John Doe',
-      fathersName: 'George Doe',
-      email: 'john.doe@example.com',
-      phone: '+1 555-123-4567',
-      identityNumber: 'AB123456',
-      employeeId: 'EMP001',
-      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
-      department: 'Engineering',
-      position: 'Senior Developer',
-      employerName: 'Should be stripped',
+  it('should reject profile with extra fields', () => {
+    const profileWithExtraField = {
+      ...baseProfile,
+      extraField: 'should be stripped',
     } as any;
-    const result = UserProfileSchema.safeParse(profileWithEmployerName);
+    const result = UserProfileSchema.safeParse(profileWithExtraField);
     expect(result.success).toBe(true);
     if (result.success) {
-      expect('employerName' in result.data).toBe(false);
+      expect('extraField' in result.data).toBe(false);
     }
   });
 });
@@ -237,8 +498,8 @@ describe('LeaveRequestSchema', () => {
     fullName: 'John Doe',
     fathersName: 'George Doe',
     email: 'john.doe@example.com',
-    phone: '+1 555-123-4567',
-    identityNumber: 'AB123456',
+    phone: '+306901234567',
+    identityNumber: 'AB1234567',
     employeeId: 'EMP001',
     companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
     department: 'Engineering',

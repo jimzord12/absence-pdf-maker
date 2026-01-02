@@ -201,42 +201,46 @@
       "description": "Update import/export for new user information. Added default Company Name 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε' when importing profiles with empty companyName field."
     },
     "048-fix-issue-009-datepicker-locale": {
-      "state": "review_fail",
+      "state": "cancelled",
       "lastUpdated": "2025-12-31T13:15:00Z",
       "description": "Update DatePicker to match selected locale format. Created locale store (locale.store.ts), LocaleSelector component (LocaleSelector.tsx), updated formatDate() function (dates.ts), added locale support to page header (LeaveRequestPage.tsx), updated ReviewAndGenerate date display (ReviewAndGenerate.tsx). Updated DateRangeField to accept locale prop and pass to react-day-picker component. react-day-picker v9 supports locale prop from date-fns/locale. Component integration in progress - need to properly integrate DateRangeField with existing LeaveRequestForm structure to pass control from form."
     },
-      "049-fix-issue-010-signature-persistence": {
-        "state": "committed",
-        "lastUpdated": "2026-01-01T10:16:00Z",
-        "description": "Fix signature persistence in store. Updated store partialize function (leaveRequest.store.ts line 166) to include 'signature: state.signature' so signature data persists to localStorage."
-      },
-      "050-fix-issue-011-user-info-changes": {
-        "state": "committed",
-        "lastUpdated": "2025-12-31T13:15:00Z",
-        "description": "Remove duplicate Employer ID and Employer Name fields from Employment Details section and set default Company Name to 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε'."
-      },
-      "051-fix-issue-012-personal-details-validation": {
-        "state": "not_started",
-        "lastUpdated": "2025-12-31T15:00:00Z",
-        "description": "Implement comprehensive field validation for Personal Details section, including Greek Identity Number (ADT) format validation with support for multiple valid formats."
-      },
-      "052-fix-issue-013-employment-details-validation": {
-        "state": "not_started",
-        "lastUpdated": "2025-12-31T15:00:00Z",
-        "description": "Implement validation for Employment Details section fields, ensuring Company Name, Department, and Position are required with appropriate error handling."
-      },
-      "053-fix-issue-014-leave-details-broken": {
-        "state": "committed",
-        "lastUpdated": "2026-01-01T10:18:00Z",
-        "description": "Fix completely broken Date Range picker layout and ensure Reason field is visible and functional in Leave Details section. DateRangeField now uses useFormContext for reactive form updates. FormProvider added to LeaveRequestForm to provide form context to child components. Date Range Summary updates correctly when dates are selected."
-      },
-      "054-fix-issue-015-datepicker-styling-broken": {
-        "state": "committed",
-        "lastUpdated": "2026-01-01T10:17:00Z",
-        "description": "Fix DateRangeField calendar layout that displays days vertically in a single column instead of expected 7-column weekly grid. Root cause is using react-day-picker v8 API styling on v9. Migrated from v8 styling API to v9 by importing react-day-picker/style.css, removing DAY_PICKER_STYLES object, removing styles prop, keeping modifiersStyles for holiday/weekend highlighting, wrapping console.logs in DEV check, removing as any type assertions, and removing unnecessary useMemo.",
-        "blockedBy": []
-      }
+    "049-fix-issue-010-signature-persistence": {
+      "state": "committed",
+      "lastUpdated": "2026-01-01T10:16:00Z",
+      "description": "Fix signature persistence in store. Updated store partialize function (leaveRequest.store.ts line 166) to include 'signature: state.signature' so signature data persists to localStorage."
+    },
+    "050-fix-issue-011-user-info-changes": {
+      "state": "committed",
+      "lastUpdated": "2025-12-31T13:15:00Z",
+      "description": "Remove duplicate Employer ID and Employer Name fields from Employment Details section and set default Company Name to 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε'."
+    },
+    "051-fix-issue-012-personal-details-validation": {
+      "state": "committed",
+      "lastUpdated": "2026-01-01T14:30:00Z",
+      "description": "Implement comprehensive field validation for Personal Details section, including Greek Identity Number (ADT) format validation with support for multiple valid formats."
+    },
+    "052-fix-issue-013-employment-details-validation": {
+      "state": "not_started",
+      "lastUpdated": "2025-12-31T15:00:00Z",
+      "description": "Implement validation for Employment Details section fields, ensuring Company Name, Department, and Position are required with appropriate error handling."
+    },
+    "053-fix-issue-014-leave-details-broken": {
+      "state": "committed",
+      "lastUpdated": "2026-01-01T10:18:00Z",
+      "description": "Fix completely broken Date Range picker layout and ensure Reason field is visible and functional in Leave Details section. DateRangeField now uses useFormContext for reactive form updates. FormProvider added to LeaveRequestForm to provide form context to child components. Date Range Summary updates correctly when dates are selected."
+    },
+    "054-fix-issue-015-datepicker-styling-broken": {
+      "state": "committed",
+      "lastUpdated": "2026-01-01T10:17:00Z",
+      "description": "Fix DateRangeField calendar layout that displays days vertically in a single column instead of expected 7-column weekly grid. Root cause is using react-day-picker v8 API styling on v9. Migrated from v8 styling API to v9 by importing react-day-picker/style.css, removing DAY_PICKER_STYLES object, removing styles prop, keeping modifiersStyles for holiday/weekend highlighting, wrapping console.logs in DEV check, removing as any type assertions, and removing unnecessary useMemo.",
+      "blockedBy": []
+    },
+    "055-update-tests-for-new-schema": {
+      "state": "committed",
+      "lastUpdated": "2026-01-01T14:30:00Z",
+      "description": "Update outdated test files to match new Personal Details schema structure and validation requirements introduced in Task 051."
     }
-  }
-
+   }
+}
 
