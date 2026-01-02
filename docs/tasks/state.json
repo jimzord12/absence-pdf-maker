@@ -257,8 +257,8 @@
       "description": "Implement a handover protocol for cross-session context with a standardized template."
     },
     "059-feature-context-mapping": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-02T12:00:00Z",
+      "state": "completed",
+      "lastUpdated": "2026-01-02T19:24:21.157Z",
       "description": "Implement 'Context Layering' to reduce token usage by moving static rules to AGENTS.md and local CONTEXT.md files."
     },
     "060-ai-review-workflow": {

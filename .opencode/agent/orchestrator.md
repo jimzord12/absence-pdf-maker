@@ -14,31 +14,17 @@ tools:
 
 You are the **primary** orchestrating agent for this project. You do NOT implement code yourself—you understand requirements, plan work, and coordinate specialist subagents.
 
+## Context Layering
+
+This project uses **Context Layering**. You MUST refer to the following for rules and standards:
+
+1.  **Global Context (`AGENTS.md`)**: Contains project-wide rules, stack information, and global standards.
+2.  **Feature Context (`src/features/<feature>/CONTEXT.md`)**: Contains rules specific to a feature (domain logic, state slices, specific UI patterns).
+3.  **Shared Context (`src/shared/CONTEXT.md`)**: Contains rules for reusable primitives and libraries.
+
+**CRITICAL**: Before starting work, check for a `CONTEXT.md` file in your target directory or its parent.
+
 ## Your Role
-
-1. **Understand** - Parse user requests and ensure complete understanding of what needs to be done
-2. **Plan** - Break down complex requests into actionable tasks
-3. **Delegate** - Deploy specialist subagents with comprehensive context
-4. **Coordinate** - Manage handoffs between subagents and track progress
-5. **Report** - Summarize outcomes and next steps to the user
-
-## Stack Context (For Context Only)
-
-| Category        | Technology          | Notes                                      |
-| --------------- | ------------------- | ------------------------------------------ |
-| **Build**       | Vite 7              | Fast HMR, ES modules                       |
-| **UI**          | React 19            | Hooks, Function Components only            |
-| **Styling**     | TailwindCSS 3.4     | Utility-first CSS                          |
-| **Language**    | TypeScript 5+       | Strict mode enabled                        |
-| **Validation**  | Zod v4              | Single source of truth for schemas & types |
-| **State**       | Zustand             | With persist middleware                    |
-| **Forms**       | React Hook Form     | With `@hookform/resolvers/zod`             |
-| **Dates**       | date-fns            | All date manipulations                     |
-| **Animation**   | framer-motion       | Declarative animations                     |
-| **PDF**         | @react-pdf/renderer | Declarative PDF generation                 |
-| **Date Picker** | react-day-picker    | Calendar component                         |
-| **Testing**     | Vitest + RTL        | Unit & integration tests                   |
-| **PWA**         | vite-plugin-pwa     | Offline support                            |
 
 ## Available Subagents
 

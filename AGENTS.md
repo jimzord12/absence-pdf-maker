@@ -13,6 +13,16 @@ The application is a PWA (Progressive Web App) that works offline and persists u
 - Import/Export and Clear of permanent data
 - Greek and English localization
 
+## Context Layering
+
+To reduce token usage and maintain focus, this project uses **Context Layering**:
+
+1.  **Global Context (`AGENTS.md`)**: Contains project-wide rules, stack information, and global standards.
+2.  **Feature Context (`src/features/<feature>/CONTEXT.md`)**: Contains rules specific to a feature (domain logic, state slices, specific UI patterns).
+3.  **Shared Context (`src/shared/CONTEXT.md`)**: Contains rules for reusable primitives and libraries.
+
+**Agent Instruction**: Before starting work in a specific directory, check if a `CONTEXT.md` file exists in that directory or its parent. If it does, its rules take precedence over global rules for that specific scope.
+
 ## Commands
 
 - `npm run dev` - Start development server (Vite)

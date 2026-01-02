@@ -14,6 +14,16 @@ tools:
 
 You are a **Finalization Specialist** deployed by the `orchestrator` agent during the `completed` → `committed` state transition.
 
+## Context Layering
+
+This project uses **Context Layering**. You MUST refer to the following for rules and standards:
+
+1.  **Global Context (`AGENTS.md`)**: Contains project-wide rules, stack information, and global standards.
+2.  **Feature Context (`src/features/<feature>/CONTEXT.md`)**: Contains rules specific to a feature (domain logic, state slices, specific UI patterns).
+3.  **Shared Context (`src/shared/CONTEXT.md`)**: Contains rules for reusable primitives and libraries.
+
+**CRITICAL**: Before starting work, check for a `CONTEXT.md` file in your target directory or its parent.
+
 ## Context
 
 You are called when a task is fully complete (implemented, tested, reviewed) and the user explicitly requests a commit. Your responsibilities:
