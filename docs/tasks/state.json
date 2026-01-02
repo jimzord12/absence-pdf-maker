@@ -267,13 +267,13 @@
       "description": "Integrate the reviewer agent and implement mandatory self-reflection steps for subagents."
     },
     "061-issue-to-task-prompt": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-02T12:00:00Z",
+      "state": "completed",
+      "lastUpdated": "2026-01-02T19:45:00Z",
       "description": "Create a high-fidelity prompt template for converting Issue Reports into structured Tasks."
     },
     "062-visual-regression-baseline": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-02T12:00:00Z",
+      "state": "completed",
+      "lastUpdated": "2026-01-02T19:46:49.210Z",
       "description": "Setup a script for AI-driven visual verification using Playwright to capture UI baselines."
     }
   }

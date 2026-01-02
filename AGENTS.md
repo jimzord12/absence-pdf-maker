@@ -206,7 +206,7 @@ To ensure efficient and autonomous operation, use the following heuristics to se
 
 **Triggers:**
 
-- **Visual Verification:** When a task involves UI changes, layout fixes, or styling updates.
+- **Visual Verification:** When a task involves UI changes, layout fixes, or styling updates. **Requirement:** Run `npm run capture-baselines` before and after changes, and use `ui_diff_check` to verify the visual impact.
 - **Runtime Debugging:** When investigating console errors, network request failures, or state synchronization issues in the browser.
 - **Form Automation:** When testing complex form flows, validation triggers, or multi-step interactions.
 - **Performance Analysis:** When a task specifically mentions performance bottlenecks or slow UI responsiveness.
@@ -215,6 +215,7 @@ To ensure efficient and autonomous operation, use the following heuristics to se
 
 - Use **Chrome DevTools** for deep debugging, performance tracing, and real-time DOM/CSS inspection.
 - Use **Playwright** for automated end-to-end flows, cross-browser verification, and repeatable UI tests.
+- Use **ZAI (`ui_diff_check`)** to compare screenshots captured via `npm run capture-baselines` to ensure no unintended visual regressions.
 
 ### 2. Library & Framework Research (Context7)
 

@@ -32,8 +32,12 @@ ELSE:
    - Parse `docs/tasks/state.json` to get task states
 
 2. **Read open issues:**
+
    - List all files in `docs/issues/open/`
    - Extract issue IDs from filenames (format: `XXX-*.md`)
+
+3. **Read Feature Observations**:
+   - Read `docs/tasks/TODO.md` to see if any issues are documented there but not yet converted to formal reports or tasks.
 
 ### Step 3: Identify Issues to Convert
 
@@ -112,6 +116,7 @@ For each issue to convert:
 ```
 
 6. **Add task to state.json:**
+
    ```json
    "{task_identifier}": {
      "state": "not_started",
@@ -120,6 +125,9 @@ For each issue to convert:
      "blockedBy": []
    }
    ```
+
+7. **Update TODO.md (Optional):**
+   - If the issue was listed in `docs/tasks/TODO.md`, add a reference to the new task ID next to the issue heading (e.g., `## Issue #01 [Task 047]`).
 
 ### Step 5: Handle Dependencies
 

@@ -31,6 +31,7 @@ See `docs/templates/ISSUE-TEMPLATE.md` for the standard issue report format.
 3. **Create a Fix Plan:**
 
    - Based on the analysis, outline a plan to address the issue.
+   - **Complexity Check**: If the fix requires changes to multiple files or complex logic, suggest converting the issue to a formal task using `/issue-to-task` instead of fixing it directly.
    - This may include code changes, configuration updates, or other necessary actions.
 
 4. **Pasue and Wait for Confirmation:**

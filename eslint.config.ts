@@ -7,7 +7,7 @@ import tseslint from 'typescript-eslint';
 
 export default defineConfig(
   // 1. Global Ignores (Must be first object without other keys)
-  { ignores: ['dist'] },
+  { ignores: ['dist', 'dev-dist'] },
 
   // 2. Base Recommended Configs
   eslint.configs.recommended,

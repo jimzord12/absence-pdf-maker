@@ -312,9 +312,9 @@ Create a high-fidelity prompt template for converting Issue Reports into structu
 
 **Acceptance Criteria:**
 
-- [ ] `docs/prompts/003-issue-to-task.txt` created.
-- [ ] Prompt handles parsing "Technical Details" and "Requirements" from issue reports.
-- [ ] Output format matches the existing `TASKS.md` structure.
+- [x] `docs/prompts/003-issue-to-task.txt` created.
+- [x] Prompt handles parsing "Technical Details" and "Requirements" from issue reports.
+- [x] Output format matches the existing `TASKS.md` structure.
 
 ---
 
@@ -331,7 +331,7 @@ Setup a script for AI-driven visual verification using Playwright to capture UI 
 
 **Acceptance Criteria:**
 
-- [ ] `scripts/capture-baselines.ts` created.
-- [ ] Captures screenshots of Personal Details, Employment Details, and Leave Details.
-- [ ] `AGENTS.md` updated to require a `ui_diff_check` after UI modifications.
+- [x] `scripts/capture-baselines.ts` created.
+- [x] Captures screenshots of Personal Details, Employment Details, and Leave Details.
+- [x] `AGENTS.md` updated to require a `ui_diff_check` after UI modifications.
 

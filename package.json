@@ -10,7 +10,8 @@
     "test": "vitest",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "task": "jiti ./scripts/task-cli.ts"
+    "task": "jiti ./scripts/task-cli.ts",
+    "capture-baselines": "jiti ./scripts/capture-baselines.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@playwright/test": "^1.57.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
     "@testing-library/user-event": "^14.6.1",
@@ -44,6 +46,7 @@
     "globals": "^16.5.0",
     "jiti": "^2.6.1",
     "jsdom": "^27.3.0",
+    "playwright": "^1.57.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.19",
     "typescript": "~5.9.3",
