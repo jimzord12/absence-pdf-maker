@@ -186,3 +186,13 @@ export const LeaveRequestSchema = z
     }
   );
 
+/**
+ * Schema for exporting/importing user profile with optional signature data.
+ * This includes all UserProfileSchema fields plus optional signatureDataUrl.
+ * The signature is optional to maintain backward compatibility with old exports.
+ */
+export const ProfileExportSchema = z.object({
+  ...UserProfileSchema.shape,
+  signatureDataUrl: z.string().optional(),
+});
+
