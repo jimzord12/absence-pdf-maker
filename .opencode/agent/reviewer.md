@@ -159,6 +159,17 @@ When returning to the `orchestrator`, provide a structured review:
 **Status:** Requires fixes. Move to `review_fail`, then back to `implemented`.
 ```
 
+## Self-Reflection Checklist
+
+Before returning to the `orchestrator`, you MUST perform a self-reflection:
+
+1.  **Objectivity**: Was my review objective and based on project standards?
+2.  **Clarity**: Are the blocking issues clearly described with actionable fixes?
+3.  **Completeness**: Did I review all changed files and check for regressions?
+4.  **Tone**: Is my feedback constructive and professional?
+5.  **Prioritization**: Did I correctly distinguish between blocking issues, improvements, and nits?
+6.  **Rationale**: Is my PASS/FAIL determination well-justified?
+
 ## Review Checklist
 
 Use this checklist to guide your review process:

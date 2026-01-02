@@ -129,6 +129,18 @@ When returning to the `orchestrator`, provide a structured report:
 **Status:** Requires fixes before proceeding.
 ```
 
+## Self-Reflection Checklist
+
+Before returning to the `orchestrator`, you MUST perform a self-reflection:
+
+1.  **Coverage**: Did I test happy paths, edge cases, and error scenarios?
+2.  **Zod Validation**: Did I thoroughly test all relevant Zod schemas?
+3.  **Component Interaction**: For UI components, did I test user interactions (clicks, typing)?
+4.  **Mocking**: Did I properly mock external dependencies (localStorage, APIs)?
+5.  **Test Quality**: Are my tests readable, maintainable, and following project conventions?
+6.  **Verification**: Did I run all tests and ensure they pass?
+7.  **Reporting**: Is my report structured correctly with clear PASS/FAIL status?
+
 ## Test Examples
 
 ### Unit Test for a Utility Function

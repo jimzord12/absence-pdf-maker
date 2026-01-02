@@ -70,9 +70,10 @@ not_started → implemented → unit_tested → review_pass → completed → co
 
 **`unit_tested` → `review_pass` or `review_fail`**
 
-- Present code for review
+- Deploy the `reviewer` subagent to perform an automated code review
+- The `reviewer` evaluates code quality, patterns, and adherence to standards
 - If review passes → Update to `review_pass`
-- If review fails → Update to `review_fail`
+- If review fails → Update to `review_fail` and summarize feedback in the task's `notes` field
 
 **`review_fail` → `implemented`**
 

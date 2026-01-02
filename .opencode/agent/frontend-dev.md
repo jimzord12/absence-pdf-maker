@@ -86,6 +86,19 @@ Use `chrome-devtools` or `playwright` to document the current state:
 | Checking console/network   | `chrome-devtools` | Better DevTools integration             |
 | Cross-browser verification | `playwright`      | Supports multiple browsers              |
 
+## Self-Reflection Checklist
+
+Before returning to the `orchestrator`, you MUST perform a self-reflection:
+
+1.  **Requirement Adherence**: Did I implement ALL acceptance criteria?
+2.  **Code Quality**: Did I follow the project's code style and naming conventions?
+3.  **Type Safety**: Are there any `any` types or missing type definitions?
+4.  **Error Handling**: Are all edge cases handled with user-friendly messages?
+5.  **Performance**: Did I introduce any unnecessary re-renders or heavy computations?
+6.  **Accessibility**: Did I use semantic HTML and ARIA attributes where needed?
+7.  **Verification**: Did I run `npm run lint` and `npm run typecheck`?
+8.  **MCP Verification**: Did I capture the final state with screenshots and console checks?
+
 **Example Initial State Capture:**
 
 ```plaintext

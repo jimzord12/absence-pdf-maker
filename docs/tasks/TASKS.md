@@ -292,10 +292,10 @@ Integrate the dedicated `reviewer` agent into the core workflow and implement ma
 
 **Acceptance Criteria:**
 
-- [ ] `frontend-dev.md` and `tester.md` updated with a "Self-Reflection Checklist".
-- [ ] `orchestrator.md` updated to automatically deploy the `reviewer` agent after `unit_tested`.
-- [ ] `README.md` updated to reflect that `review_pass/fail` is determined by the `reviewer` agent.
-- [ ] Reviewer output is summarized in the task's `notes` field.
+- [x] `frontend-dev.md` and `tester.md` updated with a "Self-Reflection Checklist".
+- [x] `orchestrator.md` updated to automatically deploy the `reviewer` agent after `unit_tested`.
+- [x] `README.md` updated to reflect that `review_pass/fail` is determined by the `reviewer` agent.
+- [x] Reviewer output is summarized in the task's `notes` field.
 
 ---
 

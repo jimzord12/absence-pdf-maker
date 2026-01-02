@@ -148,7 +148,7 @@ When the `tester` returns with passing tests:
 1. Update `docs/tasks/state.json`:
    - Change state from `implemented` to `unit_tested`
    - Update `lastUpdated` timestamp
-2. Proceed to Review
+2. **Automatically deploy the `reviewer` agent** to verify code quality.
 
 ### Phase 6: Deploy Reviewer
 
@@ -180,8 +180,8 @@ Provide structured feedback:
 
 When the `reviewer` returns:
 
-- **If PASS**: Update state to `review_pass`, then `completed`
-- **If FAIL**: Update state to `review_fail`, then delegate fixes back to `frontend-developer`
+- **If PASS**: Update state to `review_pass`, then `completed`. Summarize key positive feedback in the task's `notes` field.
+- **If FAIL**: Update state to `review_fail`, then delegate fixes back to `frontend-developer`. **MUST** summarize blocking issues in the task's `notes` field using the `npm run task` CLI.
 
 ### Phase 7: Completion
 
