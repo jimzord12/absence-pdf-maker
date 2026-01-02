@@ -31,9 +31,12 @@ describe('PersonalDetailsSection', () => {
     useLeaveRequestStore.setState({
       profile: {
         fullName: '',
+        fathersName: '',
         email: '',
         phone: '',
+        identityNumber: '',
         employeeId: '',
+        companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
         department: '',
         position: '',
       },
@@ -42,6 +45,7 @@ describe('PersonalDetailsSection', () => {
         startDate: null,
         endDate: null,
         reason: '',
+        leaveAllowance: false,
       },
       signature: {
         signatureDataUrl: '',
@@ -688,7 +692,7 @@ describe('PersonalDetailsSection', () => {
       }
     });
 
-    it('should render in correct order: Full Name, Email, Phone', () => {
+    it('should render in correct order: Full Name, Father\'s Name, Identity Number, Email, Phone', () => {
       render(
         <FormWrapper>
           <PersonalDetailsSection />
@@ -698,8 +702,10 @@ describe('PersonalDetailsSection', () => {
       const inputs = screen.getAllByRole('textbox');
 
       expect(inputs[0]).toHaveAttribute('placeholder', 'Enter your full name');
-      expect(inputs[1]).toHaveAttribute('placeholder', 'your.email@company.com');
-      expect(inputs[2]).toHaveAttribute('placeholder', '+1 (555) 123-4567');
+      expect(inputs[1]).toHaveAttribute('placeholder', 'Enter father\'s name');
+      expect(inputs[2]).toHaveAttribute('placeholder', 'Enter identity number');
+      expect(inputs[3]).toHaveAttribute('placeholder', 'your.email@company.com');
+      expect(inputs[4]).toHaveAttribute('placeholder', '+1 (555) 123-4567');
     });
 
     it('should have focusable input fields', () => {

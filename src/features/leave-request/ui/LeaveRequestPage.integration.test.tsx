@@ -73,9 +73,12 @@ const clearAllData = () => {
   useLeaveRequestStore.setState(() => ({
     profile: {
       fullName: '',
+      fathersName: '',
       email: '',
       phone: '',
+      identityNumber: '',
       employeeId: '',
+      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
       department: '',
       position: '',
     },
@@ -84,6 +87,7 @@ const clearAllData = () => {
       startDate: null,
       endDate: null,
       reason: '',
+      leaveAllowance: false,
     },
     signature: {
       signatureDataUrl: '',
@@ -221,9 +225,12 @@ describe('Integration Tests - User Flows', () => {
       // Pre-populate localStorage with user profile
       const savedProfile: UserProfile = {
         fullName: 'Jane Smith',
+        fathersName: 'Maria Smith',
         email: 'jane.smith@company.com',
-        phone: '+1 (555) 987-6543',
+        phone: '6901234567',
+        identityNumber: 'ΑΒΓ54321',
         employeeId: 'EMP-67890',
+        companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
         department: 'Marketing',
         position: 'Marketing Manager',
       };
@@ -262,8 +269,8 @@ describe('Integration Tests - User Flows', () => {
         fullName: 'Alice Johnson',
         fathersName: 'James Johnson',
         email: 'alice.j@company.com',
-        phone: '+1 (555) 555-1234',
-        identityNumber: 'AL789012',
+        phone: '6901234567',
+        identityNumber: 'ΑΒΓ78901',
         employeeId: 'EMP-99999',
         companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
         department: 'Finance',
@@ -304,9 +311,12 @@ describe('Integration Tests - User Flows', () => {
       act(() => {
         useLeaveRequestStore.getState().setProfile({
           fullName: 'Test User',
+          fathersName: 'John Doe',
           email: 'test@company.com',
-          phone: '+1 (555) 000-0000',
+          phone: '6901234567',
+          identityNumber: 'ΑΒΓ12345',
           employeeId: 'EMP-TEST',
+          companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
           department: 'Test Dept',
           position: 'Test Position',
         });
@@ -340,9 +350,12 @@ describe('Integration Tests - User Flows', () => {
         [
           JSON.stringify({
             fullName: 'Imported User',
+            fathersName: 'George Doe',
             email: 'imported@company.com',
-            phone: '+1 (555) 111-2222',
+            phone: '6901234567',
+            identityNumber: 'ΑΒΓ98765',
             employeeId: 'EMP-IMPORT',
+            companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
             department: 'Imported Dept',
             position: 'Imported Position',
           }),
@@ -355,9 +368,12 @@ describe('Integration Tests - User Flows', () => {
       mockReadFileAsText.mockResolvedValueOnce(
         JSON.stringify({
           fullName: 'Imported User',
+          fathersName: 'George Doe',
           email: 'imported@company.com',
-          phone: '+1 (555) 111-2222',
+          phone: '6901234567',
+          identityNumber: 'ΑΒΓ98765',
           employeeId: 'EMP-IMPORT',
+          companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
           department: 'Imported Dept',
           position: 'Imported Position',
         })
@@ -470,9 +486,12 @@ describe('Integration Tests - User Flows', () => {
       act(() => {
         useLeaveRequestStore.getState().setProfile({
           fullName: 'Test User',
+          fathersName: 'John Doe',
           email: 'test@company.com',
-          phone: '+1 (555) 000-0000',
+          phone: '6901234567',
+          identityNumber: 'ΑΒΓ12345',
           employeeId: 'EMP-TEST',
+          companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
           department: 'Test Dept',
           position: 'Test Position',
         });

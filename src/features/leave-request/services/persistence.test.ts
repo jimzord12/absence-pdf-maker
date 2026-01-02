@@ -68,9 +68,12 @@ describe('persistence', () => {
     it('should throw error when profile is empty', () => {
       const emptyProfile: UserProfile = {
         fullName: '',
+        fathersName: '',
         email: '',
         phone: '',
+        identityNumber: '',
         employeeId: '',
+        companyName: '',
         department: '',
         position: '',
       };
@@ -110,9 +113,12 @@ describe('persistence', () => {
     it('should export successfully with partially filled profile', () => {
       const partialProfile: UserProfile = {
         fullName: 'Jane Smith',
+        fathersName: '',
         email: 'jane@example.com',
         phone: '',
+        identityNumber: '',
         employeeId: '',
+        companyName: '',
         department: 'HR',
         position: '',
       };
@@ -151,9 +157,12 @@ describe('persistence', () => {
   describe('importProfileFromJson', () => {
     const validProfile: UserProfile = {
       fullName: 'John Doe',
+      fathersName: 'George Doe',
       email: 'john.doe@example.com',
-      phone: '123-456-7890',
+      phone: '6901234567',
+      identityNumber: 'ΑΒΓ12345',
       employeeId: 'EMP001',
+      companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
       department: 'Engineering',
       position: 'Software Developer',
     };
@@ -189,8 +198,8 @@ describe('persistence', () => {
           fullName: 'John Doe',
           fathersName: 'George Doe',
           email: 'john.doe@example.com',
-          phone: '123-456-7890',
-          identityNumber: 'AB123456',
+          phone: '6901234567',
+          identityNumber: 'ΑΒΓ12345',
           employeeId: 'EMP001',
           companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
           department: 'Engineering',
@@ -255,9 +264,12 @@ describe('persistence', () => {
       expect(mockSetProfile).toHaveBeenCalledWith(
         expect.objectContaining({
           fullName: 'John Doe',
+          fathersName: 'George Doe',
           email: 'john.doe@example.com',
-          phone: '123-456-7890',
+          phone: '6901234567',
+          identityNumber: 'ΑΒΓ12345',
           employeeId: '',
+          companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
           department: 'Engineering',
           position: 'Software Developer',
         })
@@ -351,9 +363,12 @@ describe('persistence', () => {
       // All fields in UserProfileSchema are required, so this validates that behavior
       const minimalProfile: UserProfile = {
         fullName: 'Min User',
+        fathersName: 'John Doe',
         email: 'min@example.com',
-        phone: '555-1234',
+        phone: '6901234567',
+        identityNumber: 'ΑΒΓ12345',
         employeeId: 'EMP123',
+        companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
         department: 'Sales',
         position: 'Sales Rep',
       };

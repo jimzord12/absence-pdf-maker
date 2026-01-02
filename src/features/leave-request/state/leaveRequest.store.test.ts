@@ -414,6 +414,7 @@ describe('useLeaveRequestStore', () => {
         startDate: null,
         endDate: null,
         reason: '',
+        leaveAllowance: false,
       });
     });
 
@@ -612,9 +613,9 @@ describe('useLeaveRequestStore', () => {
 
         // Verify other state slices are not persisted
         expect(state.leaveDraft).toBeUndefined();
-        expect(state.signature).toBeUndefined();
         expect(state.holidays).toBeUndefined();
         expect(state.ui).toBeUndefined();
+        // Signature is now persisted along with profile
       }
     });
 
@@ -862,7 +863,7 @@ describe('useLeaveRequestStore', () => {
       const store = useLeaveRequestStore.getState();
 
       // The partialize function is defined in the store configuration
-      // partialize: (state) => ({ profile: state.profile })
+      // partialize: (state) => ({ profile: state.profile, signature: state.signature })
 
       // We can verify this works by checking localStorage
       store.setProfile({ fullName: 'Persisted User' });
@@ -873,11 +874,11 @@ describe('useLeaveRequestStore', () => {
 
       if (storedData) {
         const parsed = JSON.parse(storedData);
-        // Only profile should be in stored state
+        // Profile and signature should be in stored state
         expect(parsed.state).toHaveProperty('profile');
         expect(parsed.state.profile.fullName).toBe('Persisted User');
+        expect(parsed.state).toHaveProperty('signature');
         expect(parsed.state).not.toHaveProperty('leaveDraft');
-        expect(parsed.state).not.toHaveProperty('signature');
         expect(parsed.state).not.toHaveProperty('holidays');
         expect(parsed.state).not.toHaveProperty('ui');
       }
