@@ -247,8 +247,8 @@
       "description": "Update AGENTS.md with a 'Tool Selection & Heuristics' section to guide autonomous tool use."
     },
     "057-task-state-automation-cli": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-02T12:00:00Z",
+      "state": "committed",
+      "lastUpdated": "2026-01-02T19:15:31.527Z",
       "description": "Create a Node.js script to automate state.json updates and validate transitions."
     },
     "058-ai-handover-protocol": {
@@ -278,4 +278,3 @@
     }
   }
 }
-

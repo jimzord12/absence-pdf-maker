@@ -231,10 +231,10 @@ Create a Node.js script to automate `state.json` updates. This prevents manual e
 
 **Acceptance Criteria:**
 
-- [ ] Script created at `scripts/task-cli.ts`.
-- [ ] Command `npm run task -- <id> <state>` works.
-- [ ] Updates `lastUpdated` automatically.
-- [ ] Prevents invalid state transitions.
+- [x] Script created at `scripts/task-cli.ts`.
+- [x] Command `npm run task -- <id> <state>` works.
+- [x] Updates `lastUpdated` automatically.
+- [x] Prevents invalid state transitions.
 
 ---
 

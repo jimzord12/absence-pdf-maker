@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "task": "jiti ./scripts/task-cli.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -52,3 +53,4 @@
     "vitest": "^4.0.16"
   }
 }
+
