@@ -145,16 +145,49 @@ Fix DateRangeField calendar layout that displays days vertically in a single col
 
 ---
 
+### 055-update-tests-for-new-schema
+
+**Identifier:** `055-update-tests-for-new-schema`
+
+**Description:**
+Update outdated test files to match new Personal Details schema structure and validation requirements introduced in Task 051.
+
+**Constraints:**
+
+- All tests must pass after updates
+- Must follow project test conventions (AGENTS.md)
+- Test data must include new required fields (fathersName, identityNumber)
+- Test data must use valid Greek phone formats
+- Test expectations must match new component structure
+
+**Acceptance Criteria:**
+
+- [ ] Store tests updated to expect `leaveAllowance: false` in initial state
+- [ ] Store tests updated to expect signature data to be persisted
+- [ ] Persistence tests updated with valid profile data including new fields:
+  - Add `fathersName: 'George Doe'` to test profiles
+  - Add `identityNumber: 'ΑΒΓ12345'` to test profiles
+  - Update phone numbers to valid Greek format (e.g., `6901234567`)
+- [ ] PersonalDetailsSection tests updated to expect 5 fields:
+  - Full Name, Father's Name, Email, Phone, Identity Number
+  - Correct order of fields
+- [ ] Integration tests updated with valid profile data
+- [ ] All updated tests pass
+- [ ] No regressions in previously passing tests
+
+---
+
 ## Summary
 
-Total New Tasks: 4
+Total New Tasks: 5
 
 ### Task Dependencies
 
 Tasks should be completed in this order:
-1. **Task 054** (Critical Priority) - Date Picker UI completely broken, calendar grid not displaying
-2. **Task 053** (Critical Priority) - Leave Details section is completely broken
-3. **Task 051** (High Priority) - Personal Details validation missing
-4. **Task 052** (Medium Priority) - Employment Details validation missing
+1. **Task 055** (High Priority) - Update outdated tests for new schema
+2. **Task 054** (Critical Priority) - Date Picker UI completely broken, calendar grid not displaying
+3. **Task 053** (Critical Priority) - Leave Details section is completely broken
+4. **Task 051** (High Priority) - Personal Details validation missing - **COMPLETED**
+5. **Task 052** (Medium Priority) - Employment Details validation missing
 
-Task 054 blocks users from selecting dates and should be addressed first.
+Task 055 should be completed first to ensure test suite is green.
