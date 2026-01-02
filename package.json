@@ -11,7 +11,9 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "task": "jiti ./scripts/task-cli.ts",
-    "capture-baselines": "jiti ./scripts/capture-baselines.ts"
+    "capture-baselines": "jiti ./scripts/capture-baselines.ts",
+    "vite:list": "ps aux | grep -E 'vite|esbuild' | grep -v grep || echo 'No Vite servers running'",
+    "vite:kill": "pkill -f 'vite' && echo 'Killed all Vite processes' || echo 'No Vite processes found'"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
