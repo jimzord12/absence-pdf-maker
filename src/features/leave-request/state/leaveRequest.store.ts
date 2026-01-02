@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { UserProfile, LeaveType } from '../model/leaveRequest.types';
+import type { LeaveType, UserProfile } from '../model/leaveRequest.types';
 
 // Type definitions for state slices
 
@@ -60,8 +60,10 @@ interface LeaveRequestActions {
 export const initialState: LeaveRequestState = {
   profile: {
     fullName: '',
+    fathersName: '',
     email: '',
     phone: '',
+    identityNumber: '',
     employeeId: '',
     companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
     department: '',
@@ -127,21 +129,19 @@ const customStorage = {
 // TypeScript types are inferred from the store definition
 export const useLeaveRequestStore = create<LeaveRequestState & LeaveRequestActions>()(
   persist(
-    (set) => ({
+    set => ({
       ...initialState,
 
-      setProfile: (profile) =>
-        set((state) => ({ profile: { ...state.profile, ...profile } })),
+      setProfile: profile => set(state => ({ profile: { ...state.profile, ...profile } })),
 
-      setLeaveDraft: (draft) =>
-        set((state) => ({ leaveDraft: { ...state.leaveDraft, ...draft } })),
+      setLeaveDraft: draft => set(state => ({ leaveDraft: { ...state.leaveDraft, ...draft } })),
 
-      setSignature: (signature) =>
-        set((state) => ({ signature: { ...state.signature, ...signature } })),
+      setSignature: signature =>
+        set(state => ({ signature: { ...state.signature, ...signature } })),
 
-      setHolidays: (holidays) => set({ holidays }),
+      setHolidays: holidays => set({ holidays }),
 
-      setUi: (ui) => set((state) => ({ ui: { ...state.ui, ...ui } })),
+      setUi: ui => set(state => ({ ui: { ...state.ui, ...ui } })),
 
       resetFormDrafts: () =>
         set(() => ({
@@ -149,30 +149,29 @@ export const useLeaveRequestStore = create<LeaveRequestState & LeaveRequestActio
         })),
 
       clearSignature: () =>
-        set((state) => ({
+        set(state => ({
           signature: { ...state.signature, signatureDataUrl: '' },
         })),
 
-      clearErrorMessage: () =>
-        set((state) => ({ ui: { ...state.ui, errorMessage: null } })),
+      clearErrorMessage: () => set(state => ({ ui: { ...state.ui, errorMessage: null } })),
 
       toggleSignatureModal: () =>
-        set((state) => ({
+        set(state => ({
           ui: { ...state.ui, isSignatureModalOpen: !state.ui.isSignatureModalOpen },
         })),
 
-      setIsGeneratingPdf: (isGenerating) =>
-        set((state) => ({ ui: { ...state.ui, isGeneratingPdf: isGenerating } })),
+      setIsGeneratingPdf: isGenerating =>
+        set(state => ({ ui: { ...state.ui, isGeneratingPdf: isGenerating } })),
 
-      setTriggerValidation: (trigger) =>
-        set((state) => ({ ui: { ...state.ui, triggerValidation: trigger } })),
+      setTriggerValidation: trigger =>
+        set(state => ({ ui: { ...state.ui, triggerValidation: trigger } })),
     }),
     {
       name: 'leave-request-storage',
-      partialize: (state) => ({ profile: state.profile, signature: state.signature }),
+      partialize: state => ({ profile: state.profile, signature: state.signature }),
       storage: customStorage,
       skipHydration: false,
-      onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => state => {
         if (import.meta.env.DEV) {
           console.log('[Store] Hydration complete', state);
         }
@@ -188,3 +187,4 @@ export type LeaveDraftState = LeaveRequestStore['leaveDraft'];
 export type SignatureState = LeaveRequestStore['signature'];
 export type HolidaysState = LeaveRequestStore['holidays'];
 export type UiState = LeaveRequestStore['ui'];
+

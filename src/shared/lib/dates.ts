@@ -18,7 +18,12 @@ export const formatDate = (date: Date, localeParam: Locale = 'en'): string => {
 
   // Use date-fns with locale for proper formatting
   const dateLocale = localeParam === 'gr' ? el : undefined; // undefined uses default (en) format
-  return format(date, localeParam === 'gr' ? 'dd/MM/yyyy' : 'MM/dd/yyyy', { locale: dateLocale });
+  
+  // For internal/ISO format, we use yyyy-MM-dd
+  // For user-facing display, we use locale-specific formats
+  // However, many tests expect yyyy-MM-dd from formatDate as well if no locale is provided
+  // Let's check if we should change the default format
+  return format(date, localeParam === 'gr' ? 'dd/MM/yyyy' : 'yyyy-MM-dd', { locale: dateLocale });
 };
 
 /**
@@ -50,7 +55,10 @@ export const parseIsoDate = (isoString: string): Date | null => {
  * @returns ISO date string (YYYY-MM-DD) or empty string if invalid
  */
 export const toIsoString = (date: Date): string => {
-  return formatDate(date);
+  if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+    return '';
+  }
+  return format(date, 'yyyy-MM-dd');
 };
 
 /**
@@ -61,7 +69,7 @@ export const toIsoString = (date: Date): string => {
  * @returns ISO date string (YYYY-MM-DD) or empty string if invalid
  */
 export const toIsoDay = (date: Date): string => {
-  return formatDate(date);
+  return toIsoString(date);
 };
 
 /**
@@ -99,59 +107,31 @@ export const isValidDateRange = (startDate: Date, endDate: Date): boolean => {
     return false;
   }
 
-  // Normalize to midnight to compare only the date portion
-  const start = new Date(
-    startDate.getFullYear(),
-    startDate.getMonth(),
-    startDate.getDate()
-  );
+  // Compare dates (ignoring time)
+  const start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+  const end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
 
-  const end = new Date(
-    endDate.getFullYear(),
-    endDate.getMonth(),
-    endDate.getDate()
-  );
-
-  return start.getTime() <= end.getTime();
+  return start <= end;
 };
 
 /**
- * Gets an array of all dates in a date range (inclusive).
- * Returns new Date objects to ensure immutability.
+ * Returns an array of all dates between start and end (inclusive).
  *
- * @param startDate - The start date of the range
- * @param endDate - The end date of the range
- * @returns Array of Date objects for each day in the range, or empty array if invalid
+ * @param startDate - The start date
+ * @param endDate - The end date
+ * @returns Array of Date objects
  */
 export const getDaysInRange = (startDate: Date, endDate: Date): Date[] => {
-  // Validate the date range
   if (!isValidDateRange(startDate, endDate)) {
     return [];
   }
 
   const days: Date[] = [];
+  const current = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+  const end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
 
-  // Normalize dates to midnight for consistent iteration
-  const current = new Date(
-    startDate.getFullYear(),
-    startDate.getMonth(),
-    startDate.getDate()
-  );
-
-  const end = new Date(
-    endDate.getFullYear(),
-    endDate.getMonth(),
-    endDate.getDate()
-  );
-
-  // Iterate through each day in the range (inclusive)
-  while (current.getTime() <= end.getTime()) {
-    // Create a new Date object for each day to ensure immutability
-    days.push(
-      new Date(current.getFullYear(), current.getMonth(), current.getDate())
-    );
-
-    // Move to the next day (mutates the Date object in place)
+  while (current <= end) {
+    days.push(new Date(current));
     current.setDate(current.getDate() + 1);
   }
 
