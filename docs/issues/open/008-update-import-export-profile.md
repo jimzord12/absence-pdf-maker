@@ -71,13 +71,16 @@ Import/export profile functionality needs to be updated to include new user info
 ### Data Structure Changes
 
 **Fields to Remove:**
+
 - Employer ID
 - Employer Name
 
 **Fields to Update:**
+
 - Company Name (should default to "ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε")
 
 **Additional Changes:**
+
 - Any other fields added/modified in issue #011
 
 ## Potential Causes
@@ -105,6 +108,7 @@ Import/export functionality may have been partially updated, leaving some fields
 ### Medium Term (Proper Fix)
 
 1. **Update Persistence Schema:**
+
    - Modify `persistence.ts` to export/import only current fields
    - Remove deprecated fields from the serialized profile
    - Add any new fields to the export logic
@@ -118,6 +122,7 @@ Import/export functionality may have been partially updated, leaving some fields
 ### Long Term (Architectural)
 
 1. **Versioned Profiles:**
+
    - Add version number to profile schema
    - Implement migration logic to handle schema changes
    - Benefits: Backward compatibility and smooth upgrades
@@ -136,7 +141,7 @@ Import/export functionality may have been partially updated, leaving some fields
 
 ## Related Issues
 
-- [#011 - User Info Changes](011-user-info-changes.md) - Defines the field changes that need to be reflected in import/export
+- [#011 - User Info Changes](../closed/011-user-info-changes.md) - Defines the field changes that need to be reflected in import/export
 - Feature: [email-sending-integration](docs/features/email-sending-integration/guide.md) - May use profile data
 
 ## References
@@ -144,3 +149,4 @@ Import/export functionality may have been partially updated, leaving some fields
 - File: `src/features/leave-request/services/persistence.ts`
 - File: `src/features/leave-request/state/leaveRequest.store.ts`
 - File: `src/features/leave-request/model/leaveRequest.schema.ts`
+
