@@ -8,7 +8,8 @@
 
 ## Summary
 
-Personal Details section lacks text wrapping for long user input, and Absence Days calculation section appears only after selecting dates, causing inconsistent UI layout.
+- Personal Details section lacks text wrapping for long user input (Not Completed)
+- Absence Days calculation section appears only after selecting dates, causing inconsistent UI layout. (Done!)
 
 ## Problem Description
 
@@ -88,6 +89,7 @@ Absence Days section may be using conditional rendering (e.g., `{dates && <Secti
 ### Medium Term (Proper Fix)
 
 1. **Text Wrapping:**
+
    - Add proper CSS classes for text wrapping in all input fields
    - Ensure consistent behavior across all text inputs
    - Expected outcome: All text wraps properly within input boxes
@@ -118,3 +120,4 @@ Absence Days section may be using conditional rendering (e.g., `{dates && <Secti
 
 - File: `src/features/leave-request/ui/PersonalDetailsSection.tsx`
 - File: `src/features/leave-request/ui/LeaveDetailsSection.tsx`
+

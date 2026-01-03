@@ -1,6 +1,6 @@
 # Feature Obeservations
 
-## General Observations
+## General Observations (0/4 Done!)
 
 ### Bad Points
 
@@ -15,7 +15,7 @@ Currently many of the Section share the same name which makes it hard to identif
 
 - You should use "react-toastify" to show error messages to the user. For example, when the PDF generation fails, you should show a toast notification with the error message instead of briefly showing a red box ontop of the "Personal Details" Summary section. This will improve the user experience by providing immediate feedback on errors.
 
-## Import, Export & Clear Profile
+## Import, Export & Clear Profile (1/4 Done!)
 
 ### Good Points
 
@@ -44,7 +44,7 @@ Currently many of the Section share the same name which makes it hard to identif
 }
 ```
 
-## Personal Details Section Form
+## Personal Details Section Form (1/1 Done!)
 
 ### Good Points
 
@@ -59,15 +59,15 @@ Currently many of the Section share the same name which makes it hard to identif
 
 ### Bad Points
 
-- Add some reasonable validation for the fields in this section. For example, the Company Name should not be empty, the Position should not be empty, etc.
+- Add some reasonable validation for the fields in this section. For example, the Company Name should not be empty, the Position should not be empty, etc. (Done!)
 
-## Leave Details Section Form
+## Leave Details Section Form (2/3 Done!)
 
 ### Bad Points
 
-- The `src/features/leave-request/ui/DateRangeField.tsx` is not utilizing the `data/holidays.json` to show holidays.
-- The Service for calculating the business days excluding weekends and holidays is missing, also does NOT utilize the `data/holidays.json` file. You need to implement this service to correctly calculate the number of business days between the selected start and end dates, excluding weekends and holidays.
-- There should be a way for the user to clear the selected dates in the Date Range Picker. Currently, once dates are selected, there is no option to clear them and start over. Add a clear button in the some row as "Holidays legend" to allow users to easily reset their date selection.
+- The `src/features/leave-request/ui/DateRangeField.tsx` is not utilizing the `data/holidays.json` to show holidays. (Done!)
+- The Service for calculating the business days excluding weekends and holidays is missing, also does NOT utilize the `data/holidays.json` file. You need to implement this service to correctly calculate the number of business days between the selected start and end dates, excluding weekends and holidays. (Done!)
+- There should be a way for the user to clear the selected dates in the Date Range Picker. Currently, once dates are selected, there is no option to clear them and start over. Add a clear button in the some row as "Holidays legend" to allow users to easily reset their date selection. (Not Completed)
 
 ### Good Points
 
@@ -79,7 +79,9 @@ Currently many of the Section share the same name which makes it hard to identif
 
 - To my suprise, the Signature Modal works perfectly. The signature is captured and displayed correctly in the Read-only Summary. And it also persists across page reloads. I do not know if it is correctly embedded in the generated PDF, as I could not generate one yet, but at least this part works flawlessly.
 
-## Locale Support
+## Locale Support (0/1 Done!)
+
+- Currently, the locale only affects the date display at the Leave Details Summary Section.
 
 ### Good Points
 
@@ -87,20 +89,15 @@ Currently many of the Section share the same name which makes it hard to identif
 
 ### Bad Points
 
-- Currently, the locale only affects the date display at the Leave Details Summary Section.
-- Ideally, it should be able to change the whole app text into Greek and vice versa.
+- (Low Priority) Ideally, it should be able to change the whole app text into Greek and vice versa.
 
-## Personal Details Read-only Summary Section
-
-### Good Points
-
-- I like the UI design
+## Personal Details Read-only Summary Section (0/1 Done!)
 
 ### Bad Points
 
 - The text does NOT wrap. So if I enter a long name or email, it overflows outside the container. Make sure the text wraps correctly within the container boundaries. Just apply the Tailwind CSS class for text wrapping.
 
-## PDF Generation
+## PDF Generation (0/2 Done!)
 
 ### Bad Points
 

@@ -3,7 +3,7 @@
 **Issue ID:** 010
 **Component:** Signature Management
 **Date Discovered:** 2025-12-30
-**Status:** Open
+**Status:** Closed
 **Priority:** Medium
 
 ## Summary
@@ -95,11 +95,11 @@ Check if signature field is included in `partialize` function:
 
 ```typescript
 // If signature is excluded:
-partialize: (state) => ({
+partialize: state => ({
   profile: state.profile,
   leaveDraft: state.leaveDraft,
   // signature: state.signature  <- MISSING?
-})
+});
 ```
 
 ## Potential Causes
@@ -128,6 +128,7 @@ If the signature data is large or many signatures are stored, localStorage quota
 ### Medium Term (Proper Fix)
 
 1. **Include Signature in Persistence:**
+
    - Add signature field to the `partialize` function in store
    - Ensure "Save Signature" updates the persisted store state
    - Expected outcome: Signature persists across sessions
@@ -140,6 +141,7 @@ If the signature data is large or many signatures are stored, localStorage quota
 ### Long Term (Architectural)
 
 1. **External Signature Storage:**
+
    - Store signatures in IndexedDB instead of localStorage (higher quota)
    - Or store signatures on server with authentication
    - Benefits: No localStorage quota issues, better security
@@ -166,3 +168,4 @@ If the signature data is large or many signatures are stored, localStorage quota
 - File: `src/features/leave-request/ui/SignatureModal.tsx`
 - File: `src/features/leave-request/state/leaveRequest.store.ts`
 - Documentation: Zustand persist middleware
+
