@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { zodResolver } from '@hookform/resolvers/zod';
 import isEqual from 'lodash/isEqual';
 import { useEffect, useRef } from 'react';
@@ -6,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { Button } from '../../../../shared/ui';
 import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
-import { useLeaveRequestStore } from '../../state/leaveRequest.store';
+import { useLeaveRequestStore, type LeaveDraftState, type ProfileState } from '../../state/leaveRequest.store';
 import { EmploymentDetailsSection } from '../sections/EmploymentDetailsSection';
 import { LeaveDetailsSection } from '../sections/LeaveDetailsSection';
 import { PersonalDetailsSection } from '../sections/PersonalDetailsSection';
@@ -21,8 +20,8 @@ export const LeaveRequestForm = () => {
   const setUi = useLeaveRequestStore(state => state.setUi);
 
   // Use refs to track previous values and prevent infinite loops
-  const prevProfileRef = useRef(profile);
-  const prevLeaveDraftRef = useRef(leaveDraft);
+  const prevProfileRef = useRef<ProfileState>(profile);
+  const prevLeaveDraftRef = useRef<Partial<LeaveDraftState>>(leaveDraft);
 
   const methods = useForm({
     resolver: zodResolver(LeaveRequestSchema),
@@ -84,7 +83,7 @@ export const LeaveRequestForm = () => {
         reason: leaveDraft.reason || '',
         createdAt: new Date(),
       });
-      prevProfileRef.current = { ...profile } as any;
+      prevProfileRef.current = { ...profile };
       prevLeaveDraftRef.current = {
         leaveType: leaveDraft.leaveType,
         leaveAllowance: leaveDraft.leaveAllowance,
@@ -97,20 +96,21 @@ export const LeaveRequestForm = () => {
   }, [forceFormReset, profile, leaveDraft, reset, setUi]);
 
   // Sync form changes to store using subscription to avoid extra re-renders
+  // Note: React Compiler cannot optimize watch() subscription - this is expected
   useEffect(() => {
     const subscription = watch(value => {
       const { profile: formProfile, ...formLeaveDraft } = value;
 
       // Sync profile if changed
       if (formProfile && !isEqual(formProfile, prevProfileRef.current)) {
-        setProfile({ ...formProfile } as any);
-        prevProfileRef.current = { ...formProfile } as any;
+        setProfile({ ...formProfile });
+        prevProfileRef.current = { ...formProfile };
       }
 
       // Sync leave draft if changed
       const normalizedDraft = {
-        leaveType: formLeaveDraft.leaveType as any,
-        leaveAllowance: formLeaveDraft.leaveAllowance as any,
+        leaveType: formLeaveDraft.leaveType,
+        leaveAllowance: formLeaveDraft.leaveAllowance,
         startDate: formLeaveDraft.startDate || null,
         endDate: formLeaveDraft.endDate || null,
         reason: formLeaveDraft.reason || '',
@@ -177,7 +177,7 @@ export const LeaveRequestForm = () => {
         reason: leaveDraft.reason || '',
         createdAt: currentFormValues.createdAt || new Date(),
       });
-      prevProfileRef.current = { ...profile } as any;
+      prevProfileRef.current = { ...profile };
       prevLeaveDraftRef.current = { ...normalizedStoreDraft };
     }
   }, [profile, leaveDraft, reset, methods, isDirty]);

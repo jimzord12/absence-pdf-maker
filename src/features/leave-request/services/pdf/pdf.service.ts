@@ -1,4 +1,4 @@
-import { pdf } from '@react-pdf/renderer';
+import { pdf, type DocumentProps } from '@react-pdf/renderer';
 import React from 'react';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
 import { calculateAbsenceDays } from '../absenceDays';
@@ -23,13 +23,14 @@ export const generateLeaveRequestPdf = async (
   const absenceBreakdown = calculateAbsenceDays(data.startDate, data.endDate, holidays);
 
   // Create PDF document
-  const blob = await pdf(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    React.createElement(LeaveRequestPdf as any, {
+  const pdfElement = React.createElement(
+    LeaveRequestPdf,
+    {
       data,
       absenceDays: absenceBreakdown.absenceDays,
-    }) as any
-  ).toBlob();
+    }
+  );
+  const blob = await pdf(pdfElement as React.ReactElement<DocumentProps>).toBlob();
 
   return blob;
 };
