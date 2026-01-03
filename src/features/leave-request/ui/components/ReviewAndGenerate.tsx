@@ -37,6 +37,7 @@ export const ReviewAndGenerate: React.FC = () => {
   const setIsGeneratingPdf = useLeaveRequestStore(state => state.setIsGeneratingPdf);
   const clearSignature = useLeaveRequestStore(state => state.clearSignature);
   const toggleSignatureModal = useLeaveRequestStore(state => state.toggleSignatureModal);
+  const triggerForceFormReset = useLeaveRequestStore(state => state.triggerForceFormReset);
 
   // Component state
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -76,8 +77,10 @@ export const ReviewAndGenerate: React.FC = () => {
     if (!file) return;
 
     try {
-      await importProfileFromJson(file);
-      showSuccess('Profile imported successfully!');
+      await importProfileFromJson(file, () => {
+        // Force form reset after successful import to sync with updated store
+        triggerForceFormReset();
+      });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to import profile';
       showError(message);
@@ -90,7 +93,7 @@ export const ReviewAndGenerate: React.FC = () => {
   };
 
   /**
-   * Handles clearing the stored profile data.
+   * Handles clearing the stored profile data and form.
    */
   const handleClearProfile = () => {
     setProfile({
@@ -105,6 +108,7 @@ export const ReviewAndGenerate: React.FC = () => {
       position: '',
     });
     clearSignature();
+    triggerForceFormReset(); // Force form to reset
     showSuccess('Profile cleared successfully!');
   };
 

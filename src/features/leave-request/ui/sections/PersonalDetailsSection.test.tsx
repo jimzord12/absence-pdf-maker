@@ -59,6 +59,7 @@ describe('PersonalDetailsSection', () => {
         lastGeneratedFileName: '',
         errorMessage: null,
         triggerValidation: null,
+      forceFormReset: false,
       },
     });
     vi.clearAllMocks();

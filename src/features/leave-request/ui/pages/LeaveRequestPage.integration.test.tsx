@@ -58,9 +58,11 @@ vi.mock('jspdf', () => ({
 // Mock toast functions
 const mockShowSuccess = vi.fn();
 const mockShowError = vi.fn();
+const mockShowWarning = vi.fn();
 vi.mock('../../../../shared/lib/toast', () => ({
   showSuccess: (...args: any[]) => mockShowSuccess(...args),
   showError: (...args: any[]) => mockShowError(...args),
+  showWarning: (...args: any[]) => mockShowWarning(...args),
 }));
 
 // Test wrapper component
@@ -107,6 +109,7 @@ const clearAllData = () => {
       lastGeneratedFileName: '',
       errorMessage: null,
       triggerValidation: null,
+      forceFormReset: false,
     },
   }));
 };
@@ -501,11 +504,11 @@ describe('Integration Tests - User Flows', () => {
       // Simulate file selection
       await user.upload(fileInput, mockFile);
 
-      // Verify error toast about invalid data was called
+      // With partial data support, this should show warning about missing fields, not error
       await waitFor(() => {
-        expect(mockShowError).toHaveBeenCalled();
-        const errorMessage = mockShowError.mock.calls[0][0];
-        expect(errorMessage.toLowerCase()).toMatch(/invalid/);
+        expect(mockShowWarning).toHaveBeenCalled();
+        const warningMessage = mockShowWarning.mock.calls[0][0];
+        expect(warningMessage).toMatch(/missing fields/i);
       });
     });
 

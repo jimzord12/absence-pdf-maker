@@ -50,6 +50,7 @@ describe('EmploymentDetailsSection', () => {
         lastGeneratedFileName: '',
         errorMessage: null,
         triggerValidation: null,
+      forceFormReset: false,
       },
     });
     vi.clearAllMocks();

@@ -17,6 +17,8 @@ export const LeaveRequestForm = () => {
   const setProfile = useLeaveRequestStore(state => state.setProfile);
   const setLeaveDraft = useLeaveRequestStore(state => state.setLeaveDraft);
   const setTriggerValidation = useLeaveRequestStore(state => state.setTriggerValidation);
+  const forceFormReset = useLeaveRequestStore(state => state.ui.forceFormReset);
+  const setUi = useLeaveRequestStore(state => state.setUi);
 
   // Use refs to track previous values and prevent infinite loops
   const prevProfileRef = useRef(profile);
@@ -59,6 +61,40 @@ export const LeaveRequestForm = () => {
     setTriggerValidation(trigger);
     return () => setTriggerValidation(null);
   }, [trigger, setTriggerValidation]);
+
+  // Handle force form reset from store (e.g., after Clear or Import)
+  useEffect(() => {
+    if (forceFormReset) {
+      reset({
+        profile: {
+          fullName: profile.fullName || '',
+          fathersName: profile.fathersName || '',
+          email: profile.email || '',
+          phone: profile.phone || '',
+          identityNumber: profile.identityNumber || '',
+          employeeId: profile.employeeId || '',
+          companyName: profile.companyName || 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
+          department: profile.department || '',
+          position: profile.position || '',
+        },
+        leaveType: leaveDraft.leaveType || 'annual',
+        leaveAllowance: leaveDraft.leaveAllowance || false,
+        startDate: leaveDraft.startDate || undefined,
+        endDate: leaveDraft.endDate || undefined,
+        reason: leaveDraft.reason || '',
+        createdAt: new Date(),
+      });
+      prevProfileRef.current = { ...profile } as any;
+      prevLeaveDraftRef.current = {
+        leaveType: leaveDraft.leaveType,
+        leaveAllowance: leaveDraft.leaveAllowance,
+        startDate: leaveDraft.startDate || null,
+        endDate: leaveDraft.endDate || null,
+        reason: leaveDraft.reason || '',
+      };
+      setUi({ forceFormReset: false });
+    }
+  }, [forceFormReset, profile, leaveDraft, reset, setUi]);
 
   // Sync form changes to store using subscription to avoid extra re-renders
   useEffect(() => {

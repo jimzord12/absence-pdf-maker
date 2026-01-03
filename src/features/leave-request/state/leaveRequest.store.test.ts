@@ -43,6 +43,7 @@ describe('useLeaveRequestStore', () => {
         lastGeneratedFileName: '',
         errorMessage: null,
         triggerValidation: null,
+        forceFormReset: false,
       },
     });
     // Clear console call counts
@@ -87,6 +88,7 @@ describe('useLeaveRequestStore', () => {
         lastGeneratedFileName: '',
         errorMessage: null,
         triggerValidation: null,
+        forceFormReset: false,
       });
     });
 
@@ -132,6 +134,7 @@ describe('useLeaveRequestStore', () => {
         lastGeneratedFileName: '',
         errorMessage: null,
         triggerValidation: null,
+        forceFormReset: false,
       };
       expect(ui).toBeDefined();
     });

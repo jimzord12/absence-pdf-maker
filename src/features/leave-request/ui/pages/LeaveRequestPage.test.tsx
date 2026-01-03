@@ -61,6 +61,7 @@ describe('LeaveRequestPage', () => {
         lastGeneratedFileName: '',
         errorMessage: null,
         triggerValidation: null,
+      forceFormReset: false,
       },
     });
     vi.resetAllMocks();
@@ -458,6 +459,7 @@ describe('LeaveRequestPage', () => {
           lastGeneratedFileName: '',
           errorMessage: 'Test error message',
           triggerValidation: null,
+      forceFormReset: false,
         },
       });
 

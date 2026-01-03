@@ -205,3 +205,23 @@ export const ProfileExportSchema = z.object({
   signatureDataUrl: z.string().optional(),
 });
 
+/**
+ * Schema for importing user profile data with partial support.
+ * All fields are optional to allow importing incomplete profiles.
+ * Uses safeParse() to validate partial data without throwing errors.
+ */
+export const ProfileImportSchema = z.object({
+  fullName: UserProfileSchema.shape.fullName.optional(),
+  fathersName: UserProfileSchema.shape.fathersName.optional(),
+  email: UserProfileSchema.shape.email.optional(),
+  phone: UserProfileSchema.shape.phone.optional(),
+  identityNumber: UserProfileSchema.shape.identityNumber.optional(),
+  employeeId: UserProfileSchema.shape.employeeId.optional(),
+  companyName: UserProfileSchema.shape.companyName.optional(),
+  department: UserProfileSchema.shape.department.optional(),
+  position: UserProfileSchema.shape.position.optional(),
+  signatureDataUrl: z.string().optional(),
+});
+
+export type ProfileImportResult = z.infer<typeof ProfileImportSchema>;
+
