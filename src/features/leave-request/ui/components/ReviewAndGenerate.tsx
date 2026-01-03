@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { formatDate } from '../../../../shared/lib/dates';
 import { Alert, Button, Card } from '../../../../shared/ui';
-import type { LeaveType } from '../../model/leaveRequest.types';
+import type { LeaveType, UserProfile } from '../../model/leaveRequest.types';
 import { calculateAbsenceDays } from '../../services/absenceDays';
 import { downloadLeaveRequestPdf } from '../../services/pdf/pdf.service';
 import { exportProfileToJson, importProfileFromJson } from '../../services/persistence';
@@ -165,8 +165,8 @@ export const ReviewAndGenerate: React.FC = () => {
 
     try {
       const leaveRequestData = {
-        profile: profile as any,
-        leaveType: leaveDraft.leaveType!,
+        profile: profile as UserProfile,
+        leaveType: leaveDraft.leaveType ?? 'other',
         leaveAllowance: leaveDraft.leaveAllowance || false,
         startDate: leaveDraft.startDate,
         endDate: leaveDraft.endDate,
