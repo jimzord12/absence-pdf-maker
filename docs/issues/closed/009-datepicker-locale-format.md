@@ -3,7 +3,7 @@
 **Issue ID:** 009
 **Component:** DatePicker Components
 **Date Discovered:** 2025-12-30
-**Status:** Open
+**Status:** closed
 **Priority:** Medium
 
 ## Summary
@@ -71,8 +71,8 @@ DatePicker components currently use "MM/DD/YYYY" format, but should display date
 ```typescript
 // Expected format mapping
 const DATE_FORMATS = {
-  gr: 'dd/MM/yyyy',  // Greek locale
-  en: 'MM/dd/yyyy'   // English locale
+  gr: 'dd/MM/yyyy', // Greek locale
+  en: 'MM/dd/yyyy', // English locale
 };
 ```
 
@@ -101,6 +101,7 @@ The DatePicker library may not support dynamic locale switching or may require s
 ### Medium Term (Proper Fix)
 
 1. **Locale-Aware Date Formatting:**
+
    - Create a utility function that returns format string based on current locale
    - Apply format to all DatePicker components
    - Expected outcome: Dates display in locale-appropriate format
@@ -113,6 +114,7 @@ The DatePicker library may not support dynamic locale switching or may require s
 ### Long Term (Architectural)
 
 1. **Centralized Date Configuration:**
+
    - Create a shared date configuration module
    - Centralize all locale-specific date settings
    - Benefits: Consistency across the application, easier maintenance
@@ -124,17 +126,18 @@ The DatePicker library may not support dynamic locale switching or may require s
 
 ## Additional Notes
 
-- Blocked by feature: [add-gr-locale-and-lang-support](docs/features/add-gr-locale-and-lang-support/feature.md)
+- Blocked by feature: [add-gr-locale-and-lang-support](../open/docs/features/add-gr-locale-and-lang-support/feature.md)
 - Important for Greek user experience as they are the primary user base
 - Consider date input format as well as display format
 - Ensure validation also respects locale format
 
 ## Related Issues
 
-- Feature: [add-gr-locale-and-lang-support](docs/features/add-gr-locale-and-lang-support/feature.md) - Implements locale switching functionality
+- Feature: [add-gr-locale-and-lang-support](../open/docs/features/add-gr-locale-and-lang-support/feature.md) - Implements locale switching functionality
 
 ## References
 
 - File: `src/features/leave-request/ui/DateRangeField.tsx`
 - File: `src/shared/lib/dates.ts`
 - Documentation: date-fns locale configuration
+

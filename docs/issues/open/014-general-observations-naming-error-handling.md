@@ -3,8 +3,9 @@
 **Issue ID:** 014
 **Component:** UI Components and Error Handling
 **Date Discovered:** 2025-12-31
-**Status:** Open
+**Status:** In Progress
 **Priority:** Medium
+**Task ID:** 064-fix-issue-014-component-naming, 065-fix-issue-014-toastify-errors
 
 ## Summary
 

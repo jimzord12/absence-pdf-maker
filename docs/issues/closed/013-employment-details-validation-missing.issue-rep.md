@@ -168,7 +168,7 @@ Form submission may not be properly connected to form validation, allowing bypas
 
 ## Related Issues
 
-- [012 - Personal Details Form Validation Missing](../closed/012-personal-details-validation-missing.issue-rep.md)
+- [012 - Personal Details Form Validation Missing](./012-personal-details-validation-missing.issue-rep.md)
 
 ## References
 

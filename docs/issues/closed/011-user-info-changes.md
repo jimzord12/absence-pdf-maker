@@ -3,7 +3,7 @@
 **Issue ID:** 011
 **Component:** Employment Details Section
 **Date Discovered:** 2025-12-30
-**Status:** Open
+**Status:** Closed
 **Priority:** Medium
 
 ## Summary
@@ -76,8 +76,7 @@ Employment Details section contains duplicate fields (Employer ID, Employer Name
 
 ```typescript
 // Remove these fields from schema and UI
-- employerId
-- employerName
+-employerId - employerName;
 ```
 
 ### Fields to Update
@@ -108,6 +107,7 @@ Company Name field may be intentionally left empty to force users to enter it, b
 ### Medium Term (Proper Fix)
 
 1. **Remove Duplicate Fields:**
+
    - Delete Employer ID and Employer Name from UI component
    - Remove from Zod schema validation
    - Expected outcome: Cleaner form without redundant fields
@@ -120,6 +120,7 @@ Company Name field may be intentionally left empty to force users to enter it, b
 ### Long Term (Architectural)
 
 1. **Multi-Company Support:**
+
    - Add company selector dropdown
    - Load company information from configuration
    - Benefits: Support multiple companies without code changes
@@ -139,10 +140,11 @@ Company Name field may be intentionally left empty to force users to enter it, b
 
 ## Related Issues
 
-- [#008 - Update Import/Export Profile](008-update-import-export-profile.md) - Blocked by this issue
+- [#008 - Update Import/Export Profile](../open/008-update-import-export-profile.md) - Blocked by this issue
 
 ## References
 
 - File: `src/features/leave-request/ui/EmploymentDetailsSection.tsx`
 - File: `src/features/leave-request/model/leaveRequest.schema.ts`
 - File: `src/features/leave-request/state/leaveRequest.store.ts`
+

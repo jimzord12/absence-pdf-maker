@@ -179,19 +179,43 @@ Update outdated test files to match new Personal Details schema structure and va
 
 ## Summary
 
-Total New Tasks: 5
+Total New Tasks: 10
 
 ### Task Dependencies
 
 Tasks should be completed in this order:
 
-1. **Task 055** (High Priority) - Update outdated tests for new schema
-2. **Task 054** (Critical Priority) - Date Picker UI completely broken, calendar grid not displaying
-3. **Task 053** (Critical Priority) - Leave Details section is completely broken
-4. **Task 051** (High Priority) - Personal Details validation missing - **COMPLETED**
-5. **Task 052** (Medium Priority) - Employment Details validation missing
+#### Critical Priority
+1. **Task 068** - PDF generation offline failure (CRITICAL - PWA core functionality broken)
 
-Task 055 should be completed first to ensure test suite is green.
+#### High Priority
+2. **Task 065** - Toastify error notifications (Blocks Task 066)
+3. **Task 066** - Import/Export/Clear form sync (User workflow affected)
+
+#### Medium Priority
+4. **Task 064** - Component naming (Developer communication improvement)
+5. **Task 067** - Date Range clear button (UX improvement)
+
+### Completed Issues (Tasks Done)
+
+- Task 045 - Issue 006 UI fixes (Committed)
+- Task 046 - Issue 007 PDF generation failure (Committed)
+- Task 047 - Issue 008 Import/Export update (Committed)
+- Task 051 - Issue 012 Personal Details validation (Committed)
+- Task 052 - Issue 013 Employment Details validation (Committed)
+- Task 053 - Issue 014 Leave Details broken (Committed)
+- Task 054 - Issue 015 DatePicker styling (Committed)
+- Task 055 - Update tests for new schema (Committed)
+- Task 056 - AI tool heuristics (Committed)
+- Task 057 - Task state automation CLI (Committed)
+- Task 058 - AI handover protocol (Committed)
+- Task 059 - Feature context mapping (Committed)
+- Task 060 - AI review workflow (Committed)
+- Task 061 - Issue to task prompt (Committed)
+- Task 062 - Visual regression baseline (Committed)
+- Task 063 - Copilot optimization (Committed)
+
+**Note:** Task 055 should be completed first to ensure test suite is green. (Already completed)
 
 ---
 
@@ -335,3 +359,185 @@ Setup a script for AI-driven visual verification using Playwright to capture UI 
 - [x] Captures screenshots of Personal Details, Employment Details, and Leave Details.
 - [x] `AGENTS.md` updated to require a `ui_diff_check` after UI modifications.
 
+---
+
+### 064-fix-issue-014-component-naming
+
+**Identifier:** `064-fix-issue-014-component-naming`
+
+**Description:**
+Rename form sections and read-only summary sections to eliminate naming confusion. Currently "Personal Details" and "Leave Details" names are used for both form inputs and read-only summaries, making it difficult to identify which component is being referenced.
+
+**Constraints:**
+
+- Must follow project code style (AGENTS.md)
+- Maintain existing functionality
+- Update all references in documentation and code comments
+- Ensure clear distinction between form input and summary/preview components
+
+**Acceptance Criteria:**
+
+- [ ] Form section titles include "Form" or "Input" suffix (e.g., "Personal Details Form")
+- [ ] Summary section titles include "Summary" or "Preview" suffix (e.g., "Personal Details Summary")
+- [ ] ReviewAndGenerate.tsx section titles updated to reflect their purpose
+- [ ] Component file names (PersonalDetailsSection, LeaveDetailsSection) may remain unchanged or updated if needed
+- [ ] All documentation references updated with new naming convention
+- [ ] Code comments updated where section names are mentioned
+- [ ] No TypeScript errors
+- [ ] No console errors
+
+---
+
+### 065-fix-issue-014-toastify-errors
+
+**Identifier:** `065-fix-issue-014-toastify-errors`
+
+**Description:**
+Add react-toastify library to replace brief red box error overlays with persistent, user-friendly toast notifications. Currently error messages appear briefly and disappear, making it difficult for users to understand issues.
+
+**Constraints:**
+
+- Must install and configure react-toastify
+- Must create ToastContainer in app root (likely App.tsx or main.tsx)
+- Must replace all red box error displays with toast notifications
+- Create centralized error notification utility function
+- Support different toast types (error, warning, success, info)
+- Configure default settings (duration, position, styling)
+- Must pass lint and typecheck
+
+**Acceptance Criteria:**
+
+- [ ] react-toastify installed as dependency
+- [ ] ToastContainer configured in app root
+- [ ] All red box error displays replaced with toast.error() calls
+- [ ] Error notifications persist for 5-10 seconds (configurable)
+- [ ] Toast notifications are dismissable by user
+- [ ] Multiple toast notifications stack properly
+- [ ] Toast notifications are accessible (screen reader compatible)
+- [ ] Centralized error notification utility created (e.g., showToast function)
+- [ ] PDF generation errors show toast instead of red box
+- [ ] Form validation errors show toast (in addition to inline errors)
+- [ ] No TypeScript errors
+- [ ] No console errors
+- [ ] Tests for toast notification system
+
+---
+
+### 066-fix-issue-016-import-export-clear-sync
+
+**Identifier:** `066-fix-issue-016-import-export-clear-sync`
+
+**Description:**
+Fix form state synchronization issues where Clear and Import operations update the Read-only Summary but not the form fields. Additionally, Import should accept partial data with toast notifications instead of rejecting incomplete profiles with errors.
+
+**Constraints:**
+
+- Must sync React Hook Form state on Clear operation
+- Must sync React Hook Form state on Import operation
+- Must use Zod safeParse() for import validation to accept partial data
+- Must show toast notifications for missing/invalid fields during import
+- Must integrate with react-toastify (blocked by Task 065)
+- Must write comprehensive unit tests for partial data scenarios
+- Must pass lint and typecheck
+
+**Acceptance Criteria:**
+
+- [ ] Clear button resets both Zustand store AND React Hook Form state
+- [ ] After Clear, form fields show empty state (not previous values)
+- [ ] After Clear, Read-only Summary shows empty state
+- [ ] Import operation populates both Zustand store AND React Hook Form state
+- [ ] After Import, form fields show imported data
+- [ ] After Import, Read-only Summary shows imported data
+- [ ] Import uses safeParse() instead of strict parse()
+- [ ] Import accepts partial valid data and populates valid fields
+- [ ] Import shows toast notification with details of missing/invalid fields
+- [ ] Import does NOT throw error for incomplete data
+- [ ] Toast notification lists all missing/invalid fields
+- [ ] Unit tests for partial data scenarios:
+  - [ ] Import with only fullName and email
+  - [ ] Import with all fields except identityNumber
+  - [ ] Import with invalid email format
+  - [ ] Import with empty JSON
+- [ ] Integration tests for Clear operation
+- [ ] Integration tests for Import operation
+- [ ] No TypeScript errors
+- [ ] No console errors
+
+---
+
+### 067-add-date-range-clear-button
+
+**Identifier:** `067-add-date-range-clear-button`
+
+**Description:**
+Add a clear button to Date Range Picker in Leave Details section to allow users to easily reset selected dates with one click. Currently users must manually deselect dates in calendar, requiring extra clicks.
+
+**Constraints:**
+
+- Add clear button in LeaveDetailsSection (next to Holidays Legend)
+- Button should reset startDate and endDate to undefined
+- Button should only be visible when dates are selected (context-aware)
+- Must integrate with existing React Hook Form state
+- Must follow Tailwind CSS styling patterns
+- Must maintain accessibility (keyboard navigation, ARIA attributes)
+- Must pass lint and typecheck
+
+**Acceptance Criteria:**
+
+- [ ] "Clear Dates" button added in LeaveDetailsSection
+- [ ] Button positioned in same row as Holidays Legend
+- [ ] Button has appropriate styling (secondary button style)
+- [ ] Button is visible only when dates are selected
+- [ ] Button is hidden when no dates selected
+- [ ] Clicking button clears startDate and endDate form fields
+- [ ] Clicking button clears date selection in calendar
+- [ ] Absence days calculation updates correctly after clearing (shows '—')
+- [ ] Button has tooltip: "Clear selected dates"
+- [ ] Button is keyboard accessible (Enter key activates)
+- [ ] Button has proper ARIA attributes
+- [ ] No TypeScript errors
+- [ ] No console errors
+- [ ] Tests for clear button functionality
+
+---
+
+### 068-fix-issue-018-pdf-offline-generation
+
+**Identifier:** `068-fix-issue-018-pdf-offline-generation`
+
+**Description:**
+Fix PDF generation to work fully offline. Currently PDF generation fails with "Failed to fetch" error when the application is used offline, which is critical for a PWA designed to work without internet connection.
+
+**Constraints:**
+
+- Must bundle fonts locally (download to `public/fonts/`)
+- Must update font registration in PDF components to use local file paths
+- Must add fonts to service worker precache in vite.config.ts
+- Must ensure all @react-pdf/renderer assets are available offline
+- Must test PDF generation thoroughly in offline mode
+- Must maintain Greek character support (Roboto fonts)
+- Must pass lint and typecheck
+- CRITICAL: PDF generation is core feature that MUST work offline
+
+**Acceptance Criteria:**
+
+- [ ] Roboto font files (regular, italic, bold, bold-italic) downloaded to public/fonts/
+- [ ] Font registration in LeaveRequestPdf.tsx uses local file paths (e.g., /fonts/Roboto-Regular.ttf)
+- [ ] No external font URLs (e.g., Google Fonts CDN) in PDF code
+- [ ] Fonts added to vite-plugin-pwa precache list in vite.config.ts
+- [ ] PDF generation works completely offline
+- [ ] PDF generation works in different offline scenarios:
+  - [ ] Fresh app load offline
+  - [ ] Cached app offline
+  - [ ] After service worker update
+- [ ] Greek characters display correctly in PDF
+- [ ] PDF generation produces same output online and offline
+- [ ] No network requests during PDF generation (verify in browser network tab)
+- [ ] Error handling for offline mode is graceful
+- [ ] Tests for offline PDF generation
+- [ ] No TypeScript errors
+- [ ] No console errors
+- [ ] "Failed to fetch" error resolved
+- [ ] Font resolution errors resolved
+
+---

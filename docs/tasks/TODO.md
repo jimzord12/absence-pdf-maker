@@ -15,6 +15,8 @@ Currently many of the Section share the same name which makes it hard to identif
 
 - You should use "react-toastify" to show error messages to the user. For example, when the PDF generation fails, you should show a toast notification with the error message instead of briefly showing a red box ontop of the "Personal Details" Summary section. This will improve the user experience by providing immediate feedback on errors.
 
+**Tasks:** 064-fix-issue-014-component-naming, 065-fix-issue-014-toastify-errors
+
 ## Import, Export & Clear Profile (1/4 Done!)
 
 ### Good Points
@@ -28,6 +30,8 @@ Currently many of the Section share the same name which makes it hard to identif
 - (Blocked by `react-toastify` integration). Import similarly does not update the Form fields only the Read-only Summary. After importing a profile, the form fields remain empty. Make sure to populate the form fields with the imported data.
 - IMPORTANT: When Importing a json file with incomplete data an error is thrown: Failed to import profile: Invalid profile data: fullName: Full name is required fullName: Full name must contain at least 2 words (Greek or Latin letters only) fathersName: Father's name is required fathersName: Father's name must contain at least 2 characters (Greek or Latin letters only) email: Email is required email: Please enter a valid email address (e.g., name@example.com) phone: Phone number is required phone: Please enter a valid phone number (10 digits, spaces allowed) identityNumber: Identity number is required identityNumber: Identity number must be valid: Old ADT (e.g., AB-123456), New ID (12 alphanumeric), or Passport (e.g., AB1234567) department: Department is required position: Position is required.
   the import should not throw an error. It should the partial data and just notify the User via Toast Notification. Write multiple unit tests for this, but first search the codebase if there any existing ones.
+
+**Task:** 066-fix-issue-016-import-export-clear-sync
 
 ```json
 {
@@ -69,6 +73,8 @@ Currently many of the Section share the same name which makes it hard to identif
 - The Service for calculating the business days excluding weekends and holidays is missing, also does NOT utilize the `data/holidays.json` file. You need to implement this service to correctly calculate the number of business days between the selected start and end dates, excluding weekends and holidays. (Done!)
 - There should be a way for the user to clear the selected dates in the Date Range Picker. Currently, once dates are selected, there is no option to clear them and start over. Add a clear button in the some row as "Holidays legend" to allow users to easily reset their date selection. (Not Completed)
 
+**Task:** 067-add-date-range-clear-button
+
 ### Good Points
 
 - The Date Range Summary dynamically updates as I select different start and end dates, providing immediate feedback on the selected range.
@@ -103,3 +109,5 @@ Currently many of the Section share the same name which makes it hard to identif
 
 - [Without Internet connection]: It throws this error: "Failed to download PDF: Failed to fetch" - Critical this app must be Fully Functional Offline!
 - It just NOT WORKS! This is the CORE feature of the application, and it is broken. When I try to generate a PDF, I get an error about missing fonts. Please fix this ASAP. The UI displayed error: `Failed to download PDF: Unknown font format`. The console only shows 2 warnings: `Invalid ' ' string child outside <Text> component` and `Cannot read properties of undefined (reading 'isBuffer')`.
+
+**Task:** 068-fix-issue-018-pdf-offline-generation (Critical Priority)
