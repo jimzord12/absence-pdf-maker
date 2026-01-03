@@ -290,11 +290,12 @@
       "notes": "Reviewer feedback: Consistent naming convention applied across all sections. All tests passing. No breaking changes. Minor suggestion: replace @ts-ignore with @ts-expect-error in ReviewAndGenerate.test.tsx; consider aligning section ID naming in ReviewAndGenerate.tsx with form section IDs."
     },
     "065-fix-issue-014-toastify-errors": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-03T00:00:00Z",
+      "state": "committed",
+      "lastUpdated": "2026-01-03T14:20:00Z",
       "description": "Add react-toastify library to replace brief red box error overlays with persistent, user-friendly toast notifications.",
       "fromIssue": "014",
-      "blockedBy": []
+      "blockedBy": [],
+      "notes": "Reviewer feedback: Excellent TypeScript type safety with proper type unions. Well-organized code following shared layer architecture. Comprehensive testing with 18 new tests, all 1,165 tests passing. Great UX with sensible defaults (8s duration, top-right position). Proper error handling with user-friendly messages. Clean, documented, maintainable code. Built-in ARIA accessibility support. Implemented reviewer suggestions: created DEFAULT_TOAST_CONTAINER_CONFIG constant to avoid duplication; added exports to shared index for cleaner imports."
     },
     "066-fix-issue-016-import-export-clear-sync": {
       "state": "not_started",

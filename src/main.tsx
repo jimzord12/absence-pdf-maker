@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { PwaProvider } from './app/providers/PwaProvider';
 import { StoreProvider } from './app/providers/StoreProvider';
 import { ThemeProvider } from './app/providers/ThemeProvider';

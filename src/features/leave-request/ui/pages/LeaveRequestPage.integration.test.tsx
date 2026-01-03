@@ -55,6 +55,14 @@ vi.mock('jspdf', () => ({
   })),
 }));
 
+// Mock toast functions
+const mockShowSuccess = vi.fn();
+const mockShowError = vi.fn();
+vi.mock('../../../../shared/lib/toast', () => ({
+  showSuccess: (...args: any[]) => mockShowSuccess(...args),
+  showError: (...args: any[]) => mockShowError(...args),
+}));
+
 // Test wrapper component
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
@@ -107,6 +115,8 @@ describe('Integration Tests - User Flows', () => {
   beforeEach(() => {
     clearAllData();
     vi.clearAllMocks();
+    mockShowSuccess.mockClear();
+    mockShowError.mockClear();
   });
 
   afterEach(() => {
@@ -345,10 +355,10 @@ describe('Integration Tests - User Flows', () => {
       const exportButton = screen.getByRole('button', { name: /export profile/i });
       await user.click(exportButton);
 
-      // Verify success message - this confirms export was triggered
+      // Verify success toast was called - this confirms export was triggered
       await waitFor(
         () => {
-          expect(screen.getByText(/profile exported successfully/i)).toBeInTheDocument();
+          expect(mockShowSuccess).toHaveBeenCalledWith('Profile exported successfully!');
         },
         { timeout: 3000 }
       );
@@ -412,9 +422,9 @@ describe('Integration Tests - User Flows', () => {
       // Simulate file selection
       await user.upload(fileInput, mockFile);
 
-      // Verify success message
+      // Verify success toast was called
       await waitFor(() => {
-        expect(screen.getByText(/profile imported successfully/i)).toBeInTheDocument();
+        expect(mockShowSuccess).toHaveBeenCalledWith('Profile imported successfully!');
       });
     });
 
@@ -445,11 +455,11 @@ describe('Integration Tests - User Flows', () => {
       // Simulate file selection
       await user.upload(fileInput, mockFile);
 
-      // Verify error message
+      // Verify error toast was called
       await waitFor(() => {
-        expect(
-          screen.getByText(/invalid json format/i) || screen.getByText(/failed to import/i)
-        ).toBeInTheDocument();
+        expect(mockShowError).toHaveBeenCalled();
+        const errorMessage = mockShowError.mock.calls[0][0];
+        expect(errorMessage.toLowerCase()).toMatch(/invalid/);
       });
     });
 
@@ -491,11 +501,11 @@ describe('Integration Tests - User Flows', () => {
       // Simulate file selection
       await user.upload(fileInput, mockFile);
 
-      // Verify error message about invalid data
+      // Verify error toast about invalid data was called
       await waitFor(() => {
-        expect(
-          screen.getByText(/invalid profile data/i) || screen.getByText(/failed to import/i)
-        ).toBeInTheDocument();
+        expect(mockShowError).toHaveBeenCalled();
+        const errorMessage = mockShowError.mock.calls[0][0];
+        expect(errorMessage.toLowerCase()).toMatch(/invalid/);
       });
     });
 
@@ -530,9 +540,9 @@ describe('Integration Tests - User Flows', () => {
       const clearButton = screen.getByRole('button', { name: /clear profile/i });
       await user.click(clearButton);
 
-      // Verify success message
+      // Verify success toast was called
       await waitFor(() => {
-        expect(screen.getByText(/profile cleared successfully/i)).toBeInTheDocument();
+        expect(mockShowSuccess).toHaveBeenCalledWith('Profile cleared successfully!');
       });
 
       // Verify store has been cleared

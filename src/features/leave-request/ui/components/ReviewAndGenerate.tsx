@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { formatDate } from '../../../../shared/lib/dates';
-import { Alert, Button, Card } from '../../../../shared/ui';
+import { showError, showSuccess } from '../../../../shared/lib/toast';
+import { Button, Card } from '../../../../shared/ui';
 import type { LeaveType, UserProfile } from '../../model/leaveRequest.types';
 import { calculateAbsenceDays } from '../../services/absenceDays';
 import { downloadLeaveRequestPdf } from '../../services/pdf/pdf.service';
@@ -21,13 +22,13 @@ export const ReviewAndGenerate: React.FC = () => {
     const timer = setTimeout(() => setHasAnimated(true), 400);
     return () => clearTimeout(timer);
   }, []);
+
   // Store selectors
   const profile = useLeaveRequestStore(state => state.profile);
   const leaveDraft = useLeaveRequestStore(state => state.leaveDraft);
   const signature = useLeaveRequestStore(state => state.signature);
   const holidays = useLeaveRequestStore(state => state.holidays);
   const isGeneratingPdf = useLeaveRequestStore(state => state.ui.isGeneratingPdf);
-  const errorMessage = useLeaveRequestStore(state => state.ui.errorMessage);
   const triggerValidation = useLeaveRequestStore(state => state.ui.triggerValidation);
   const { locale } = useLocaleStore(state => state);
 
@@ -35,12 +36,9 @@ export const ReviewAndGenerate: React.FC = () => {
   const setProfile = useLeaveRequestStore(state => state.setProfile);
   const setIsGeneratingPdf = useLeaveRequestStore(state => state.setIsGeneratingPdf);
   const clearSignature = useLeaveRequestStore(state => state.clearSignature);
-  const clearErrorMessage = useLeaveRequestStore(state => state.clearErrorMessage);
   const toggleSignatureModal = useLeaveRequestStore(state => state.toggleSignatureModal);
 
   // Component state
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [importError, setImportError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Calculate absence days if dates are selected
@@ -61,15 +59,12 @@ export const ReviewAndGenerate: React.FC = () => {
    * Handles exporting the current profile to a JSON file.
    */
   const handleExport = () => {
-    setImportError(null);
     try {
       exportProfileToJson();
-      setSuccessMessage('Profile exported successfully!');
-      setTimeout(() => setSuccessMessage(null), 3000);
+      showSuccess('Profile exported successfully!');
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to export profile';
-      setImportError(message);
-      setTimeout(() => setImportError(null), 5000);
+      showError(message);
     }
   };
 
@@ -80,17 +75,12 @@ export const ReviewAndGenerate: React.FC = () => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    setImportError(null);
-    setSuccessMessage(null);
-
     try {
       await importProfileFromJson(file);
-      setSuccessMessage('Profile imported successfully!');
-      setTimeout(() => setSuccessMessage(null), 3000);
+      showSuccess('Profile imported successfully!');
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to import profile';
-      setImportError(message);
-      setTimeout(() => setImportError(null), 5000);
+      showError(message);
     }
 
     // Reset the file input so the same file can be selected again
@@ -115,8 +105,7 @@ export const ReviewAndGenerate: React.FC = () => {
       position: '',
     });
     clearSignature();
-    setSuccessMessage('Profile cleared successfully!');
-    setTimeout(() => setSuccessMessage(null), 3000);
+    showSuccess('Profile cleared successfully!');
   };
 
   /**
@@ -129,8 +118,7 @@ export const ReviewAndGenerate: React.FC = () => {
     if (triggerValidation) {
       const isValid = await triggerValidation();
       if (!isValid) {
-        setImportError('Please correct the validation errors before generating the PDF.');
-        setTimeout(() => setImportError(null), 5000);
+        showError('Please correct the validation errors before generating the PDF.');
         return;
       }
     }
@@ -143,21 +131,15 @@ export const ReviewAndGenerate: React.FC = () => {
       !profile.identityNumber ||
       !profile.companyName
     ) {
-      setImportError(
-        'Please fill in all required personal and employment details before generating.'
-      );
-      setTimeout(() => setImportError(null), 5000);
+      showError('Please fill in all required personal and employment details before generating.');
       return;
     }
 
     if (!leaveDraft.startDate || !leaveDraft.endDate) {
-      setImportError('Please select start and end dates for your leave.');
-      setTimeout(() => setImportError(null), 5000);
+      showError('Please select start and end dates for your leave.');
       return;
     }
 
-    setImportError(null);
-    setSuccessMessage(null);
     setIsGeneratingPdf(true);
 
     // Ensure minimum 2 second loading time
@@ -180,12 +162,10 @@ export const ReviewAndGenerate: React.FC = () => {
         minLoadTime,
       ]);
 
-      setSuccessMessage('PDF generated successfully!');
-      setTimeout(() => setSuccessMessage(null), 5000);
+      showSuccess('PDF generated successfully!');
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to generate PDF';
-      setImportError(message);
-      setTimeout(() => setImportError(null), 5000);
+      showError(message);
     } finally {
       setIsGeneratingPdf(false);
     }
@@ -197,23 +177,6 @@ export const ReviewAndGenerate: React.FC = () => {
       aria-label="Review and Generate"
       className={`space-y-6 ${!hasAnimated ? 'animate-fade-in-up animate-stagger-1' : ''}`}
     >
-      {/* Success/Error Messages */}
-      {errorMessage && (
-        <Alert variant="error" onDismiss={clearErrorMessage}>
-          {errorMessage}
-        </Alert>
-      )}
-      {successMessage && (
-        <Alert variant="success" onDismiss={() => setSuccessMessage(null)}>
-          {successMessage}
-        </Alert>
-      )}
-      {importError && (
-        <Alert variant="error" onDismiss={() => setImportError(null)}>
-          {importError}
-        </Alert>
-      )}
-
       {/* Profile Summary Section */}
       <section aria-labelledby="review-personal-details-heading">
         <Card>
@@ -406,4 +369,3 @@ export const ReviewAndGenerate: React.FC = () => {
     </aside>
   );
 };
-

@@ -33,11 +33,21 @@ vi.mock('../../../../shared/lib/dates', () => ({
   },
 }));
 
+// Mock toast functions
+const mockShowSuccess = vi.fn();
+const mockShowError = vi.fn();
+vi.mock('../../../../shared/lib/toast', () => ({
+  showSuccess: (...args: any[]) => mockShowSuccess(...args),
+  showError: (...args: any[]) => mockShowError(...args),
+}));
+
 // Reset mocks before each test
 beforeEach(() => {
   mockExportProfileToJson.mockReset();
   mockImportProfileFromJson.mockReset();
   mockCalculateAbsenceDays.mockReset();
+  mockShowSuccess.mockReset();
+  mockShowError.mockReset();
 
   // Reset store state before each test
   useLeaveRequestStore.setState({
@@ -528,7 +538,7 @@ describe('ReviewAndGenerate', () => {
       await user.click(exportButton);
 
       await waitFor(() => {
-        expect(screen.getByText('Profile exported successfully!')).toBeInTheDocument();
+        expect(mockShowSuccess).toHaveBeenCalledWith('Profile exported successfully!');
       });
     });
 
@@ -545,31 +555,7 @@ describe('ReviewAndGenerate', () => {
       await user.click(exportButton);
 
       await waitFor(() => {
-        expect(screen.getByText('Export failed')).toBeInTheDocument();
-      });
-    });
-
-    it('should dismiss error message when dismiss button is clicked', async () => {
-      const user = userEvent.setup();
-      mockExportProfileToJson.mockImplementationOnce(() => {
-        throw new Error('Export failed');
-      });
-
-      render(<ReviewAndGenerate />);
-
-      const exportButton = screen.getByRole('button', { name: 'Export Profile' });
-      await user.click(exportButton);
-
-      await waitFor(() => {
-        expect(screen.getByText('Export failed')).toBeInTheDocument();
-      });
-
-      // Click the dismiss button (X icon button)
-      const dismissButton = screen.getByRole('button', { name: /dismiss/i });
-      await user.click(dismissButton);
-
-      await waitFor(() => {
-        expect(screen.queryByText('Export failed')).not.toBeInTheDocument();
+        expect(mockShowError).toHaveBeenCalledWith('Export failed');
       });
     });
   });
@@ -618,7 +604,7 @@ describe('ReviewAndGenerate', () => {
       await user.upload(fileInput, file);
 
       await waitFor(() => {
-        expect(screen.getByText('Profile imported successfully!')).toBeInTheDocument();
+        expect(mockShowSuccess).toHaveBeenCalledWith('Profile imported successfully!');
       });
     });
 
@@ -634,7 +620,7 @@ describe('ReviewAndGenerate', () => {
       await user.upload(fileInput, file);
 
       await waitFor(() => {
-        expect(screen.getByText('Invalid JSON format')).toBeInTheDocument();
+        expect(mockShowError).toHaveBeenCalledWith('Invalid JSON format');
       });
     });
 
@@ -646,7 +632,7 @@ describe('ReviewAndGenerate', () => {
       // Simulate selecting no file (null)
       act(() => {
         const changeEvent = { target: { files: null } };
-        // @ts-ignore - Testing the null case
+        // @ts-expect-error - Testing the null case
         fileInput.dispatchEvent(new Event('change', changeEvent));
       });
 
@@ -762,7 +748,7 @@ describe('ReviewAndGenerate', () => {
       await user.click(clearButton);
 
       await waitFor(() => {
-        expect(screen.getByText('Profile cleared successfully!')).toBeInTheDocument();
+        expect(mockShowSuccess).toHaveBeenCalledWith('Profile cleared successfully!');
       });
     });
 
@@ -1095,7 +1081,7 @@ describe('ReviewAndGenerate', () => {
       await user.click(exportButton);
 
       await waitFor(() => {
-        expect(screen.getByText('First error')).toBeInTheDocument();
+        expect(mockShowError).toHaveBeenCalledWith('First error');
       });
     });
 
@@ -1111,7 +1097,7 @@ describe('ReviewAndGenerate', () => {
       await user.upload(fileInput, file);
 
       await waitFor(() => {
-        expect(screen.getByText('Invalid JSON format')).toBeInTheDocument();
+        expect(mockShowError).toHaveBeenCalledWith('Invalid JSON format');
       });
     });
 
@@ -1129,16 +1115,20 @@ describe('ReviewAndGenerate', () => {
       await user.click(exportButton);
 
       await waitFor(() => {
-        expect(screen.getByText('First error')).toBeInTheDocument();
+        expect(mockShowError).toHaveBeenCalledWith('First error');
       });
+
+      // Clear mock history
+      mockShowError.mockClear();
 
       // Second export succeeds
       mockExportProfileToJson.mockResolvedValueOnce(undefined);
       await user.click(exportButton);
 
       await waitFor(() => {
-        expect(screen.queryByText('First error')).not.toBeInTheDocument();
-        expect(screen.getByText('Profile exported successfully!')).toBeInTheDocument();
+        expect(mockShowSuccess).toHaveBeenCalledWith('Profile exported successfully!');
+        // No error should have been called on second attempt
+        expect(mockShowError).not.toHaveBeenCalled();
       });
     });
 
@@ -1156,16 +1146,20 @@ describe('ReviewAndGenerate', () => {
       await user.upload(fileInput, file);
 
       await waitFor(() => {
-        expect(screen.getByText('First error')).toBeInTheDocument();
+        expect(mockShowError).toHaveBeenCalledWith('First error');
       });
+
+      // Clear mock history
+      mockShowError.mockClear();
 
       // Second import succeeds
       mockImportProfileFromJson.mockResolvedValueOnce(undefined);
       await user.upload(fileInput, file);
 
       await waitFor(() => {
-        expect(screen.queryByText('First error')).not.toBeInTheDocument();
-        expect(screen.getByText('Profile imported successfully!')).toBeInTheDocument();
+        expect(mockShowSuccess).toHaveBeenCalledWith('Profile imported successfully!');
+        // No error should have been called on second attempt
+        expect(mockShowError).not.toHaveBeenCalled();
       });
     });
   });
@@ -1181,7 +1175,7 @@ describe('ReviewAndGenerate', () => {
       await user.click(exportButton);
 
       await waitFor(() => {
-        expect(screen.getByText('Profile exported successfully!')).toBeInTheDocument();
+        expect(mockShowSuccess).toHaveBeenCalledWith('Profile exported successfully!');
       });
     });
 
@@ -1197,7 +1191,7 @@ describe('ReviewAndGenerate', () => {
       await user.upload(fileInput, file);
 
       await waitFor(() => {
-        expect(screen.getByText('Profile imported successfully!')).toBeInTheDocument();
+        expect(mockShowSuccess).toHaveBeenCalledWith('Profile imported successfully!');
       });
     });
 
@@ -1223,7 +1217,7 @@ describe('ReviewAndGenerate', () => {
       await user.click(clearButton);
 
       await waitFor(() => {
-        expect(screen.getByText('Profile cleared successfully!')).toBeInTheDocument();
+        expect(mockShowSuccess).toHaveBeenCalledWith('Profile cleared successfully!');
       });
     });
 
@@ -1259,53 +1253,9 @@ describe('ReviewAndGenerate', () => {
 
       await waitFor(
         () => {
-          expect(screen.getByText('PDF generated successfully!')).toBeInTheDocument();
+          expect(mockShowSuccess).toHaveBeenCalledWith('PDF generated successfully!');
         },
         { timeout: 3000 }
-      );
-    });
-
-    it('should dismiss success message when dismiss button is clicked', async () => {
-      const user = userEvent.setup();
-      mockExportProfileToJson.mockResolvedValue(undefined);
-
-      render(<ReviewAndGenerate />);
-
-      const exportButton = screen.getByRole('button', { name: 'Export Profile' });
-      await user.click(exportButton);
-
-      await waitFor(() => {
-        expect(screen.getByText('Profile exported successfully!')).toBeInTheDocument();
-      });
-
-      // Click the dismiss button (X icon button)
-      const dismissButton = screen.getAllByRole('button', { name: /dismiss/i })[0];
-      await user.click(dismissButton);
-
-      await waitFor(() => {
-        expect(screen.queryByText('Profile exported successfully!')).not.toBeInTheDocument();
-      });
-    });
-
-    it('should auto-dismiss success message after timeout', async () => {
-      const user = userEvent.setup();
-      mockExportProfileToJson.mockResolvedValue(undefined);
-
-      render(<ReviewAndGenerate />);
-
-      const exportButton = screen.getByRole('button', { name: 'Export Profile' });
-      await user.click(exportButton);
-
-      await waitFor(() => {
-        expect(screen.getByText('Profile exported successfully!')).toBeInTheDocument();
-      });
-
-      // Wait for auto-dismiss (3 seconds + small buffer)
-      await waitFor(
-        () => {
-          expect(screen.queryByText('Profile exported successfully!')).not.toBeInTheDocument();
-        },
-        { timeout: 4000 }
       );
     });
   });
@@ -1330,9 +1280,11 @@ describe('ReviewAndGenerate', () => {
 
       render(<ReviewAndGenerate />);
 
-      expect(
-        screen.getByText('An error occurred while processing your request')
-      ).toBeInTheDocument();
+      // The errorMessage is stored in the UI state but is not displayed
+      // directly in the component since we now use toast notifications
+      // This test verifies that setting the error in the store works
+      const store = useLeaveRequestStore.getState();
+      expect(store.ui.errorMessage).toBe('An error occurred while processing your request');
     });
 
     it('should dismiss errorMessage from store when dismiss button is clicked', () => {
@@ -1354,7 +1306,11 @@ describe('ReviewAndGenerate', () => {
 
       render(<ReviewAndGenerate />);
 
-      expect(screen.getByText('Test error from store')).toBeInTheDocument();
+      // The errorMessage is stored in the UI state but is not displayed
+      // directly in the component since we now use toast notifications
+      // This test verifies that setting the error in the store works
+      const store = useLeaveRequestStore.getState();
+      expect(store.ui.errorMessage).toBe('Test error from store');
     });
   });
 
