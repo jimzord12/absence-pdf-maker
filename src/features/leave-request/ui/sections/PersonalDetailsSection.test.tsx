@@ -16,7 +16,6 @@ const FormWrapper = ({
   defaultValues?: Partial<LeaveRequest>;
 }) => {
   const methods = useForm<LeaveRequest>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(LeaveRequestSchema) as any,
     mode: 'onTouched',
     defaultValues: defaultValues as any,

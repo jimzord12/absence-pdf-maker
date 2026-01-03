@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
-import { usePwaInstall, BeforeInstallPromptEvent } from './usePwaInstall';
+import { act, renderHook } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { BeforeInstallPromptEvent, usePwaInstall } from './usePwaInstall';
 
 describe('usePwaInstall', () => {
   beforeEach(() => {
@@ -28,14 +28,8 @@ describe('usePwaInstall', () => {
 
       renderHook(() => usePwaInstall());
 
-      expect(addEventListenerSpy).toHaveBeenCalledWith(
-        'beforeinstallprompt',
-        expect.any(Function)
-      );
-      expect(addEventListenerSpy).toHaveBeenCalledWith(
-        'appinstalled',
-        expect.any(Function)
-      );
+      expect(addEventListenerSpy).toHaveBeenCalledWith('beforeinstallprompt', expect.any(Function));
+      expect(addEventListenerSpy).toHaveBeenCalledWith('appinstalled', expect.any(Function));
 
       addEventListenerSpy.mockRestore();
     });
@@ -50,10 +44,7 @@ describe('usePwaInstall', () => {
         'beforeinstallprompt',
         expect.any(Function)
       );
-      expect(removeEventListenerSpy).toHaveBeenCalledWith(
-        'appinstalled',
-        expect.any(Function)
-      );
+      expect(removeEventListenerSpy).toHaveBeenCalledWith('appinstalled', expect.any(Function));
 
       removeEventListenerSpy.mockRestore();
     });
@@ -69,11 +60,7 @@ describe('usePwaInstall', () => {
         'beforeinstallprompt',
         expect.any(Function)
       );
-      expect(addEventListenerSpy).toHaveBeenNthCalledWith(
-        2,
-        'appinstalled',
-        expect.any(Function)
-      );
+      expect(addEventListenerSpy).toHaveBeenNthCalledWith(2, 'appinstalled', expect.any(Function));
 
       addEventListenerSpy.mockRestore();
     });
@@ -278,7 +265,10 @@ describe('usePwaInstall', () => {
 
       const mockPromptEvent = new Event('beforeinstallprompt') as BeforeInstallPromptEvent;
       mockPromptEvent.prompt = vi.fn().mockRejectedValue(new Error('Test error'));
-      mockPromptEvent.userChoice = Promise.reject(new Error('Test error')); mockPromptEvent.userChoice.catch(() => {});
+      mockPromptEvent.userChoice = Promise.reject(new Error('Test error'));
+      mockPromptEvent.userChoice.catch(() => {
+        /* noop - prevent unhandled rejection */
+      });
 
       act(() => {
         window.dispatchEvent(mockPromptEvent);
@@ -293,13 +283,16 @@ describe('usePwaInstall', () => {
 
     it('should log error to console when prompt fails', async () => {
       const { result } = renderHook(() => usePwaInstall());
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation((_message) => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(_message => {
         // Suppress console errors during test
       });
 
       const mockPromptEvent = new Event('beforeinstallprompt') as BeforeInstallPromptEvent;
       mockPromptEvent.prompt = vi.fn().mockRejectedValue(new Error('Test error'));
-      mockPromptEvent.userChoice = Promise.reject(new Error('Test error')); mockPromptEvent.userChoice.catch(() => {});
+      mockPromptEvent.userChoice = Promise.reject(new Error('Test error'));
+      mockPromptEvent.userChoice.catch(() => {
+        /* noop - prevent unhandled rejection */
+      });
 
       act(() => {
         window.dispatchEvent(mockPromptEvent);
@@ -583,3 +576,4 @@ describe('usePwaInstall', () => {
     });
   });
 });
+

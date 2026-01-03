@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
 import { LeaveRequestPdf } from './LeaveRequestPdf';
 
@@ -104,7 +104,7 @@ describe('LeaveRequestPdf', () => {
 
       // Convert all text content to string and check for Greek characters
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       // Should contain Greek text
@@ -116,14 +116,16 @@ describe('LeaveRequestPdf', () => {
 
   describe('Header Section', () => {
     it('should render company name', () => {
-      const data = createMockLeaveRequest({ profile: { ...createMockLeaveRequest().profile, companyName: 'Test Company' } });
+      const data = createMockLeaveRequest({
+        profile: { ...createMockLeaveRequest().profile, companyName: 'Test Company' },
+      });
       const absenceDays = 5;
 
       const { container } = render(<LeaveRequestPdf data={data} absenceDays={absenceDays} />);
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('Test Company');
@@ -137,7 +139,7 @@ describe('LeaveRequestPdf', () => {
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('ΑΙΤΗΣΗ');
@@ -146,98 +148,112 @@ describe('LeaveRequestPdf', () => {
 
   describe('Employee Details Section', () => {
     it('should render full name', () => {
-      const data = createMockLeaveRequest({ profile: { ...createMockLeaveRequest().profile, fullName: 'Test User' } });
+      const data = createMockLeaveRequest({
+        profile: { ...createMockLeaveRequest().profile, fullName: 'Test User' },
+      });
       const absenceDays = 5;
 
       const { container } = render(<LeaveRequestPdf data={data} absenceDays={absenceDays} />);
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('Test User');
     });
 
-    it('should render father\'s name', () => {
-      const data = createMockLeaveRequest({ profile: { ...createMockLeaveRequest().profile, fathersName: 'Test Father' } });
+    it("should render father's name", () => {
+      const data = createMockLeaveRequest({
+        profile: { ...createMockLeaveRequest().profile, fathersName: 'Test Father' },
+      });
       const absenceDays = 5;
 
       const { container } = render(<LeaveRequestPdf data={data} absenceDays={absenceDays} />);
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('Test Father');
     });
 
     it('should render position', () => {
-      const data = createMockLeaveRequest({ profile: { ...createMockLeaveRequest().profile, position: 'Senior Developer' } });
+      const data = createMockLeaveRequest({
+        profile: { ...createMockLeaveRequest().profile, position: 'Senior Developer' },
+      });
       const absenceDays = 5;
 
       const { container } = render(<LeaveRequestPdf data={data} absenceDays={absenceDays} />);
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('Senior Developer');
     });
 
     it('should render identity number', () => {
-      const data = createMockLeaveRequest({ profile: { ...createMockLeaveRequest().profile, identityNumber: 'AD987654' } });
+      const data = createMockLeaveRequest({
+        profile: { ...createMockLeaveRequest().profile, identityNumber: 'AD987654' },
+      });
       const absenceDays = 5;
 
       const { container } = render(<LeaveRequestPdf data={data} absenceDays={absenceDays} />);
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('AD987654');
     });
 
     it('should render phone number', () => {
-      const data = createMockLeaveRequest({ profile: { ...createMockLeaveRequest().profile, phone: '9876543210' } });
+      const data = createMockLeaveRequest({
+        profile: { ...createMockLeaveRequest().profile, phone: '9876543210' },
+      });
       const absenceDays = 5;
 
       const { container } = render(<LeaveRequestPdf data={data} absenceDays={absenceDays} />);
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('9876543210');
     });
 
     it('should render employee ID when present', () => {
-      const data = createMockLeaveRequest({ profile: { ...createMockLeaveRequest().profile, employeeId: 'EMP999' } });
+      const data = createMockLeaveRequest({
+        profile: { ...createMockLeaveRequest().profile, employeeId: 'EMP999' },
+      });
       const absenceDays = 5;
 
       const { container } = render(<LeaveRequestPdf data={data} absenceDays={absenceDays} />);
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('EMP999');
     });
 
     it('should not render employee ID section when absent', () => {
-      const data = createMockLeaveRequest({ profile: { ...createMockLeaveRequest().profile, employeeId: '' } });
+      const data = createMockLeaveRequest({
+        profile: { ...createMockLeaveRequest().profile, employeeId: '' },
+      });
       const absenceDays = 5;
 
       const { container } = render(<LeaveRequestPdf data={data} absenceDays={absenceDays} />);
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       // Should not contain an empty employee ID or the label
@@ -254,7 +270,7 @@ describe('LeaveRequestPdf', () => {
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('10');
@@ -268,7 +284,7 @@ describe('LeaveRequestPdf', () => {
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('2025-06-01');
@@ -282,7 +298,7 @@ describe('LeaveRequestPdf', () => {
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('2025-06-05');
@@ -296,7 +312,7 @@ describe('LeaveRequestPdf', () => {
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('Family vacation');
@@ -310,7 +326,7 @@ describe('LeaveRequestPdf', () => {
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('Προσωπικοί λόγοι');
@@ -326,7 +342,7 @@ describe('LeaveRequestPdf', () => {
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('ΕΠΙΘΥΜΩ');
@@ -341,7 +357,7 @@ describe('LeaveRequestPdf', () => {
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('ΔΕΝ ΕΠΙΘΥΜΩ');
@@ -372,14 +388,16 @@ describe('LeaveRequestPdf', () => {
     });
 
     it('should render employee name under signature line', () => {
-      const data = createMockLeaveRequest({ profile: { ...createMockLeaveRequest().profile, fullName: 'Jane Smith' } });
+      const data = createMockLeaveRequest({
+        profile: { ...createMockLeaveRequest().profile, fullName: 'Jane Smith' },
+      });
       const absenceDays = 5;
 
       const { container } = render(<LeaveRequestPdf data={data} absenceDays={absenceDays} />);
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('Jane Smith');
@@ -395,7 +413,7 @@ describe('LeaveRequestPdf', () => {
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('2024-12-31');
@@ -414,7 +432,7 @@ describe('LeaveRequestPdf', () => {
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('1');
@@ -431,7 +449,7 @@ describe('LeaveRequestPdf', () => {
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('22');
@@ -451,7 +469,7 @@ describe('LeaveRequestPdf', () => {
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain('Γιώργος Παπαδόπουλος');
@@ -459,7 +477,8 @@ describe('LeaveRequestPdf', () => {
     });
 
     it('should handle very long reason text', () => {
-      const longReason = 'This is a very long reason for leave that spans multiple lines and contains a lot of text';
+      const longReason =
+        'This is a very long reason for leave that spans multiple lines and contains a lot of text';
       const data = createMockLeaveRequest({ reason: longReason });
       const absenceDays = 5;
 
@@ -467,7 +486,7 @@ describe('LeaveRequestPdf', () => {
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
       const allText = Array.from(textElements)
-        .map((el) => el.textContent || '')
+        .map(el => el.textContent || '')
         .join(' ');
 
       expect(allText).toContain(longReason);
@@ -475,10 +494,10 @@ describe('LeaveRequestPdf', () => {
   });
 
   describe('Font Registration', () => {
-    it('should register font with @react-pdf/renderer', () => {
+    it('should register font with @react-pdf/renderer', async () => {
       // Font registration happens at module level when LeaveRequestPdf is imported
       // The mock verifies that Font.register is called when the component is loaded
-      const { Font } = require('@react-pdf/renderer');
+      const { Font } = await import('@react-pdf/renderer');
       // The mock is called during module initialization
       expect(Font.register).toBeDefined();
       expect(typeof Font.register).toBe('function');
@@ -554,3 +573,4 @@ describe('LeaveRequestPdf', () => {
     });
   });
 });
+

@@ -1,7 +1,7 @@
 // @vitest-environment node
-import { describe, it, expect, beforeEach } from 'vitest';
-import { readFileSync, existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 const projectRoot = process.cwd();
 
@@ -24,12 +24,12 @@ describe('Tailwind CSS Integration', () => {
     });
 
     it('should have index.css imported in main.tsx', () => {
-      expect(mainTsxContent).toContain("./index.css");
+      expect(mainTsxContent).toContain('./index.css');
       expect(mainTsxContent).toMatch(/import\s+['"].*index\.css['"]/);
     });
 
     it('should NOT have globals.css imported in main.tsx', () => {
-      expect(mainTsxContent).not.toContain("./shared/styles/globals.css");
+      expect(mainTsxContent).not.toContain('./shared/styles/globals.css');
     });
   });
 
@@ -111,7 +111,7 @@ describe('Tailwind CSS Integration', () => {
       expect(indexCssContent).toContain('.focus-visible');
     });
 
-    it('should define .focus\:not-focus-visible utility', () => {
+    it('should define .focus:not-focus-visible utility', () => {
       expect(indexCssContent).toContain('.focus\\:not-focus-visible:focus:not(:focus-visible)');
     });
   });
@@ -177,3 +177,4 @@ describe('Tailwind CSS Integration', () => {
     });
   });
 });
+

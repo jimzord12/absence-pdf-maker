@@ -21,21 +21,27 @@ export const SignatureModal: React.FC = () => {
     setSignature,
   } = useLeaveRequestStore();
 
-  // Clear the canvas when modal opens and reset signature state
+  // Reset state when modal opens - using callback pattern to avoid setState in effect body
+  const resetSignatureState = useCallback(() => {
+    setHasSignature(false);
+    setTypedName('');
+    setUseTypedSignature(false);
+  }, []);
+
+  // Clear the canvas when modal opens
   useEffect(() => {
     if (isSignatureModalOpen) {
       if (sigCanvas.current) {
         sigCanvas.current.clear();
       }
       hasInitializedRef.current = true;
-      setHasSignature(false);
-      setTypedName('');
-      setUseTypedSignature(false);
+      // Use queueMicrotask to defer state updates and avoid cascading renders
+      queueMicrotask(resetSignatureState);
     } else {
       hasInitializedRef.current = false;
     }
     return undefined;
-  }, [isSignatureModalOpen, setHasSignature, setTypedName, setUseTypedSignature]);
+  }, [isSignatureModalOpen, resetSignatureState]);
 
   // Handle clearing the signature canvas
   const handleClear = useCallback(() => {

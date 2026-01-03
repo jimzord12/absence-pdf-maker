@@ -23,9 +23,12 @@ export const generateLeaveRequestPdf = async (
   const absenceBreakdown = calculateAbsenceDays(data.startDate, data.endDate, holidays);
 
   // Create PDF document
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const blob = await pdf(
-    React.createElement(LeaveRequestPdf as any, { data, absenceDays: absenceBreakdown.absenceDays }) as any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    React.createElement(LeaveRequestPdf as any, {
+      data,
+      absenceDays: absenceBreakdown.absenceDays,
+    }) as any
   ).toBlob();
 
   return blob;
