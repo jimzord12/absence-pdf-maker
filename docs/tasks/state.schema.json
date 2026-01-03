@@ -34,6 +34,10 @@
           "notes": {
             "type": "string"
           },
+          "fromIssue": {
+            "type": "string",
+            "description": "The issue ID this task was created from (e.g., '006')"
+          },
           "blockedBy": {
             "type": "array",
             "items": {

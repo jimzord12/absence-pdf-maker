@@ -206,6 +206,12 @@ Create a conventional git commit for the completed changes.
 **Task/Request:**
 {description of what was done}
 
+**Task Identifier:**
+{task identifier from state.json, if applicable}
+
+**Linked Issue:**
+{issue ID from task's fromIssue field, if applicable}
+
 **Files Changed:**
 {comprehensive list}
 
@@ -213,8 +219,22 @@ Create a conventional git commit for the completed changes.
 1. Create a conventional commit message (feat/fix/docs/test/refactor/chore)
 2. Stage appropriate files
 3. Execute the commit
-4. Report the commit hash and status
+4. If the task has a linked issue (fromIssue), close the issue:
+   - Update the issue's Status to "Closed"
+   - Move the issue from docs/issues/open/ to docs/issues/closed/
+5. Report the commit hash and status
 ```
+
+### Phase 9: Handle Issue Closure
+
+When a task reaches `committed` state:
+
+1. **Check for linked issue**: Read the task from `docs/tasks/state.json` and check for `fromIssue` property
+2. **If linked issue exists**:
+   - Verify the finisher has moved the issue to `docs/issues/closed/`
+   - If not done, move it now: `mv docs/issues/open/{issue_id}-*.md docs/issues/closed/`
+   - Confirm the issue's `**Status:**` is set to `Closed`
+3. **Report issue closure** in the completion summary to the user
 
 ## State Transition Flow
 
@@ -268,6 +288,7 @@ For requests not in `docs/tasks/TASKS.md`:
       "state": "not_started|implemented|unit_tested|review_pass|review_fail|completed|committed",
       "lastUpdated": "ISO datetime",
       "description": "optional description",
+      "fromIssue": "optional issue ID (e.g., '006') linking task to its source issue",
       "blockedBy": ["optional", "array", "of", "task-ids"]
     }
   }

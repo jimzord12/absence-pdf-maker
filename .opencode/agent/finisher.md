@@ -133,6 +133,18 @@ After committing:
 - If there are uncommitted changes, inform the `implementor`
 - The working tree should be clean except for the state file update
 
+### Handle Linked Issues
+
+After a successful commit, check if the task is linked to an issue:
+
+1. **Read the task from `docs/tasks/state.json`**: Check if the task has a `fromIssue` property
+2. **If linked to an issue:**
+   - Locate the issue file in `docs/issues/open/{issue_id}-*.md`
+   - Update the issue's `**Status:**` field to `Closed`
+   - Move the issue file from `docs/issues/open/` to `docs/issues/closed/`
+   - Example: `mv docs/issues/open/006-ui-fixes.md docs/issues/closed/006-ui-fixes.md`
+3. **Report the issue closure** in the commit report
+
 ## Return Format
 
 When returning to the `orchestrator`, provide a structured report:
@@ -159,6 +171,10 @@ When returning to the `orchestrator`, provide a structured report:
 ### Files Deleted
 
 - [List if any, otherwise "None"]
+
+### Issue Closed
+
+- [Issue ID and filename if a linked issue was closed, otherwise "None"]
 
 ### Documentation Updated
 
