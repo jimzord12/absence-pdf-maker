@@ -15,9 +15,9 @@ DateRangeField component does not utilize holidays.json data to visually highlig
 ### Symptom
 
 1. User opens Date Range Picker to select leave dates
-2. Holidays are not visually highlighted in calendar
-3. Business days calculation may not exclude holidays
-4. No clear button exists to reset date selection
+2. Holidays are not visually highlighted in calendar (Done!)
+3. Business days calculation may not exclude holidays (Done!)
+4. No clear button exists to reset date selection (Not Completed)
 5. Users must manually clear dates by opening calendar and deselecting
 
 ### Investigation Details
@@ -59,16 +59,19 @@ DateRangeField component does not utilize holidays.json data to visually highlig
 ### Current Implementation
 
 **Date Range Picker:**
+
 - Library: `react-day-picker` (currently v9)
 - Component: `DateRangeField.tsx`
 - Props: Receives form control and validation
 
 **Holidays Data:**
+
 - File: `data/holidays.json`
 - Format: JSON array of holiday dates
 - Usage: Should be used for both UI highlighting and calculation
 
 **Business Days Service:**
+
 - File: `src/features/leave-request/services/absenceDays.ts`
 - Function: `calculateAbsenceDays(startDate, endDate, holidays)`
 - Current State: May or may not exclude holidays
@@ -76,6 +79,7 @@ DateRangeField component does not utilize holidays.json data to visually highlig
 ### Holiday Highlighting Requirements
 
 The date picker should visually distinguish:
+
 1. **Regular days** - Default styling
 2. **Holidays** - Highlighted with different color (e.g., red or orange)
 3. **Weekends** - Already handled by react-day-picker
@@ -84,6 +88,7 @@ The date picker should visually distinguish:
 ### Business Days Calculation
 
 Should calculate:
+
 - Total calendar days
 - Weekends excluded
 - Holidays excluded
@@ -92,11 +97,13 @@ Should calculate:
 ### Clear Button Placement
 
 **Option 1 - In DateRangeField:**
+
 - Position: Next to date input
 - Icon: "X" or "Clear" text
 - Action: Resets form field values for start and end dates
 
 **Option 2 - In LeaveDetailsSection:**
+
 - Position: Next to "Holidays legend"
 - Text: "Clear Dates" button
 - Action: Same as above
@@ -104,18 +111,22 @@ Should calculate:
 ### Relevant Files
 
 1. **`src/features/leave-request/ui/DateRangeField.tsx`**
+
    - Date range picker component
    - Needs holiday integration and clear button
 
 2. **`src/features/leave-request/ui/LeaveDetailsSection.tsx`**
+
    - Contains DateRangeField
    - Alternative location for clear button
 
 3. **`data/holidays.json`**
+
    - Contains Greek holidays data
    - Needs to be imported and used
 
 4. **`src/features/leave-request/services/absenceDays.ts`**
+
    - Business days calculation logic
    - Needs to receive and use holidays data
 
@@ -128,14 +139,14 @@ Should calculate:
 ```typescript
 // Example of how to modify styling for holidays
 const modifiers = {
-  holiday: (date: Date) => isHoliday(date, holidays)
+  holiday: (date: Date) => isHoliday(date, holidays),
 };
 
 const modifiersStyles = {
   holiday: {
     color: 'red',
     backgroundColor: 'rgba(255,0,0,0.1)',
-  }
+  },
 };
 ```
 
@@ -144,6 +155,7 @@ const modifiersStyles = {
 ### 1. Missing Holiday Integration
 
 DateRangeField was implemented without reading holidays.json, either because:
+
 - Holidays feature was deferred to later
 - Holiday integration was overlooked during implementation
 - No clear requirement for holiday highlighting was specified
@@ -151,6 +163,7 @@ DateRangeField was implemented without reading holidays.json, either because:
 ### 2. Service Not Connected
 
 The business days calculation service may exist but:
+
 - Does not receive holidays as parameter
 - Holiday service not integrated with calculator
 - Logic exists but not called properly
@@ -158,6 +171,7 @@ The business days calculation service may exist but:
 ### 3. UI/UX Decision
 
 Clear button may have been intentionally omitted due to:
+
 - Design preference for minimal UI
 - Assumption users can deselect dates manually
 - Not considered during initial development
@@ -173,6 +187,7 @@ Clear button may have been intentionally omitted due to:
 ### Medium Term (Proper Fix)
 
 1. **Integrate Holidays in DateRangeField:**
+
    - Import holidays.json or use holidays.service
    - Add `modifiers` prop to react-day-picker
    - Create `isHoliday(date: Date, holidays: string[])` utility
@@ -180,6 +195,7 @@ Clear button may have been intentionally omitted due to:
    - Expected outcome: Holidays visually highlighted in calendar
 
 2. **Update Business Days Service:**
+
    - Ensure `calculateAbsenceDays()` receives holidays data
    - Filter out holiday dates from business days count
    - Update function signature if needed
@@ -195,12 +211,14 @@ Clear button may have been intentionally omitted due to:
 ### Long Term (Architectural)
 
 1. **Holiday Configuration Service:**
+
    - Create centralized holiday configuration
    - Support multiple countries/regions
    - Allow holiday updates without code changes
    - Benefits: Scalability, maintainability
 
 2. **Reusable Date Range Picker:**
+
    - Move DateRangeField to shared components
    - Make holiday highlighting configurable
    - Add props for custom modifiers and styles
@@ -234,3 +252,4 @@ Clear button may have been intentionally omitted due to:
 - File: `src/features/leave-request/services/holidays/holidays.service.ts`
 - Documentation: [TODO.md](../../tasks/TODO.md) - Issue #04
 - Library: [react-day-picker v9](https://daypicker.dev/)
+

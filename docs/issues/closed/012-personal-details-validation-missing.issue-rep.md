@@ -3,7 +3,7 @@
 **Issue ID:** 012
 **Component:** Personal Details Section Form
 **Date Discovered:** 2025-12-31
-**Status:** Open
+**Status:** Closed
 **Priority:** High
 
 ## Summary
@@ -56,11 +56,13 @@ Personal Details section form lacks proper validation for all fields, including 
 The Greek Identity Number (Αριθμός Δελτίου Ταυτότητας - ADT) has multiple valid formats:
 
 1. **Standard ADT Format:**
+
    - 8 digits in format: LLLDDDDD
    - LLL = 3-letter uppercase Greek letters
    - DDDDD = 5 digits (4 for date, 1 for parity)
 
 2. **AMKA Format (Social Security Number):**
+
    - 11 digits
    - Specific checksum validation
 
@@ -111,12 +113,14 @@ Validation may be happening but error messages are not displayed in the UI.
 ### Medium Term (Proper Fix)
 
 1. **Implement Greek ADT Validation:**
+
    - Create utility function to validate Greek identity number formats
    - Support multiple valid formats (ADT, AMKA, Passport)
    - Add specific error messages for each format
    - Expected outcome: Only valid Greek identity numbers accepted
 
 2. **Connect Zod Resolver:**
+
    - Ensure React Hook Form properly uses zodResolver
    - Set mode to 'onTouched' or 'onChange' for immediate feedback
    - Verify error display in form fields
@@ -133,6 +137,7 @@ Validation may be happening but error messages are not displayed in the UI.
 ### Long Term (Architectural)
 
 1. **Reusable Validation Utilities:**
+
    - Create shared validation utilities for Greek-specific formats
    - Implement in separate `src/shared/lib/validation.ts`
    - Benefits: Reusable across features, consistent validation
@@ -158,3 +163,4 @@ Validation may be happening but error messages are not displayed in the UI.
 - File: `src/features/leave-request/model/leaveRequest.schema.ts`
 - File: `src/features/leave-request/ui/LeaveRequestForm.tsx`
 - Documentation: [TODO.md](../../tasks/TODO.md) - Issue #02
+

@@ -267,17 +267,17 @@
       "description": "Integrate the reviewer agent and implement mandatory self-reflection steps for subagents."
     },
     "061-issue-to-task-prompt": {
-      "state": "completed",
+      "state": "committed",
       "lastUpdated": "2026-01-02T19:45:00Z",
       "description": "Create a high-fidelity prompt template for converting Issue Reports into structured Tasks."
     },
     "062-visual-regression-baseline": {
-      "state": "completed",
+      "state": "committed",
       "lastUpdated": "2026-01-02T19:46:49.210Z",
       "description": "Setup a script for AI-driven visual verification using Playwright to capture UI baselines."
     },
     "063-copilot-optimization": {
-      "state": "completed",
+      "state": "committed",
       "lastUpdated": "2026-01-02T20:00:00Z",
       "description": "Optimize repository for GitHub Copilot by adding .github/copilot-instructions.md and VS Code configurations."
     }

@@ -104,6 +104,7 @@ Form submission may not be properly connected to form validation, allowing bypas
 ### Medium Term (Proper Fix)
 
 1. **Ensure Error Display:**
+
    - Verify validation errors are passed to Input components
    - Display error messages below each field
    - Use red color and clear messaging
@@ -112,35 +113,40 @@ Form submission may not be properly connected to form validation, allowing bypas
 2. **Strengthen Field Validation:**
 
    **Company Name:**
+
    - Required: Yes
    - Min length: 2 characters
    - Pattern: Allow letters, numbers, spaces, Greek characters
    - Default: "ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε" (should be editable)
 
    **Department:**
+
    - Required: Yes
    - Min length: 2 characters
    - Pattern: Allow letters, numbers, spaces, Greek characters
 
    **Position:**
+
    - Required: Yes
    - Min length: 2 characters
    - Pattern: Allow letters, numbers, spaces, Greek characters
 
    **Employee ID:**
+
    - Required: No
    - Pattern: Alphanumeric, allow common formats
    - Expected outcome: Proper validation for all fields
 
 3. **Visual Validation Feedback:**
    - Add red border to invalid fields
-   - Show asterisk (*) for required fields
+   - Show asterisk (\*) for required fields
    - Display error messages in red text below fields
    - Expected outcome: Clear visual indicators of validation state
 
 ### Long Term (Architectural)
 
 1. **Form Field Component Enhancement:**
+
    - Enhance Input component to handle validation display
    - Add required field indicator
    - Support multiple validation rules per field
@@ -162,7 +168,7 @@ Form submission may not be properly connected to form validation, allowing bypas
 
 ## Related Issues
 
-- [012 - Personal Details Form Validation Missing](./012-personal-details-validation-missing.issue-rep.md)
+- [012 - Personal Details Form Validation Missing](../closed/012-personal-details-validation-missing.issue-rep.md)
 
 ## References
 
@@ -170,3 +176,4 @@ Form submission may not be properly connected to form validation, allowing bypas
 - File: `src/features/leave-request/ui/EmploymentDetailsSection.tsx`
 - File: `src/features/leave-request/ui/LeaveRequestForm.tsx`
 - Documentation: [TODO.md](../../tasks/TODO.md) - Issue #03
+
