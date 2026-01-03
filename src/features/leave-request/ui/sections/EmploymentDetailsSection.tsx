@@ -12,7 +12,7 @@ interface EmploymentDetailsSectionProps {
 /**
  * EmploymentDetailsSection component
  *
- * Displays form fields for employment information:
+ * Displays form fields for employment information (Employment Details Form):
  * - Employee ID (text input, optional)
  * - Company Name (text input, with default value)
  * - Department (text input)
@@ -33,7 +33,7 @@ export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> =
     <section aria-labelledby="employment-details-heading">
       <Card>
         <h2 id="employment-details-heading" className="text-xl font-semibold mb-4">
-          Employment Details
+          Employment Details Form
         </h2>
         <div className="space-y-4">
           <Input

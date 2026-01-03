@@ -218,7 +218,7 @@ export const ReviewAndGenerate: React.FC = () => {
       <section aria-labelledby="review-personal-details-heading">
         <Card>
           <h2 id="review-personal-details-heading" className="text-xl font-semibold mb-4">
-            Personal Details
+            Personal Details Summary
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -265,7 +265,7 @@ export const ReviewAndGenerate: React.FC = () => {
       <section aria-labelledby="review-leave-details-heading">
         <Card>
           <h2 id="review-leave-details-heading" className="text-xl font-semibold mb-4">
-            Leave Details
+            Leave Details Summary
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex-col justify-between">

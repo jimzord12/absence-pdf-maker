@@ -101,11 +101,11 @@ describe('ReviewAndGenerate', () => {
     it('should render all sections', () => {
       render(<ReviewAndGenerate />);
 
-      // Check Personal Details Section
-      expect(screen.getByText('Personal Details')).toBeInTheDocument();
+      // Check Personal Details Summary Section
+      expect(screen.getByText('Personal Details Summary')).toBeInTheDocument();
 
-      // Check Leave Details Section
-      expect(screen.getByText('Leave Details')).toBeInTheDocument();
+      // Check Leave Details Summary Section
+      expect(screen.getByText('Leave Details Summary')).toBeInTheDocument();
 
       // Check Actions Section
       expect(screen.getByText('Actions')).toBeInTheDocument();

@@ -63,7 +63,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      expect(screen.getByText('Employment Details')).toBeInTheDocument();
+      expect(screen.getByText('Employment Details Form')).toBeInTheDocument();
     });
 
     it('should render all four input fields with correct labels', () => {
@@ -513,7 +513,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const heading = screen.getByText('Employment Details');
+      const heading = screen.getByText('Employment Details Form');
       expect(heading).toHaveClass('text-xl');
       expect(heading).toHaveClass('font-semibold');
       expect(heading).toHaveClass('mb-4');
@@ -666,7 +666,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      expect(screen.getByText('Employment Details')).toBeInTheDocument();
+      expect(screen.getByText('Employment Details Form')).toBeInTheDocument();
       expect(screen.getByLabelText(/Employee ID/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/Department/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/Position/i)).toBeInTheDocument();
@@ -679,7 +679,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      expect(screen.getByText('Employment Details')).toBeInTheDocument();
+      expect(screen.getByText('Employment Details Form')).toBeInTheDocument();
     });
 
     it('should accept various Employee ID formats', async () => {
@@ -864,7 +864,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const heading = screen.getByText('Employment Details');
+      const heading = screen.getByText('Employment Details Form');
       expect(heading).toHaveClass('text-xl');
       expect(heading).toHaveClass('font-semibold');
       expect(heading).toHaveClass('mb-4');

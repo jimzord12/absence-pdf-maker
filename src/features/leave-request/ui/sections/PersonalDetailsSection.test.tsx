@@ -73,7 +73,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      expect(screen.getByText('Personal Details')).toBeInTheDocument();
+      expect(screen.getByText('Personal Details Form')).toBeInTheDocument();
     });
 
     it('should render all three input fields with correct labels', () => {
@@ -522,7 +522,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      const heading = screen.getByText('Personal Details');
+      const heading = screen.getByText('Personal Details Form');
       expect(heading).toHaveClass('text-xl');
       expect(heading).toHaveClass('font-semibold');
       expect(heading).toHaveClass('mb-4');
@@ -647,7 +647,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      expect(screen.getByText('Personal Details')).toBeInTheDocument();
+      expect(screen.getByText('Personal Details Form')).toBeInTheDocument();
       expect(screen.getByLabelText(/Full Name/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/Email Address/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/Phone Number/i)).toBeInTheDocument();
@@ -660,7 +660,7 @@ describe('PersonalDetailsSection', () => {
         </FormWrapper>
       );
 
-      expect(screen.getByText('Personal Details')).toBeInTheDocument();
+      expect(screen.getByText('Personal Details Form')).toBeInTheDocument();
     });
 
     it('should accept phone numbers in various formats', async () => {

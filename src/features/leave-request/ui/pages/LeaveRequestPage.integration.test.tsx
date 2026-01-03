@@ -229,7 +229,7 @@ describe('Integration Tests - User Flows', () => {
         fathersName: 'Maria Smith',
         email: 'jane.smith@company.com',
         phone: '+1 (555) 987-6543',
-        identityNumber: 'ΑΒΓ54321',
+        identityNumber: 'ΑΒ-543210',
         employeeId: 'EMP-67890',
         companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
         department: 'Marketing',
@@ -277,7 +277,7 @@ describe('Integration Tests - User Flows', () => {
         fathersName: 'James Johnson',
         email: 'alice.j@company.com',
         phone: '6901234567',
-        identityNumber: 'ΑΒΓ78901',
+        identityNumber: 'ΑΒ-789012',
         employeeId: 'EMP-99999',
         companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
         department: 'Finance',
@@ -369,7 +369,7 @@ describe('Integration Tests - User Flows', () => {
             fathersName: 'George Doe',
             email: 'imported@company.com',
             phone: '6901234567',
-            identityNumber: 'ΑΒΓ98765',
+            identityNumber: 'ΑΒ-123456',
             employeeId: 'EMP-IMPORT',
             companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
             department: 'Imported Dept',
@@ -387,7 +387,7 @@ describe('Integration Tests - User Flows', () => {
           fathersName: 'George Doe',
           email: 'imported@company.com',
           phone: '6901234567',
-          identityNumber: 'ΑΒΓ98765',
+          identityNumber: 'ΑΒ-123456',
           employeeId: 'EMP-IMPORT',
           companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
           department: 'Imported Dept',
@@ -553,7 +553,7 @@ describe('Integration Tests - User Flows', () => {
 
       // Verify leave details section is rendered (use heading to be specific)
       const form = screen.getByRole('form');
-      expect(within(form).getByRole('heading', { name: /^leave details$/i })).toBeInTheDocument();
+      expect(within(form).getByRole('heading', { name: /^leave details form$/i })).toBeInTheDocument();
 
       // Select leave type
       const leaveTypeSelect = screen.getByLabelText(/leave type/i);

@@ -12,7 +12,7 @@ interface PersonalDetailsSectionProps {
 /**
  * PersonalDetailsSection component
  *
- * Displays form fields for personal information:
+ * Displays form fields for personal information (Personal Details Form):
  * - Full Name (text input)
  * - Email (email type input with validation)
  * - Phone Number (tel type input)
@@ -31,7 +31,7 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ 
     <section aria-labelledby="personal-details-heading">
       <Card>
         <h2 id="personal-details-heading" className="text-xl font-semibold mb-4">
-          Personal Details
+          Personal Details Form
         </h2>
         <div className="space-y-4">
           <Input

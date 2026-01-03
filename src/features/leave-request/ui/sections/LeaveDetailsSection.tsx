@@ -23,7 +23,7 @@ const leaveTypeOptions = [
 /**
  * LeaveDetailsSection component
  *
- * Displays form fields for leave information:
+ * Displays form fields for leave information (Leave Details Form):
  * - Leave Type (select dropdown)
  * - Date Range (start and end dates)
  * - Reason for leave (textarea)
@@ -59,7 +59,7 @@ export const LeaveDetailsSection: React.FC<LeaveDetailsSectionProps> = ({ errors
     <section aria-labelledby="leave-details-heading">
       <Card>
         <h2 id="leave-details-heading" className="text-xl font-semibold mb-4">
-          Leave Details
+          Leave Details Form
         </h2>
         <div className="space-y-4">
           <Select

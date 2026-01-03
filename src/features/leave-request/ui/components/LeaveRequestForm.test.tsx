@@ -149,9 +149,9 @@ describe('LeaveRequestForm', () => {
       </Wrapper>
     );
 
-    expect(screen.getByText('Personal Details')).toBeInTheDocument();
-    expect(screen.getByText('Employment Details')).toBeInTheDocument();
-    expect(screen.getByText('Leave Details')).toBeInTheDocument();
+    expect(screen.getByText('Personal Details Form')).toBeInTheDocument();
+    expect(screen.getByText('Employment Details Form')).toBeInTheDocument();
+    expect(screen.getByText('Leave Details Form')).toBeInTheDocument();
   });
 
   it('renders all required fields', () => {

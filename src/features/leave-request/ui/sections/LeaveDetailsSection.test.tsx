@@ -177,7 +177,7 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      expect(screen.getByText('Leave Details')).toBeInTheDocument();
+      expect(screen.getByText('Leave Details Form')).toBeInTheDocument();
     });
 
     it('should render all form fields', () => {
@@ -918,7 +918,7 @@ describe('LeaveDetailsSection', () => {
       render(<LeaveDetailsSection />);
 
       // Component should still render without crashing
-      expect(screen.getByText('Leave Details')).toBeInTheDocument();
+      expect(screen.getByText('Leave Details Form')).toBeInTheDocument();
     });
 
     it('should handle undefined errors prop', () => {
