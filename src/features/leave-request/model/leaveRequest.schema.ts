@@ -22,22 +22,32 @@ const nameRegex = new RegExp('^[' + GREEK_LETTERS + LATIN_LETTERS + ' \\-]+$');
  */
 
 /**
- * Validates Greek Identity Number (ADT) format - OLD FORMAT
- * Old ADT: LL-DDDDDD or LLDDDDDD where LL = 2 uppercase letters from ABEZHIKMNOPTYX, optional hyphen, DDDDDD = 6 digits
+ * Valid letters for Greek ADT (Old Format)
+ * Latin: ABEZHIKMNOPTYX
+ * Greek equivalents: ΑΒΕΖΗΙΚΜΝΟΠΤΥΧ (visually similar but different Unicode)
  */
-const greekAdtOldRegex = /^[ABEZHIKMNOPTYX]{2}-?\d{6}$/;
+const ADT_LATIN_LETTERS = 'ABEZHIKMNOPTYX';
+const ADT_GREEK_LETTERS = 'ΑΒΕΖΗΙΚΜΝΟΠΤΥΧ';
+
+/**
+ * Validates Greek Identity Number (ADT) format - OLD FORMAT
+ * Old ADT: LL-DDDDDD or LLDDDDDD where LL = 2 uppercase letters from ABEZHIKMNOPTYX (or Greek equivalents), optional hyphen, DDDDDD = 6 digits
+ */
+const greekAdtOldRegex = new RegExp(`^[${ADT_LATIN_LETTERS}${ADT_GREEK_LETTERS}]{2}-?\\d{6}$`);
 
 /**
  * Validates Greek Identity Number - NEW FORMAT
  * New format: 12-character alphanumeric identifier (EU digital identity aligned)
+ * Supports both Latin (A-Z) and Greek (Α-Ω) uppercase letters
  */
-const greekAdtNewRegex = /^[A-Z0-9]{12}$/;
+const greekAdtNewRegex = new RegExp(`^[A-Z0-9${GREEK_LETTERS}]{12}$`, 'i');
 
 /**
  * Validates Greek Passport number
- * Passport: 2 letters + 7 digits, no spaces or delimiters (e.g., AB1234567)
+ * Passport: 2 letters + 7 digits, no spaces or delimiters (e.g., AB1234567 or ΑΒ1234567)
+ * Supports both Latin and Greek letters
  */
-const greekPassportRegex = /^[A-Za-z]{2}\d{7}$/;
+const greekPassportRegex = new RegExp(`^[A-Za-z${GREEK_LETTERS}]{2}\\d{7}$`);
 
 /**
  * Validates if a string is a valid name (Greek or Latin letters)
@@ -142,9 +152,8 @@ export const UserProfileSchema = z.object({
     message: "Father's name must contain at least 2 characters (Greek or Latin letters only)",
   }),
   email: z
-    .string()
-    .min(1, 'Email is required')
-    .email('Please enter a valid email address (e.g., name@example.com)'),
+    .email('Please enter a valid email address (e.g., name@example.com)')
+    .min(1, 'Email is required'),
   phone: z.string().min(1, 'Phone number is required').refine(isValidGreekPhone, {
     message: 'Please enter a valid phone number (10 digits, spaces allowed)',
   }),
@@ -153,7 +162,7 @@ export const UserProfileSchema = z.object({
     .min(1, 'Identity number is required')
     .refine(isValidGreekIdentityNumber, {
       message:
-        'Identity number must be valid: Old ADT (e.g., AB-123456), New ID (12 alphanumeric), or Passport (e.g., AB1234567)',
+        'Identity number must be valid: Old ADT (e.g., AB-123456 or ΑΒ-123456), New ID (12 alphanumeric), or Passport (e.g., AB1234567)',
     }),
   employeeId: z.string().optional(),
   companyName: z.string().min(1, 'Company name is required'),

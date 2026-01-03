@@ -258,9 +258,9 @@ describe('Greek ADT Validation - Old Format', () => {
       expect(isValidGreekAdtOld('AB-12 456')).toBe(false);
     });
 
-    it('should reject Greek letters (this is Latin-only format)', () => {
-      expect(isValidGreekAdtOld('ΑΒ-123456')).toBe(false);
-      expect(isValidGreekAdtOld('ΑΒ123456')).toBe(false);
+    it('should accept Greek letters (equivalent to Latin letters)', () => {
+      expect(isValidGreekAdtOld('ΑΒ-123456')).toBe(true);
+      expect(isValidGreekAdtOld('ΑΒ123456')).toBe(true);
     });
   });
 });
@@ -292,8 +292,8 @@ describe('Greek ADT Validation - New Format', () => {
       expect(isValidGreekAdtNew('A1B2-C3D4E56')).toBe(false);
     });
 
-    it('should reject identifiers with Greek letters', () => {
-      expect(isValidGreekAdtNew('ΑΒΓ123456789')).toBe(false);
+    it('should accept identifiers with Greek letters', () => {
+      expect(isValidGreekAdtNew('ΑΒΓ123456789')).toBe(true);
     });
 
     it('should reject empty string', () => {
@@ -330,8 +330,8 @@ describe('Greek Passport Validation', () => {
       expect(isValidGreekPassport('AB 1234567')).toBe(false);
     });
 
-    it('should reject passport with Greek letters', () => {
-      expect(isValidGreekPassport('ΑΒ1234567')).toBe(false);
+    it('should accept passport with Greek letters', () => {
+      expect(isValidGreekPassport('ΑΒ1234567')).toBe(true);
     });
 
     it('should reject empty string', () => {
