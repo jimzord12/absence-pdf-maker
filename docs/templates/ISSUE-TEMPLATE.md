@@ -5,6 +5,7 @@
 **Date Discovered:** [YYYY-MM-DD]
 **Status:** [Open | In Progress | Resolved | Closed]
 **Priority:** [Critical | High | Medium | Low]
+**Task ID:** [None | Task identifier if converted to task]
 
 ## Summary
 

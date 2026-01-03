@@ -122,11 +122,18 @@ For each issue to convert:
      "state": "not_started",
      "lastUpdated": "{current ISO datetime}",
      "description": "{brief description}",
+     "fromIssue": "{issue_id}",
      "blockedBy": []
    }
    ```
 
-7. **Update TODO.md (Optional):**
+7. **Update the Issue File (Two-Way Link):**
+
+   - Open the issue file and update the `**Task ID:**` field with the new task identifier
+   - Example: Change `**Task ID:** None` to `**Task ID:** 055-fix-issue-006-ui-text-wrapping`
+   - Update `**Status:**` from `Open` to `In Progress`
+
+8. **Update TODO.md (Optional):**
    - If the issue was listed in `docs/tasks/TODO.md`, add a reference to the new task ID next to the issue heading (e.g., `## Issue #01 [Task 047]`).
 
 ### Step 5: Handle Dependencies

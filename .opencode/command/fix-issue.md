@@ -57,6 +57,11 @@ See `docs/templates/ISSUE-TEMPLATE.md` for the standard issue report format.
    - Ask the user to review and confirm that the issue is resolved.
 
 8. **Update the Issue Report:**
+
    - Document the fix in the issue report, including.
    - Update the Report's Status to "Completed".
    - Recommend to the user to commit the changes if the user is satisfied.
+
+9. **Close the Issue (After Commit):**
+   - Once the fix is committed, move the issue file from `docs/issues/open/` to `docs/issues/closed/`
+   - If the issue has a linked Task (check `**Task ID:**` field), verify the task is also marked as `committed` in `docs/tasks/state.json`
