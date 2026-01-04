@@ -4,27 +4,27 @@ import { el } from 'date-fns/locale';
 import React from 'react';
 import { LeaveRequest } from '../../model/leaveRequest.types';
 
-// Register font with Greek support
+// Register font with Greek support (bundled locally for offline functionality)
 Font.register({
   family: 'Roboto',
   fonts: [
     {
-      src: 'https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxP.ttf',
+      src: '/fonts/Roboto-Regular.ttf',
       fontWeight: 400,
       fontStyle: 'normal',
     }, // Regular
     {
-      src: 'https://fonts.gstatic.com/s/roboto/v27/KFOkCnqEu92Fr1Mu51xMIzIFKw.ttf',
+      src: '/fonts/Roboto-Italic.ttf',
       fontWeight: 400,
       fontStyle: 'italic',
     }, // Regular Italic
     {
-      src: 'https://fonts.gstatic.com/s/roboto/v27/KFOlCnqEu92Fr1MmWUlfBBc9.ttf',
+      src: '/fonts/Roboto-Bold.ttf',
       fontWeight: 700,
       fontStyle: 'normal',
     }, // Bold
     {
-      src: 'https://fonts.gstatic.com/s/roboto/v27/KFOjCnqEu92Fr1Mu51TzBic3CsTKlA.ttf',
+      src: '/fonts/Roboto-BoldItalic.ttf',
       fontWeight: 700,
       fontStyle: 'italic',
     }, // Bold Italic

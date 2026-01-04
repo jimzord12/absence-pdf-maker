@@ -12,7 +12,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['*.svg', '*.png', '*.jpg', '*.jpeg'],
+      includeAssets: ['*.svg', '*.png', '*.jpg', '*.jpeg', 'fonts/*.ttf'],
       manifest: {
         name: 'Leave Request PDF Maker',
         short_name: 'Leave PDF',
@@ -39,7 +39,7 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,jpg,jpeg,json}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,jpg,jpeg,json,ttf}'],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/.*\.(?:json|js|css|svg|png|jpg|jpeg)$/i,

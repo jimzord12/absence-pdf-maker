@@ -353,9 +353,14 @@ export const ReviewAndGenerate: React.FC = () => {
                 size="lg"
                 disabled={
                   !profile.fullName ||
-                  !profile.employeeId ||
+                  !profile.email ||
+                  !profile.identityNumber ||
+                  !profile.companyName ||
+                  !profile.department ||
+                  !profile.position ||
                   !leaveDraft.startDate ||
-                  !leaveDraft.endDate
+                  !leaveDraft.endDate ||
+                  !signature.signatureDataUrl
                 }
                 className="w-full md:w-auto"
               >

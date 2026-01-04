@@ -3,12 +3,11 @@
   "version": "2.0",
   "tasks": {
     "068-fix-issue-018-pdf-offline-generation": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-03T07:51:55.871Z",
-      "location": "backlog",
+      "state": "completed",
+      "lastUpdated": "2026-01-04T13:28:59.809Z",
+      "location": "active",
       "fromIssue": "018",
       "blockedBy": []
     }
   }
 }
-
