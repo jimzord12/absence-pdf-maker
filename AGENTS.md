@@ -2,16 +2,18 @@
 
 ## Project Overview
 
-This project is a **Leave Request Application** built with **React**, **TypeScript**, and **Zustand** for state management. It allows employees to submit leave requests, manage their profile information, and generate PDF documents of their requests. The application uses **React Hook Form** for form handling and validation with **Zod** schemas. PDF generation is handled using `@react-pdf/renderer`.
+**Leave Request Application** - A PWA for employees to submit leave requests and generate PDFs.
 
-The application is a PWA (Progressive Web App) that works offline and persists user data in local storage. It many features including:
+**Stack:** React 19, TypeScript, Zustand, React Hook Form, Zod, @react-pdf/renderer, Tailwind CSS, Vitest.
 
-- Employee profile management
+**Key Features:**
+
+- Employee profile management with persistent data
 - Leave request form with date range selection and absence days calculation
-- PDF generation of leave requests with digital signatures
-- State persistence with selective data storage
-- Import/Export and Clear of permanent data
+- PDF generation with digital signatures and Greek character support
+- Import/Export/Clear functionality for permanent data
 - Greek and English localization
+- PWA with offline support
 
 ## Context Layering
 
@@ -40,6 +42,67 @@ This repository is optimized for GitHub Copilot.
 - `npm run test -- --reporter=verbose` - Run tests with verbose output
 - `npm run lint` - Run ESLint linter
 - `npm run typecheck` - Run TypeScript type checking (`tsc --noEmit`)
+
+## Task Management System
+
+### Task Locations
+
+Tasks are organized by status in separate folders:
+
+| Folder                | Contents | Description                 |
+| --------------------- | -------- | --------------------------- |
+| `docs/tasks/backlog/` | `*.md`   | Tasks not yet started       |
+| `docs/tasks/active/`  | `*.md`   | Tasks currently in progress |
+| `docs/tasks/archive/` | `*.md`   | Completed/committed tasks   |
+
+### Task State Tracking
+
+- **State file:** `docs/tasks/state.json` (minimal, ~100 lines - only non-archived tasks)
+- **Task details:** Individual `.md` files in respective folders
+- **Schema:** `docs/tasks/state.schema.json` validates the state file format
+
+### CLI Commands
+
+| Command                                 | Description               |
+| --------------------------------------- | ------------------------- |
+| `npm run task next`                     | Get next actionable task  |
+| `npm run task show <id>`                | Display task details      |
+| `npm run task list`                     | List all active tasks     |
+| `npm run task list --state=not_started` | Filter by state           |
+| `npm run task state <id> <state>`       | Update task state         |
+| `npm run task create <id>`              | Create task from template |
+| `npm run task archive <id>`             | Move task to archive      |
+
+### OpenCode Tools
+
+The following tools are available for AI agents via `.opencode/tool/`:
+
+| Tool             | Description                                |
+| ---------------- | ------------------------------------------ |
+| `tasks_next`     | Get next actionable task with full details |
+| `tasks_show`     | Get specific task by ID                    |
+| `tasks_list`     | List tasks with optional filters           |
+| `tasks_setState` | Update task state with validation          |
+| `tasks_create`   | Create new task from template              |
+
+### Workflow for Agents
+
+1. Call `tasks_next` or `npm run task next` to get the next task to work on
+2. Read task details (description, constraints, acceptance criteria)
+3. Implement the task according to the acceptance criteria
+4. Call `tasks_setState` or `npm run task state <id> <state>` to update progress
+5. Task files auto-move between folders based on state transitions
+
+### State Transitions with Auto-Archiving
+
+| Transition                    | Action         | Folder Move            |
+| ----------------------------- | -------------- | ---------------------- |
+| `not_started` → `implemented` | Code written   | `backlog/` → `active/` |
+| `implemented` → `unit_tested` | Tests pass     | Stays in `active/`     |
+| `unit_tested` → `review_pass` | Review passes  | Stays in `active/`     |
+| `review_pass` → `completed`   | Task done      | Stays in `active/`     |
+| `completed` → `committed`     | Git commit     | `active/` → `archive/` |
+| Any → `cancelled`             | Task cancelled | Current → `archive/`   |
 
 ## Code Style
 
@@ -256,7 +319,7 @@ To ensure efficient and autonomous operation, use the following heuristics to se
 
 To ensure continuity across sessions, agents must provide a handover note for any task that is not yet `committed`.
 
-1. **Update Task State:** Use `npm run task -- <id> <state>` to update the task status.
-2. **Write Handover Note:** If a task is in-progress or blocked, add a summary of the current state to the `notes` field in `docs/tasks/state.json`.
+1. **Update Task State:** Use `npm run task state <id> <state>` or the `tasks_setState` tool to update the task status.
+2. **Update Task File:** If a task is in-progress or blocked, add progress notes to the "Notes" section of the task file in `docs/tasks/active/`.
 3. **Template:** For complex handovers, refer to the structure in `docs/templates/HANDOVER-TEMPLATE.md`.
 

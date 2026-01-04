@@ -1,12 +1,12 @@
 ---
-description: Convert open issues to tasks in TASKS.md with proper state tracking.
+description: Convert open issues to tasks with proper state tracking.
 agent: orchestrator
 subtask: false
 ---
 
 # Issue to Task Converter
 
-Convert issue reports from `docs/issues/open/` into actionable tasks in `docs/tasks/TASKS.md`.
+Convert issue reports from `docs/issues/open/` into actionable tasks in `docs/tasks/backlog/`.
 
 ## Arguments
 
@@ -28,7 +28,7 @@ ELSE:
 
 1. **Read existing tasks:**
 
-   - Parse `docs/tasks/TASKS.md` to extract all task identifiers
+   - List task files in `docs/tasks/{backlog,active,archive}/`
    - Parse `docs/tasks/state.json` to get task states
 
 2. **Read open issues:**
@@ -53,8 +53,8 @@ Possible Task Patterns:
 
 **Skip if:**
 
-- A task with matching pattern already exists in TASKS.md
-- The issue is already referenced in an existing task's description
+- A task file with matching pattern already exists in `docs/tasks/{backlog,active,archive}/`
+- The issue is already referenced in an existing task's Issue field
 
 **Process if:**
 
@@ -88,14 +88,20 @@ For each issue to convert:
    Example: 055-fix-issue-006-ui-text-wrapping
    ```
 
-5. **Create task entry in TASKS.md format:**
+5. **Create task file in `docs/tasks/backlog/{task_identifier}.md`:**
 
 ```markdown
-### {task_identifier}
+# {task_identifier}
 
-**Identifier:** `{task_identifier}`
+**Priority:** {priority}
+**Blocks:** none
+**Blocked By:** {blocked_by_task_ids or none}
+**Issue:** [#{issue_id}](../../issues/open/{issue_filename})
 
-**Description:**
+---
+
+## Description
+
 {Derived from issue Summary and Problem Description}
 
 **Constraints:**
@@ -172,7 +178,7 @@ Provide a summary to the user:
 
 ### Next Steps
 
-1. Review the generated tasks in TASKS.md
+1. Review the generated task files in `docs/tasks/backlog/`
 2. Adjust acceptance criteria if needed
 3. Start implementation with: `/implement-task {task_identifier}`
 ```
@@ -232,8 +238,8 @@ If issue lacks sufficient detail:
 
 Before creating a task:
 
-1. Check TASKS.md for similar descriptions
-2. Check state.json for similar task identifiers
+1. Check existing task files in `docs/tasks/{backlog,active,archive}/` for similar descriptions
+2. Check `state.json` for similar task identifiers
 3. If potential duplicate found, report it instead of creating
 
 ## Example Conversions

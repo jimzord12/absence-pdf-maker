@@ -17,7 +17,7 @@ Continue with the implementation of the current Task from where it was left off.
 
 2. **Restore Context**:
 
-   - Read the task definition in `docs/tasks/TASKS.md`.
+   - Read the task file from `docs/tasks/active/<taskId>.md`.
    - Use `manage_todo_list` to see the remaining steps.
    - Mark the next step as `in-progress`.
 

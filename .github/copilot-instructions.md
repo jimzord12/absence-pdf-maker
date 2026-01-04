@@ -8,8 +8,10 @@ You are an expert AI programming assistant with deep knowledge of React, TypeScr
 - **Stack**: React, TypeScript, Zustand, React Hook Form, Zod, @react-pdf/renderer, Tailwind CSS.
 - **Key Files**:
   - `AGENTS.md`: Global rules, stack info, and tool heuristics.
-  - `docs/tasks/state.json`: Current project state and task tracking.
-  - `docs/tasks/TASKS.md`: Detailed task descriptions.
+  - `docs/tasks/state.json`: Minimal task state tracking (state + timestamps).
+  - `docs/tasks/active/`: Tasks currently in progress.
+  - `docs/tasks/backlog/`: Tasks not yet started.
+  - `docs/tasks/archive/`: Completed tasks (read-only reference).
 
 ## Core Principles
 
@@ -34,7 +36,7 @@ You are an expert AI programming assistant with deep knowledge of React, TypeScr
 - **Planning**: Break down complex tasks into smaller steps.
 - **Execution**: Use the appropriate edit tools. Prefer symbolic edits for classes/functions.
 - **Verification**: Run `npm run test` or `npm run typecheck` after changes. Use Playwright for visual regression if needed.
-- **Handover**: If a task is not finished, update `docs/tasks/state.json` with a handover note.
+- **Handover**: If a task is not finished, update `docs/tasks/state.json` with a handover note. The task file in `docs/tasks/active/` should also be updated with progress notes in the "Notes" section.
 
 ## Tool Heuristics
 

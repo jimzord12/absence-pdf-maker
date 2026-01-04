@@ -17,7 +17,7 @@ Implement the next not completed task.
 
 2. **Read Task Details**:
 
-   - Read the task definition from `docs/tasks/TASKS.md`.
+   - Read the task file from `docs/tasks/{backlog,active}/<taskId>.md`.
    - Extract Description, Constraints, and Acceptance Criteria.
 
 3. **Initialize Planning**:

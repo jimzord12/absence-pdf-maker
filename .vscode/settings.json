@@ -6,5 +6,6 @@
     "source.fixAll.eslint": "explicit"
   },
   "tailwindCSS.experimental.classRegex": [["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*)[\"'`]"]],
-  "github.copilot.chat.scope": "workspace"
+  "github.copilot.chat.scope": "workspace",
+  "todo-tree.filtering.includeGlobs": ["**/TASKS.md"]
 }

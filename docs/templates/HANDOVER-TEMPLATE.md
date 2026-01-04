@@ -3,6 +3,7 @@
 **Date:** [YYYY-MM-DD]
 **Status:** [Current State]
 **Agent:** GitHub Copilot
+**Task File:** `docs/tasks/active/[taskId].md`
 
 ## Summary of Work Done
 
@@ -24,3 +25,9 @@
 - [ ] Unit tests passing
 - [ ] UI verified (if applicable)
 - [ ] Linting/Typecheck passing
+
+## Next Steps
+
+1. Run `npm run task show [taskId]` to view task details
+2. Continue from the current state using `npm run task state [taskId] [newState]`
+3. Update the "Notes" section in the task file with progress

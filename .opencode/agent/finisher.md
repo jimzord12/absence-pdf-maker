@@ -47,7 +47,7 @@ Your report enables the `orchestrator` to update the task state from `completed`
 
 ### Summarize Changes
 
-- Read `docs/tasks/TASKS.md` to understand the task scope
+- Read the task file from `docs/tasks/active/<taskId>.md` to understand the task scope
 - Review the git status to see all modified and created files
 - Provide a concise summary of what was accomplished
 - List all files that were created, modified, or deleted
@@ -130,20 +130,21 @@ Related to #010
 After committing:
 
 - Verify no uncommitted changes remain (except `docs/tasks/state.json` which may need update)
-- If there are uncommitted changes, inform the `implementor`
+- If there are uncommitted changes, inform the `Orchestrator`
 - The working tree should be clean except for the state file update
 
 ### Handle Linked Issues
 
 After a successful commit, check if the task is linked to an issue:
 
-1. **Read the task from `docs/tasks/state.json`**: Check if the task has a `fromIssue` property
+1. **Read the task file from `docs/tasks/active/<taskId>.md`**: Check if the task has an `Issue` field
 2. **If linked to an issue:**
    - Locate the issue file in `docs/issues/open/{issue_id}-*.md`
    - Update the issue's `**Status:**` field to `Closed`
    - Move the issue file from `docs/issues/open/` to `docs/issues/closed/`
    - Example: `mv docs/issues/open/006-ui-fixes.md docs/issues/closed/006-ui-fixes.md`
-3. **Report the issue closure** in the commit report
+3. **Archive the task:** Use `tasks_setState` or `npm run task state <id> committed` to archive the task
+4. **Report the issue closure** in the commit report
 
 ## Return Format
 
@@ -238,7 +239,7 @@ Clean (ready for next task)
 **Next Steps:**
 
 - Task is ready to move to `committed` state
-- Implementor should update `docs/tasks/state.json`
+- Orchestrator should update `docs/tasks/state.json`
 
 ```
 
@@ -296,7 +297,7 @@ Accepts #001
 **Commit Details:**
 
 - Commit hash: abc123def456...
-- Author: Implementor Agent
+- Author: Orchestrator Agent
 - Date: 2025-12-23T19:45:00Z
 
 **Working Tree Status:**
@@ -306,7 +307,7 @@ Accepts #001
 **Next Steps:**
 
 - Task is ready to move to `committed` state
-- Implementor should update `docs/tasks/state.json`
+- Orchestrator should update `docs/tasks/state.json`
 
 ```
 
@@ -346,22 +347,22 @@ If something goes wrong during the commit process:
 1. **Git Fails**:
 
    - Check the error message
-   - Provide details to the `implementor`
+   - Provide details to the `Orchestrator`
    - Suggest how to resolve
 
 2. **Merge Conflicts**:
 
-   - Inform the `implementor`
+   - Inform the `Orchestrator`
    - Do NOT attempt to resolve conflicts yourself
-   - Let the `implementor` handle it
+   - Let the `Orchestrator` handle it
 
 3. **Unexpected Files**:
 
-   - Inform the `implementor` about unexpected files
+   - Inform the `Orchestrator` about unexpected files
    - Ask for guidance on whether to include them
 
 4. **Test Failures**:
-   - If tests fail before commit, inform the `implementor`
+   - If tests fail before commit, inform the `Orchestrator`
    - Do not proceed with commit until tests pass
 
 ```

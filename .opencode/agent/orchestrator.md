@@ -44,16 +44,16 @@ When the user makes a request:
 1. **Parse the Request**: Carefully read what the user wants
 2. **Clarify if Needed**: If the request is ambiguous, ask clarifying questions BEFORE proceeding
 3. **Identify Scope**: Determine if this is:
-   - A predefined task from `docs/tasks/TASKS.md`
+   - A predefined task from `docs/tasks/{backlog,active}/`
    - An ad-hoc request (bug fix, feature, refactor)
    - A question or information request
 4. **Confirm Understanding**: Summarize what you understood and get user confirmation
 
 ### Phase 2: Check Task Dependencies (For Predefined Tasks)
 
-For tasks in `docs/tasks/TASKS.md`:
+For tasks in `docs/tasks/{backlog,active,archive}/`:
 
-1. **Read task state**: Read `docs/tasks/state.json` to find the current state
+1. **Read task state**: Use `tasks_next` or `npm run task next` to find the next actionable task
 2. **Check for blockers**: If the task has `blockedBy`, verify all blocking tasks are `completed` or `committed`
 3. **Display task details**: Show:
    - Task identifier
@@ -180,8 +180,16 @@ Provide structured feedback:
 
 When the `reviewer` returns:
 
-- **If PASS**: Update state to `review_pass`, then `completed`. Summarize key positive feedback in the task's `notes` field.
-- **If FAIL**: Update state to `review_fail`, then delegate fixes back to `frontend-developer`. **MUST** summarize blocking issues in the task's `notes` field using the `npm run task` CLI.
+- **If PASS**:
+  1. Update state to `review_pass`, then `completed` using `tasks_setState` or `npm run task state <id> completed`
+  2. The task file auto-moves based on state transitions
+  3. Summarize key positive feedback in the task file's "Notes" section
+  4. **Update all acceptance criteria checkboxes in the task file**:
+     - Find the task file in `docs/tasks/active/<taskId>.md`
+     - Change all `[ ]` checkboxes to `[x]` in the "Acceptance Criteria" section
+- **If FAIL**:
+  1. Update state to `review_fail`, then delegate fixes back to `frontend-developer`
+  2. **MUST** summarize blocking issues in the task file's "Notes" section
 
 ### Phase 7: Completion
 
@@ -239,9 +247,12 @@ When a task reaches `committed` state:
 ## State Transition Flow
 
 ```plaintext
+backlog/                          active/                              archive/
 not_started → implemented → unit_tested → review_pass → completed → committed
-                                ↓
-                            review_fail → (back to implemented for fixes)
+                                  ↑                              ↑
+                                  │                              └─ Update task file checkboxes here
+                                  ↓
+                              review_fail → (back to implemented for fixes)
 ```
 
 ## Important Rules
@@ -253,10 +264,11 @@ not_started → implemented → unit_tested → review_pass → completed → co
 5. **DO NOT skip state transitions** - Go through each state sequentially
 6. **ONLY commit** when explicitly requested by user
 7. **Provide clear summaries** after each subagent returns
+8. **Update task file checkboxes** when task reaches `completed` state (update `[ ]` to `[x]` in acceptance criteria)
 
 ## Handling Ad-Hoc Requests
 
-For requests not in `docs/tasks/TASKS.md`:
+For requests not in `docs/tasks/{backlog,active,archive}/`:
 
 1. Create a mental task breakdown
 2. Delegate to `frontend-developer` with full context
@@ -278,19 +290,26 @@ For requests not in `docs/tasks/TASKS.md`:
 - `npm run test` - Run all tests
 - `npm run lint` - Run linter
 - `npm run typecheck` - TypeScript type checking
+- `npm run task` - CLI for managing tasks
 
 ## State File Structure
 
+**State file:** `docs/tasks/state.json` (only non-archived tasks)
+
 ```json
 {
+  "$schema": "./state.schema.json",
+  "version": "2.0",
   "tasks": {
     "task-identifier": {
-      "state": "not_started|implemented|unit_tested|review_pass|review_fail|completed|committed",
+      "state": "not_started|implemented|unit_tested|review_pass|review_fail|completed",
       "lastUpdated": "ISO datetime",
-      "description": "optional description",
-      "fromIssue": "optional issue ID (e.g., '006') linking task to its source issue",
-      "blockedBy": ["optional", "array", "of", "task-ids"]
+      "location": "backlog|active"
     }
   }
 }
 ```
+
+**Task file format:** `docs/tasks/{location}/{taskId}.md` - see `docs/tasks/CONTEXT.md` for details.
+
+**Note:** Archived tasks (committed/cancelled) are NOT in `state.json`. They exist only as files in `docs/tasks/archive/`.
