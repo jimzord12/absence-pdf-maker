@@ -8,16 +8,7 @@
       "location": "backlog",
       "fromIssue": "018",
       "blockedBy": []
-    },
-    "033-task-tailwind-css-import": {
-      "state": "completed",
-      "lastUpdated": "2025-12-28T13:29:00Z",
-      "location": "active"
-    },
-    "037-fix-issue-001-pdf-generation": {
-      "state": "completed",
-      "lastUpdated": "2025-12-29T00:00:00Z",
-      "location": "active"
     }
   }
 }
+

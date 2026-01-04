@@ -743,7 +743,7 @@ describe('DateRangeField', () => {
   });
 
   describe('clear dates button', () => {
-    it('should not render clear button when no dates are selected', () => {
+    it('should render clear button but disabled when no dates are selected', () => {
       const NoDatesWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         const methods = useForm<LeaveRequest>({
           defaultValues: {
@@ -771,7 +771,10 @@ describe('DateRangeField', () => {
         </NoDatesWrapper>
       );
 
-      expect(screen.queryByText('Clear Dates')).not.toBeInTheDocument();
+      const clearButton = screen.getByRole('button', { name: 'Clear selected dates' });
+      expect(clearButton).toBeInTheDocument();
+      expect(clearButton).toBeDisabled();
+      expect(clearButton).toHaveClass('bg-gray-200');
     });
 
     it('should render clear button when dates are selected', () => {
@@ -809,16 +812,18 @@ describe('DateRangeField', () => {
         clearButton.click();
       });
 
-      // After clearing, the button should disappear
+      // After clearing, the button should still be present but disabled
       await waitFor(() => {
-        expect(screen.queryByText('Clear Dates')).not.toBeInTheDocument();
+        const button = screen.getByRole('button', { name: 'Clear selected dates' });
+        expect(button).toBeInTheDocument();
+        expect(button).toBeDisabled();
       });
 
       // Footer should show em dashes when no dates are selected
       expect(screen.getAllByText('—').length).toBe(4);
     });
 
-    it('should have secondary button styling', () => {
+    it('should have danger button styling when dates are selected', () => {
       render(
         <TestWrapper>
           <DateRangeField holidaySet={mockHolidaySet} />
@@ -826,11 +831,11 @@ describe('DateRangeField', () => {
       );
 
       const clearButton = screen.getByText('Clear Dates');
-      expect(clearButton).toHaveClass('bg-gray-200');
-      expect(clearButton).toHaveClass('text-gray-900');
+      expect(clearButton).toHaveClass('bg-red-600');
+      expect(clearButton).toHaveClass('text-white');
     });
 
-    it('should show clear button only when both start and end dates are selected', () => {
+    it('should render clear button but disabled when only one date is selected', () => {
       const OnlyStartDateWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         const methods = useForm<LeaveRequest>({
           defaultValues: {
@@ -858,7 +863,10 @@ describe('DateRangeField', () => {
         </OnlyStartDateWrapper>
       );
 
-      expect(screen.queryByText('Clear Dates')).not.toBeInTheDocument();
+      const clearButton = screen.getByRole('button', { name: 'Clear selected dates' });
+      expect(clearButton).toBeInTheDocument();
+      expect(clearButton).toBeDisabled();
+      expect(clearButton).toHaveClass('bg-gray-200');
     });
 
     it('should update absence calculation to em dash after clearing dates', async () => {

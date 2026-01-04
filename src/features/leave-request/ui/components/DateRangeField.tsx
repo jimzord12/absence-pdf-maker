@@ -240,23 +240,22 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({
       <label id={`${dateFieldId}-label`} className="block text-sm font-medium text-gray-700">
         Select Date Range
       </label>
-      <div className="flex items-start gap-2">
+      <div className="flex justify-between gap-2">
         <HolidaysLegend />
-        {startDate && endDate && (
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => {
-              setValue('startDate', undefined, { shouldDirty: true, shouldValidate: false });
-              setValue('endDate', undefined, { shouldDirty: true, shouldValidate: false });
-            }}
-            title="Clear selected dates"
-            aria-label="Clear selected dates"
-            className="flex-shrink-0"
-          >
-            Clear Dates
-          </Button>
-        )}
+        <Button
+          variant={startDate && endDate ? 'danger' : 'secondary'}
+          size="sm"
+          disabled={!startDate || !endDate}
+          onClick={() => {
+            setValue('startDate', undefined, { shouldDirty: true, shouldValidate: false });
+            setValue('endDate', undefined, { shouldDirty: true, shouldValidate: false });
+          }}
+          title="Clear selected dates"
+          aria-label="Clear selected dates"
+          className="flex-shrink-0"
+        >
+          Clear Dates
+        </Button>
       </div>
       <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm" role="region" aria-label="Calendar">
         <DayPicker
