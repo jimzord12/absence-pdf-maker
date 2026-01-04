@@ -1,6 +1,6 @@
-# Next Task Tool Tests
+# Task Management Tools Library
 
-This directory contains tests for the next task tool.
+This directory contains the core library for the task management system.
 
 ## Running Tests
 
@@ -8,26 +8,36 @@ All tests can be run using:
 
 ```bash
 cd .opencode
-npx tsx --test tool/lib/*.test.ts
+bun test tool/lib/*.test.ts
 ```
 
 ## Test Structure
 
 ### `tasks.test.ts`
+
 Tests for pure business logic functions that don't depend on the filesystem:
 
-- **extractTaskInfo**: Extracts task information from TASKS.md content
+- **parseTaskFile**: Parses individual task `.md` files into structured data
 - **getNextSteps**: Returns the appropriate next action based on task state
 - **sortTaskIds**: Sorts task IDs numerically
 - **findNextTask**: Finds the first non-committed task
 - **calculateSummary**: Calculates task completion statistics
-- **getNextTaskResult**: Orchestrates the full logic flow
+- **getLocationForState**: Determines the folder location for a task state
+- **isValidStateTransition**: Validates state transitions
+- **generateTaskContent**: Creates task file content from template
 
 ### `filesystem.test.ts`
+
 Tests for filesystem operations:
 
 - **readStateFile**: Reading and parsing the state.json file
-- **readTasksFile**: Reading the TASKS.md file
+- **readTaskFile**: Reading individual task .md files
+- **writeStateFile**: Writing state.json file
+- **writeTaskFile**: Writing task .md files
+- **listTaskFiles**: Listing task files in a directory
+- **listAllTasks**: Listing all tasks across all locations
+- **findTaskFile**: Finding a task file by ID
+- **moveTaskFile**: Moving task files between locations
 - **getDefaultPaths**: Generating correct file paths
 - **readFileErrorResult**: Creating error result objects
 
@@ -55,3 +65,4 @@ To run tests in watch mode (if supported by your test runner):
 cd .opencode
 npx tsx --test --watch tool/lib/*.test.ts
 ```
+

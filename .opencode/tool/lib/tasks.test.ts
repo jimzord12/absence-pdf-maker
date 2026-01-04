@@ -1,66 +1,185 @@
-import { assert, describe, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import {
   calculateSummary,
-  extractTaskInfo,
   findNextTask,
+  generateTaskContent,
+  getLocationForState,
   getNextSteps,
-  getNextTaskResult,
+  isValidStateTransition,
+  parseTaskFile,
   sortTaskIds,
   type StateFile,
   type TaskState,
 } from './tasks.js';
 
-describe('extractTaskInfo', () => {
-  const mockTasksContent = `
-### 001-task-test-task
+// ============================================================================
+// parseTaskFile Tests (New individual file format)
+// ============================================================================
 
-**Identifier:** \`001-task-test-task\`
+describe('parseTaskFile', () => {
+  const mockTaskContent = `# 065-toastify-notifications
 
-**Description:**
-This is a test task description.
-
-**Constraints:**
-- Constraint 1
-- Constraint 2
-
-**Acceptance Criteria:**
-- [ ] Criterion 1
-- [ ] Criterion 2
+**Priority:** high
+**Blocks:** 066-import-export
+**Blocked By:** none
+**Issue:** [#015](../issues/open/015.md)
 
 ---
 
-### 002-task-another-task
+## Description
 
-**Identifier:** \`002-task-another-task\`
+Implement toast notifications using react-toastify for user feedback.
 
-**Description:**
-Another task description.
+## Constraints
 
-**Constraints:**
-- Another constraint
+- Use react-toastify library
+- Toast positioning: top-right
 
-**Acceptance Criteria:**
-- [ ] Another criterion
+## Acceptance Criteria
 
----
+- [ ] Toast notifications appear for successful form save
+- [ ] Toast notifications appear for import success/failure
 
+## Notes
+
+Related to Issue #015
 `;
 
-  it('should extract task info correctly', () => {
-    const result = extractTaskInfo('001-task-test-task', mockTasksContent);
+  it('should parse task file correctly', () => {
+    const result = parseTaskFile('065-toastify-notifications', mockTaskContent);
 
-    assert.ok(result);
-    assert.strictEqual(result.identifier, '001-task-test-task');
-    assert.strictEqual(result.description, 'This is a test task description.');
-    assert.strictEqual(result.constraints, '- Constraint 1\n- Constraint 2');
-    assert.strictEqual(result.acceptanceCriteria, '- [ ] Criterion 1\n- [ ] Criterion 2');
+    expect(result).toBeTruthy();
+    expect(result?.identifier).toBe('065-toastify-notifications');
+    expect(result?.priority).toBe('high');
+    expect(result?.blocks).toBe('066-import-export');
+    expect(result?.blockedBy).toBe('none');
+    expect(result?.description).toContain('toast notifications');
+    expect(result?.constraints).toContain('react-toastify');
+    expect(result?.acceptanceCriteria).toContain('Toast notifications appear');
+    expect(result?.notes).toContain('Issue #015');
   });
 
-  it('should return null for non-existent task', () => {
-    const result = extractTaskInfo('999-task-nonexistent', mockTasksContent);
-    assert.strictEqual(result, null);
+  it('should handle minimal task file', () => {
+    const minimalContent = `# 001-minimal
+
+**Priority:** low
+**Blocks:** none
+**Blocked By:** none
+**Issue:** N/A
+
+---
+
+## Description
+
+Minimal description.
+
+## Constraints
+
+No constraints.
+
+## Acceptance Criteria
+
+- [ ] Done
+
+## Notes
+
+No notes.
+`;
+    const result = parseTaskFile('001-minimal', minimalContent);
+
+    expect(result).toBeTruthy();
+    expect(result?.identifier).toBe('001-minimal');
+    expect(result?.priority).toBe('low');
   });
 });
+
+// ============================================================================
+// getLocationForState Tests
+// ============================================================================
+
+describe('getLocationForState', () => {
+  it('should return backlog for not_started', () => {
+    expect(getLocationForState('not_started')).toBe('backlog');
+  });
+
+  it('should return backlog for pending', () => {
+    expect(getLocationForState('pending')).toBe('backlog');
+  });
+
+  it('should return active for in-progress states', () => {
+    expect(getLocationForState('implemented')).toBe('active');
+    expect(getLocationForState('unit_tested')).toBe('active');
+    expect(getLocationForState('review_fail')).toBe('active');
+    expect(getLocationForState('review_pass')).toBe('active');
+    expect(getLocationForState('completed')).toBe('active');
+  });
+
+  it('should return archive for terminal states', () => {
+    expect(getLocationForState('committed')).toBe('archive');
+    expect(getLocationForState('cancelled')).toBe('archive');
+  });
+});
+
+// ============================================================================
+// isValidStateTransition Tests
+// ============================================================================
+
+describe('isValidStateTransition', () => {
+  it('should allow not_started → implemented', () => {
+    expect(isValidStateTransition('not_started', 'implemented')).toBe(true);
+  });
+
+  it('should allow implemented → unit_tested', () => {
+    expect(isValidStateTransition('implemented', 'unit_tested')).toBe(true);
+  });
+
+  it('should allow any state → cancelled', () => {
+    expect(isValidStateTransition('not_started', 'cancelled')).toBe(true);
+    expect(isValidStateTransition('implemented', 'cancelled')).toBe(true);
+    expect(isValidStateTransition('completed', 'cancelled')).toBe(true);
+  });
+
+  it('should not allow backwards transitions', () => {
+    expect(isValidStateTransition('unit_tested', 'implemented')).toBe(false);
+    expect(isValidStateTransition('completed', 'not_started')).toBe(false);
+  });
+
+  it('should not allow transitions from terminal states', () => {
+    expect(isValidStateTransition('committed', 'not_started')).toBe(false);
+    expect(isValidStateTransition('cancelled', 'not_started')).toBe(false);
+  });
+});
+
+// ============================================================================
+// generateTaskContent Tests
+// ============================================================================
+
+describe('generateTaskContent', () => {
+  it('should generate task content with defaults', () => {
+    const content = generateTaskContent('069-new-task');
+
+    expect(content).toContain('# 069-new-task');
+    expect(content).toContain('**Priority:** medium');
+    expect(content).toContain('## Description');
+    expect(content).toContain('## Constraints');
+    expect(content).toContain('## Acceptance Criteria');
+  });
+
+  it('should generate task content with custom options', () => {
+    const content = generateTaskContent('070-custom', {
+      priority: 'high',
+      issue: '[#020](../issues/open/020.md)',
+      description: 'Custom description',
+    });
+
+    expect(content).toContain('**Priority:** high');
+    expect(content).toContain('Custom description');
+  });
+});
+
+// ============================================================================
+// getNextSteps Tests
+// ============================================================================
 
 describe('getNextSteps', () => {
   it('should return correct step for each state', () => {
@@ -72,199 +191,124 @@ describe('getNextSteps', () => {
       review_pass: 'Mark task as completed',
       completed: 'Commit changes to version control',
       committed: 'Task is finished - move to next task',
+      cancelled: 'Task has been cancelled',
       pending: 'Start working on this task (begin with implementation)',
     };
 
     for (const [state, expectedStep] of Object.entries(steps)) {
       const result = getNextSteps(state as TaskState);
-      assert.strictEqual(
-        result,
-        expectedStep,
-        `Expected "${expectedStep}" for state "${state}", got "${result}"`
-      );
+      expect(result).toBe(expectedStep);
     }
   });
 });
+
+// ============================================================================
+// sortTaskIds Tests
+// ============================================================================
 
 describe('sortTaskIds', () => {
   it('should sort task IDs numerically', () => {
     const taskIds = ['002-task-b', '010-task-j', '001-task-a', '005-task-e'];
     const result = sortTaskIds(taskIds);
-    assert.deepStrictEqual(result, ['001-task-a', '002-task-b', '005-task-e', '010-task-j']);
+    expect(result).toEqual(['001-task-a', '002-task-b', '005-task-e', '010-task-j']);
   });
 
   it('should handle already sorted IDs', () => {
     const taskIds = ['001-task-a', '002-task-b', '003-task-c'];
     const result = sortTaskIds(taskIds);
-    assert.deepStrictEqual(result, taskIds);
+    expect(result).toEqual(taskIds);
   });
 
   it('should handle empty array', () => {
     const result = sortTaskIds([]);
-    assert.deepStrictEqual(result, []);
+    expect(result).toEqual([]);
   });
 });
 
-describe('findNextTask', () => {
-  const stateFile: StateFile = {
-    tasks: {
-      '001-task-a': { state: 'committed', lastUpdated: '2024-01-01T00:00:00Z' },
-      '002-task-b': { state: 'pending', lastUpdated: '2024-01-01T00:00:00Z' },
-      '003-task-c': { state: 'committed', lastUpdated: '2024-01-01T00:00:00Z' },
-      '004-task-d': { state: 'completed', lastUpdated: '2024-01-01T00:00:00Z' },
-    },
-  };
+// ============================================================================
+// findNextTask Tests
+// ============================================================================
 
-  it('should find the first non-committed task', () => {
-    const sortedIds = ['001-task-a', '002-task-b', '003-task-c', '004-task-d'];
+describe('findNextTask', () => {
+  it('should find task with review_fail first (highest priority)', () => {
+    const stateFile: StateFile = {
+      tasks: {
+        '001-task-a': { state: 'committed', lastUpdated: '2024-01-01', location: 'archive' },
+        '002-task-b': { state: 'not_started', lastUpdated: '2024-01-01', location: 'backlog' },
+        '003-task-c': { state: 'review_fail', lastUpdated: '2024-01-01', location: 'active' },
+      },
+    };
+    const sortedIds = ['001-task-a', '002-task-b', '003-task-c'];
     const result = findNextTask(sortedIds, stateFile);
-    assert.strictEqual(result, '002-task-b');
+    expect(result).toBe('003-task-c');
   });
 
-  it('should return null if all tasks are committed', () => {
-    const allCommittedState: StateFile = {
+  it('should find not_started task if no in-progress tasks', () => {
+    const stateFile: StateFile = {
       tasks: {
-        '001-task-a': { state: 'committed', lastUpdated: '2024-01-01T00:00:00Z' },
-        '002-task-b': { state: 'committed', lastUpdated: '2024-01-01T00:00:00Z' },
+        '001-task-a': { state: 'committed', lastUpdated: '2024-01-01', location: 'archive' },
+        '002-task-b': { state: 'not_started', lastUpdated: '2024-01-01', location: 'backlog' },
       },
     };
     const sortedIds = ['001-task-a', '002-task-b'];
-    const result = findNextTask(sortedIds, allCommittedState);
-    assert.strictEqual(result, null);
+    const result = findNextTask(sortedIds, stateFile);
+    expect(result).toBe('002-task-b');
+  });
+
+  it('should return null if all tasks are committed or cancelled', () => {
+    const stateFile: StateFile = {
+      tasks: {
+        '001-task-a': { state: 'committed', lastUpdated: '2024-01-01', location: 'archive' },
+        '002-task-b': { state: 'cancelled', lastUpdated: '2024-01-01', location: 'archive' },
+      },
+    };
+    const sortedIds = ['001-task-a', '002-task-b'];
+    const result = findNextTask(sortedIds, stateFile);
+    expect(result).toBeNull();
   });
 
   it('should handle empty state file', () => {
     const emptyState: StateFile = { tasks: {} };
     const sortedIds: string[] = [];
     const result = findNextTask(sortedIds, emptyState);
-    assert.strictEqual(result, null);
+    expect(result).toBeNull();
   });
 });
 
-describe('calculateSummary', () => {
-  const stateFile: StateFile = {
-    tasks: {
-      '001-task-a': { state: 'committed', lastUpdated: '2024-01-01T00:00:00Z' },
-      '002-task-b': { state: 'pending', lastUpdated: '2024-01-01T00:00:00Z' },
-      '003-task-c': { state: 'completed', lastUpdated: '2024-01-01T00:00:00Z' },
-      '004-task-d': { state: 'implemented', lastUpdated: '2024-01-01T00:00:00Z' },
-    },
-  };
+// ============================================================================
+// calculateSummary Tests
+// ============================================================================
 
+describe('calculateSummary', () => {
   it('should calculate correct summary', () => {
+    const stateFile: StateFile = {
+      tasks: {
+        '001-task-a': { state: 'committed', lastUpdated: '2024-01-01', location: 'archive' },
+        '002-task-b': { state: 'pending', lastUpdated: '2024-01-01', location: 'backlog' },
+        '003-task-c': { state: 'cancelled', lastUpdated: '2024-01-01', location: 'archive' },
+        '004-task-d': { state: 'implemented', lastUpdated: '2024-01-01', location: 'active' },
+      },
+    };
     const sortedIds = ['001-task-a', '002-task-b', '003-task-c', '004-task-d'];
     const result = calculateSummary(sortedIds, stateFile);
 
-    assert.strictEqual(result.totalTasks, 4);
-    assert.strictEqual(result.completedTasks, 1);
-    assert.strictEqual(result.inProgressTasks, 3);
+    expect(result.totalTasks).toBe(4);
+    expect(result.completedTasks).toBe(2); // committed + cancelled
+    expect(result.inProgressTasks).toBe(2);
   });
 
   it('should handle all committed', () => {
     const allCommittedState: StateFile = {
       tasks: {
-        '001-task-a': { state: 'committed', lastUpdated: '2024-01-01T00:00:00Z' },
-        '002-task-b': { state: 'committed', lastUpdated: '2024-01-01T00:00:00Z' },
+        '001-task-a': { state: 'committed', lastUpdated: '2024-01-01', location: 'archive' },
+        '002-task-b': { state: 'committed', lastUpdated: '2024-01-01', location: 'archive' },
       },
     };
     const result = calculateSummary(['001-task-a', '002-task-b'], allCommittedState);
 
-    assert.strictEqual(result.totalTasks, 2);
-    assert.strictEqual(result.completedTasks, 2);
-    assert.strictEqual(result.inProgressTasks, 0);
-  });
-});
-
-describe('getNextTaskResult', () => {
-  const mockTasksContent = `
-### 001-task-first
-
-**Identifier:** \`001-task-first\`
-
-**Description:**
-First task description.
-
-**Constraints:**
-- First constraint
-
-**Acceptance Criteria:**
-- [ ] First criterion
-
----
-
-### 002-task-second
-
-**Identifier:** \`002-task-second\`
-
-**Description:**
-Second task description.
-
-**Constraints:**
-- Second constraint
-
-**Acceptance Criteria:**
-- [ ] Second criterion
-
----
-
-`;
-
-  it('should return next task result', () => {
-    const stateFile: StateFile = {
-      tasks: {
-        '001-task-first': { state: 'committed', lastUpdated: '2024-01-01T00:00:00Z' },
-        '002-task-second': { state: 'pending', lastUpdated: '2024-01-01T00:00:00Z' },
-      },
-    };
-
-    const result = getNextTaskResult(stateFile, mockTasksContent);
-
-    assert.strictEqual(result.success, true);
-    if (result.success && result.nextTask) {
-      assert.strictEqual(result.nextTask.identifier, '002-task-second');
-      assert.strictEqual(result.nextTask.description, 'Second task description.');
-      assert.strictEqual(result.nextTask.currentState, 'pending');
-      assert.strictEqual(
-        result.nextTask.nextSteps,
-        'Start working on this task (begin with implementation)'
-      );
-      assert.strictEqual(result.summary.totalTasks, 2);
-      assert.strictEqual(result.summary.completedTasks, 1);
-      assert.strictEqual(result.summary.inProgressTasks, 1);
-    }
-  });
-
-  it('should return all completed result', () => {
-    const stateFile: StateFile = {
-      tasks: {
-        '001-task-first': { state: 'committed', lastUpdated: '2024-01-01T00:00:00Z' },
-      },
-    };
-
-    const result = getNextTaskResult(stateFile, mockTasksContent);
-
-    assert.strictEqual(result.success, true);
-    if (result.success && result.nextTask === null) {
-      assert.strictEqual(result.nextTask, null);
-      assert.strictEqual(result.message, 'All tasks have been completed and committed!');
-      assert.strictEqual(result.totalTasks, 1);
-      assert.strictEqual(result.completedTasks, 1);
-    }
-  });
-
-  it('should return error result for missing task info', () => {
-    const stateFile: StateFile = {
-      tasks: {
-        '999-task-missing': { state: 'pending', lastUpdated: '2024-01-01T00:00:00Z' },
-      },
-    };
-
-    const result = getNextTaskResult(stateFile, mockTasksContent);
-
-    assert.strictEqual(result.success, false);
-    if (!result.success) {
-      assert.ok(result.error.includes('Could not extract information for task'));
-    }
+    expect(result.totalTasks).toBe(2);
+    expect(result.completedTasks).toBe(2);
+    expect(result.inProgressTasks).toBe(0);
   });
 });
 
