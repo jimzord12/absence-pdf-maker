@@ -1,13 +1,5 @@
 {
   "$schema": "./state.schema.json",
   "version": "2.0",
-  "tasks": {
-    "069-fix-issue-022-reason-field-value-mapping": {
-      "state": "committed",
-      "lastUpdated": "2026-01-04T15:20:00.000Z",
-      "location": "archive",
-      "fromIssue": "022",
-      "blockedBy": []
-    }
-  }
+  "tasks": {}
 }

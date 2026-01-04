@@ -1,6 +1,6 @@
 ---
 description: Commit the freshly implemented Task.
-agent: finisher
+agent: orchestrator
 subtask: false
 ---
 
@@ -16,3 +16,4 @@ You descriptive commit name for the Task, it must follow the pattern: `feat(<tas
 
 - Forgetting to update `docs/tasks/state.json` to mark the Task as `"state": "committed"`.
 - Not committing the `docs/tasks/state.json` file along with the code changes.
+

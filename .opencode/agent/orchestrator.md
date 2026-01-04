@@ -233,6 +233,15 @@ Create a conventional git commit for the completed changes.
 5. Report the commit hash and status
 ```
 
+When the `finisher` returns:
+
+1. **Remove task from state.json**: Since archived tasks should NOT exist in `state.json`, delete the task entry:
+   - Read `docs/tasks/state.json`
+   - Remove the task entry from the `tasks` object
+   - Save the updated file
+2. **Verify task file archived**: Confirm the task file was moved to `docs/tasks/archive/`
+3. **Proceed to issue closure** if applicable
+
 ### Phase 9: Handle Issue Closure
 
 When a task reaches `committed` state:
