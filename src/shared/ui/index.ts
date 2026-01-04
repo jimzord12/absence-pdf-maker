@@ -22,3 +22,6 @@ export type { CardProps } from './Card';
 
 export { Alert } from './Alert';
 export type { AlertProps, AlertVariant } from './Alert';
+
+export { DeveloperPresence } from './DeveloperPresence';
+export type { DeveloperPresenceProps, DeveloperPresenceSize } from './DeveloperPresence';

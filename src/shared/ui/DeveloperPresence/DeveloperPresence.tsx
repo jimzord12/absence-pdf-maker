@@ -34,6 +34,7 @@ export const DeveloperPresence = ({
 }: DeveloperPresenceProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [shouldShowInfo, setShouldShowInfo] = useState(false);
+  const [hasFlippedForward, setHasFlippedForward] = useState(false);
   const revertTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const config = SIZE_CONFIG[size];
@@ -41,25 +42,28 @@ export const DeveloperPresence = ({
   useEffect(() => {
     if (isHovered) {
       setShouldShowInfo(true);
-      // Clear any pending revert timer when user hovers
       if (revertTimerRef.current) {
         clearTimeout(revertTimerRef.current);
         revertTimerRef.current = null;
       }
     } else {
-      // Start revert timer when user hovers away
-      revertTimerRef.current = setTimeout(() => {
-        setShouldShowInfo(false);
-      }, REVERT_DELAY);
+      if (revertTimerRef.current) {
+        clearTimeout(revertTimerRef.current);
+        revertTimerRef.current = null;
+      }
+      if (hasFlippedForward) {
+        revertTimerRef.current = setTimeout(() => {
+          setShouldShowInfo(false);
+        }, REVERT_DELAY);
+      }
     }
 
-    // Cleanup: clear timer when component unmounts
     return () => {
       if (revertTimerRef.current) {
         clearTimeout(revertTimerRef.current);
       }
     };
-  }, [isHovered]);
+  }, [isHovered, hasFlippedForward]);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -79,7 +83,7 @@ export const DeveloperPresence = ({
 
   return (
     <motion.div
-      className={`inline-block relative ${className}`}
+      className={`inline-block relative lg:fixed lg:bottom-4 lg:right-4 lg:top-auto lg:left-auto lg:z-fixed ${className}`}
       style={{ width: config.width, height: config.width }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -113,6 +117,9 @@ export const DeveloperPresence = ({
           stiffness: 150,
           damping: 20,
           mass: 0.8,
+        }}
+        onAnimationComplete={() => {
+          setHasFlippedForward(shouldShowInfo);
         }}
       >
         <motion.div

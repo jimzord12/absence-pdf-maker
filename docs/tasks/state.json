@@ -2,12 +2,6 @@
   "$schema": "./state.schema.json",
   "version": "2.0",
   "tasks": {
-    "074-fix-revert-timer": {
-      "state": "implemented",
-      "lastUpdated": "2026-01-04T22:47:17.386Z",
-      "location": "active",
-      "blockedBy": []
-    },
     "075-add-rainbow-blur": {
       "state": "completed",
       "lastUpdated": "2026-01-04T22:24:45.111Z",
@@ -15,9 +9,9 @@
       "blockedBy": []
     },
     "076-fixed-positioning": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-04T22:03:40.436Z",
-      "location": "backlog",
+      "state": "completed",
+      "lastUpdated": "2026-01-04T23:02:51.146Z",
+      "location": "active",
       "blockedBy": []
     },
     "077-slower-animation-easing": {
@@ -33,9 +27,9 @@
       "blockedBy": []
     },
     "plan-074-fix-revert-timer": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-04T22:11:15.669Z",
-      "location": "backlog",
+      "state": "completed",
+      "lastUpdated": "2026-01-04T23:11:45.607Z",
+      "location": "active",
       "blockedBy": []
     }
   }

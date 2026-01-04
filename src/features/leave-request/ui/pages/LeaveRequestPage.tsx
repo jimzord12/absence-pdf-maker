@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { usePwaInstall } from '../../../../app/providers/usePwaInstall';
-import { Button } from '../../../../shared/ui';
+import { Button, DeveloperPresence } from '../../../../shared/ui';
 import { loadHolidays } from '../../services/holidays/holidays.service';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { LeaveRequestForm } from '../components/LeaveRequestForm';
@@ -65,6 +65,14 @@ export const LeaveRequestPage: React.FC = () => {
           <div className="lg:col-span-1">
             <ReviewAndGenerate />
           </div>
+        </div>
+
+        <div className="mt-12">
+          <DeveloperPresence
+            avatarUrl="src/assets/images/Dimitrios-Stamatakis-github-img.png"
+            name="Dimitrios Stamatakis"
+            size="lg"
+          />
         </div>
       </div>
       <SignatureModal />
