@@ -2,10 +2,35 @@
   "$schema": "./state.schema.json",
   "version": "2.0",
   "tasks": {
-    "073-pdf-template-tweaks": {
-      "state": "completed",
-      "lastUpdated": "2026-01-04T20:33:13.215Z",
-      "location": "active"
+    "074-fix-revert-timer": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-04T22:03:00.649Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "075-add-rainbow-blur": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-04T22:03:40.436Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "076-fixed-positioning": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-04T22:03:40.436Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "077-slower-animation-easing": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-04T22:03:40.437Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "078-inner-shadow-heartbeat": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-04T22:03:40.437Z",
+      "location": "backlog",
+      "blockedBy": []
     }
   }
 }
