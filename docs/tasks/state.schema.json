@@ -1,10 +1,15 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Task State Schema",
-  "description": "Schema for tracking the state of implementation tasks",
+  "description": "Schema for tracking the state of implementation tasks (v2.0)",
   "type": "object",
-  "required": ["tasks"],
+  "required": ["version", "tasks"],
   "properties": {
+    "version": {
+      "type": "string",
+      "description": "Schema version for migration tracking",
+      "enum": ["1.0", "2.0"]
+    },
     "tasks": {
       "type": "object",
       "additionalProperties": {
@@ -27,6 +32,11 @@
           "lastUpdated": {
             "type": "string",
             "format": "date-time"
+          },
+          "location": {
+            "type": "string",
+            "enum": ["backlog", "active", "archive"],
+            "description": "Folder location of the task file"
           },
           "description": {
             "type": "string"
