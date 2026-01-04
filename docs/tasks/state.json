@@ -15,21 +15,15 @@
       "blockedBy": []
     },
     "077-slower-animation-easing": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-04T22:03:40.437Z",
-      "location": "backlog",
+      "state": "completed",
+      "lastUpdated": "2026-01-04T23:32:36.354Z",
+      "location": "active",
       "blockedBy": []
     },
     "078-inner-shadow-heartbeat": {
       "state": "not_started",
       "lastUpdated": "2026-01-04T22:03:40.437Z",
       "location": "backlog",
-      "blockedBy": []
-    },
-    "plan-074-fix-revert-timer": {
-      "state": "completed",
-      "lastUpdated": "2026-01-04T23:11:45.607Z",
-      "location": "active",
       "blockedBy": []
     }
   }

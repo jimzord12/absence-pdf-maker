@@ -35,19 +35,19 @@ describe('DeveloperPresence', () => {
     it('should render medium size by default', () => {
       render(<DeveloperPresence {...defaultProps} />);
       const container = screen.getByRole('button');
-      expect(container).toHaveStyle({ width: '120px', height: '120px' });
+      expect(container).toHaveStyle({ width: '90px', height: '90px' });
     });
 
     it('should render small size', () => {
       render(<DeveloperPresence {...defaultProps} size="sm" />);
       const container = screen.getByRole('button');
-      expect(container).toHaveStyle({ width: '80px', height: '80px' });
+      expect(container).toHaveStyle({ width: '60px', height: '60px' });
     });
 
     it('should render large size', () => {
       render(<DeveloperPresence {...defaultProps} size="lg" />);
       const container = screen.getByRole('button');
-      expect(container).toHaveStyle({ width: '160px', height: '160px' });
+      expect(container).toHaveStyle({ width: '120px', height: '120px' });
     });
   });
 
@@ -130,11 +130,11 @@ describe('DeveloperPresence', () => {
       expect(glowElement).toHaveClass('rounded-full');
     });
 
-    it('should have larger GitHub icon (32px)', () => {
+    it('should have larger GitHub icon (24px)', () => {
       const { container } = render(<DeveloperPresence {...defaultProps} />);
       const githubIcon = container.querySelector('svg');
       expect(githubIcon).toBeInTheDocument();
-      expect(githubIcon).toHaveClass('w-8', 'h-8');
+      expect(githubIcon).toHaveClass('w-6', 'h-6');
     });
   });
 });

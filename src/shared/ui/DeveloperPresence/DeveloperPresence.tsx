@@ -7,10 +7,10 @@ const DEFAULT_NAME = 'Dimitrios Stamatakis';
 const REVERT_DELAY = 1500;
 const FLIP_SEQUENCE_ROTATION = 540;
 
-const SIZE_CONFIG: Record<DeveloperPresenceSize, { width: string; fontSize: string }> = {
-  sm: { width: '80px', fontSize: 'text-xs' },
-  md: { width: '120px', fontSize: 'text-sm' },
-  lg: { width: '160px', fontSize: 'text-base' },
+const SIZE_CONFIG: Record<DeveloperPresenceSize, { width: string; fontSize: string; iconSize: string }> = {
+  sm: { width: '60px', fontSize: 'text-xs', iconSize: 'w-5 h-5' },
+  md: { width: '90px', fontSize: 'text-xs', iconSize: 'w-6 h-6' },
+  lg: { width: '120px', fontSize: 'text-sm', iconSize: 'w-7 h-7' },
 };
 
 const GitHubIcon = ({ className }: { className?: string }) => (
@@ -114,9 +114,9 @@ export const DeveloperPresence = ({
         animate={{ rotateY: shouldShowInfo ? FLIP_SEQUENCE_ROTATION : 0 }}
         transition={{
           type: 'spring',
-          stiffness: 150,
-          damping: 20,
-          mass: 0.8,
+          stiffness: 80,
+          damping: 25,
+          mass: 1.2,
         }}
         onAnimationComplete={() => {
           setHasFlippedForward(shouldShowInfo);
@@ -195,8 +195,9 @@ export const DeveloperPresence = ({
               transition={{ delay: 0.2, duration: 0.3, type: 'spring', stiffness: 300 }}
               aria-label={`Visit ${name}'s GitHub profile`}
               onClick={(e) => e.stopPropagation()}
+              onBlur={() => setIsHovered(false)}
             >
-              <GitHubIcon className="w-8 h-8" />
+              <GitHubIcon className={config.iconSize} />
             </motion.a>
           </div>
         </motion.div>
