@@ -44,8 +44,9 @@ vi.mock('date-fns', () => ({
  * Issue022 - Reason Field Value Mapping Tests
  *
  * These tests verify that the reason field from the form
- * correctly maps to the "Λόγος" field in the PDF,
- * and the employeeId field correctly maps to the "Αρ. Μητρώου" field.
+ * correctly maps to the "Λόγος" field in the PDF.
+ * Note: Employee ID field was removed from PDF in task 071,
+ * so tests no longer verify its presence.
  */
 
 const createMockLeaveRequest = (): LeaveRequest => ({
@@ -105,7 +106,7 @@ describe('Issue 022 - Reason Field Value Mapping', () => {
       }
     });
 
-    it('should map employeeId field correctly in form', () => {
+    it('should not render employeeId in PDF', () => {
       const data = createMockLeaveRequest();
       const absenceDays = 5;
 
@@ -116,26 +117,11 @@ describe('Issue 022 - Reason Field Value Mapping', () => {
         .map(el => el.textContent || '')
         .join(' ');
 
-      // Employee ID value should be present
-      expect(allText2).toContain('EMP123');
+      // Employee ID value should NOT be present
+      expect(allText2).not.toContain('EMP123');
 
-      // Employee ID should NOT appear in reason position
-      const textLines2 = allText2.split('\n');
-      for (let idx = 0; idx < textLines2.length - 1; idx++) {
-        if (textLines2[idx]?.includes('Λόγος:')) {
-          if (textLines2[idx + 1]) {
-            const nextLine2 = textLines2[idx + 1].trim();
-            expect(nextLine2).not.toBe('EMP123');
-          }
-        }
-        if (textLines2[idx]?.includes('Αρ. Μητρώου:')) {
-          if (textLines2[idx + 1]) {
-            const nextLine2 = textLines2[idx + 1].trim();
-            expect(nextLine2).toBe('EMP123');
-            expect(nextLine2).not.toBe('Για οικογενειακούς λόγους');
-          }
-        }
-      }
+      // Employee ID label should NOT be present
+      expect(allText2).not.toContain('Αρ. Μητρώου:');
     });
 
     it('should render default reason when empty', () => {
@@ -157,27 +143,21 @@ describe('Issue 022 - Reason Field Value Mapping', () => {
   });
 
   describe('Field Distinction', () => {
-    it('should keep reason and employeeId values separate', () => {
+    it('should render reason field correctly', () => {
       const data = createMockLeaveRequest();
       const absenceDays = 5;
 
       const { container } = render(<LeaveRequestPdf data={data} absenceDays={absenceDays} />);
       const textElements = container.querySelectorAll('[data-testid="pdf-text"]');
 
-      const allText4 = Array.from(textElements)
+      const allText3 = Array.from(textElements)
         .map(el => el.textContent || '')
         .join(' ');
 
-      // Both values should be present
-      expect(allText4).toContain('Για οικογενειακούς λόγους');
-      expect(allText4).toContain('EMP123');
-
-      // Count occurrences - each should appear once in appropriate context
-      const reasonCount = (allText4.match(/Για οικογενειακούς λόγους/g) || []).length;
-      const empIdCount = (allText4.match(/EMP123/g) || []).length;
+      // Reason should be present
+      const reasonCount = (allText3.match(/Για οικογενειακούς λόγους/g) || []).length;
 
       expect(reasonCount).toBeGreaterThan(0);
-      expect(empIdCount).toBeGreaterThan(0);
     });
 
     it('should handle Greek characters in reason field', () => {
@@ -198,7 +178,7 @@ describe('Issue 022 - Reason Field Value Mapping', () => {
       expect(allText5).toContain('Για οικογενειακούς λόγους με κεφαλαία');
     });
 
-    it('should render employeeId only when present', () => {
+    it('should not render employeeId even when present in data', () => {
       const data = {
         ...createMockLeaveRequest(),
         profile: {
@@ -215,19 +195,9 @@ describe('Issue 022 - Reason Field Value Mapping', () => {
         .map(el => el.textContent || '')
         .join(' ');
 
-      // Employee ID should be present
-      expect(allText6).toContain('EMP456');
-
-      // But employee ID section should only appear if employeeId is not empty
-      const textLines3 = allText6.split('\n');
-      let hasEmployeeIdLabel = false;
-      for (const line of textLines3) {
-        if (line?.includes('Αρ. Μητρώου:')) {
-          hasEmployeeIdLabel = true;
-          break;
-        }
-      }
-      expect(hasEmployeeIdLabel).toBe(true);
+      // Employee ID should NOT be present (removed in task 071)
+      expect(allText6).not.toContain('EMP456');
+      expect(allText6).not.toContain('Αρ. Μητρώου:');
     });
 
     it('should not render employeeId section when empty', () => {

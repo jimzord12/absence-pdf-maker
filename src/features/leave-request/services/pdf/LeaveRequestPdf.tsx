@@ -35,15 +35,15 @@ const styles = StyleSheet.create({
   page: {
     padding: 40,
     fontFamily: 'Roboto',
-    fontSize: 11,
-    color: '#333',
-    lineHeight: 1.5,
+    fontSize: 12,
+    color: '#222',
+    lineHeight: 1.6,
   },
   header: {
-    marginBottom: 30,
-    borderBottomWidth: 2,
+    marginBottom: 35,
+    borderBottomWidth: 3,
     borderBottomColor: '#1a73e8',
-    paddingBottom: 10,
+    paddingBottom: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
@@ -56,21 +56,22 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   companyName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#1a73e8',
     textTransform: 'uppercase',
   },
   documentTitle: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#333',
-    marginTop: 10,
+    color: '#1a73e8',
+    marginTop: 12,
   },
   subject: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 25,
+    color: '#444',
     textDecoration: 'underline',
   },
   content: {
@@ -84,35 +85,41 @@ const styles = StyleSheet.create({
     width: '48%',
   },
   section: {
-    marginBottom: 15,
+    marginBottom: 20,
   },
   sectionTitle: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: 10,
     color: '#1a73e8',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    paddingBottom: 2,
+    borderBottomWidth: 2,
+    borderBottomColor: '#1a73e8',
+    paddingBottom: 5,
   },
   row: {
-    marginBottom: 5,
+    marginBottom: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   label: {
-    fontSize: 10,
-    color: '#666',
+    fontSize: 11,
+    color: '#555',
     fontWeight: 'bold',
+    flex: 1,
   },
   value: {
-    fontSize: 11,
+    fontSize: 12,
     color: '#000',
+    fontWeight: 'normal',
+    flex: 1.5,
   },
   paragraph: {
-    marginBottom: 10,
+    marginBottom: 12,
     textAlign: 'justify',
+    lineHeight: 1.7,
   },
   footer: {
-    marginTop: 50,
+    marginTop: 60,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
@@ -120,11 +127,15 @@ const styles = StyleSheet.create({
   signatureBox: {
     width: '45%',
     alignItems: 'center',
+    padding: 15,
+    backgroundColor: '#fafafa',
+    borderRadius: 4,
   },
   signatureTitle: {
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: 'bold',
     marginBottom: 30,
+    color: '#333',
   },
   signatureImage: {
     width: 120,
@@ -133,23 +144,26 @@ const styles = StyleSheet.create({
   },
   signatureLine: {
     width: '100%',
-    borderBottomWidth: 1,
+    borderBottomWidth: 1.5,
     borderBottomColor: '#333',
     marginTop: 5,
   },
   dateSection: {
-    marginTop: 20,
+    marginTop: 25,
     alignItems: 'flex-end',
   },
   allowanceSection: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 4,
+    marginTop: 25,
+    padding: 15,
+    backgroundColor: '#f0f4ff',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#d0e0ff',
   },
   allowanceText: {
-    fontSize: 10,
+    fontSize: 11,
     fontStyle: 'italic',
+    color: '#333',
   },
 });
 
@@ -178,7 +192,7 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({ data, absenceD
           </View>
         </View>
 
-        <Text style={styles.subject}>ΘΕΜΑ: Χορήγηση Κανονικής Άδειας</Text>
+        <Text style={styles.subject}>ΘΕΜΑ: ΑΙΤΗΣΗ ΓΙΑ ΧΟΡΗΓΗΣΗ ΚΑΝΟΝΙΚΗΣ ΑΔΕΙΑΣ</Text>
 
         <View style={styles.content}>
           {/* Left Column: Employee Details */}
@@ -210,13 +224,6 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({ data, absenceD
                 <Text style={styles.label}>Τηλ. Επικοινωνίας:</Text>
                 <Text style={styles.value}>{data.profile.phone}</Text>
               </View>
-
-              {data.profile.employeeId && (
-                <View style={styles.row}>
-                  <Text style={styles.label}>Αρ. Μητρώου:</Text>
-                  <Text style={styles.value}>{data.profile.employeeId}</Text>
-                </View>
-              )}
             </View>
           </View>
 
@@ -227,8 +234,8 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({ data, absenceD
 
               <Text style={styles.paragraph}>
                 Παρακαλώ να μου χορηγήσετε κανονική άδεια απουσίας{' '}
-                <Text style={{ fontWeight: 'bold' }}>{absenceDays}</Text>{' '}
-                εργάσιμων ημερών.
+                <Text style={{ fontWeight: 'bold', fontSize: 13, color: '#1a73e8' }}>{absenceDays}</Text>{' '}
+                <Text>εργάσιμων ημερών.</Text>
               </Text>
 
               <View style={styles.row}>
@@ -258,6 +265,15 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({ data, absenceD
             </View>
           </View>
         </View>
+
+        <View
+          style={{
+            marginTop: 20,
+            marginBottom: 20,
+            borderBottomWidth: 1,
+            borderBottomColor: '#e0e0e0',
+          }}
+        />
 
         {/* Allowance Preference */}
         <View style={styles.allowanceSection}>

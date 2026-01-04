@@ -227,7 +227,7 @@ describe('LeaveRequestPdf', () => {
       expect(allText).toContain('9876543210');
     });
 
-    it('should render employee ID when present', () => {
+    it('should not render employee ID field even when present in data', () => {
       const data = createMockLeaveRequest({
         profile: { ...createMockLeaveRequest().profile, employeeId: 'EMP999' },
       });
@@ -240,10 +240,13 @@ describe('LeaveRequestPdf', () => {
         .map(el => el.textContent || '')
         .join(' ');
 
-      expect(allText).toContain('EMP999');
+      // Should not contain the employee ID value
+      expect(allText).not.toContain('EMP999');
+      // Should not contain the employee ID label
+      expect(allText).not.toContain('Αρ. Μητρώου:');
     });
 
-    it('should not render employee ID section when absent', () => {
+    it('should not render employee ID field when absent', () => {
       const data = createMockLeaveRequest({
         profile: { ...createMockLeaveRequest().profile, employeeId: '' },
       });
@@ -256,7 +259,7 @@ describe('LeaveRequestPdf', () => {
         .map(el => el.textContent || '')
         .join(' ');
 
-      // Should not contain an empty employee ID or the label
+      // Should not contain the employee ID label
       expect(allText).not.toContain('Αρ. Μητρώου:');
     });
   });
