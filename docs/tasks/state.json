@@ -2,11 +2,11 @@
   "$schema": "./state.schema.json",
   "version": "2.0",
   "tasks": {
-    "068-fix-issue-018-pdf-offline-generation": {
-      "state": "completed",
-      "lastUpdated": "2026-01-04T13:28:59.809Z",
-      "location": "active",
-      "fromIssue": "018",
+    "069-fix-issue-022-reason-field-value-mapping": {
+      "state": "committed",
+      "lastUpdated": "2026-01-04T15:20:00.000Z",
+      "location": "archive",
+      "fromIssue": "022",
       "blockedBy": []
     }
   }
