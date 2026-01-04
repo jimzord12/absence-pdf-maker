@@ -3,15 +3,15 @@
   "version": "2.0",
   "tasks": {
     "074-fix-revert-timer": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-04T22:03:00.649Z",
-      "location": "backlog",
+      "state": "implemented",
+      "lastUpdated": "2026-01-04T22:47:17.386Z",
+      "location": "active",
       "blockedBy": []
     },
     "075-add-rainbow-blur": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-04T22:03:40.436Z",
-      "location": "backlog",
+      "state": "completed",
+      "lastUpdated": "2026-01-04T22:24:45.111Z",
+      "location": "active",
       "blockedBy": []
     },
     "076-fixed-positioning": {
@@ -29,6 +29,12 @@
     "078-inner-shadow-heartbeat": {
       "state": "not_started",
       "lastUpdated": "2026-01-04T22:03:40.437Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "plan-074-fix-revert-timer": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-04T22:11:15.669Z",
       "location": "backlog",
       "blockedBy": []
     }
