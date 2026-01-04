@@ -1,5 +1,6 @@
 ---
 name: orchestrator
+# model: zai-coding-plan/glm-4.7
 mode: primary
 description: Project orchestrator that understands user requests, plans work, and delegates to specialist subagents with proper handoffs.
 tools:

@@ -130,6 +130,65 @@ Only non-archived tasks are tracked in `state.json`:
 | `npm run task create <id>`              | Create task from template |
 | `npm run task archive <id>`             | Move task to archive      |
 
+## Creating New Tasks
+
+### Task Template
+
+All new tasks should follow the standard template located at: [`docs/templates/TASK-TEMPLATE.md`](../templates/TASK-TEMPLATE.md)
+
+### Task ID Convention
+
+Task IDs follow a sequential numbering pattern with a descriptive suffix:
+
+- Format: `{number}-{kebab-case-description}`
+- Examples: `065-toastify-notifications`, `067-date-range-clear`
+
+To determine the next task number:
+
+1. Check the highest existing task ID in `backlog/`, `active/`, and `archive/`
+2. Increment by 1 for the new task
+
+### Creating a Task via CLI
+
+```bash
+npm run task create <task-id>
+```
+
+This command:
+
+1. Creates a new task file in `docs/tasks/backlog/{task-id}.md` from the template
+2. Adds an entry to `docs/tasks/state.json` with state `not_started`
+
+### Creating a Task Manually
+
+1. Copy the template from `docs/templates/TASK-TEMPLATE.md`
+2. Create a new file: `docs/tasks/backlog/{task-id}.md`
+3. Fill in all required fields:
+   - **Priority:** `high`, `medium`, or `low`
+   - **Blocks/Blocked By:** Task dependencies or `none`
+   - **Issue:** Link to related issue or `N/A`
+   - **Description:** Clear explanation of what needs to be done
+   - **Constraints:** Technical limitations or patterns to follow
+   - **Acceptance Criteria:** Measurable checklist items
+4. Add an entry to `docs/tasks/state.json`:
+
+```json
+"{task-id}": {
+  "state": "not_started",
+  "lastUpdated": "{ISO-8601-timestamp}",
+  "location": "backlog"
+}
+```
+
+### Tips for Writing Good Tasks
+
+1. **Be specific:** Avoid vague descriptions. Include file paths, function names, and expected behavior.
+2. **Keep tasks atomic:** One task = one logical unit of work. If a task feels too large, split it.
+3. **Define clear acceptance criteria:** Each criterion should be testable/verifiable.
+4. **Document dependencies:** Use `Blocks` and `Blocked By` to track task relationships.
+5. **Link to issues:** Connect tasks to GitHub issues when applicable for traceability.
+6. **Add context in Notes:** Include research links, design decisions, or handover information.
+
 ## OpenCode Tools
 
 The following tools are available for AI agents:
