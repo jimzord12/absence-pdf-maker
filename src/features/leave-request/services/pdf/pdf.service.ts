@@ -1,8 +1,23 @@
+import { format } from 'date-fns';
 import { pdf, type DocumentProps } from '@react-pdf/renderer';
 import React from 'react';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
 import { calculateAbsenceDays } from '../absenceDays';
 import { LeaveRequestPdf } from './LeaveRequestPdf';
+
+/**
+ * Sanitize a string for use in filenames.
+ *
+ * - Replaces spaces with hyphens
+ * - Removes special characters (keeps letters, numbers, hyphens)
+ * - Preserves Greek characters
+ *
+ * @param str - The string to sanitize
+ * @returns Sanitized string
+ */
+const sanitizeForFilename = (str: string): string => {
+  return str.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9α-ωΑ-Ωά-ώΆ-Ώ-]/g, '');
+};
 
 /**
  * Generate a leave request PDF blob.
@@ -50,9 +65,22 @@ export const downloadLeaveRequestPdf = async (
   try {
     const blob = await generateLeaveRequestPdf(data, holidays);
 
-    const employeeId = data.profile.employeeId?.replace(/[^a-zA-Z0-9]/g, '_') || 'unknown';
-    const today = new Date().toISOString().split('T')[0];
-    const filename = `LeaveRequest_${employeeId}_${today}.pdf`;
+    // Extract and sanitize employee full name
+    const sanitizedName = sanitizeForFilename(data.profile.fullName || 'unknown');
+
+    // Format start and end dates as dd-MM-yyyy
+    const formattedStartDate = data.startDate
+      ? format(data.startDate, 'dd-MM-yyyy')
+      : 'unknown';
+    const formattedEndDate = data.endDate
+      ? format(data.endDate, 'dd-MM-yyyy')
+      : 'unknown';
+
+    // Extract and sanitize company name
+    const sanitizedCompany = sanitizeForFilename(data.profile.companyName || 'unknown');
+
+    // Construct filename: LeaveRequest_<Name>_<StartDate>_<EndDate>_<Company>.pdf
+    const filename = `LeaveRequest_${sanitizedName}_${formattedStartDate}_${formattedEndDate}_${sanitizedCompany}.pdf`;
 
     // Create download link and trigger download
     const url = URL.createObjectURL(blob);

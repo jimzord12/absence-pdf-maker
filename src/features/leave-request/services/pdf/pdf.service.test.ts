@@ -97,14 +97,95 @@ describe('PDF Service', () => {
   });
 
   describe('downloadLeaveRequestPdf', () => {
-    it('should generate and download the PDF', async () => {
+    it('should generate and download the PDF with new filename format', async () => {
       await downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays);
 
       expect(global.URL.createObjectURL).toHaveBeenCalled();
       expect(document.createElement).toHaveBeenCalledWith('a');
-      expect(mockLink.download).toMatch(/LeaveRequest_EMP123_.*\.pdf/);
+      expect(mockLink.download).toBe(
+        'LeaveRequest_John-Doe_01-01-2025_05-01-2025_Acme-Corp.pdf'
+      );
       expect(mockLink.click).toHaveBeenCalled();
       expect(global.URL.revokeObjectURL).toHaveBeenCalled();
+    });
+
+    it('should sanitize special characters from name and company', async () => {
+      const requestWithSpecialChars: LeaveRequest = {
+        ...mockLeaveRequest,
+        profile: {
+          ...mockLeaveRequest.profile,
+          fullName: 'John "The Rock" Doe!',
+          companyName: 'Acme Corp, Inc.',
+        },
+      };
+
+      await downloadLeaveRequestPdf(requestWithSpecialChars, mockHolidays);
+
+      expect(mockLink.download).toBe(
+        'LeaveRequest_John-The-Rock-Doe_01-01-2025_05-01-2025_Acme-Corp-Inc.pdf'
+      );
+    });
+
+    it('should preserve Greek characters in name and company', async () => {
+      const requestWithGreek: LeaveRequest = {
+        ...mockLeaveRequest,
+        profile: {
+          ...mockLeaveRequest.profile,
+          fullName: 'Γιάννης Παπαδόπουλος',
+          companyName: 'Ελληνική Εταιρεία ΑΕ',
+        },
+      };
+
+      await downloadLeaveRequestPdf(requestWithGreek, mockHolidays);
+
+      expect(mockLink.download).toBe(
+        'LeaveRequest_Γιάννης-Παπαδόπουλος_01-01-2025_05-01-2025_Ελληνική-Εταιρεία-ΑΕ.pdf'
+      );
+    });
+
+    it('should handle missing fullName and companyName', async () => {
+      const requestWithMissingFields: LeaveRequest = {
+        ...mockLeaveRequest,
+        profile: {
+          ...mockLeaveRequest.profile,
+          fullName: '',
+          companyName: '',
+        },
+      };
+
+      await downloadLeaveRequestPdf(requestWithMissingFields, mockHolidays);
+
+      expect(mockLink.download).toBe(
+        'LeaveRequest_unknown_01-01-2025_05-01-2025_unknown.pdf'
+      );
+    });
+
+    it('should handle dates in different months and years', async () => {
+      const requestWithDifferentDates: LeaveRequest = {
+        ...mockLeaveRequest,
+        startDate: new Date('2024-12-31'),
+        endDate: new Date('2025-01-15'),
+      };
+
+      await downloadLeaveRequestPdf(requestWithDifferentDates, mockHolidays);
+
+      expect(mockLink.download).toBe(
+        'LeaveRequest_John-Doe_31-12-2024_15-01-2025_Acme-Corp.pdf'
+      );
+    });
+
+    it('should handle single and double digit days and months', async () => {
+      const requestWithEdgeDates: LeaveRequest = {
+        ...mockLeaveRequest,
+        startDate: new Date('2025-01-09'),
+        endDate: new Date('2025-12-31'),
+      };
+
+      await downloadLeaveRequestPdf(requestWithEdgeDates, mockHolidays);
+
+      expect(mockLink.download).toBe(
+        'LeaveRequest_John-Doe_09-01-2025_31-12-2025_Acme-Corp.pdf'
+      );
     });
 
     it('should handle errors gracefully', async () => {
