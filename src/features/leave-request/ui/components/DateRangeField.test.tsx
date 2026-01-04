@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { act } from 'react';
 import { DateRangeField } from './DateRangeField';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
 
@@ -738,6 +739,148 @@ describe('DateRangeField', () => {
       // Calendar should be rendered for keyboard navigation
       const calendar = container.querySelector('.rdp');
       expect(calendar).toBeInTheDocument();
+    });
+  });
+
+  describe('clear dates button', () => {
+    it('should not render clear button when no dates are selected', () => {
+      const NoDatesWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+        const methods = useForm<LeaveRequest>({
+          defaultValues: {
+            profile: {
+              fullName: '',
+              email: '',
+              phone: '',
+              employeeId: '',
+              department: '',
+              position: '',
+            },
+            leaveType: 'annual',
+            startDate: undefined as unknown as Date,
+            endDate: undefined as unknown as Date,
+            reason: '',
+            createdAt: new Date(),
+          } as any,
+        });
+        return <FormProvider {...methods}>{children}</FormProvider>;
+      };
+
+      render(
+        <NoDatesWrapper>
+          <DateRangeField holidaySet={mockHolidaySet} />
+        </NoDatesWrapper>
+      );
+
+      expect(screen.queryByText('Clear Dates')).not.toBeInTheDocument();
+    });
+
+    it('should render clear button when dates are selected', () => {
+      render(
+        <TestWrapper>
+          <DateRangeField holidaySet={mockHolidaySet} />
+        </TestWrapper>
+      );
+
+      expect(screen.getByText('Clear Dates')).toBeInTheDocument();
+    });
+
+    it('should have proper accessibility attributes on clear button', () => {
+      render(
+        <TestWrapper>
+          <DateRangeField holidaySet={mockHolidaySet} />
+        </TestWrapper>
+      );
+
+      const clearButton = screen.getByText('Clear Dates');
+      expect(clearButton).toHaveAttribute('title', 'Clear selected dates');
+      expect(clearButton).toHaveAttribute('aria-label', 'Clear selected dates');
+    });
+
+    it('should clear dates when clear button is clicked', async () => {
+      render(
+        <TestWrapper>
+          <DateRangeField holidaySet={mockHolidaySet} />
+        </TestWrapper>
+      );
+
+      const clearButton = screen.getByText('Clear Dates');
+
+      await act(async () => {
+        clearButton.click();
+      });
+
+      // After clearing, the button should disappear
+      await waitFor(() => {
+        expect(screen.queryByText('Clear Dates')).not.toBeInTheDocument();
+      });
+
+      // Footer should show em dashes when no dates are selected
+      expect(screen.getAllByText('—').length).toBe(4);
+    });
+
+    it('should have secondary button styling', () => {
+      render(
+        <TestWrapper>
+          <DateRangeField holidaySet={mockHolidaySet} />
+        </TestWrapper>
+      );
+
+      const clearButton = screen.getByText('Clear Dates');
+      expect(clearButton).toHaveClass('bg-gray-200');
+      expect(clearButton).toHaveClass('text-gray-900');
+    });
+
+    it('should show clear button only when both start and end dates are selected', () => {
+      const OnlyStartDateWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+        const methods = useForm<LeaveRequest>({
+          defaultValues: {
+            profile: {
+              fullName: '',
+              email: '',
+              phone: '',
+              employeeId: '',
+              department: '',
+              position: '',
+            },
+            leaveType: 'annual',
+            startDate: new Date('2025-12-20'),
+            endDate: undefined as unknown as Date,
+            reason: '',
+            createdAt: new Date(),
+          } as any,
+        });
+        return <FormProvider {...methods}>{children}</FormProvider>;
+      };
+
+      render(
+        <OnlyStartDateWrapper>
+          <DateRangeField holidaySet={mockHolidaySet} />
+        </OnlyStartDateWrapper>
+      );
+
+      expect(screen.queryByText('Clear Dates')).not.toBeInTheDocument();
+    });
+
+    it('should update absence calculation to em dash after clearing dates', async () => {
+      render(
+        <TestWrapper>
+          <DateRangeField holidaySet={mockHolidaySet} />
+        </TestWrapper>
+      );
+
+      // Initially, should show numeric values (not em dash)
+      expect(screen.getByText('Date Range Summary')).toBeInTheDocument();
+
+      const clearButton = screen.getByText('Clear Dates');
+
+      await act(async () => {
+        clearButton.click();
+      });
+
+      // After clearing, all values should show em dash
+      await waitFor(() => {
+        expect(screen.getAllByText('—').length).toBe(4);
+      });
     });
   });
 });

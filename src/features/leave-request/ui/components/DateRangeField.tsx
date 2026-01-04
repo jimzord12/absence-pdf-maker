@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { isHoliday } from '../../services/holidays/holidays.service';
 import { calculateAbsenceDays } from '../../services/absenceDays';
 import { isWeekend } from '../../../../shared/lib/dates';
+import { Button } from '../../../../shared/ui/Button';
 import { HolidaysLegend } from './HolidaysLegend';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
 import type { FieldErrors } from 'react-hook-form';
@@ -239,7 +240,24 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({
       <label id={`${dateFieldId}-label`} className="block text-sm font-medium text-gray-700">
         Select Date Range
       </label>
-      <HolidaysLegend />
+      <div className="flex items-start gap-2">
+        <HolidaysLegend />
+        {startDate && endDate && (
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => {
+              setValue('startDate', undefined, { shouldDirty: true, shouldValidate: false });
+              setValue('endDate', undefined, { shouldDirty: true, shouldValidate: false });
+            }}
+            title="Clear selected dates"
+            aria-label="Clear selected dates"
+            className="flex-shrink-0"
+          >
+            Clear Dates
+          </Button>
+        )}
+      </div>
       <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm" role="region" aria-label="Calendar">
         <DayPicker
           mode="range"
