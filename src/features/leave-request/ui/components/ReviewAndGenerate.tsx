@@ -360,7 +360,8 @@ export const ReviewAndGenerate: React.FC = () => {
                   !profile.position ||
                   !leaveDraft.startDate ||
                   !leaveDraft.endDate ||
-                  !signature.signatureDataUrl
+                  !signature.signatureDataUrl ||
+                  absenceBreakdown?.absenceDays === 0
                 }
                 className="w-full md:w-auto"
               >
@@ -378,3 +379,4 @@ export const ReviewAndGenerate: React.FC = () => {
     </aside>
   );
 };
+

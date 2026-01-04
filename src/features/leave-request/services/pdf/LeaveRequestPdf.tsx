@@ -40,20 +40,20 @@ const styles = StyleSheet.create({
     lineHeight: 1.6,
   },
   header: {
-    marginBottom: 35,
+    marginBottom: 25,
     borderBottomWidth: 3,
     borderBottomColor: '#1a73e8',
-    paddingBottom: 15,
+    paddingBottom: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
   },
   headerLeft: {
     flexDirection: 'column',
   },
   headerRight: {
     flexDirection: 'column',
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
   },
   companyName: {
     fontSize: 18,
@@ -64,13 +64,12 @@ const styles = StyleSheet.create({
   documentTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1a73e8',
-    marginTop: 12,
+    color: '#222',
   },
   subject: {
     fontSize: 13,
     fontWeight: 'bold',
-    marginBottom: 25,
+    marginBottom: 15,
     color: '#444',
     textDecoration: 'underline',
   },
@@ -85,7 +84,7 @@ const styles = StyleSheet.create({
     width: '48%',
   },
   section: {
-    marginBottom: 20,
+    marginBottom: 15,
   },
   sectionTitle: {
     fontSize: 14,
@@ -110,7 +109,7 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 12,
     color: '#000',
-    fontWeight: 'normal',
+    fontWeight: 700,
     flex: 1.5,
   },
   paragraph: {
@@ -119,7 +118,7 @@ const styles = StyleSheet.create({
     lineHeight: 1.7,
   },
   footer: {
-    marginTop: 60,
+    marginTop: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
@@ -130,6 +129,7 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: '#fafafa',
     borderRadius: 4,
+    maxHeight: 200,
   },
   signatureTitle: {
     fontSize: 11,
@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   signatureImage: {
-    width: 120,
-    height: 60,
+    width: 145,
+    height: 68,
     marginBottom: 5,
   },
   signatureLine: {
@@ -149,12 +149,12 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   dateSection: {
-    marginTop: 25,
+    marginTop: 15,
     alignItems: 'flex-end',
   },
   allowanceSection: {
-    marginTop: 25,
-    padding: 15,
+    marginTop: 15,
+    padding: 12,
     backgroundColor: '#f0f4ff',
     borderRadius: 6,
     borderWidth: 1,
@@ -176,6 +176,10 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({ data, absenceD
   const formatDate = (date: Date | undefined) => {
     if (!date) return '—';
     return format(date, 'dd/MM/yyyy', { locale: el });
+  };
+
+  const formatPhone = (phone: string) => {
+    return phone.startsWith('+30') ? phone.replace('+30', '+30 ') : phone;
   };
 
   return (
@@ -222,7 +226,7 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({ data, absenceD
 
               <View style={styles.row}>
                 <Text style={styles.label}>Τηλ. Επικοινωνίας:</Text>
-                <Text style={styles.value}>{data.profile.phone}</Text>
+                <Text style={styles.value}>{formatPhone(data.profile.phone)}</Text>
               </View>
             </View>
           </View>
@@ -234,7 +238,9 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({ data, absenceD
 
               <Text style={styles.paragraph}>
                 Παρακαλώ να μου χορηγήσετε κανονική άδεια απουσίας{' '}
-                <Text style={{ fontWeight: 'bold', fontSize: 13, color: '#1a73e8' }}>{absenceDays}</Text>{' '}
+                <Text style={{ fontWeight: 'bold', fontSize: 13, color: '#1a73e8' }}>
+                  {absenceDays}
+                </Text>{' '}
                 <Text>εργάσιμων ημερών.</Text>
               </Text>
 
@@ -288,7 +294,7 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({ data, absenceD
         <View style={styles.footer}>
           <View style={styles.signatureBox}>
             <Text style={styles.signatureTitle}>Συμφωνώ</Text>
-            <View style={{ height: 60 }} /> {/* Space for employer signature */}
+            <View style={{ height: 68 }} /> {/* Space for employer signature */}
             <View style={styles.signatureLine} />
             <Text style={{ fontSize: 10 }}>Ο Εργοδότης</Text>
           </View>
@@ -298,7 +304,7 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({ data, absenceD
             {data.signatureDataUrl ? (
               <Image src={data.signatureDataUrl} style={styles.signatureImage} />
             ) : (
-              <View style={{ height: 60 }} />
+              <View style={{ height: 68 }} />
             )}
             <View style={styles.signatureLine} />
             <Text style={{ fontSize: 10 }}>{data.profile.fullName}</Text>
@@ -306,9 +312,10 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({ data, absenceD
         </View>
 
         <View style={styles.dateSection}>
-          <Text style={{ fontSize: 10 }}>Ημερομηνία: {formatDate(data.createdAt)}</Text>
+          <Text style={{ fontSize: 12 }}>Ημερομηνία: {formatDate(data.createdAt)}</Text>
         </View>
       </Page>
     </Document>
   );
 };
+

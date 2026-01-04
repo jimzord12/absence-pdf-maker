@@ -4,8 +4,41 @@ import SignatureCanvas from 'react-signature-canvas';
 import { Button, Input, Modal } from '../../../../shared/ui';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 
-// Constants
 const CANVAS_HEIGHT = 200;
+const SIGNATURE_SCALE_WIDTH = 1.8;
+const SIGNATURE_SCALE_HEIGHT = 1.5;
+
+const scaleSignatureDataUrl = (
+  dataUrl: string,
+  scaleX: number,
+  scaleY: number
+): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      if (!ctx) {
+        reject(new Error('Failed to get canvas context'));
+        return;
+      }
+
+      canvas.width = img.width * scaleX;
+      canvas.height = img.height * scaleY;
+
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      const scaledDataUrl = canvas.toDataURL('image/png');
+      resolve(scaledDataUrl);
+    };
+    img.onerror = () => reject(new Error('Failed to load signature image'));
+    img.src = dataUrl;
+  });
+};
 
 export const SignatureModal: React.FC = () => {
   const sigCanvas = useRef<SignatureCanvas>(null);
@@ -54,15 +87,25 @@ export const SignatureModal: React.FC = () => {
     }
   }, [useTypedSignature]);
 
-  // Handle saving the signature as data URL
-  const handleSave = useCallback(() => {
+  const handleSave = useCallback(async () => {
     if (useTypedSignature && typedName.trim()) {
       setSignature({ signatureDataUrl: `text:${typedName.trim()}` });
       toggleSignatureModal();
     } else if (sigCanvas.current && !sigCanvas.current.isEmpty()) {
       const dataUrl = sigCanvas.current.toDataURL();
-      setSignature({ signatureDataUrl: dataUrl });
-      toggleSignatureModal();
+      try {
+        const scaledDataUrl = await scaleSignatureDataUrl(
+          dataUrl,
+          SIGNATURE_SCALE_WIDTH,
+          SIGNATURE_SCALE_HEIGHT
+        );
+        setSignature({ signatureDataUrl: scaledDataUrl });
+        toggleSignatureModal();
+      } catch (error) {
+        console.error('Failed to scale signature:', error);
+        setSignature({ signatureDataUrl: dataUrl });
+        toggleSignatureModal();
+      }
     }
   }, [setSignature, toggleSignatureModal, useTypedSignature, typedName]);
 

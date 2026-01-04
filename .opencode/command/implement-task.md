@@ -6,13 +6,15 @@ subtask: true
 
 # Implement Task
 
-Implement **ONE** task only.
+Implement **ONE** task completely from `not_started` to `completed`.
 
-## IMPORTANT - CONTROL
+## IMPORTANT - AUTOMATED WORKFLOW
 
-- **Stop after completing ONE task** - do NOT automatically continue to the next
+- **Complete the ENTIRE lifecycle** without intermediate reporting
+- If reviewer fails implementation, automatically spawn developer subagent to fix issues
+- **Only notify user when task is `completed`** (implemented + tested + review passed)
 - If `$ARGUMENTS` contains a task ID, only implement that specific task
-- Report completion and wait for user confirmation before doing anything else
+- **Stop after completing ONE task** - do NOT automatically continue to the next
 
 ## Workflow
 
@@ -44,15 +46,33 @@ Implement **ONE** task only.
 
    - Once implementation is complete, update task state to `implemented`
    - If tests also pass, update to `unit_tested`
-   - If review passes, update to `review_pass`
 
-6. **STOP - DO NOT CONTINUE**:
+6. **Automated Code Review**:
 
-   - Report the completed task to the user
+   - **Spawn reviewer agent** to review the implementation
+   - If reviewer **PASSES**:
+     - Update task state to `review_pass`
+     - Update task state to `completed`
+     - **NOTIFY USER**: Task completed successfully
+     - **STOP** - wait for user instruction before any further action
+   - If reviewer **FAILS**:
+     - Capture all reviewer feedback/notes
+     - **Spawn developer subagent** with:
+       - Task ID and context
+       - Full reviewer feedback (what's wrong, what needs fixing)
+       - Instruction to fix all issues and re-test
+     - Wait for developer subagent to complete fixes
+     - After fixes complete, **go back to step 4** (re-test and re-review)
+     - Loop until reviewer passes
+
+7. **STOP AFTER COMPLETION**:
+
+   - Only notify user when task reaches `completed` state
    - **STOP here** - do NOT proceed to the next task automatically
    - Wait for explicit user instruction before taking any further action
 
-7. **Handover** (ONLY if task not finished in one go):
+8. **Handover** (ONLY if task cannot be completed):
 
-   - If the task is not finished in one go, provide a clear handover note in the task file
-   - Do NOT proceed to other tasks
+   - If after multiple attempts the task still cannot be completed (e.g., blocker, external dependency issue)
+   - Provide detailed handover note in the task file explaining what was tried and what's blocking
+   - Update task state to reflect current situation
