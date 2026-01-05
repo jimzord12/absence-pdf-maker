@@ -6,14 +6,15 @@ subtask: false
 
 # Commit Task Changes
 
-You descriptive commit name for the Task, it must follow the pattern: `feat(<task-identifier>): <brief description>`
+Create a commit message for the Task, following the pattern: `feat(<task-identifier>): <brief description>`
 
-**CRITICAL**: Do NOT forget to update `docs/tasks/state.json` to mark the Task as `"state": "committed"` after the commit.
+**CRITICAL**: Do NOT forget to **REMOVE** the Task from `docs/tasks/state.json` after the commit.
+Archived tasks are NOT in state.json - their state is inferred from their location in `docs/tasks/archive/`.
 
-**IMPORTANT**: `docs/tasks/state.json` must be committed along with the code changes!!!.
+**IMPORTANT**: The task file is automatically moved from `docs/tasks/active/` to `docs/tasks/archive/` during the `completed` → `committed` transition.
 
 ## Common issues
 
-- Forgetting to update `docs/tasks/state.json` to mark the Task as `"state": "committed"`.
-- Not committing the `docs/tasks/state.json` file along with the code changes.
+- Forgetting to **REMOVE** the Task from `docs/tasks/state.json` (not marking it as "committed").
+- Not committing the `docs/tasks/state.json` file after removing the task.
 
