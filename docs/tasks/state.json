@@ -2,29 +2,10 @@
   "$schema": "./state.schema.json",
   "version": "2.0",
   "tasks": {
-    "075-add-rainbow-blur": {
-      "state": "completed",
-      "lastUpdated": "2026-01-04T22:24:45.111Z",
-      "location": "active",
-      "blockedBy": []
-    },
-    "076-fixed-positioning": {
-      "state": "completed",
-      "lastUpdated": "2026-01-04T23:02:51.146Z",
-      "location": "active",
-      "blockedBy": []
-    },
-    "079-capture-pre-upgrade-baselines": {
-      "state": "completed",
-      "lastUpdated": "2026-01-05T21:08:43.372Z",
-      "location": "active",
-      "fromIssue": "Derived from upgrade-tailwind-v3-to-v4",
-      "blockedBy": []
-    },
     "080-update-tailwind-dependencies": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-05T20:05:47.782Z",
-      "location": "backlog",
+      "state": "completed",
+      "lastUpdated": "2026-01-05T21:33:22.926Z",
+      "location": "active",
       "fromIssue": "Derived from upgrade-tailwind-v3-to-v4",
       "blockedBy": []
     },
