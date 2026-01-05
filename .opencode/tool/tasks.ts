@@ -202,6 +202,7 @@ export const setState = tool({
       .optional()
       .describe('Force state change even if transition is invalid (default: false)'),
   },
+
   async execute(args): Promise<string> {
     const { taskId, newState: newStateStr, force = false } = args;
     const paths = getDefaultPaths();
@@ -266,7 +267,7 @@ export const setState = tool({
     // Update state.json
     if (newLocation === 'archive') {
       // Remove from state.json when archived (state.json only tracks active tasks)
-      delete stateFile.tasks[taskId];
+      if (stateFile.tasks[taskId]) delete stateFile.tasks[taskId];
     } else {
       stateFile.tasks[taskId] = {
         state: newState,

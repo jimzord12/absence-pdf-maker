@@ -13,6 +13,273 @@
       "lastUpdated": "2026-01-04T23:02:51.146Z",
       "location": "active",
       "blockedBy": []
+    },
+    "079-capture-pre-upgrade-baselines": {
+      "state": "completed",
+      "lastUpdated": "2026-01-05T21:08:43.372Z",
+      "location": "active",
+      "fromIssue": "Derived from upgrade-tailwind-v3-to-v4",
+      "blockedBy": []
+    },
+    "080-update-tailwind-dependencies": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:05:47.782Z",
+      "location": "backlog",
+      "fromIssue": "Derived from upgrade-tailwind-v3-to-v4",
+      "blockedBy": []
+    },
+    "081-migrate-tailwind-config-to-css": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:05:47.782Z",
+      "location": "backlog",
+      "fromIssue": "Derived from upgrade-tailwind-v3-to-v4",
+      "blockedBy": []
+    },
+    "082-add-tailwind-enhancements": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:05:47.783Z",
+      "location": "backlog",
+      "fromIssue": "Derived from upgrade-tailwind-v3-to-v4",
+      "blockedBy": []
+    },
+    "083-verify-tailwind-upgrade": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:05:47.783Z",
+      "location": "backlog",
+      "fromIssue": "Derived from upgrade-tailwind-v3-to-v4",
+      "blockedBy": []
+    },
+    "084-generate-color-scales": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:05:47.784Z",
+      "location": "backlog",
+      "fromIssue": "Derived from design-color-palettes-light-dark",
+      "blockedBy": []
+    },
+    "085-implement-color-palettes-in-css": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:05:47.784Z",
+      "location": "backlog",
+      "fromIssue": "Derived from design-color-palettes-light-dark",
+      "blockedBy": []
+    },
+    "086-create-theme-store-and-provider": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:06:13.248Z",
+      "location": "backlog",
+      "fromIssue": "Derived from implement-theme-toggle",
+      "blockedBy": []
+    },
+    "087-add-dark-variants-to-shared-components": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:06:13.249Z",
+      "location": "backlog",
+      "fromIssue": "Derived from implement-theme-toggle",
+      "blockedBy": []
+    },
+    "088-add-dark-variants-to-feature-components": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:06:13.249Z",
+      "location": "backlog",
+      "fromIssue": "Derived from implement-theme-toggle",
+      "blockedBy": []
+    },
+    "089-integrate-starswars-toggle": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:06:13.250Z",
+      "location": "backlog",
+      "fromIssue": "Derived from implement-theme-toggle",
+      "blockedBy": []
+    },
+    "090-add-theme-state-tests": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:06:13.250Z",
+      "location": "backlog",
+      "fromIssue": "Derived from add-comprehensive-tests",
+      "blockedBy": []
+    },
+    "091-add-component-dark-mode-tests": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:06:13.250Z",
+      "location": "backlog",
+      "fromIssue": "Derived from add-comprehensive-tests",
+      "blockedBy": []
+    },
+    "092-add-theme-integration-tests": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:06:13.251Z",
+      "location": "backlog",
+      "fromIssue": "Derived from add-comprehensive-tests",
+      "blockedBy": []
+    },
+    "093-add-theme-e2e-tests": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:06:13.251Z",
+      "location": "backlog",
+      "fromIssue": "Derived from add-comprehensive-tests",
+      "blockedBy": []
+    },
+    "101-install-i18next-dependencies": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:08.664Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "102-create-i18n-config": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:08.665Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "103-create-i18n-type-declarations": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:08.666Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "104-create-translation-files": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:08.666Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "105-initialize-i18next-in-main": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:08.667Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "106-update-locale-store-with-i18next": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:08.667Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "107-create-pdf-language-store": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:08.668Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "108-create-pdf-language-selector": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:08.668Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "109-create-validation-schema-factories": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:08.669Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "110-migrate-personal-details-section": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:08.669Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "111-migrate-employment-details-section": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:08.669Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "112-migrate-leave-details-section": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:08.669Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "113-migrate-date-range-field": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:08.670Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "114-migrate-signature-modal": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:37.992Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "115-migrate-leave-request-form": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:37.993Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "116-migrate-review-and-generate": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:37.994Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "117-migrate-leave-request-page": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:37.994Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "118-update-persistence-service-messages": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:37.995Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "119-update-pdf-service-messages": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:37.995Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "120-update-shared-ui-components": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:37.996Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "121-refactor-pdf-component-for-bilingual": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:37.996Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "122-integrate-pdf-language-in-generation": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:37.997Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "123-update-component-tests-for-translations": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:37.997Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "124-test-language-switching-persistence": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:37.998Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "125-test-pdf-bilingual-generation": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:37.998Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "126-run-typecheck-and-lint": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:37.999Z",
+      "location": "backlog",
+      "blockedBy": []
+    },
+    "127-end-to-end-testing": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-05T20:32:37.999Z",
+      "location": "backlog",
+      "blockedBy": []
     }
   }
 }
