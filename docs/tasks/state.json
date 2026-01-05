@@ -2,13 +2,6 @@
   "$schema": "./state.schema.json",
   "version": "2.0",
   "tasks": {
-    "081-migrate-tailwind-config-to-css": {
-      "state": "committed",
-      "lastUpdated": "2026-01-05T23:23:00.000Z",
-      "location": "archive",
-      "fromIssue": "Derived from upgrade-tailwind-v3-to-v4",
-      "blockedBy": []
-    },
     "082-add-tailwind-enhancements": {
       "state": "not_started",
       "lastUpdated": "2026-01-05T20:05:47.783Z",
