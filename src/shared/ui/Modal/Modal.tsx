@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useId } from 'react';
+import React, { useEffect, useId, useRef } from 'react';
 
 export interface ModalProps {
   isOpen: boolean;
@@ -81,11 +81,20 @@ export const Modal: React.FC<ModalProps> = ({
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
       onClick={handleBackdropClick}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleBackdropClick(e as unknown as React.MouseEvent<HTMLDivElement>);
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label="Close modal backdrop"
     >
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
       <div
         ref={modalRef}
         className="relative w-full max-w-lg bg-white rounded-lg shadow-lg max-h-[90vh] overflow-hidden flex flex-col"
-        onClick={(e) => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? titleId : undefined}
@@ -122,10 +131,9 @@ export const Modal: React.FC<ModalProps> = ({
             )}
           </div>
         )}
-        <div className="flex-1 px-6 py-4 overflow-y-auto">
-          {children}
-        </div>
+        <div className="flex-1 px-6 py-4 overflow-y-auto">{children}</div>
       </div>
     </div>
   );
 };
+

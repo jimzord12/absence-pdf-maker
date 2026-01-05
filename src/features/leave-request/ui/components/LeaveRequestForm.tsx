@@ -5,7 +5,11 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { Button } from '../../../../shared/ui';
 import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
-import { useLeaveRequestStore, type LeaveDraftState, type ProfileState } from '../../state/leaveRequest.store';
+import {
+  useLeaveRequestStore,
+  type LeaveDraftState,
+  type ProfileState,
+} from '../../state/leaveRequest.store';
 import { EmploymentDetailsSection } from '../sections/EmploymentDetailsSection';
 import { LeaveDetailsSection } from '../sections/LeaveDetailsSection';
 import { PersonalDetailsSection } from '../sections/PersonalDetailsSection';
@@ -187,7 +191,6 @@ export const LeaveRequestForm = () => {
       <form
         onSubmit={handleSubmit(data => console.log('Form submitted:', data))}
         className="space-y-6 animate-fade-in-up"
-        role="form"
       >
         <div className="animate-stagger-2">
           <PersonalDetailsSection errors={errors} />

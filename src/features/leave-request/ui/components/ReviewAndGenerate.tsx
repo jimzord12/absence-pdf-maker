@@ -177,7 +177,6 @@ export const ReviewAndGenerate: React.FC = () => {
 
   return (
     <aside
-      role="complementary"
       aria-label="Review and Generate"
       className={`space-y-6 ${!hasAnimated ? 'animate-fade-in-up animate-stagger-1' : ''}`}
     >

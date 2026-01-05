@@ -1,16 +1,16 @@
-import React, { useMemo, useId } from 'react';
+import { el } from 'date-fns/locale';
+import React, { useId, useMemo } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
+import type { FieldErrors } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
-import { isHoliday } from '../../services/holidays/holidays.service';
-import { calculateAbsenceDays } from '../../services/absenceDays';
 import { isWeekend } from '../../../../shared/lib/dates';
 import { Button } from '../../../../shared/ui/Button';
-import { HolidaysLegend } from './HolidaysLegend';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
-import type { FieldErrors } from 'react-hook-form';
+import { calculateAbsenceDays } from '../../services/absenceDays';
+import { isHoliday } from '../../services/holidays/holidays.service';
 import type { Locale } from '../../state/locale.store';
-import { el } from 'date-fns/locale';
+import { HolidaysLegend } from './HolidaysLegend';
 
 interface DateRangeFieldProps {
   errors?: FieldErrors<LeaveRequest>;
@@ -51,24 +51,37 @@ const Footer: React.FC<AbsenceSummary & { hasDates: boolean }> = ({
   const displayValue = (value: number) => (hasDates ? value : '—');
 
   return (
-    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg" role="region" aria-live="polite">
+    <div
+      className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg"
+      role="region"
+      aria-live="polite"
+    >
       <p className="text-sm text-blue-900 font-medium">Date Range Summary</p>
       <div className="mt-2 space-y-1 text-sm text-blue-800">
         <div className="flex justify-between">
           <span>Total Days:</span>
-          <span className="font-semibold" aria-label={`Total days in range: ${displayValue(totalDays)}`}>
+          <span
+            className="font-semibold"
+            aria-label={`Total days in range: ${displayValue(totalDays)}`}
+          >
             {displayValue(totalDays)}
           </span>
         </div>
         <div className="flex justify-between">
           <span>Holidays:</span>
-          <span className="font-semibold" aria-label={`Holidays in range: ${displayValue(holidayDays)}`}>
+          <span
+            className="font-semibold"
+            aria-label={`Holidays in range: ${displayValue(holidayDays)}`}
+          >
             {displayValue(holidayDays)}
           </span>
         </div>
         <div className="flex justify-between">
           <span>Weekends:</span>
-          <span className="font-semibold" aria-label={`Weekend days in range: ${displayValue(weekendDays)}`}>
+          <span
+            className="font-semibold"
+            aria-label={`Weekend days in range: ${displayValue(weekendDays)}`}
+          >
             {displayValue(weekendDays)}
           </span>
         </div>
@@ -104,11 +117,7 @@ const Footer: React.FC<AbsenceSummary & { hasDates: boolean }> = ({
  *
  * Component uses useFormContext to access form methods (watch, setValue) for reactive updates.
  */
-export const DateRangeField: React.FC<DateRangeFieldProps> = ({
-  errors,
-  holidaySet,
-  locale,
-}) => {
+export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidaySet, locale }) => {
   const methods = useFormContext<LeaveRequest>();
   const { watch, setValue } = methods || {
     watch: () => undefined,
@@ -237,9 +246,9 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({
 
   return (
     <div className="space-y-2" role="group" aria-labelledby={`${dateFieldId}-label`}>
-      <label id={`${dateFieldId}-label`} className="block text-sm font-medium text-gray-700">
+      <span id={`${dateFieldId}-label`} className="block text-sm font-medium text-gray-700">
         Select Date Range
-      </label>
+      </span>
       <div className="flex justify-between gap-2">
         <HolidaysLegend />
         <Button
@@ -257,7 +266,11 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({
           Clear Dates
         </Button>
       </div>
-      <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm" role="region" aria-label="Calendar">
+      <div
+        className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm"
+        role="region"
+        aria-label="Calendar"
+      >
         <DayPicker
           mode="range"
           selected={selectedRange}
@@ -280,10 +293,8 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({
           )}
         </div>
       )}
-      <Footer
-        {...absenceDaysCalculation}
-        hasDates={!!startDate && !!endDate}
-      />
+      <Footer {...absenceDaysCalculation} hasDates={!!startDate && !!endDate} />
     </div>
   );
 };
+
