@@ -41,8 +41,8 @@ describe('Task 035: Tailwind CSS Cleanup - globals.css', () => {
     });
 
     it('should have a clean and well-documented file structure', () => {
-      // Should have section comments
-      expect(indexCssContent).toContain('Tailwind CSS Directives');
+      // Tailwind v4 uses @import instead of directives
+      expect(indexCssContent).toContain('Tailwind CSS v4');
       expect(indexCssContent).toContain('Tailwind Components Layer');
       expect(indexCssContent).toContain('Tailwind Utilities Layer');
 
@@ -62,32 +62,15 @@ describe('Task 035: Tailwind CSS Cleanup - globals.css', () => {
     });
   });
 
-  describe('Tailwind Directives Present', () => {
-    it('should include @tailwind base directive', () => {
-      expect(indexCssContent).toContain('@tailwind base');
+  describe('Tailwind v4 Import', () => {
+    it('should include @import "tailwindcss" directive', () => {
+      expect(indexCssContent).toContain('@import "tailwindcss"');
     });
 
-    it('should include @tailwind components directive', () => {
-      expect(indexCssContent).toContain('@tailwind components');
-    });
-
-    it('should include @tailwind utilities directive', () => {
-      expect(indexCssContent).toContain('@tailwind utilities');
-    });
-
-    it('should not have duplicate Tailwind directives', () => {
-      const baseMatches = indexCssContent.match(/@tailwind base/g);
-      const componentsMatches = indexCssContent.match(/@tailwind components/g);
-      const utilitiesMatches = indexCssContent.match(/@tailwind utilities/g);
-
-      expect(baseMatches).toBeTruthy();
-      if (baseMatches) expect(baseMatches.length).toBe(1);
-
-      expect(componentsMatches).toBeTruthy();
-      if (componentsMatches) expect(componentsMatches.length).toBe(1);
-
-      expect(utilitiesMatches).toBeTruthy();
-      if (utilitiesMatches) expect(utilitiesMatches.length).toBe(1);
+    it('should NOT have @tailwind directives (replaced by @import)', () => {
+      expect(indexCssContent).not.toContain('@tailwind base');
+      expect(indexCssContent).not.toContain('@tailwind components');
+      expect(indexCssContent).not.toContain('@tailwind utilities');
     });
   });
 

@@ -33,17 +33,15 @@ describe('Tailwind CSS Integration', () => {
     });
   });
 
-  describe('Tailwind Directives', () => {
-    it('should include @tailwind base directive', () => {
-      expect(indexCssContent).toContain('@tailwind base');
+  describe('Tailwind v4 Import', () => {
+    it('should include @import "tailwindcss" directive', () => {
+      expect(indexCssContent).toContain('@import "tailwindcss"');
     });
 
-    it('should include @tailwind components directive', () => {
-      expect(indexCssContent).toContain('@tailwind components');
-    });
-
-    it('should include @tailwind utilities directive', () => {
-      expect(indexCssContent).toContain('@tailwind utilities');
+    it('should NOT have @tailwind directives (replaced by @import)', () => {
+      expect(indexCssContent).not.toContain('@tailwind base');
+      expect(indexCssContent).not.toContain('@tailwind components');
+      expect(indexCssContent).not.toContain('@tailwind utilities');
     });
   });
 
@@ -154,19 +152,11 @@ describe('Tailwind CSS Integration', () => {
   });
 
   describe('No Duplicate CSS', () => {
-    it('should not have duplicate Tailwind directives', () => {
-      const baseMatches = indexCssContent.match(/@tailwind base/g);
-      const componentsMatches = indexCssContent.match(/@tailwind components/g);
-      const utilitiesMatches = indexCssContent.match(/@tailwind utilities/g);
+    it('should not have duplicate Tailwind v4 imports', () => {
+      const importMatches = indexCssContent.match(/@import "tailwindcss"/g);
 
-      expect(baseMatches).toBeTruthy();
-      if (baseMatches) expect(baseMatches.length).toBe(1);
-
-      expect(componentsMatches).toBeTruthy();
-      if (componentsMatches) expect(componentsMatches.length).toBe(1);
-
-      expect(utilitiesMatches).toBeTruthy();
-      if (utilitiesMatches) expect(utilitiesMatches.length).toBe(1);
+      expect(importMatches).toBeTruthy();
+      if (importMatches) expect(importMatches.length).toBe(1);
     });
 
     it('should use Tailwind utility classes via @apply', () => {

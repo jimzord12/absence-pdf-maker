@@ -2,13 +2,6 @@
   "$schema": "./state.schema.json",
   "version": "2.0",
   "tasks": {
-    "080-update-tailwind-dependencies": {
-      "state": "completed",
-      "lastUpdated": "2026-01-05T21:33:22.926Z",
-      "location": "active",
-      "fromIssue": "Derived from upgrade-tailwind-v3-to-v4",
-      "blockedBy": []
-    },
     "081-migrate-tailwind-config-to-css": {
       "state": "not_started",
       "lastUpdated": "2026-01-05T20:05:47.782Z",
