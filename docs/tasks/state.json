@@ -15,9 +15,9 @@
       "blockedBy": []
     },
     "078-inner-shadow-heartbeat": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-04T22:03:40.437Z",
-      "location": "backlog",
+      "state": "committed",
+      "lastUpdated": "2026-01-05T20:02:58.000Z",
+      "location": "active",
       "blockedBy": []
     }
   }

@@ -125,7 +125,7 @@ describe('DeveloperPresence', () => {
   describe('visual enhancements', () => {
     it('should have rotating rainbow glow element', () => {
       const { container } = render(<DeveloperPresence {...defaultProps} />);
-      const glowElement = container.querySelector('.absolute.-inset-1');
+      const glowElement = container.querySelector('.absolute.-inset-2');
       expect(glowElement).toBeInTheDocument();
       expect(glowElement).toHaveClass('rounded-full');
     });

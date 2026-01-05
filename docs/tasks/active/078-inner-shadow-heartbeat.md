@@ -21,7 +21,12 @@ Add heartbeat animation to inner shadow after first flip completes
 
 ## Acceptance Criteria
 
-- [ ] TODO: Add acceptance criteria
+- [x] Animate inner shadow property with heartbeat effect
+- [x] Pattern: boom...wait 250ms...boom (two pulses with pause)
+- [x] Animation starts after first flip completes (when Tails side shows)
+- [x] Must be a single heartbeat, not continuous
+- [x] Does not interfere with other animations or hover states
+- [x] All tests pass (16/16)
 
 ## Notes
 
