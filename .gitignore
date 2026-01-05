@@ -6,3 +6,4 @@ dev-dist
 *.bak
 *.png
 !Dimitrios-Stamatakis-github-img.png
+!docs/baselines/*.png
