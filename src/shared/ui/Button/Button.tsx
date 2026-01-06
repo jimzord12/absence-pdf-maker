@@ -26,12 +26,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-medium rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+      'inline-flex items-center justify-center font-medium rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-offset-[color:var(--color-background)]';
 
     const variantStyles = {
-      primary: 'bg-black text-white hover:bg-gray-800 focus:ring-black',
-      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500',
-      danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+      primary:
+        'bg-[color:var(--color-primary)] text-[color:var(--color-text-inverse)] hover:bg-[color:var(--color-primary-hover)] focus:ring-[color:var(--color-primary)] dark:hover:bg-[color:var(--color-primary-light)]',
+      secondary:
+        'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500 dark:bg-[color:var(--color-surface-hover)] dark:text-[color:var(--color-text-primary)] dark:border dark:border-[color:var(--color-border)] dark:hover:bg-[color:var(--color-border)]',
+      danger:
+        'bg-[color:var(--color-error)] text-white hover:bg-[color:var(--color-error-hover)] focus:ring-[color:var(--color-error)]',
     };
 
     const sizeStyles = {

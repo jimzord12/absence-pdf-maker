@@ -14,7 +14,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <div className="flex flex-col gap-1">
         {label && (
-          <label htmlFor={textareaId} className="text-sm font-medium text-gray-700">
+          <label htmlFor={textareaId} className="text-sm font-medium text-[color:var(--color-text-primary)]">
             {label}
           </label>
         )}
@@ -25,10 +25,10 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           aria-describedby={errorId}
           className={`
           w-full px-3 py-2 rounded-md border
-          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:border-transparent
-          disabled:opacity-50 disabled:cursor-not-allowed
-          transition-colors resize-y
-          ${error ? 'border-red-500 focus-visible:ring-red-500' : 'border-gray-300'}
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[color:var(--color-primary)] focus-visible:border-transparent
+          disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-offset-[color:var(--color-background)]
+          transition-colors resize-y bg-[color:var(--color-surface)] text-[color:var(--color-text-primary)]
+          ${error ? 'border-[color:var(--color-error)] focus-visible:ring-[color:var(--color-error)]' : 'border-[color:var(--color-border)]'}
           ${className}
         `}
           {...props}

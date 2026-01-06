@@ -62,7 +62,7 @@ describe('Spinner', () => {
       const dots = Array.from(spinner.querySelectorAll('div'));
 
       dots.forEach(dot => {
-        expect(dot).toHaveClass('bg-primary');
+        expect(dot).toHaveClass('bg-[color:var(--color-primary)]');
       });
     });
 
@@ -134,7 +134,7 @@ describe('Spinner', () => {
       const dots = spinner.querySelectorAll('div');
 
       dots.forEach(dot => {
-        expect(dot).toHaveClass('bg-primary');
+        expect(dot).toHaveClass('bg-[color:var(--color-primary)]');
       });
     });
   });

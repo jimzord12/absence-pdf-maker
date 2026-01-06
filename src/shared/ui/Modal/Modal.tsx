@@ -79,7 +79,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm dark:bg-black/70"
       onClick={handleBackdropClick}
       onKeyDown={e => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -93,16 +93,16 @@ export const Modal: React.FC<ModalProps> = ({
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
       <div
         ref={modalRef}
-        className="relative w-full max-w-lg bg-white rounded-lg shadow-lg max-h-[90vh] overflow-hidden flex flex-col"
+        className="relative w-full max-w-lg bg-[color:var(--color-surface)] text-[color:var(--color-text-primary)] rounded-lg shadow-lg max-h-[90vh] overflow-hidden flex flex-col"
         onClick={e => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? titleId : undefined}
       >
-        {(title || showCloseButton) && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+         {(title || showCloseButton) && (
+          <div className="flex items-center justify-between px-6 py-4 border-b border-[color:var(--color-border)]">
             {title && (
-              <h2 id={titleId} className="text-xl font-semibold text-gray-900">
+              <h2 id={titleId} className="text-xl font-semibold text-[color:var(--color-text-primary)]">
                 {title}
               </h2>
             )}
@@ -110,7 +110,7 @@ export const Modal: React.FC<ModalProps> = ({
               <button
                 ref={closeButtonRef}
                 onClick={onClose}
-                className="p-2 text-gray-400 hover:text-gray-600 transition-colors rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+                className="p-2 text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text-primary)] transition-colors rounded-full hover:bg-[color:var(--color-surface-hover)] focus:outline-none focus:ring-2 focus:ring-[color:var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[color:var(--color-surface)]"
                 aria-label="Close modal"
               >
                 <svg

@@ -36,7 +36,7 @@ export const Spinner: React.FC<SpinnerProps> = ({ size = 'md', className = '' })
       {[0, 1, 2].map(i => (
         <div
           key={i}
-          className="animate-pulse-dot bg-primary"
+          className="animate-pulse-dot bg-[color:var(--color-primary)]"
           style={{
             width: currentSize.dot,
             height: currentSize.dot,

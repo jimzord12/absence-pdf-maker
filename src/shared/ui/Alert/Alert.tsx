@@ -52,17 +52,17 @@ const icons = {
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(
   ({ variant = 'info', title, children, className = '', onDismiss }, ref) => {
     const variantStyles = {
-      info: 'bg-blue-50 border-blue-200 text-blue-800',
-      success: 'bg-green-50 border-green-200 text-green-800',
-      warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-      error: 'bg-red-50 border-red-200 text-red-800',
+      info: 'bg-[color:var(--color-info-bg)] border-[color:var(--color-info)] text-[color:var(--color-info)]',
+      success: 'bg-[color:var(--color-success-bg)] border-[color:var(--color-success)] text-[color:var(--color-success)]',
+      warning: 'bg-[color:var(--color-warning-bg)] border-[color:var(--color-warning)] text-[color:var(--color-warning)]',
+      error: 'bg-[color:var(--color-error-bg)] border-[color:var(--color-error)] text-[color:var(--color-error)]',
     };
 
     const iconStyles = {
-      info: 'text-blue-600',
-      success: 'text-green-600',
-      warning: 'text-yellow-600',
-      error: 'text-red-600',
+      info: 'text-[color:var(--color-info)]',
+      success: 'text-[color:var(--color-success)]',
+      warning: 'text-[color:var(--color-warning)]',
+      error: 'text-[color:var(--color-error)]',
     };
 
     return (

@@ -70,19 +70,19 @@ describe('Card', () => {
     it('should render with border by default', () => {
       const { container } = render(<Card>Content</Card>);
       const card = container.firstChild;
-      expect(card).toHaveClass('border', 'border-gray-200');
+      expect(card).toHaveClass('border', 'border-[color:var(--color-border)]');
     });
 
     it('should render with border when bordered={true}', () => {
       const { container } = render(<Card bordered>Content</Card>);
       const card = container.firstChild;
-      expect(card).toHaveClass('border', 'border-gray-200');
+      expect(card).toHaveClass('border', 'border-[color:var(--color-border)]');
     });
 
     it('should render without border when bordered={false}', () => {
       const { container } = render(<Card bordered={false}>Content</Card>);
       const card = container.firstChild;
-      expect(card).not.toHaveClass('border', 'border-gray-200');
+      expect(card).not.toHaveClass('border', 'border-[color:var(--color-border)]');
     });
   });
 
@@ -140,7 +140,7 @@ describe('Card', () => {
     it('should preserve other styles when hoverable is true', () => {
       const { container } = render(<Card hoverable padding="lg" shadow="lg">Content</Card>);
       const card = container.firstChild;
-      expect(card).toHaveClass('bg-white', 'rounded-lg', 'p-8', 'shadow-lg', 'hover:shadow-md', 'transition-shadow', 'duration-200');
+      expect(card).toHaveClass('bg-[color:var(--color-surface)]', 'text-[color:var(--color-text-primary)]', 'rounded-lg', 'p-8', 'shadow-lg', 'hover:shadow-md', 'transition-shadow', 'duration-200');
     });
   });
 
@@ -148,7 +148,7 @@ describe('Card', () => {
     it('should have base card styles', () => {
       const { container } = render(<Card>Content</Card>);
       const card = container.firstChild;
-      expect(card).toHaveClass('bg-white', 'rounded-lg');
+      expect(card).toHaveClass('bg-[color:var(--color-surface)]', 'text-[color:var(--color-text-primary)]', 'rounded-lg');
     });
   });
 
@@ -162,7 +162,7 @@ describe('Card', () => {
     it('should preserve base styles with custom className', () => {
       const { container } = render(<Card className="custom-class">Content</Card>);
       const card = container.firstChild;
-      expect(card).toHaveClass('bg-white', 'rounded-lg', 'custom-class');
+      expect(card).toHaveClass('bg-[color:var(--color-surface)]', 'text-[color:var(--color-text-primary)]', 'rounded-lg', 'custom-class');
     });
   });
 
@@ -170,7 +170,7 @@ describe('Card', () => {
     it('should combine padding, border, and shadow props', () => {
       const { container } = render(<Card padding="lg" bordered={false} shadow="md">Content</Card>);
       const card = container.firstChild;
-      expect(card).toHaveClass('p-8', 'bg-white', 'rounded-lg', 'shadow-md');
+      expect(card).toHaveClass('p-8', 'bg-[color:var(--color-surface)]', 'text-[color:var(--color-text-primary)]', 'rounded-lg', 'shadow-md');
       expect(card).not.toHaveClass('border');
     });
   });
@@ -219,7 +219,7 @@ describe('Card', () => {
       const { container } = render(<Card />);
       const card = container.firstChild;
       expect(card).toBeInTheDocument();
-      expect(card).toHaveClass('bg-white', 'rounded-lg');
+      expect(card).toHaveClass('bg-[color:var(--color-surface)]', 'text-[color:var(--color-text-primary)]', 'rounded-lg');
     });
   });
 });

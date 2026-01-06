@@ -27,7 +27,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       lg: 'p-8',
     };
 
-    const borderStyles = bordered ? 'border border-gray-200' : '';
+    const borderStyles = bordered ? 'border border-[color:var(--color-border)]' : '';
     const shadowStyles = {
       none: '',
       sm: 'shadow-sm',
@@ -41,7 +41,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={`
-        bg-white rounded-lg
+        bg-[color:var(--color-surface)] text-[color:var(--color-text-primary)] rounded-lg
         ${paddingStyles[padding]}
         ${borderStyles}
         ${shadowStyles[shadow]}
