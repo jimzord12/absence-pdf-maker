@@ -1,6 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Card } from './Card';
+import { ThemeProvider } from '../../../app/providers/ThemeProvider';
+import { useThemeStore } from '../../../shared/state/theme.store';
 
 describe('Card', () => {
   describe('rendering', () => {
@@ -220,6 +222,76 @@ describe('Card', () => {
       const card = container.firstChild;
       expect(card).toBeInTheDocument();
       expect(card).toHaveClass('bg-[color:var(--color-surface)]', 'text-[color:var(--color-text-primary)]', 'rounded-lg');
+    });
+  });
+
+  describe('dark mode', () => {
+    beforeEach(() => {
+      useThemeStore.setState({ theme: 'light' });
+      document.documentElement.setAttribute('data-theme', 'light');
+    });
+
+    it('should render in light mode with default theme', () => {
+      render(
+        <ThemeProvider>
+          <Card>Light Mode</Card>
+        </ThemeProvider>
+      );
+      expect(screen.getByText('Light Mode')).toBeInTheDocument();
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    });
+
+    it('should render in dark mode with data-theme="dark"', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Card>Dark Mode</Card>
+        </ThemeProvider>
+      );
+      expect(screen.getByText('Dark Mode')).toBeInTheDocument();
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    it('should have surface and text-primary CSS variables in both themes', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      const { container } = render(
+        <ThemeProvider>
+          <Card>Content</Card>
+        </ThemeProvider>
+      );
+      const card = container.firstChild;
+      expect(card).toHaveClass('bg-[color:var(--color-surface)]');
+      expect(card).toHaveClass('text-[color:var(--color-text-primary)]');
+    });
+
+    it('should have border CSS variable in both themes', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      const { container } = render(
+        <ThemeProvider>
+          <Card bordered>Content</Card>
+        </ThemeProvider>
+      );
+      const card = container.firstChild;
+      expect(card).toHaveClass('border-[color:var(--color-border)]');
+    });
+
+    it('should have rounded-lg class in both themes', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      const { container } = render(
+        <ThemeProvider>
+          <Card>Content</Card>
+        </ThemeProvider>
+      );
+      const card = container.firstChild;
+      expect(card).toHaveClass('rounded-lg');
     });
   });
 });

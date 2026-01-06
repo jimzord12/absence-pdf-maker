@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Alert } from './Alert';
 import userEvent from '@testing-library/user-event';
+import { ThemeProvider } from '../../../app/providers/ThemeProvider';
+import { useThemeStore } from '../../../shared/state/theme.store';
 
 describe('Alert', () => {
   const defaultProps = {
@@ -261,6 +263,96 @@ describe('Alert', () => {
       expect(screen.getByText('Info message').closest('[class*="bg-blue-50"]')).toBeInTheDocument();
       expect(screen.getByText('Success message').closest('[class*="bg-green-50"]')).toBeInTheDocument();
       expect(screen.getByText('Error message').closest('[class*="bg-red-50"]')).toBeInTheDocument();
+    });
+  });
+
+  describe('dark mode', () => {
+    beforeEach(() => {
+      useThemeStore.setState({ theme: 'light' });
+      document.documentElement.setAttribute('data-theme', 'light');
+    });
+
+    it('should render in light mode with default theme', () => {
+      render(
+        <ThemeProvider>
+          <Alert>Light Mode Alert</Alert>
+        </ThemeProvider>
+      );
+      expect(screen.getByText('Light Mode Alert')).toBeInTheDocument();
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    });
+
+    it('should render in dark mode with data-theme="dark"', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Alert>Dark Mode Alert</Alert>
+        </ThemeProvider>
+      );
+      expect(screen.getByText('Dark Mode Alert')).toBeInTheDocument();
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    it('should have CSS variables for info variant in both themes', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Alert variant="info">Info</Alert>
+        </ThemeProvider>
+      );
+      const alert = screen.getByText('Info').parentElement?.parentElement;
+      expect(alert).toHaveClass('bg-[color:var(--color-info-bg)]');
+      expect(alert).toHaveClass('border-[color:var(--color-info)]');
+      expect(alert).toHaveClass('text-[color:var(--color-info)]');
+    });
+
+    it('should have CSS variables for success variant in both themes', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Alert variant="success">Success</Alert>
+        </ThemeProvider>
+      );
+      const alert = screen.getByText('Success').parentElement?.parentElement;
+      expect(alert).toHaveClass('bg-[color:var(--color-success-bg)]');
+      expect(alert).toHaveClass('border-[color:var(--color-success)]');
+      expect(alert).toHaveClass('text-[color:var(--color-success)]');
+    });
+
+    it('should have CSS variables for warning variant in both themes', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Alert variant="warning">Warning</Alert>
+        </ThemeProvider>
+      );
+      const alert = screen.getByText('Warning').parentElement?.parentElement;
+      expect(alert).toHaveClass('bg-[color:var(--color-warning-bg)]');
+      expect(alert).toHaveClass('border-[color:var(--color-warning)]');
+      expect(alert).toHaveClass('text-[color:var(--color-warning)]');
+    });
+
+    it('should have CSS variables for error variant in both themes', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Alert variant="error">Error</Alert>
+        </ThemeProvider>
+      );
+      const alert = screen.getByText('Error').parentElement?.parentElement;
+      expect(alert).toHaveClass('bg-[color:var(--color-error-bg)]');
+      expect(alert).toHaveClass('border-[color:var(--color-error)]');
+      expect(alert).toHaveClass('text-[color:var(--color-error)]');
     });
   });
 });

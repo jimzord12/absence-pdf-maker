@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Button } from './Button';
 import userEvent from '@testing-library/user-event';
+import { ThemeProvider } from '../../../app/providers/ThemeProvider';
+import { useThemeStore } from '../../../shared/state/theme.store';
 
 describe('Button', () => {
   describe('variants', () => {
@@ -176,6 +178,92 @@ describe('Button', () => {
       expect(button).toHaveAttribute('type', 'submit');
       expect(button).toHaveAttribute('form', 'test-form');
       expect(button).toHaveAttribute('name', 'submit-btn');
+    });
+  });
+
+  describe('dark mode', () => {
+    beforeEach(() => {
+      useThemeStore.setState({ theme: 'light' });
+      document.documentElement.setAttribute('data-theme', 'light');
+    });
+
+    it('should render in light mode with default theme', () => {
+      render(
+        <ThemeProvider>
+          <Button>Light Mode</Button>
+        </ThemeProvider>
+      );
+      const button = screen.getByRole('button', { name: 'Light Mode' });
+      expect(button).toBeInTheDocument();
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    });
+
+    it('should render in dark mode with data-theme="dark"', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Button>Dark Mode</Button>
+        </ThemeProvider>
+      );
+      const button = screen.getByRole('button', { name: 'Dark Mode' });
+      expect(button).toBeInTheDocument();
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    it('should have dark: variant classes when theme is dark', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Button variant="secondary">Secondary</Button>
+        </ThemeProvider>
+      );
+      const button = screen.getByRole('button', { name: 'Secondary' });
+      expect(button).toHaveClass('dark:bg-[color:var(--color-surface-hover)]');
+      expect(button).toHaveClass('dark:text-[color:var(--color-text-primary)]');
+      expect(button).toHaveClass('dark:border');
+      expect(button).toHaveClass('dark:border-[color:var(--color-border)]');
+    });
+
+    it('should have dark hover classes when theme is dark', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Button variant="secondary">Secondary</Button>
+        </ThemeProvider>
+      );
+      const button = screen.getByRole('button', { name: 'Secondary' });
+      expect(button).toHaveClass('dark:hover:bg-[color:var(--color-border)]');
+    });
+
+    it('should have dark hover class for primary variant', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Button variant="primary">Primary</Button>
+        </ThemeProvider>
+      );
+      const button = screen.getByRole('button', { name: 'Primary' });
+      expect(button).toHaveClass('dark:hover:bg-[color:var(--color-primary-light)]');
+    });
+
+    it('should have dark: prefix in className string', () => {
+      document.documentElement.setAttribute('data-theme', 'light');
+
+      render(
+        <ThemeProvider>
+          <Button>Light</Button>
+        </ThemeProvider>
+      );
+      const button = screen.getByRole('button', { name: 'Light' });
+      expect(button.className).toContain('dark:');
     });
   });
 });

@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Modal } from './Modal';
+import { ThemeProvider } from '../../../app/providers/ThemeProvider';
+import { useThemeStore } from '../../../shared/state/theme.store';
 
 describe('Modal', () => {
   const defaultProps = {
@@ -249,6 +251,62 @@ describe('Modal', () => {
       render(<Modal {...defaultProps} title="Accessible Title" />);
       const heading = screen.getByRole('heading', { level: 2, name: 'Accessible Title' });
       expect(heading).toBeInTheDocument();
+    });
+  });
+
+  describe('dark mode', () => {
+    beforeEach(() => {
+      useThemeStore.setState({ theme: 'light' });
+      document.documentElement.setAttribute('data-theme', 'light');
+    });
+
+    it('should render in light mode with default theme', () => {
+      render(
+        <ThemeProvider>
+          <Modal {...defaultProps} />
+        </ThemeProvider>
+      );
+      expect(screen.getByText('Modal content')).toBeInTheDocument();
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    });
+
+    it('should render in dark mode with data-theme="dark"', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Modal {...defaultProps} />
+        </ThemeProvider>
+      );
+      expect(screen.getByText('Modal content')).toBeInTheDocument();
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    it('should have dark:bg-black/70 class on backdrop', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Modal {...defaultProps} />
+        </ThemeProvider>
+      );
+      const backdrop = document.querySelector('.backdrop-blur-sm');
+      expect(backdrop).toHaveClass('dark:bg-black/70');
+    });
+
+    it('should render correctly in both themes', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Modal {...defaultProps} title="Dark Mode Modal" />
+        </ThemeProvider>
+      );
+      expect(screen.getByText('Dark Mode Modal')).toBeInTheDocument();
+      expect(screen.getByLabelText('Close modal')).toBeInTheDocument();
     });
   });
 });

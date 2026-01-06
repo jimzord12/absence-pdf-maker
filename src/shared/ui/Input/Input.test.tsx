@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Input } from './Input';
 import userEvent from '@testing-library/user-event';
+import { ThemeProvider } from '../../../app/providers/ThemeProvider';
+import { useThemeStore } from '../../../shared/state/theme.store';
 
 describe('Input', () => {
   describe('rendering', () => {
@@ -236,6 +238,79 @@ describe('Input', () => {
       render(<Input error="Error message" aria-describedby="error-desc" />);
       const input = screen.getByRole('textbox');
       expect(input).toHaveAttribute('aria-describedby', 'error-desc');
+    });
+  });
+
+  describe('dark mode', () => {
+    beforeEach(() => {
+      useThemeStore.setState({ theme: 'light' });
+      document.documentElement.setAttribute('data-theme', 'light');
+    });
+
+    it('should render in light mode with default theme', () => {
+      render(
+        <ThemeProvider>
+          <Input label="Light Mode" />
+        </ThemeProvider>
+      );
+      const input = screen.getByRole('textbox');
+      expect(input).toBeInTheDocument();
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    });
+
+    it('should render in dark mode with data-theme="dark"', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Input label="Dark Mode" />
+        </ThemeProvider>
+      );
+      const input = screen.getByRole('textbox');
+      expect(input).toBeInTheDocument();
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    it('should have label with text-[color:var(--color-text-primary)] CSS variable in both themes', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Input label="Label" />
+        </ThemeProvider>
+      );
+      const label = screen.getByText('Label');
+      expect(label).toHaveClass('text-[color:var(--color-text-primary)]');
+    });
+
+    it('should have input with surface and text-primary CSS variables in both themes', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Input />
+        </ThemeProvider>
+      );
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveClass('bg-[color:var(--color-surface)]');
+      expect(input).toHaveClass('text-[color:var(--color-text-primary)]');
+    });
+
+    it('should apply error styles with error CSS variables in both themes', () => {
+      useThemeStore.setState({ theme: 'dark' });
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+      render(
+        <ThemeProvider>
+          <Input error="Error" />
+        </ThemeProvider>
+      );
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveClass('border-[color:var(--color-error)]');
+      expect(input).toHaveClass('focus-visible:ring-[color:var(--color-error)]');
     });
   });
 });
