@@ -1,11 +1,5 @@
 {
   "$schema": "./state.schema.json",
   "version": "2.0",
-  "tasks": {
-    "091-add-component-dark-mode-tests": {
-      "state": "implemented",
-      "lastUpdated": "2026-01-06T22:23:05.659Z",
-      "location": "active"
-    }
-  }
+  "tasks": {}
 }
