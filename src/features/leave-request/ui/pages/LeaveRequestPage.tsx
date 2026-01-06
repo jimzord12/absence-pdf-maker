@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { usePwaInstall } from '../../../../app/providers/usePwaInstall';
-import { Button, DeveloperPresence } from '../../../../shared/ui';
+import { Button, DeveloperPresence, StarsWarsRobotToggle } from '../../../../shared/ui';
 import { loadHolidays } from '../../services/holidays/holidays.service';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
+import { useThemeStore } from '../../../../shared/state/theme.store';
 import { LeaveRequestForm } from '../components/LeaveRequestForm';
 import { LocaleSelector } from '../components/LocaleSelector';
 import { ReviewAndGenerate } from '../components/ReviewAndGenerate';
@@ -15,6 +16,8 @@ import { SignatureModal } from '../components/SignatureModal';
 export const LeaveRequestPage: React.FC = () => {
   const setHolidays = useLeaveRequestStore(state => state.setHolidays);
   const { isInstallable, promptInstall } = usePwaInstall();
+  const theme = useThemeStore(state => state.theme);
+  const toggleTheme = useThemeStore(state => state.toggleTheme);
 
   // Load holidays on page mount
   useEffect(() => {
@@ -27,14 +30,14 @@ export const LeaveRequestPage: React.FC = () => {
   }, [setHolidays]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-[color:var(--color-background)] to-[color:var(--color-surface)] py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Page Header */}
-        <div className="mb-8">
+          <div className="mb-8">
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Leave Request</h1>
-              <p className="mt-2 text-sm text-gray-600">
+              <h1 className="text-3xl font-bold text-[color:var(--color-text-primary)]">Leave Request</h1>
+              <p className="mt-2 text-sm text-[color:var(--color-text-secondary)]">
                 Submit your leave request and generate a PDF document
               </p>
             </div>
@@ -49,6 +52,11 @@ export const LeaveRequestPage: React.FC = () => {
                   Install App
                 </Button>
               )}
+              <StarsWarsRobotToggle
+                checked={theme === 'dark'}
+                onChange={toggleTheme}
+                aria-label="Toggle dark mode"
+              />
               <LocaleSelector />
             </div>
           </div>
