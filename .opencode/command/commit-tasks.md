@@ -1,6 +1,6 @@
 ---
 description: Commit all changes grouped by their corresponding Tasks
-agent: finisher
+# agent: finisher
 subtask: false
 ---
 
@@ -8,11 +8,11 @@ subtask: false
 
 Commit all changes grouped by their corresponding Tasks. Follow these steps:
 
-1. **Check State Cleanup**: Run `tasks_checkArchivedState` tool to verify there are no tasks with `"location": "archive"` in `docs/tasks/state.json`. If archived tasks exist, they should be removed before proceeding (state.json should only track non-archived tasks).
+1. **Check State Cleanup**: Run `tasks_checkArchivedState` tool to verify there are no tasks with `"location": "archive"` in `docs/tasks/state.json`. If archived tasks exist, they **should be removed** before proceeding (state.json should only track non-archived tasks).
 
-2. **Read Task State**: Load `docs/tasks/state.json` to see which tasks are in `not_started`, `implemented`, `unit_tested`, `review_fail`, `review_pass`, or `completed` state (i.e., NOT `committed`)
+2. **Read Task State**: Load `docs/tasks/state.json` to see which tasks are in the `completed` state (i.e., NOT `committed`)
 
-3. **Read Task Definitions**: Read individual task files from `docs/tasks/{active,backlog}/<taskId>.md` to understand each task's description, acceptance criteria, and files involved
+3. **Read Task Definitions**: Read individual task files from `docs/tasks/active/<taskId>.md` to understand each task's description, acceptance criteria, and files involved
 
 4. **Load Git Changes**: Get all untracked and modified files using `git status` and `git diff`
 
@@ -35,14 +35,9 @@ Commit all changes grouped by their corresponding Tasks. Follow these steps:
    - Do NOT add or commit these files
    - Inform the user about these files
 
-8. **Present Plan to User**: Display the commit plan showing:
+8. **Move Task Files**: Completed Tasks need to be moved from `docs/tasks/active/` to `docs/tasks/archive/` before their changes are committed, in order for the commit to reflect the task's completion.
 
-   - Each task with its commit message
-   - Files to be added and committed for each task
-   - Any unrelated changes that will be skipped
-   - Ask for user confirmation before proceeding
-
-9. **Execute Commits**: After confirmation:
+9. **Execute Commits**:
 
    - For each task: `git add <files>` and `git commit -m "<message>"`
    - Move task file from `active/` or `backlog/` to `archive/`
