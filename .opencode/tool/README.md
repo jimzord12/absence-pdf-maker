@@ -112,6 +112,23 @@ Create a new task file from template.
 
 ---
 
+### tasks_checkArchivedState
+
+Check for archived tasks in state.json before committing.
+
+**Description:** Checks if there are any tasks with `"location": "archive"` in `docs/tasks/state.json`. Should be called before committing to ensure state.json is clean (only tracks non-archived tasks).
+
+**Args:** None
+
+**Returns:**
+
+- `hasArchivedTasks`: Boolean indicating if archived tasks exist in state.json
+- `archivedTasks`: Array of task IDs with "archive" location (empty if none)
+- `message`: Human-readable message about state cleanliness
+- `totalTasksInState`: Total number of tasks currently tracked in state.json
+
+---
+
 ## Task File Format
 
 Task files are stored in `docs/tasks/{active,backlog,archive}/<taskId>.md`:
