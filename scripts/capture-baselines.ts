@@ -2,8 +2,8 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { chromium } from 'playwright';
 
-const BASELINE_DIR = path.resolve(process.cwd(), 'docs/baselines');
-const APP_URL = process.env.APP_URL || 'http://localhost:5174';
+const BASELINE_DIR = path.resolve(process.cwd(), process.env.BASELINE_DIR || 'docs/baselines');
+const APP_URL = process.env.APP_URL || 'http://localhost:5173';
 
 async function captureBaselines() {
   if (!fs.existsSync(BASELINE_DIR)) {

@@ -6,5 +6,8 @@
     "esbenp.prettier-vscode",
     "bradlc.vscode-tailwindcss",
     "vitest.explorer"
+  ],
+  "unwantedRecommendations": [
+    "bradlc.vscode-tailwindcss"
   ]
 }

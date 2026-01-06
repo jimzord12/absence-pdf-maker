@@ -1,6 +1,6 @@
 @import "tailwindcss";
-@import "@tailwindcss/typography";
-@import "@tailwindcss/container-queries";
+@plugin '@tailwindcss/typography';
+@plugin '@tailwindcss/container-queries';
 
 /* ===== Tailwind Theme Configuration ===== */
 @theme {
@@ -229,7 +229,7 @@
 
 /* ===== Tailwind Utilities Layer ===== */
 @layer utilities {
-  .focus\\:not-focus-visible:focus:not(:focus-visible) {
+  .focus\:not-focus-visible:focus:not(:focus-visible) {
     outline: none;
   }
 

@@ -189,6 +189,26 @@ import { useLeaveRequestStore } from '../state/leaveRequest.store';
 
 **class-variance-authority (CVA)**: Build variant-based components with type safety. Import: `import { cva } from 'class-variance-authority'`. Define variants as objects (e.g., `size`, `variant`), merge with `twMerge` for dynamic className props.
 
+**Tailwind CSS v4 Configuration**:
+
+- **Configuration Approach**: Tailwind v4 uses CSS-first configuration with `@import "tailwindcss"` and `@theme` block in `src/index.css`. No JavaScript config files (`tailwind.config.js`, `postcss.config.js`) are needed.
+- **Plugin System**: Plugins are imported in CSS using `@plugin` directive instead of `require()` in config. Example: `@plugin '@tailwindcss/typography';`
+- **Theme Definition**: All theme values (colors, fonts, shadows, animations) are defined as CSS custom properties in the `@theme` block using `--property-name: value;` syntax.
+- **Custom Utilities**: Use `@utility` directive for custom utilities. Example:
+  ```css
+  @utility sr-only {
+    position: absolute;
+    width: 1px;
+    /* ... */
+  }
+  ```
+- **Vite Integration**: Tailwind v4 uses `@tailwindcss/vite` plugin directly in `vite.config.ts`. No PostCSS configuration required.
+- **Migration Notes**: The project has been migrated from Tailwind CSS v3 to v4. Key changes:
+  - Removed `tailwind.config.js` and `postcss.config.js`
+  - Migrated theme configuration to CSS `@theme` block in `src/index.css`
+  - Updated plugin imports to use `@plugin` directive
+  - Increased PWA workbox cache limit to 3 MB (for large JS bundles)
+
 ## Available MCP Servers
 
 I have access to **7 Model Context Protocol (MCP) servers** that provide specialized capabilities:
