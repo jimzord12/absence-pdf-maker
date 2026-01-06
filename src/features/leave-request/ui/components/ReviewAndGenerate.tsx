@@ -183,45 +183,45 @@ export const ReviewAndGenerate: React.FC = () => {
       {/* Profile Summary Section */}
       <section aria-labelledby="review-personal-details-heading">
         <Card>
-          <h2 id="review-personal-details-heading" className="text-xl font-semibold mb-4">
+          <h2 id="review-personal-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
             Personal Details Summary
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <span className="text-sm text-gray-500">Full Name</span>
-              <p className="font-medium">{profile.fullName || '—'}</p>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">Full Name</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.fullName || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-gray-500">Father's Name</span>
-              <p className="font-medium">{profile.fathersName || '—'}</p>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">Father's Name</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.fathersName || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-gray-500">Email</span>
-              <p className="font-medium">{profile.email || '—'}</p>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">Email</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.email || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-gray-500">Phone</span>
-              <p className="font-medium">{profile.phone || '—'}</p>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">Phone</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.phone || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-gray-500">Identity Number</span>
-              <p className="font-medium">{profile.identityNumber || '—'}</p>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">Identity Number</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.identityNumber || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-gray-500">Employee ID</span>
-              <p className="font-medium">{profile.employeeId || '—'}</p>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">Employee ID</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.employeeId || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-gray-500">Company Name</span>
-              <p className="font-medium">{profile.companyName || '—'}</p>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">Company Name</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.companyName || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-gray-500">Department</span>
-              <p className="font-medium">{profile.department || '—'}</p>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">Department</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.department || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-gray-500">Position</span>
-              <p className="font-medium">{profile.position || '—'}</p>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">Position</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.position || '—'}</p>
             </div>
           </div>
         </Card>
@@ -230,62 +230,62 @@ export const ReviewAndGenerate: React.FC = () => {
       {/* Leave Details Summary Section */}
       <section aria-labelledby="review-leave-details-heading">
         <Card>
-          <h2 id="review-leave-details-heading" className="text-xl font-semibold mb-4">
+          <h2 id="review-leave-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
             Leave Details Summary
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex-col justify-between">
-              <span className="text-sm text-gray-500">Leave Type</span>
-              <p className="font-medium">
+              <span className="text-sm text-[color:var(--color-text-secondary)]">Leave Type</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">
                 {leaveDraft.leaveType ? leaveTypeLabels[leaveDraft.leaveType] : '—'}
               </p>
             </div>
             <div>
-              <span className="text-sm text-gray-500">Leave Allowance</span>
-              <p className="font-medium">{leaveDraft.leaveAllowance ? 'Yes' : 'No'}</p>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">Leave Allowance</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">{leaveDraft.leaveAllowance ? 'Yes' : 'No'}</p>
             </div>
             <div>
-              <span className="text-sm text-gray-500">Start Date</span>
-              <p className="font-medium">
+              <span className="text-sm text-[color:var(--color-text-secondary)]">Start Date</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">
                 {leaveDraft.startDate ? formatDate(leaveDraft.startDate, locale) : '—'}
               </p>
             </div>
             <div>
-              <span className="text-sm text-gray-500">End Date</span>
-              <p className="font-medium">
+              <span className="text-sm text-[color:var(--color-text-secondary)]">End Date</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">
                 {leaveDraft.endDate ? formatDate(leaveDraft.endDate, locale) : '—'}
               </p>
             </div>
             <div>
-              <span className="text-sm text-gray-500">Reason</span>
-              <p className="font-medium">{leaveDraft.reason || '—'}</p>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">Reason</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">{leaveDraft.reason || '—'}</p>
             </div>
           </div>
 
           {/* Absence Days Breakdown */}
           {absenceBreakdown && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-              <h3 className="font-semibold mb-2">Absence Days Calculation</h3>
+            <div className="mt-4 p-4 bg-[color:var(--color-surface-hover)] rounded-lg">
+              <h3 className="font-semibold mb-2 text-[color:var(--color-text-primary)]">Absence Days Calculation</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <span className="text-gray-500 block">Total Days</span>
-                  <span className="font-medium text-lg">{absenceBreakdown.totalDays}</span>
+                  <span className="text-[color:var(--color-text-secondary)] block">Total Days</span>
+                  <span className="font-medium text-lg text-[color:var(--color-text-primary)]">{absenceBreakdown.totalDays}</span>
                 </div>
                 <div>
-                  <span className="text-gray-500 block">Weekend Days</span>
-                  <span className="font-medium text-lg text-gray-600">
+                  <span className="text-[color:var(--color-text-secondary)] block">Weekend Days</span>
+                  <span className="font-medium text-lg text-[color:var(--color-text-muted)]">
                     {absenceBreakdown.weekendDays}
                   </span>
                 </div>
                 <div>
-                  <span className="text-gray-500 block">Holiday Days</span>
-                  <span className="font-medium text-lg text-gray-600">
+                  <span className="text-[color:var(--color-text-secondary)] block">Holiday Days</span>
+                  <span className="font-medium text-lg text-[color:var(--color-text-muted)]">
                     {absenceBreakdown.holidayDays}
                   </span>
                 </div>
                 <div>
-                  <span className="text-gray-500 block">Absence Days</span>
-                  <span className="font-medium text-lg text-blue-600">
+                  <span className="text-[color:var(--color-text-secondary)] block">Absence Days</span>
+                  <span className="font-medium text-lg text-[color:var(--color-info-700)] dark:text-[color:var(--color-info-300)]">
                     {absenceBreakdown.absenceDays}
                   </span>
                 </div>
@@ -295,13 +295,13 @@ export const ReviewAndGenerate: React.FC = () => {
 
           {/* Signature Status */}
           <div className="mt-4">
-            <span className="text-sm text-gray-500">Signature</span>
+            <span className="text-sm text-[color:var(--color-text-secondary)]">Signature</span>
             <div className="flex items-center justify-between mt-1">
-              <p className="font-medium">
+              <p className="font-medium text-[color:var(--color-text-primary)]">
                 {signature.signatureDataUrl ? (
-                  <span className="text-green-600">✓ Signed</span>
+                  <span className="text-[color:var(--color-success)]">✓ Signed</span>
                 ) : (
-                  <span className="text-red-500">✗ Not signed</span>
+                  <span className="text-[color:var(--color-error)]">✗ Not signed</span>
                 )}
               </p>
               <Button variant="secondary" size="sm" onClick={toggleSignatureModal}>
@@ -315,7 +315,7 @@ export const ReviewAndGenerate: React.FC = () => {
       {/* Action Buttons Section */}
       <section aria-labelledby="review-actions-heading">
         <Card>
-          <h2 id="review-actions-heading" className="text-xl font-semibold mb-4">
+          <h2 id="review-actions-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
             Actions
           </h2>
           <div className="space-y-4">
@@ -340,7 +340,7 @@ export const ReviewAndGenerate: React.FC = () => {
               </Button>
             </div>
 
-            <hr className="border-gray-200" />
+            <hr className="border-[color:var(--color-border)]" />
 
             {/* PDF Generation */}
             <div>
@@ -366,7 +366,7 @@ export const ReviewAndGenerate: React.FC = () => {
               >
                 Generate PDF
               </Button>
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-sm text-[color:var(--color-text-secondary)] mt-2">
                 {isGeneratingPdf
                   ? 'Please wait while we generate your PDF document...'
                   : 'Click to generate and download your leave request PDF'}

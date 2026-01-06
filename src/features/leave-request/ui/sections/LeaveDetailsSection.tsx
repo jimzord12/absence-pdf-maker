@@ -58,7 +58,7 @@ export const LeaveDetailsSection: React.FC<LeaveDetailsSectionProps> = ({ errors
   return (
     <section aria-labelledby="leave-details-heading">
       <Card>
-        <h2 id="leave-details-heading" className="text-xl font-semibold mb-4">
+        <h2 id="leave-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
           Leave Details Form
         </h2>
         <div className="space-y-4">

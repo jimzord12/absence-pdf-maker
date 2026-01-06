@@ -30,7 +30,7 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ 
   return (
     <section aria-labelledby="personal-details-heading">
       <Card>
-        <h2 id="personal-details-heading" className="text-xl font-semibold mb-4">
+        <h2 id="personal-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
           Personal Details Form
         </h2>
         <div className="space-y-4">

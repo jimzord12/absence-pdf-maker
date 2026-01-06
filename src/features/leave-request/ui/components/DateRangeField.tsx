@@ -52,12 +52,12 @@ const Footer: React.FC<AbsenceSummary & { hasDates: boolean }> = ({
 
   return (
     <div
-      className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg"
+      className="mt-4 p-3 bg-[color:var(--color-info-bg)] border border-[color:var(--color-info-300)] rounded-lg dark:border-[color:var(--color-info-800)]"
       role="region"
       aria-live="polite"
     >
-      <p className="text-sm text-blue-900 font-medium">Date Range Summary</p>
-      <div className="mt-2 space-y-1 text-sm text-blue-800">
+      <p className="text-sm text-[color:var(--color-info-900)] dark:text-[color:var(--color-info-100)] font-medium">Date Range Summary</p>
+      <div className="mt-2 space-y-1 text-sm text-[color:var(--color-info-800)] dark:text-[color:var(--color-info-200)]">
         <div className="flex justify-between">
           <span>Total Days:</span>
           <span
@@ -85,10 +85,10 @@ const Footer: React.FC<AbsenceSummary & { hasDates: boolean }> = ({
             {displayValue(weekendDays)}
           </span>
         </div>
-        <div className="flex justify-between border-t border-blue-200 pt-1">
+        <div className="flex justify-between border-t border-[color:var(--color-info-300)] dark:border-[color:var(--color-info-800)] pt-1">
           <span className="font-semibold">Absence Days:</span>
           <span
-            className="font-bold text-blue-700"
+            className="font-bold text-[color:var(--color-info-700)] dark:text-[color:var(--color-info-300)]"
             aria-label={`Total absence days: ${displayValue(absenceDays)}`}
           >
             {displayValue(absenceDays)}
@@ -238,15 +238,15 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
   // Handle empty form context gracefully
   if (!methods) {
     return (
-      <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-        <p className="text-sm text-yellow-800">Form context not available</p>
+      <div className="p-4 bg-[color:var(--color-warning-bg)] border border-[color:var(--color-warning-300)] rounded-lg dark:border-[color:var(--color-warning-800)]">
+        <p className="text-sm text-[color:var(--color-warning-900)] dark:text-[color:var(--color-warning-100)]">Form context not available</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-2" role="group" aria-labelledby={`${dateFieldId}-label`}>
-      <span id={`${dateFieldId}-label`} className="block text-sm font-medium text-gray-700">
+      <span id={`${dateFieldId}-label`} className="block text-sm font-medium text-[color:var(--color-text-primary)]">
         Select Date Range
       </span>
       <div className="flex justify-between gap-2">
@@ -267,7 +267,7 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
         </Button>
       </div>
       <div
-        className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm"
+        className="p-4 border border-[color:var(--color-border)] rounded-lg bg-[color:var(--color-surface)] shadow-sm"
         role="region"
         aria-label="Calendar"
       >
@@ -286,10 +286,10 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
       {(errors?.startDate?.message || errors?.endDate?.message) && (
         <div className="space-y-1" role="alert" aria-live="polite">
           {errors?.startDate?.message && (
-            <p className="text-sm text-red-600">{errors.startDate.message}</p>
+            <p className="text-sm text-[color:var(--color-error)]">{errors.startDate.message}</p>
           )}
           {errors?.endDate?.message && (
-            <p className="text-sm text-red-600">{errors.endDate.message}</p>
+            <p className="text-sm text-[color:var(--color-error)]">{errors.endDate.message}</p>
           )}
         </div>
       )}

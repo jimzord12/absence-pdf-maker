@@ -130,7 +130,7 @@ export const SignatureModal: React.FC = () => {
       showCloseButton={false}
     >
       <div className="space-y-4">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-[color:var(--color-text-secondary)]">
           Please sign in the box below or type your name. Your signature will be saved to the
           document.
         </p>
@@ -143,9 +143,9 @@ export const SignatureModal: React.FC = () => {
               name="signatureMethod"
               checked={!useTypedSignature}
               onChange={() => setUseTypedSignature(false)}
-              className="w-4 h-4 text-black focus:ring-2 focus:ring-black focus:ring-offset-2"
+              className="w-4 h-4 text-[color:var(--color-primary)] focus:ring-2 focus:ring-[color:var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[color:var(--color-background)]"
             />
-            <span className="text-sm">Draw signature</span>
+            <span className="text-sm text-[color:var(--color-text-primary)]">Draw signature</span>
           </label>
           <label className="flex items-center gap-2">
             <input
@@ -153,20 +153,20 @@ export const SignatureModal: React.FC = () => {
               name="signatureMethod"
               checked={useTypedSignature}
               onChange={() => setUseTypedSignature(true)}
-              className="w-4 h-4 text-black focus:ring-2 focus:ring-black focus:ring-offset-2"
+              className="w-4 h-4 text-[color:var(--color-primary)] focus:ring-2 focus:ring-[color:var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[color:var(--color-background)]"
             />
-            <span className="text-sm">Type name</span>
+            <span className="text-sm text-[color:var(--color-text-primary)]">Type name</span>
           </label>
         </div>
 
         {/* Signature Canvas */}
         {!useTypedSignature ? (
-          <div className="border-2 border-gray-300 rounded-lg overflow-hidden">
+          <div className="border-2 border-[color:var(--color-border)] rounded-lg overflow-hidden">
             <SignatureCanvas
               ref={sigCanvas}
               onBegin={handleSignatureBegin}
               canvasProps={{
-                className: 'w-full bg-white cursor-crosshair',
+                className: 'w-full bg-[color:var(--color-surface)] cursor-crosshair',
                 style: { height: `${CANVAS_HEIGHT}px` },
               }}
             />
@@ -187,10 +187,10 @@ export const SignatureModal: React.FC = () => {
 
         {/* Signature Preview */}
         {signatureDataUrl && signatureDataUrl.length > 0 && (
-          <div className="border border-gray-200 rounded-lg p-3">
-            <p className="text-xs text-gray-500 mb-2">Captured Signature:</p>
+          <div className="border border-[color:var(--color-border)] rounded-lg p-3">
+            <p className="text-xs text-[color:var(--color-text-muted)] mb-2">Captured Signature:</p>
             {signatureDataUrl.startsWith('text:') ? (
-              <p className="text-xl font-medium text-gray-800">
+              <p className="text-xl font-medium text-[color:var(--color-text-primary)]">
                 {signatureDataUrl.replace('text:', '')}
               </p>
             ) : (
