@@ -177,6 +177,18 @@ import { useLeaveRequestStore } from '../state/leaveRequest.store';
 
 **Linting & Type Checking:** Always run `npm run lint` and `npm run typecheck` before committing. ESLint config includes TypeScript strict mode, React Hooks rules, and React Refresh optimization. Fix all linting errors before submission.
 
+**Styling & Component Utilities:**
+
+**vite-plugin-svgr**: Import SVG files as React components. Configuration in `vite.config.ts`. Example: `import { ReactComponent as Icon } from './icon.svg'`
+
+**@tailwindcss/typography**: Typography plugin for styled content blocks. Use `prose` classes for styled prose content. Example: `<div class="prose prose-sm">...</div>`
+
+**@tailwindcss/container-queries**: Container query utilities for responsive components based on container width rather than viewport. Example: `@container` on parent, `@md:w-full` for child that responds to container.
+
+**tailwind-merge**: Utility for intelligently merging Tailwind CSS class strings, handling conflicts and deduplication. Import: `import { twMerge } from 'tailwind-merge'`. Use when combining class strings from multiple sources (e.g., component props + default classes).
+
+**class-variance-authority (CVA)**: Build variant-based components with type safety. Import: `import { cva } from 'class-variance-authority'`. Define variants as objects (e.g., `size`, `variant`), merge with `twMerge` for dynamic className props.
+
 ## Available MCP Servers
 
 I have access to **7 Model Context Protocol (MCP) servers** that provide specialized capabilities:
