@@ -2,45 +2,11 @@
   "$schema": "./state.schema.json",
   "version": "2.0",
   "tasks": {
-    "082-add-tailwind-enhancements": {
-      "state": "committed",
-      "lastUpdated": "2026-01-06T16:11:19.000Z",
-      "location": "archive",
-      "fromIssue": "Derived from upgrade-tailwind-v3-to-v4",
-      "blockedBy": []
-    },
-    "083-verify-tailwind-upgrade": {
-      "state": "committed",
-      "lastUpdated": "2026-01-06T17:02:00.000Z",
-      "location": "archive",
-      "fromIssue": "Derived from upgrade-tailwind-v3-to-v4",
-      "blockedBy": []
-    },
-    "084-generate-color-scales": {
-      "state": "committed",
-      "lastUpdated": "2026-01-06T20:05:00.000Z",
-      "location": "archive",
-      "fromIssue": "Derived from design-color-palettes-light-dark",
-      "blockedBy": []
-    },
-    "085-implement-color-palettes-in-css": {
-      "state": "committed",
-      "lastUpdated": "2026-01-06T20:05:00.000Z",
-      "location": "archive",
-      "fromIssue": "Derived from design-color-palettes-light-dark",
-      "blockedBy": []
-    },
-    "086-create-theme-store-and-provider": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-05T20:06:13.248Z",
-      "location": "backlog",
-      "fromIssue": "Derived from implement-theme-toggle",
-      "blockedBy": []
-    },
+
     "087-add-dark-variants-to-shared-components": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-05T20:06:13.249Z",
-      "location": "backlog",
+      "state": "completed",
+      "lastUpdated": "2026-01-06T19:44:43.282Z",
+      "location": "active",
       "fromIssue": "Derived from implement-theme-toggle",
       "blockedBy": []
     },
@@ -246,18 +212,10 @@
       "state": "not_started",
       "lastUpdated": "2026-01-05T20:32:37.999Z",
       "location": "backlog",
+      "fromIssue": "Derived from add-comprehensive-tests",
       "blockedBy": []
-    },
-    "081-migrate-tailwind-config-to-css-impl": {
-      "state": "committed",
-      "lastUpdated": "2026-01-06T16:11:19.000Z",
-      "location": "archive",
-      "blockedBy": []
-    },
-    "081-migrate-tailwind-config-to-css": {
-      "state": "committed",
-      "lastUpdated": "2026-01-06T16:11:19.000Z",
-      "location": "archive"
     }
+  }
+}
   }
 }
