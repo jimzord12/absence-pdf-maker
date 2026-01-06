@@ -35,7 +35,9 @@ Commit all changes grouped by their corresponding Tasks. Follow these steps:
    - Do NOT add or commit these files
    - Inform the user about these files
 
-8. **Move Task Files**: Completed Tasks need to be moved from `docs/tasks/active/` to `docs/tasks/archive/` before their changes are committed, in order for the commit to reflect the task's completion.
+8. **Move Task Files**: Completed Tasks need to be moved from `docs/tasks/active/` to `docs/tasks/archive/` before their changes are committed, in order for commit to reflect on task's completion.
+
+8.5. **Add Archived Task Files**: If task files exist in `docs/tasks/archive/`, add them to git with `git add docs/tasks/archive/<taskId>.md`.
 
 9. **Execute Commits**:
 
