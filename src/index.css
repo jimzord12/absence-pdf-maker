@@ -4,48 +4,106 @@
 
 /* ===== Tailwind Theme Configuration ===== */
 @theme {
-  /* Color Palette */
-  --color-primary: #0f172a;
-  --color-primary-hover: #1e293b;
-  --color-primary-light: #334155;
+  /* Light Theme Primary Scale */
+  --color-light-primary-50: #ccebfb;
+  --color-light-primary-100: #b4e2f9;
+  --color-light-primary-200: #85d0f5;
+  --color-light-primary-300: #56bef1;
+  --color-light-primary-400: #27aced;
+  --color-light-primary-500: #1191d0;
+  --color-light-primary-600: #1191d0;
+  --color-light-primary-700: #0d70a1;
+  --color-light-primary-800: #094f72;
+  --color-light-primary-900: #052e43;
+  --color-light-primary-950: #000000;
 
-  --color-secondary: #64748b;
-  --color-secondary-hover: #475569;
-  --color-secondary-light: #94a3b8;
+  /* Light Theme Secondary Scale */
+  --color-light-secondary-50: #ffffff;
+  --color-light-secondary-100: #ffffff;
+  --color-light-secondary-200: #ffffff;
+  --color-light-secondary-300: #ffffff;
+  --color-light-secondary-400: #ffffff;
+  --color-light-secondary-500: #deeeff;
+  --color-light-secondary-600: #deeeff;
+  --color-light-secondary-700: #abd4ff;
+  --color-light-secondary-800: #78b9ff;
+  --color-light-secondary-900: #459fff;
+  --color-light-secondary-950: #0078f8;
 
-  --color-background: #ffffff;
-  --color-background-alt: #f8fafc;
+  /* Dark Theme Primary Scale */
+  --color-dark-primary-50: #b5a2da;
+  --color-dark-primary-100: #a790d2;
+  --color-dark-primary-200: #8a6bc4;
+  --color-dark-primary-300: #6d48b4;
+  --color-dark-primary-400: #573a8f;
+  --color-dark-primary-500: #412b6b;
+  --color-dark-primary-600: #412b6b;
+  --color-dark-primary-700: #2b1c47;
+  --color-dark-primary-800: #150e22;
+  --color-dark-primary-900: #000000;
+  --color-dark-primary-950: #000000;
 
-  --color-surface: #ffffff;
-  --color-surface-hover: #f1f5f9;
+  /* Dark Theme Secondary Scale */
+  --color-dark-secondary-50: #fef1ec;
+  --color-dark-secondary-100: #fde0d3;
+  --color-dark-secondary-200: #fabfa3;
+  --color-dark-secondary-300: #f79d73;
+  --color-dark-secondary-400: #f57b42;
+  --color-dark-secondary-500: #f25912;
+  --color-dark-secondary-600: #f25912;
+  --color-dark-secondary-700: #c6460b;
+  --color-dark-secondary-800: #963508;
+  --color-dark-secondary-900: #652406;
+  --color-dark-secondary-950: #1d0a02;
 
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #64748b;
-  --color-text-muted: #94a3b8;
-  --color-text-inverse: #ffffff;
+  /* Semantic Colors (Same across themes) */
+  --color-error-50: #fcecec;
+  --color-error-100: #f8d6d6;
+  --color-error-200: #f1aaaa;
+  --color-error-300: #ea7e7e;
+  --color-error-400: #e35252;
+  --color-error-500: #dc2626;
+  --color-error-600: #dc2626;
+  --color-error-700: #b21d1d;
+  --color-error-800: #861616;
+  --color-error-900: #5a0f0f;
+  --color-error-950: #190404;
 
-  --color-error: #dc2626;
-  --color-error-bg: #fef2f2;
-  --color-error-hover: #b91c1c;
+  --color-success-50: #abf4c6;
+  --color-success-100: #94f1b6;
+  --color-success-200: #67eb98;
+  --color-success-300: #3be479;
+  --color-success-400: #1cd05e;
+  --color-success-500: #16a34a;
+  --color-success-600: #16a34a;
+  --color-success-700: #107636;
+  --color-success-800: #0a4921;
+  --color-success-900: #041c0d;
+  --color-success-950: #000000;
 
-  --color-success: #16a34a;
-  --color-success-bg: #f0fdf4;
-  --color-success-hover: #15803d;
+  --color-warning-50: #fbcca8;
+  --color-warning-100: #f9bd90;
+  --color-warning-200: #f7a15f;
+  --color-warning-300: #f5842e;
+  --color-warning-400: #e5690b;
+  --color-warning-500: #b45309;
+  --color-warning-600: #b45309;
+  --color-warning-700: #833d07;
+  --color-warning-800: #532604;
+  --color-warning-900: #221002;
+  --color-warning-950: #000000;
 
-  --color-warning: #b45309;
-  --color-warning-bg: #fef3c7;
-  --color-warning-hover: #92400e;
-
-  --color-info: #2563eb;
-  --color-info-bg: #eff6ff;
-  --color-info-hover: #1d4ed8;
-
-  --color-holiday-bg: #fee2e2;
-  --color-holiday-text: #b91c1c;
-
-  --color-border: #e2e8f0;
-  --color-border-light: #f1f5f9;
-  --color-border-dark: #cbd5e1;
+  --color-info-50: #f7f9fe;
+  --color-info-100: #e0e9fc;
+  --color-info-200: #b1c7f8;
+  --color-info-300: #82a6f4;
+  --color-info-400: #5484ef;
+  --color-info-500: #2563eb;
+  --color-info-600: #2563eb;
+  --color-info-700: #134cca;
+  --color-info-800: #0e3b9c;
+  --color-info-900: #0a296d;
+  --color-info-950: #040f27;
 
   /* Font Families */
   --font-family-sans:
@@ -150,6 +208,103 @@
   }
 }
 
+/* ===== Theme Variables ===== */
+
+:root {
+  --color-primary: var(--color-light-primary-600);
+  --color-primary-hover: var(--color-light-primary-700);
+  --color-primary-light: var(--color-light-primary-400);
+
+  --color-secondary: var(--color-light-secondary-200);
+  --color-secondary-hover: var(--color-light-secondary-700);
+
+  --color-error: var(--color-error-600);
+  --color-error-bg: var(--color-error-50);
+  --color-error-hover: var(--color-error-700);
+
+  --color-success: var(--color-success-600);
+  --color-success-bg: var(--color-success-50);
+  --color-success-hover: var(--color-success-700);
+
+  --color-warning: var(--color-warning-600);
+  --color-warning-bg: var(--color-warning-50);
+  --color-warning-hover: var(--color-warning-700);
+
+  --color-info: var(--color-info-600);
+  --color-info-bg: var(--color-info-50);
+  --color-info-hover: var(--color-info-700);
+
+  --color-background: var(--color-light-secondary-50);
+  --color-background-alt: var(--color-light-secondary-100);
+
+  --color-surface: #ffffff;
+  --color-surface-hover: #f1f5f9;
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #64748b;
+  --color-text-muted: #94a3b8;
+  --color-text-inverse: #ffffff;
+
+  --color-holiday-bg: #fee2e2;
+  --color-holiday-text: #b91c1c;
+
+  --color-border: #e2e8f0;
+  --color-border-light: #f1f5f9;
+  --color-border-dark: #cbd5e1;
+}
+
+[data-theme='dark'] {
+  --color-primary: var(--color-dark-primary-600);
+  --color-primary-hover: var(--color-dark-primary-700);
+  --color-primary-light: var(--color-dark-primary-400);
+
+  --color-secondary: var(--color-dark-secondary-600);
+  --color-secondary-hover: var(--color-dark-secondary-700);
+
+  --color-error: var(--color-error-600);
+  --color-error-bg: var(--color-error-950);
+  --color-error-hover: var(--color-error-700);
+
+  --color-success: var(--color-success-600);
+  --color-success-bg: var(--color-success-950);
+  --color-success-hover: var(--color-success-700);
+
+  --color-warning: var(--color-warning-600);
+  --color-warning-bg: var(--color-warning-950);
+  --color-warning-hover: var(--color-warning-700);
+
+  --color-info: var(--color-info-600);
+  --color-info-bg: var(--color-info-950);
+  --color-info-hover: var(--color-info-700);
+
+  --color-background: var(--color-dark-primary-950);
+  --color-background-alt: var(--color-dark-primary-900);
+
+  --color-surface: var(--color-dark-primary-800);
+  --color-surface-hover: var(--color-dark-primary-700);
+
+  --color-text-primary: #deeeff;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-text-inverse: #ffffff;
+
+  --color-holiday-bg: #4a0404;
+  --color-holiday-text: #fca5a5;
+
+  --color-border: #342258;
+  --color-border-light: #573a8f;
+  --color-border-dark: #8a6bc4;
+}
+
+/* Theme Transition */
+*,
+*::before,
+*::after {
+  transition-property: background-color, color, border-color, box-shadow;
+  transition-duration: var(--duration-normal, 250ms);
+  transition-timing-function: ease-in-out;
+}
+
 /* ===== Custom Utilities ===== */
 @utility sr-only {
   position: absolute;
@@ -188,6 +343,15 @@
 }
 @utility animate-stagger-6 {
   animation-delay: 300ms;
+}
+
+/* ===== Tailwind Base Layer - Base Styles ===== */
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    transition: background-color var(--duration-normal) ease-in-out, color var(--duration-normal) ease-in-out;
+  }
 }
 
 /* ===== Tailwind Components Layer - Custom Components ===== */
@@ -240,6 +404,7 @@
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+      transition-property: none !important;
     }
   }
 }
