@@ -33,7 +33,6 @@ export const DeveloperPresence = ({
   const [isHovered, setIsHovered] = useState(false);
   const [shouldShowInfo, setShouldShowInfo] = useState(false);
   const [hasFlippedForward, setHasFlippedForward] = useState(false);
-  const [hasPlayedHeartbeat, setHasPlayedHeartbeat] = useState(false);
   const revertTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const config = SIZE_CONFIG[size];
@@ -53,7 +52,6 @@ export const DeveloperPresence = ({
       if (hasFlippedForward) {
         revertTimerRef.current = setTimeout(() => {
           setShouldShowInfo(false);
-          setHasPlayedHeartbeat(false);
         }, REVERT_DELAY);
       }
     }
@@ -120,9 +118,6 @@ export const DeveloperPresence = ({
         }}
         onAnimationComplete={() => {
           setHasFlippedForward(shouldShowInfo);
-          if (shouldShowInfo && !hasPlayedHeartbeat) {
-            setHasPlayedHeartbeat(true);
-          }
         }}
       >
         <motion.div
@@ -160,30 +155,40 @@ export const DeveloperPresence = ({
           style={{
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
-            boxShadow: 'inset 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 -2px 4px rgba(0, 0, 0, 0.05)',
           }}
           animate={
-            shouldShowInfo && hasPlayedHeartbeat
+            shouldShowInfo
               ? {
                   boxShadow: [
-                    'inset 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 -2px 4px rgba(0, 0, 0, 0.05)',
-                    'inset 0 2px 12px rgba(0, 0, 0, 0.375), inset 0 -4px 8px rgba(0, 0, 0, 0.225)',
-                    'inset 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 -2px 4px rgba(0, 0, 0, 0.05)',
-                    'inset 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 -2px 4px rgba(0, 0, 0, 0.05)',
-                    'inset 0 2px 12px rgba(0, 0, 0, 0.375), inset 0 -4px 8px rgba(0, 0, 0, 0.225)',
-                    'inset 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 -2px 4px rgba(0, 0, 0, 0.05)',
+                    'inset 0 6px 16px rgba(0, 0, 0, 0.15)',
+                    'inset 0 12px 32px rgba(0, 0, 0, 0.4)',
+                    'inset 0 8px 20px rgba(0, 0, 0, 0.2)',
+                    'inset 0 6px 16px rgba(0, 0, 0, 0.15)',
+                    'inset 0 12px 32px rgba(0, 0, 0, 0.4)',
+                    'inset 0 8px 20px rgba(0, 0, 0, 0.2)',
                   ],
+                  scale: [1, 1.06, 1, 1.06, 1],
                   transition: {
                     boxShadow: {
-                      duration: 0.5,
-                      times: [0, 0.15, 0.35, 0.45, 0.7, 1.0],
+                      duration: 0.6,
+                      times: [0, 0.2, 0.5, 0.7, 1.0],
                       ease: ['easeOut', 'easeIn', 'easeOut', 'easeIn', 'easeOut'],
+                      repeat: Infinity,
+                      repeatDelay: 1,
+                    },
+                    scale: {
+                      duration: 0.6,
+                      times: [0, 0.2, 0.5, 0.7, 1.0],
+                      ease: ['easeOut', 'easeIn', 'easeOut', 'easeIn', 'easeOut'],
+                      repeat: Infinity,
+                      repeatDelay: 1,
                     },
                   },
                 }
               : {
                   scale: shouldShowInfo ? 1 : 0.9,
                   opacity: shouldShowInfo ? 1 : 0,
+                  boxShadow: 'inset 0 6px 16px rgba(0, 0, 0, 0.3)',
                 }
           }
           transition={{
