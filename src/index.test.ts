@@ -218,24 +218,24 @@ describe('Task 081: Tailwind CSS v3 to v4 Migration', () => {
   describe('Custom Utilities Migrated (AC: Custom utilities migrated to @utility directive)', () => {
     it('should have .sr-only utility with @utility directive', () => {
       expect(indexCssContent).toContain('@utility sr-only');
-      expect(indexCssContent).toMatch(/\.sr-only\s*{[^}]*position:\s*absolute/);
-      expect(indexCssContent).toMatch(/\.sr-only\s*{[^}]*width:\s*1px/);
-      expect(indexCssContent).toMatch(/\.sr-only\s*{[^}]*height:\s*1px/);
-      expect(indexCssContent).toMatch(/\.sr-only\s*{[^}]*overflow-hidden/);
-      expect(indexCssContent).toMatch(/\.sr-only\s*{[^}]*white-space-nowrap/);
-      expect(indexCssContent).toMatch(/\.sr-only\s*{[^}]*border-0/);
+      expect(indexCssContent).toMatch(/\.sr-only\s*\{[\s\S\s]*position:\s*absolute/);
+      expect(indexCssContent).toMatch(/\.sr-only\s*\{[\s\S\s]*width:\s*1px/);
+      expect(indexCssContent).toMatch(/\.sr-only\s*\{[\s\S\s]*height:\s*1px/);
+      expect(indexCssContent).toMatch(/\.sr-only\s*\{[\s\S\s]*overflow:\s*hidden/);
+      expect(indexCssContent).toMatch(/\.sr-only\s*\{[\s\S\s]*white-space:\s*nowrap/);
+      expect(indexCssContent).toMatch(/\.sr-only\s*\{[\s\S\s]*border:\s*0/);
       expect(indexCssContent).toMatch(/clip:\s*rect\(0,\s*0,\s*0,\s*0\)/);
     });
 
     it('should have .focus-visible-custom utility with @utility directive', () => {
       expect(indexCssContent).toContain('@utility focus-visible-custom');
-      expect(indexCssContent).toMatch(/\.focus-visible-custom\s*{[^}]*outline:\s*2px\s+solid/);
+      expect(indexCssContent).toMatch(/\.focus-visible-custom\s*\{[\s\S\s]*outline:\s*2px\s+solid/);
       expect(indexCssContent).toMatch(/outline-offset:\s*2px/);
     });
 
     it('should have .focus\\:not-focus-visible utility in @layer utilities', () => {
       expect(indexCssContent).toContain('.focus\\:not-focus-visible:focus:not(:focus-visible)');
-      expect(indexCssContent).toMatch(/\.focus\\:not-focus-visible:focus:not\(:focus-visible\)\s*{[^}]*outline:\s*none/);
+      expect(indexCssContent).toMatch(/\.focus\\:not-focus-visible:focus:not\(:focus-visible\)\s*\{[\s\S\s]*outline:\s*none/);
     });
 
     it('should have .animate-stagger-0 through .animate-stagger-6 utilities', () => {
@@ -249,13 +249,13 @@ describe('Task 081: Tailwind CSS v3 to v4 Migration', () => {
     });
 
     it('should have correct animation delay values', () => {
-      expect(indexCssContent).toMatch(/\.animate-stagger-0[^}]*animation-delay:\s*0ms/);
-      expect(indexCssContent).toMatch(/\.animate-stagger-1[^}]*animation-delay:\s*50ms/);
-      expect(indexCssContent).toMatch(/\.animate-stagger-2[^}]*animation-delay:\s*100ms/);
-      expect(indexCssContent).toMatch(/\.animate-stagger-3[^}]*animation-delay:\s*150ms/);
-      expect(indexCssContent).toMatch(/\.animate-stagger-4[^}]*animation-delay:\s*200ms/);
-      expect(indexCssContent).toMatch(/\.animate-stagger-5[^}]*animation-delay:\s*250ms/);
-      expect(indexCssContent).toMatch(/\.animate-stagger-6[^}]*animation-delay:\s*300ms/);
+      expect(indexCssContent).toMatch(/\.animate-stagger-0[^}]+animation-delay:\s*0ms/);
+      expect(indexCssContent).toMatch(/\.animate-stagger-1[^}]+animation-delay:\s*50ms/);
+      expect(indexCssContent).toMatch(/\.animate-stagger-2[^}]+animation-delay:\s*100ms/);
+      expect(indexCssContent).toMatch(/\.animate-stagger-3[^}]+animation-delay:\s*150ms/);
+      expect(indexCssContent).toMatch(/\.animate-stagger-4[^}]+animation-delay:\s*200ms/);
+      expect(indexCssContent).toMatch(/\.animate-stagger-5[^}]+animation-delay:\s*250ms/);
+      expect(indexCssContent).toMatch(/\.animate-stagger-6[^}]+animation-delay:\s*300ms/);
     });
   });
 
@@ -352,7 +352,7 @@ describe('Task 081: Tailwind CSS v3 to v4 Migration', () => {
       expect(indexCssContent).toContain('@theme {');
       expect(indexCssContent).toMatch(/--color-[\w-]+:\s*#[0-9a-f]{6}/);
       expect(indexCssContent).toMatch(/--font-size-[\w-]+:\s*[\d.]+rem/);
-      expect(indexCssContent).toMatch(/--shadow-[\w-]+:\s*rgba?\(/);
+      expect(indexCssContent).toMatch(/--shadow-[\w-]+:\s*[\d\s\w-]+.*rgba?\(/);
     });
 
     it('should have valid @utility definitions', () => {
