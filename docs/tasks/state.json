@@ -17,16 +17,16 @@
       "blockedBy": []
     },
     "084-generate-color-scales": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-05T20:05:47.784Z",
-      "location": "backlog",
+      "state": "completed",
+      "lastUpdated": "2026-01-06T18:27:44.549Z",
+      "location": "active",
       "fromIssue": "Derived from design-color-palettes-light-dark",
       "blockedBy": []
     },
     "085-implement-color-palettes-in-css": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-05T20:05:47.784Z",
-      "location": "backlog",
+      "state": "completed",
+      "lastUpdated": "2026-01-06T18:52:34.270Z",
+      "location": "active",
       "fromIssue": "Derived from design-color-palettes-light-dark",
       "blockedBy": []
     },
