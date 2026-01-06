@@ -3,9 +3,9 @@
   "version": "2.0",
   "tasks": {
     "082-add-tailwind-enhancements": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-05T20:05:47.783Z",
-      "location": "backlog",
+      "state": "completed",
+      "lastUpdated": "2026-01-05T22:55:21.427Z",
+      "location": "active",
       "fromIssue": "Derived from upgrade-tailwind-v3-to-v4",
       "blockedBy": []
     },
@@ -249,10 +249,15 @@
       "blockedBy": []
     },
     "081-migrate-tailwind-config-to-css-impl": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-05T21:54:09.438Z",
-      "location": "backlog",
+      "state": "completed",
+      "lastUpdated": "2026-01-05T22:45:40.272Z",
+      "location": "active",
       "blockedBy": []
+    },
+    "081-migrate-tailwind-config-to-css": {
+      "state": "completed",
+      "lastUpdated": "2026-01-05T22:44:01.673Z",
+      "location": "active"
     }
   }
 }
