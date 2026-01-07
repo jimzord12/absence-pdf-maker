@@ -32,7 +32,7 @@ export interface TaskStateInfo {
 export interface StateFile {
   $schema?: string;
   version?: string;
-  tasks: Record<string, TaskStateInfo>;
+  tasks: Record<string, TaskStateInfo | undefined>;
 }
 
 export interface TaskInfo {

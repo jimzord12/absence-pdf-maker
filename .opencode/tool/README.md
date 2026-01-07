@@ -8,7 +8,7 @@ Visit here for more information about OpenCode tools: https://opencode.ai/docs/c
 
 ## Available Tools
 
-### nextTask
+### tasks_next
 
 Get the next task that needs to be implemented based on priority and current state.
 
@@ -109,6 +109,31 @@ Create a new task file from template.
 
 - `taskId`: The created task ID
 - `location`: Where the task was created (always "backlog")
+
+---
+
+### tasks_insert
+
+Insert a new task after a specific task, automatically renumbering subsequent tasks.
+
+**Description:** Creates a new task after a specified task ID and shifts all subsequent task numbers. For example, inserting after `003-feature` creates `004-new-task` and renames existing `004` → `005`, `005` → `006`, etc. Updates filenames, file content (header), and `state.json`. Archived tasks are not renumbered.
+
+**Args:**
+
+- `insertAfter` (string, required): The task ID to insert after (e.g., "003-some-feature")
+- `suffix` (string, required): The suffix for the new task ID (e.g., "new-feature" for "004-new-feature")
+- `priority` (string, optional): Task priority (high, medium, low). Default: medium
+- `fromIssue` (string, optional): Link to related issue number
+- `description` (string, optional): Task description
+- `constraints` (string, optional): Task constraints
+- `acceptanceCriteria` (string, optional): Acceptance criteria
+
+**Returns:**
+
+- `taskId`: The created task ID
+- `insertedAfter`: The task it was inserted after
+- `location`: Where the task was created (always "backlog")
+- `renamedTasks`: Array of `{ oldId, newId }` for all renamed tasks
 
 ---
 

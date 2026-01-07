@@ -33,7 +33,7 @@ describe('readStateFile', () => {
     });
 
     expect(result).toBeTruthy();
-    expect(result?.tasks['001-task-a'].state).toBe('committed');
+    expect(result?.tasks['001-task-a']?.state).toBe('committed');
     expect(result?.version).toBe('2.0');
   });
 
