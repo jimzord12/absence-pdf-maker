@@ -9,6 +9,7 @@ export interface StarsWarsRobotToggleProps {
   className?: string;
   id?: string;
   name?: string;
+  tabIndex?: number;
 }
 
 /**
@@ -32,6 +33,7 @@ export const StarsWarsRobotToggle = forwardRef<HTMLInputElement, StarsWarsRobotT
       className = '',
       id,
       name,
+      tabIndex = 0,
     },
     ref
   ) => {
@@ -43,8 +45,23 @@ export const StarsWarsRobotToggle = forwardRef<HTMLInputElement, StarsWarsRobotT
       [onChange]
     );
 
+    const handleKeyDown = React.useCallback(
+      (e: React.KeyboardEvent<HTMLLabelElement>) => {
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          onChange?.(!checked);
+        }
+      },
+      [checked, onChange]
+    );
+
     return (
-      <label className={`${styles['starswars-toggle']} ${className}`} aria-label={ariaLabel}>
+      <label
+        className={`${styles['starswars-toggle']} ${className}`}
+        aria-label={ariaLabel}
+        tabIndex={tabIndex}
+        onKeyDown={handleKeyDown}
+      >
         <input
           ref={ref}
           id={id}
