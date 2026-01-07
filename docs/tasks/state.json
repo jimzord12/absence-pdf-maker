@@ -1,12 +1,6 @@
 {
   "$schema": "./state.schema.json",
   "version": "2.0",
-  "tasks": {
-    "109-create-validation-schema-factories": {
-      "state": "completed",
-      "lastUpdated": "2026-01-07T22:51:34.369Z",
-      "location": "active",
-      "blockedBy": []
-    }
-  }
+  "tasks": {}
+
 }
