@@ -2,11 +2,6 @@
   "$schema": "./state.schema.json",
   "version": "2.0",
   "tasks": {
-    "107-create-pdf-language-store": {
-      "state": "completed",
-      "lastUpdated": "2026-01-07T22:38:47.681Z",
-      "location": "active"
-    },
     "109-create-validation-schema-factories": {
       "state": "completed",
       "lastUpdated": "2026-01-07T22:51:34.369Z",
