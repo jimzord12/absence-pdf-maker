@@ -2,18 +2,48 @@
   "common": {
     "cleared": "Profile cleared successfully!",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "loading": "Loading...",
+    "required": "Required",
+    "optional": "Optional"
   },
   "forms": {
     "actions": {
-      "heading": "Actions"
+      "heading": "Actions",
+      "exportProfile": "Export Profile",
+      "importProfile": "Import Profile",
+      "clearProfile": "Clear Profile"
     },
     "personal": {
-      "heading": "Personal Details Summary"
+      "heading": "Personal Details Form",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "fathersName": "Father's Name",
+      "fathersNamePlaceholder": "Enter father's name",
+      "email": "Email Address",
+      "emailPlaceholder": "your.email@company.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+1 (555) 123-4567",
+      "identityNumber": "Identity Number (ADT)",
+      "identityNumberPlaceholder": "Enter identity number"
     },
-    "employment": {},
+    "employment": {
+      "heading": "Employment Details Form",
+      "employeeId": "Employee ID (Optional)",
+      "employeeIdPlaceholder": "Leave blank if not applicable",
+      "companyName": "Company Name",
+      "companyNamePlaceholder": "Enter company name",
+      "department": "Department",
+      "departmentPlaceholder": "Engineering",
+      "position": "Position",
+      "positionPlaceholder": "Software Engineer"
+    },
     "leave": {
-      "heading": "Leave Details Summary",
+      "heading": "Leave Details Form",
+      "leaveType": "Leave Type",
+      "leaveTypePlaceholder": "Select leave type",
+      "reason": "Reason (Optional)",
+      "reasonPlaceholder": "Please provide a reason for your leave request...",
       "types": {
         "annual": "Annual Leave",
         "sick": "Sick Leave",
@@ -28,70 +58,132 @@
         "absenceDays": "Absence Days"
       }
     },
-    "dateRange": {},
+    "dateRange": {
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "selectStartDate": "Select start date",
+      "selectEndDate": "Select end date",
+      "clearDate": "Clear date",
+      "leaveAllowance": "Leave Allowance",
+      "iWishAllowance": "I wish to receive leave allowance",
+      "absenceBreakdown": "Absence Days Breakdown"
+    },
     "signature": {
       "label": "Signature",
       "signed": "Signed",
       "notSigned": "Not signed",
       "update": "Update Signature",
-      "add": "Add Signature"
+      "add": "Add Signature",
+      "heading": "Electronic Signature",
+      "drawSignature": "Draw your signature above",
+      "clear": "Clear",
+      "save": "Save Signature",
+      "cancel": "Cancel"
     },
     "pdf": {}
   },
-    "personal": {
-      "heading": "Personal Details Summary"
-    },
-    "employment": {},
-    "leave": {
-      "heading": "Leave Details Summary",
-      "types": {
-        "annual": "Annual Leave",
-        "sick": "Sick Leave",
-        "unpaid": "Unpaid Leave",
-        "other": "Other"
-      },
-      "absence": {
-        "calculationHeading": "Absence Days Calculation",
-        "totalDays": "Total Days",
-        "weekendDays": "Weekend Days",
-        "holidayDays": "Holiday Days",
-        "absenceDays": "Absence Days"
-      }
-    },
-    "dateRange": {},
-    "signature": {
-      "label": "Signature",
-      "signed": "Signed",
-      "notSigned": "Not signed",
-      "update": "Update Signature",
-      "add": "Add Signature"
-    },
-    "pdf": {}
+  "validation": {
+    "required": "{{field}} is required",
+    "invalidEmail": "Please enter a valid email address (e.g., name@example.com)",
+    "invalidPhone": "Please enter a valid phone number (10 digits, spaces allowed)",
+    "invalidIdentityNumber": "Identity number must be valid: Old ADT (e.g., AB-123456 or ΑΒ-123456), New ID (12 alphanumeric), or Passport (e.g., AB1234567)",
+    "invalidNameFormat": "Full name must contain at least 2 words (Greek or Latin letters only)",
+    "invalidFathersNameFormat": "Father's name must contain at least 2 characters (Greek or Latin letters only)",
+    "invalidNameLength": "Name must be at least 2 characters",
+    "endDateBeforeStart": "End date must be after start date",
+    "datesRequired": "Start date and end date are required for PDF generation",
+    "missingDetails": "Please fill in all required personal and employment details",
+    "missingDates": "Please select start and end dates for your leave"
   },
-  "validation": {},
   "messages": {
     "persistence": {
       "exportSuccess": "Profile exported successfully!",
       "noDataToExport": "No profile data to export. Please fill in your details first.",
       "exportFailed": "Failed to export profile: {{message}}",
       "importSuccess": "Profile imported successfully!",
-      "importWithMissingFields": "Profile imported with missing fields: {{fields}}. Please fill in the missing information.",
+      "importWithMissingFields": "Profile imported with missing fields: {{fields}}. Please fill in missing information.",
       "importFailed": "Failed to import profile: {{message}}",
       "invalidJsonFormat": "Invalid JSON format. Please check the file and try again.",
       "invalidProfileData": "Invalid profile data:\n{{errors}}"
     },
     "pdf": {
       "generationSuccess": "PDF generated successfully!",
-      "validationErrors": "Please correct the validation errors before generating the PDF.",
+      "validationErrors": "Please correct validation errors before generating PDF.",
       "missingDetails": "Please fill in all required personal and employment details before generating.",
       "missingDates": "Please select start and end dates for your leave.",
       "generationFailed": "Failed to generate PDF: {{message}}",
       "loadingMessage": "Please wait while we generate your PDF document...",
       "clickToGenerate": "Click to generate and download your leave request PDF"
+    },
+    "fields": {
+      "fullName": "Full Name",
+      "fathersName": "Father's Name",
+      "email": "Email",
+      "phone": "Phone",
+      "identityNumber": "Identity Number",
+      "employeeId": "Employee ID",
+      "companyName": "Company Name",
+      "department": "Department",
+      "position": "Position",
+      "leaveType": "Leave Type",
+      "leaveAllowance": "Leave Allowance",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "reason": "Reason"
     }
   },
   "pdf": {
-    "en": {},
-    "gr": {}
+    "en": {
+      "toEmployer": "To the employer:",
+      "requestTitle": "LEAVE REQUEST",
+      "subject": "SUBJECT: REQUEST FOR REGULAR LEAVE GRANT",
+      "employeeDetails": "Employee Details",
+      "fullName": "Full Name:",
+      "fathersName": "Father's Name:",
+      "specialty": "Position:",
+      "identityNumber": "Identity Number:",
+      "contactPhone": "Contact Phone:",
+      "leaveDetails": "Leave Details",
+      "requestText": "Please grant me regular leave of absence for",
+      "workingDays": "working days.",
+      "from": "From:",
+      "to": "To (and including):",
+      "reason": "Reason:",
+      "personalReasons": "Personal reasons",
+      "returnDate": "Return Date:",
+      "wishAllowance": "I wish to receive leave allowance.",
+      "noWishAllowance": "I do NOT wish to receive leave allowance.",
+      "agreed": "Agreed",
+      "employer": "The Employer",
+      "applicant": "The Applicant",
+      "date": "Date:",
+      "notApplicable": "—"
+    },
+    "gr": {
+      "toEmployer": "ΠΡΟΣ Τον εργοδότη:",
+      "requestTitle": "ΑΙΤΗΣΗ",
+      "subject": "ΘΕΜΑ: ΑΙΤΗΣΗ ΓΙΑ ΧΟΡΗΓΗΣΗ ΚΑΝΟΝΙΚΗΣ ΑΔΕΙΑΣ",
+      "employeeDetails": "Στοιχεία Εργαζομένου",
+      "fullName": "Ονοματεπώνυμο:",
+      "fathersName": "Πατρώνυμο:",
+      "specialty": "Ειδικότητα:",
+      "identityNumber": "ΑΔΤ:",
+      "contactPhone": "Τηλ. Επικοινωνίας:",
+      "leaveDetails": "Λεπτομέρειες Αδείας",
+      "requestText": "Παρακαλώ να μου χορηγήσετε κανονική άδεια απουσίας",
+      "workingDays": "εργάσιμων ημερών.",
+      "from": "Από:",
+      "to": "Έως (και):",
+      "reason": "Λόγος:",
+      "personalReasons": "Προσωπικοί λόγοι",
+      "returnDate": "Ημερομηνία Επιστροφής:",
+      "wishAllowance": "ΕΠΙΘΥΜΩ αναλογία επιδόματος αδείας.",
+      "noWishAllowance": "ΔΕΝ ΕΠΙΘΥΜΩ αναλογία επιδόματος αδείας.",
+      "agreed": "Συμφωνώ",
+      "employer": "Ο Εργοδότης",
+      "applicant": "Ο Αιτών / Η Αιτούσα",
+      "date": "Ημερομηνία:",
+      "notApplicable": "—"
+    }
   }
 }
