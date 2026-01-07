@@ -1,18 +1,5 @@
 {
   "$schema": "./state.schema.json",
   "version": "2.0",
-  "tasks": {
-    "093": {
-      "state": "completed",
-      "lastUpdated": "2026-01-07T14:01:06.000Z",
-      "location": "active",
-      "description": "Add Playwright E2E tests for critical user flows with theme switching across the application",
-      "blockedBy": []
-    },
-    "103-create-i18n-type-declarations": {
-      "state": "completed",
-      "lastUpdated": "2026-01-07T20:24:24.952Z",
-      "location": "active"
-    }
-  }
+  "tasks": {}
 }
