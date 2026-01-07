@@ -1,6 +1,9 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 @plugin '@tailwindcss/container-queries';
+
+/* Configure dark mode to use data-theme attribute instead of prefers-color-scheme */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ===== Tailwind Theme Configuration ===== */
 @theme {
@@ -106,12 +109,10 @@
   --color-info-950: #040f27;
 
   /* Font Families */
-  --font-family-sans:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+  --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  --font-family-mono:
-    'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', 'Courier New',
-    monospace;
+  --font-family-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono',
+    'Courier New', monospace;
 
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
@@ -234,7 +235,7 @@
   --color-info-bg: var(--color-info-50);
   --color-info-hover: var(--color-info-700);
 
-  --color-background: var(--color-light-secondary-50);
+  --color-background: var(--color-light-secondary-500);
   --color-background-alt: var(--color-light-secondary-100);
 
   --color-surface: #ffffff;
@@ -245,8 +246,8 @@
   --color-text-muted: #94a3b8;
   --color-text-inverse: #ffffff;
 
-  --color-holiday-bg: #fee2e2;
-  --color-holiday-text: #b91c1c;
+  --color-holiday-bg: var(--color-warning-50);
+  --color-holiday-text: var(--color-warning-600);
 
   --color-border: #e2e8f0;
   --color-border-light: #f1f5f9;
@@ -350,7 +351,8 @@
   body {
     background-color: var(--color-background);
     color: var(--color-text-primary);
-    transition: background-color var(--duration-normal) ease-in-out, color var(--duration-normal) ease-in-out;
+    transition: background-color var(--duration-normal) ease-in-out,
+      color var(--duration-normal) ease-in-out;
   }
 }
 
@@ -408,3 +410,4 @@
     }
   }
 }
+

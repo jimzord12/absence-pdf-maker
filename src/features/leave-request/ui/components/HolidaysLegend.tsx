@@ -38,15 +38,17 @@ export const HolidaysLegend: React.FC = () => {
       </div>
 
       {/* Legend text */}
-      <div className="flex flex-col gap-0.5 text-[color:var(--color-text-primary)]">
-        <p className="font-medium">
-          <span style={{ color: 'var(--color-holiday-text)' }}>H</span> = Holiday
+      <div className="flex flex-col gap-0.5">
+        <p className="font-medium text-(--color-text-primary)">
+          <span className="text-(--color-holiday-text)">H</span> = Holiday
         </p>
         <p className="text-xs text-[color:var(--color-text-secondary)]">
           Holidays are highlighted in the calendar and are{' '}
-          <strong className="text-[color:var(--color-text-primary)]">not</strong> counted toward absence days.
+          <strong className="text-[color:var(--color-holiday-bg)]">not</strong> counted toward
+          absence days.
         </p>
       </div>
     </div>
   );
 };
+

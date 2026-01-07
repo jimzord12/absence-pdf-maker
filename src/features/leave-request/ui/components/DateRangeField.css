@@ -1,0 +1,89 @@
+/**
+ * DateRangeField Component Styles
+ *
+ * Custom styles for react-day-picker within the DateRangeField component.
+ * These override the default rdp styles for holidays, weekends, and selection states.
+ */
+
+/* ===== React Day Picker Overrides ===== */
+/* Dark mode overrides for react-day-picker selection colors */
+[data-theme='dark'] .rdp {
+  --rdp-accent-color: var(--color-dark-primary-400);
+  --rdp-accent-background-color: #ffffff;
+  --rdp-range_middle-background-color: var(--color-dark-primary-600);
+  --rdp-range_middle-color: var(--color-dark-primary-100);
+}
+
+/* Custom modifier styles for holidays and weekends */
+.rdp-day--holiday {
+  background-color: var(--color-warning-50);
+  color: var(--color-warning-700);
+  font-weight: bold;
+}
+
+.rdp-day--weekend {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Dark mode variants */
+[data-theme='dark'] .rdp-day--holiday {
+  background-color: var(--color-warning-900);
+  color: var(--color-warning-200);
+}
+
+[data-theme='dark'] .rdp-day--weekend {
+  background-color: var(--color-dark-primary-700);
+  color: var(--color-dark-primary-200);
+}
+
+/* Selected states override modifiers using higher specificity (no !important needed) */
+.rdp-selected.rdp-day--holiday,
+.rdp-selected.rdp-day--weekend,
+.rdp-range_start.rdp-day--holiday,
+.rdp-range_start.rdp-day--weekend,
+.rdp-range_end.rdp-day--holiday,
+.rdp-range_end.rdp-day--weekend {
+  background-color: var(--rdp-accent-color);
+  color: var(--rdp-accent-background-color);
+}
+
+.rdp-range_middle.rdp-day--holiday,
+.rdp-range_middle.rdp-day--weekend {
+  background-color: var(--rdp-range_middle-background-color);
+  color: var(--rdp-range_middle-color);
+}
+
+/* Colored borders to indicate holidays/weekends within selected range */
+.rdp-selected.rdp-day--holiday,
+.rdp-range_start.rdp-day--holiday,
+.rdp-range_end.rdp-day--holiday,
+.rdp-range_middle.rdp-day--holiday {
+  border: 2px solid #f59e0b;
+  box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.3);
+}
+
+.rdp-selected.rdp-day--weekend,
+.rdp-range_start.rdp-day--weekend,
+.rdp-range_end.rdp-day--weekend,
+.rdp-range_middle.rdp-day--weekend {
+  border: 2px solid #9ca3af;
+  box-shadow: inset 0 0 0 1px rgba(156, 163, 175, 0.3);
+}
+
+/* Dark mode border colors */
+[data-theme='dark'] .rdp-selected.rdp-day--holiday,
+[data-theme='dark'] .rdp-range_start.rdp-day--holiday,
+[data-theme='dark'] .rdp-range_end.rdp-day--holiday,
+[data-theme='dark'] .rdp-range_middle.rdp-day--holiday {
+  border-color: var(--color-warning-400);
+  box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.3);
+}
+
+[data-theme='dark'] .rdp-selected.rdp-day--weekend,
+[data-theme='dark'] .rdp-range_start.rdp-day--weekend,
+[data-theme='dark'] .rdp-range_end.rdp-day--weekend,
+[data-theme='dark'] .rdp-range_middle.rdp-day--weekend {
+  border-color: var(--color-dark-primary-300);
+  box-shadow: inset 0 0 0 1px rgba(138, 107, 196, 0.3);
+}

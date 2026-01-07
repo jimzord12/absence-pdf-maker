@@ -23,11 +23,25 @@ export interface StarsWarsRobotToggleProps {
  * ```
  */
 export const StarsWarsRobotToggle = forwardRef<HTMLInputElement, StarsWarsRobotToggleProps>(
-  ({ checked = false, onChange, disabled = false, 'aria-label': ariaLabel = 'Toggle theme', className = '', id, name }, ref) => {
-    const handleChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-      const newChecked = e.target.checked;
-      onChange?.(newChecked);
-    }, [onChange]);
+  (
+    {
+      checked = false,
+      onChange,
+      disabled = false,
+      'aria-label': ariaLabel = 'Toggle theme',
+      className = '',
+      id,
+      name,
+    },
+    ref
+  ) => {
+    const handleChange = React.useCallback(
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newChecked = e.target.checked;
+        onChange?.(newChecked);
+      },
+      [onChange]
+    );
 
     return (
       <label className={`${styles['starswars-toggle']} ${className}`} aria-label={ariaLabel}>
@@ -77,3 +91,4 @@ export const StarsWarsRobotToggle = forwardRef<HTMLInputElement, StarsWarsRobotT
 );
 
 StarsWarsRobotToggle.displayName = 'StarsWarsRobotToggle';
+

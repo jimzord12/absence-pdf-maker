@@ -10,6 +10,7 @@ import type { LeaveRequest } from '../../model/leaveRequest.types';
 import { calculateAbsenceDays } from '../../services/absenceDays';
 import { isHoliday } from '../../services/holidays/holidays.service';
 import type { Locale } from '../../state/locale.store';
+import './DateRangeField.css';
 import { HolidaysLegend } from './HolidaysLegend';
 
 interface DateRangeFieldProps {
@@ -26,17 +27,10 @@ interface AbsenceSummary {
   hasDates?: boolean;
 }
 
-// Define modifiers styles outside component to avoid recreation on each render
-const MODIFIERS_STYLES = {
-  holiday: {
-    backgroundColor: '#fef3c7',
-    color: '#92400e',
-    fontWeight: 'bold' as const,
-  },
-  weekend: {
-    backgroundColor: '#f3f4f6',
-    color: '#6b7280',
-  },
+// CSS class names for modifiers - styles defined in index.css for proper specificity
+const MODIFIERS_CLASS_NAMES = {
+  holiday: 'rdp-day--holiday',
+  weekend: 'rdp-day--weekend',
 } as const;
 
 // Footer component for absence calculation display
@@ -52,12 +46,12 @@ const Footer: React.FC<AbsenceSummary & { hasDates: boolean }> = ({
 
   return (
     <div
-      className="mt-4 p-3 bg-[color:var(--color-info-bg)] border border-[color:var(--color-info-300)] rounded-lg dark:border-[color:var(--color-info-800)]"
+      className="mt-4 p-3 bg-info-50 dark:bg-info-950 border border-info-300 dark:border-info-800 rounded-lg"
       role="region"
       aria-live="polite"
     >
-      <p className="text-sm text-[color:var(--color-info-900)] dark:text-[color:var(--color-info-100)] font-medium">Date Range Summary</p>
-      <div className="mt-2 space-y-1 text-sm text-[color:var(--color-info-800)] dark:text-[color:var(--color-info-200)]">
+      <p className="text-sm text-info-900 dark:text-info-100 font-medium">Date Range Summary</p>
+      <div className="mt-2 space-y-1 text-sm text-info-800 dark:text-info-200">
         <div className="flex justify-between">
           <span>Total Days:</span>
           <span
@@ -85,10 +79,10 @@ const Footer: React.FC<AbsenceSummary & { hasDates: boolean }> = ({
             {displayValue(weekendDays)}
           </span>
         </div>
-        <div className="flex justify-between border-t border-[color:var(--color-info-300)] dark:border-[color:var(--color-info-800)] pt-1">
+        <div className="flex justify-between border-t border-info-300 dark:border-info-800 pt-1">
           <span className="font-semibold">Absence Days:</span>
           <span
-            className="font-bold text-[color:var(--color-info-700)] dark:text-[color:var(--color-info-300)]"
+            className="font-bold text-info-700 dark:text-info-300"
             aria-label={`Total absence days: ${displayValue(absenceDays)}`}
           >
             {displayValue(absenceDays)}
@@ -238,15 +232,18 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
   // Handle empty form context gracefully
   if (!methods) {
     return (
-      <div className="p-4 bg-[color:var(--color-warning-bg)] border border-[color:var(--color-warning-300)] rounded-lg dark:border-[color:var(--color-warning-800)]">
-        <p className="text-sm text-[color:var(--color-warning-900)] dark:text-[color:var(--color-warning-100)]">Form context not available</p>
+      <div className="p-4 bg-warning-50 dark:bg-warning-950 border border-warning-300 dark:border-warning-800 rounded-lg">
+        <p className="text-sm text-warning-900 dark:text-warning-100">Form context not available</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-2" role="group" aria-labelledby={`${dateFieldId}-label`}>
-      <span id={`${dateFieldId}-label`} className="block text-sm font-medium text-[color:var(--color-text-primary)]">
+      <span
+        id={`${dateFieldId}-label`}
+        className="block text-sm font-medium text-[color:var(--color-text-primary)]"
+      >
         Select Date Range
       </span>
       <div className="flex justify-between gap-2">
@@ -276,7 +273,7 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
           selected={selectedRange}
           onSelect={handleSelect}
           modifiers={modifiers}
-          modifiersStyles={MODIFIERS_STYLES}
+          modifiersClassNames={MODIFIERS_CLASS_NAMES}
           numberOfMonths={2}
           captionLayout="dropdown"
           className="rdp"
@@ -286,10 +283,10 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
       {(errors?.startDate?.message || errors?.endDate?.message) && (
         <div className="space-y-1" role="alert" aria-live="polite">
           {errors?.startDate?.message && (
-            <p className="text-sm text-[color:var(--color-error)]">{errors.startDate.message}</p>
+            <p className="text-sm text-error-600 dark:text-error-400">{errors.startDate.message}</p>
           )}
           {errors?.endDate?.message && (
-            <p className="text-sm text-[color:var(--color-error)]">{errors.endDate.message}</p>
+            <p className="text-sm text-error-600 dark:text-error-400">{errors.endDate.message}</p>
           )}
         </div>
       )}
