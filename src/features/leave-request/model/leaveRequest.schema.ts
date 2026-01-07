@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+type TranslationFunction = (key: string, options?: Record<string, unknown>) => string;
+
 // Greek letters (both uppercase and lowercase) - includes accented characters
 const GREEK_LETTERS = 'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩΆΈΉΊΌΎΏαβγδεζηθικλμνξοπρστυφχψωάέήίόύώϊϋΐΰς';
 // Latin letters (both uppercase and lowercase)
@@ -144,6 +146,47 @@ export const isValidGreekIdentityNumber = (value: string): boolean => {
   return isValidGreekAdtOld(value) || isValidGreekAdtNew(value) || isValidGreekPassport(value);
 };
 
+/**
+ * Factory function that creates a localized UserProfileSchema
+ * @param t - i18next translation function
+ * @returns A Zod schema for user profile with localized error messages
+ */
+export const createUserProfileSchema = (t: TranslationFunction) =>
+  z.object({
+    fullName: z
+      .string()
+      .min(1, t('validation:required', { field: t('messages:fields.fullName') }))
+      .refine(isValidName, {
+        message: t('validation:invalidNameFormat'),
+      }),
+    fathersName: z
+      .string()
+      .min(1, t('validation:required', { field: t('messages:fields.fathersName') }))
+      .refine(isValidSingleName, {
+        message: t('validation:invalidFathersNameFormat'),
+      }),
+    email: z
+      .email(t('validation:invalidEmail'))
+      .min(1, t('validation:required', { field: t('messages:fields.email') })),
+    phone: z
+      .string()
+      .min(1, t('validation:required', { field: t('messages:fields.phone') }))
+      .refine(isValidGreekPhone, {
+        message: t('validation:invalidPhone'),
+      }),
+    identityNumber: z
+      .string()
+      .min(1, t('validation:required', { field: t('messages:fields.identityNumber') }))
+      .refine(isValidGreekIdentityNumber, {
+        message: t('validation:invalidIdentityNumber'),
+      }),
+    employeeId: z.string().optional(),
+    companyName: z.string().min(1, t('validation:required', { field: t('messages:fields.companyName') })),
+    department: z.string().min(1, t('validation:required', { field: t('messages:fields.department') })),
+    position: z.string().min(1, t('validation:required', { field: t('messages:fields.position') })),
+  });
+
+// Legacy export for backward compatibility (non-localized)
 export const UserProfileSchema = z.object({
   fullName: z.string().min(1, 'Full name is required').refine(isValidName, {
     message: 'Full name must contain at least 2 words (Greek or Latin letters only)',
@@ -170,6 +213,38 @@ export const UserProfileSchema = z.object({
   position: z.string().min(1, 'Position is required'),
 });
 
+/**
+ * Factory function that creates a localized LeaveRequestSchema
+ * @param t - i18next translation function
+ * @returns A Zod schema for leave request with localized error messages
+ */
+export const createLeaveRequestSchema = (t: TranslationFunction) =>
+  z
+    .object({
+      profile: createUserProfileSchema(t),
+      leaveType: z.enum(['annual', 'sick', 'unpaid', 'other']),
+      leaveAllowance: z.boolean().default(false),
+      startDate: z.date().optional(),
+      endDate: z.date().optional(),
+      reason: z.string().optional(),
+      createdAt: z.date(),
+      signatureDataUrl: z.string().optional(),
+    })
+    .refine(
+      data => {
+        // Only validate date order if both dates are present
+        if (data.startDate && data.endDate) {
+          return data.startDate <= data.endDate;
+        }
+        return true;
+      },
+      {
+        message: t('validation:endDateBeforeStart'),
+        path: ['endDate'],
+      }
+    );
+
+// Legacy export for backward compatibility (non-localized)
 export const LeaveRequestSchema = z
   .object({
     profile: UserProfileSchema,
@@ -224,4 +299,10 @@ export const ProfileImportSchema = z.object({
 });
 
 export type ProfileImportResult = z.infer<typeof ProfileImportSchema>;
+
+// Export types from factory functions for external use
+export type UserProfileSchemaType = ReturnType<typeof createUserProfileSchema>;
+export type LeaveRequestSchemaType = ReturnType<typeof createLeaveRequestSchema>;
+export type LeaveRequestFormData = z.infer<LeaveRequestSchemaType>;
+export type UserProfile = z.infer<UserProfileSchemaType>;
 
