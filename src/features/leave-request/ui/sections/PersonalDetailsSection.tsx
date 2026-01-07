@@ -1,6 +1,7 @@
 import React from 'react';
 import type { FieldErrors } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { Card, Input } from '../../../../shared/ui';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
@@ -26,17 +27,18 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ 
   const methods = useFormContext<LeaveRequest>();
 
   const { register } = methods || {};
+  const { t } = useTranslation('forms') as { t: (key: string, options?: Record<string, unknown>) => string };
 
   return (
     <section aria-labelledby="personal-details-heading">
       <Card>
         <h2 id="personal-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
-          Personal Details Form
+          {t('personal.heading')}
         </h2>
         <div className="space-y-4">
           <Input
-            label="Full Name"
-            placeholder="Enter your full name"
+            label={t('personal.fullName')}
+            placeholder={t('personal.fullNamePlaceholder')}
             inputType="text"
             required
             {...register?.('profile.fullName')}
@@ -44,8 +46,8 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ 
           />
 
           <Input
-            label="Father's Name"
-            placeholder="Enter father's name"
+            label={t('personal.fathersName')}
+            placeholder={t('personal.fathersNamePlaceholder')}
             inputType="text"
             required
             {...register?.('profile.fathersName')}
@@ -53,8 +55,8 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ 
           />
 
           <Input
-            label="Identity Number (ADT)"
-            placeholder="Enter identity number"
+            label={t('personal.identityNumber')}
+            placeholder={t('personal.identityNumberPlaceholder')}
             inputType="text"
             required
             {...register?.('profile.identityNumber')}
@@ -62,8 +64,8 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ 
           />
 
           <Input
-            label="Email Address"
-            placeholder="your.email@company.com"
+            label={t('personal.email')}
+            placeholder={t('personal.emailPlaceholder')}
             inputType="email"
             required
             {...register?.('profile.email')}
@@ -71,8 +73,8 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ 
           />
 
           <Input
-            label="Phone Number"
-            placeholder="+1 (555) 123-4567"
+            label={t('personal.phone')}
+            placeholder={t('personal.phonePlaceholder')}
             inputType="tel"
             required
             {...register?.('profile.phone')}
