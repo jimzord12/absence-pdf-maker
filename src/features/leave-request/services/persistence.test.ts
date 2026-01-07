@@ -24,15 +24,53 @@ let exportProfileToJson: typeof import('./persistence').exportProfileToJson;
 let importProfileFromJson: typeof import('./persistence').importProfileFromJson;
 
 describe('persistence', () => {
+  const mockT = vi.fn((key: string, options?: Record<string, unknown>) => {
+    if (key === 'messages.persistence.noDataToExport') {
+      return 'No profile data to export. Please fill in your details first.';
+    }
+    if (key === 'messages.persistence.exportFailed') {
+      return `Failed to export profile: ${options?.message || 'Unknown error'}`;
+    }
+    if (key === 'messages.persistence.invalidProfileData') {
+      return `Invalid profile data:\n${options?.errors || ''}`;
+    }
+    if (key === 'messages.persistence.importWithMissingFields') {
+      return `Profile imported with missing fields: ${options?.fields || ''}. Please fill in the missing information.`;
+    }
+    if (key === 'messages.persistence.importSuccess') {
+      return 'Profile imported successfully!';
+    }
+    if (key === 'messages.persistence.invalidJsonFormat') {
+      return 'Invalid JSON format. Please check the file and try again.';
+    }
+    if (key === 'messages.persistence.importFailed') {
+      return `Failed to import profile: ${options?.message || 'Unknown error'}`;
+    }
+    if (key.startsWith('messages.fields.')) {
+      const field = key.replace('messages.fields.', '');
+      const labels: Record<string, string> = {
+        fullName: 'Full Name',
+        fathersName: "Father's Name",
+        email: 'Email',
+        phone: 'Phone',
+        identityNumber: 'Identity Number',
+        employeeId: 'Employee ID',
+        companyName: 'Company Name',
+        department: 'Department',
+        position: 'Position',
+      };
+      return labels[field] || field;
+    }
+    return key;
+  });
+
   beforeEach(async () => {
     vi.clearAllMocks();
 
-    // Re-import module to apply updated mocks
     const persistenceModule = await import('./persistence');
     exportProfileToJson = persistenceModule.exportProfileToJson;
     importProfileFromJson = persistenceModule.importProfileFromJson;
 
-    // Reset setProfile and setSignature mocks
     mockSetProfile.mockReset();
     mockSetSignature.mockReset();
   });
@@ -62,7 +100,7 @@ describe('persistence', () => {
     });
 
     it('should export profile with signature data to JSON file', () => {
-      exportProfileToJson();
+      exportProfileToJson(mockT);
       expect(downloadFile).toHaveBeenCalledWith(
         'user-details.json',
         expect.any(String),
@@ -83,7 +121,7 @@ describe('persistence', () => {
         setSignature: mockSetSignature,
       });
 
-      exportProfileToJson();
+      exportProfileToJson(mockT);
       const downloadedContent = JSON.parse((downloadFile as any).mock.calls[0][1]);
       expect(downloadedContent).not.toHaveProperty('signatureDataUrl');
       expect(downloadedContent).toEqual(validProfile);
@@ -97,7 +135,7 @@ describe('persistence', () => {
         setSignature: mockSetSignature,
       });
 
-      exportProfileToJson();
+      exportProfileToJson(mockT);
       const downloadedContent = JSON.parse((downloadFile as any).mock.calls[0][1]);
       expect(downloadedContent).not.toHaveProperty('signatureDataUrl');
     });
@@ -122,7 +160,7 @@ describe('persistence', () => {
         setSignature: mockSetSignature,
       });
 
-      expect(() => exportProfileToJson()).toThrow(
+      expect(() => exportProfileToJson(mockT)).toThrow(
         'No profile data to export. Please fill in your details first.'
       );
       expect(downloadFile).not.toHaveBeenCalled();
@@ -148,7 +186,7 @@ describe('persistence', () => {
         setSignature: mockSetSignature,
       });
 
-      exportProfileToJson();
+      exportProfileToJson(mockT);
       const downloadedContent = JSON.parse((downloadFile as any).mock.calls[0][1]);
       expect(downloadedContent).toEqual({
         ...partialProfile,
@@ -161,7 +199,7 @@ describe('persistence', () => {
         throw new Error('Download failed');
       });
 
-      expect(() => exportProfileToJson()).toThrow('Failed to export profile: Download failed');
+      expect(() => exportProfileToJson(mockT)).toThrow('Failed to export profile: Download failed');
     });
 
     it('should propagate error with unknown error type', () => {
@@ -169,7 +207,7 @@ describe('persistence', () => {
         throw 'Unknown error';
       });
 
-      expect(() => exportProfileToJson()).toThrow('Failed to export profile: Unknown error');
+      expect(() => exportProfileToJson(mockT)).toThrow('Failed to export profile: Unknown error');
     });
   });
 
@@ -194,7 +232,7 @@ describe('persistence', () => {
       });
       (readFileAsText as any).mockResolvedValue(JSON.stringify(validProfile));
 
-      await expect(importProfileFromJson(file)).resolves.not.toThrow();
+      await expect(importProfileFromJson(file, mockT)).resolves.not.toThrow();
       expect(mockSetProfile).toHaveBeenCalledWith(validProfile);
     });
 
@@ -205,7 +243,7 @@ describe('persistence', () => {
       });
       (readFileAsText as any).mockResolvedValue(JSON.stringify(profileWithSignature));
 
-      await expect(importProfileFromJson(file)).resolves.not.toThrow();
+      await expect(importProfileFromJson(file, mockT)).resolves.not.toThrow();
       expect(mockSetProfile).toHaveBeenCalledWith(validProfile);
       expect(mockSetSignature).toHaveBeenCalledWith({ signatureDataUrl });
     });
@@ -222,7 +260,7 @@ describe('persistence', () => {
       );
       (readFileAsText as any).mockResolvedValue(JSON.stringify(profileWithoutSignature));
 
-      await expect(importProfileFromJson(file)).resolves.not.toThrow();
+      await expect(importProfileFromJson(file, mockT)).resolves.not.toThrow();
       expect(mockSetProfile).toHaveBeenCalled();
       expect(mockSetSignature).not.toHaveBeenCalled();
     });
@@ -239,7 +277,7 @@ describe('persistence', () => {
       );
       (readFileAsText as any).mockResolvedValue(JSON.stringify(profileWithEmptySignature));
 
-      await expect(importProfileFromJson(file)).resolves.not.toThrow();
+      await expect(importProfileFromJson(file, mockT)).resolves.not.toThrow();
       expect(mockSetProfile).toHaveBeenCalledWith(validProfile);
       expect(mockSetSignature).not.toHaveBeenCalled();
     });
@@ -257,7 +295,7 @@ describe('persistence', () => {
       (readFileAsText as any).mockResolvedValue(JSON.stringify(profileWithNullSignature));
 
       // With partial schema, null signature should be accepted and not set
-      await expect(importProfileFromJson(file)).resolves.not.toThrow();
+      await expect(importProfileFromJson(file, mockT)).resolves.not.toThrow();
       expect(mockSetProfile).toHaveBeenCalledWith(validProfile);
       expect(mockSetSignature).not.toHaveBeenCalled();
     });
@@ -269,7 +307,7 @@ describe('persistence', () => {
       });
       (readFileAsText as any).mockResolvedValue(JSON.stringify(profileWithoutSignature));
 
-      await expect(importProfileFromJson(file)).resolves.not.toThrow();
+      await expect(importProfileFromJson(file, mockT)).resolves.not.toThrow();
       expect(mockSetProfile).toHaveBeenCalledWith(validProfile);
     });
 
@@ -279,7 +317,7 @@ describe('persistence', () => {
       });
       (readFileAsText as any).mockResolvedValue('{ invalid json }');
 
-      await expect(importProfileFromJson(file)).rejects.toThrow('Invalid JSON format');
+      await expect(importProfileFromJson(file, mockT)).rejects.toThrow('Invalid JSON format');
     });
 
     it('should handle partial data missing fullName', async () => {
@@ -294,7 +332,7 @@ describe('persistence', () => {
       (readFileAsText as any).mockResolvedValue(JSON.stringify(partialProfile));
 
       // With partial schema, missing fields should be accepted
-      await expect(importProfileFromJson(file)).resolves.not.toThrow();
+      await expect(importProfileFromJson(file, mockT)).resolves.not.toThrow();
       expect(mockSetProfile).toHaveBeenCalledWith(
         expect.objectContaining({
           email: 'test@example.com',
@@ -321,8 +359,8 @@ describe('persistence', () => {
       });
       (readFileAsText as any).mockResolvedValue(JSON.stringify(invalidProfile));
 
-      await expect(importProfileFromJson(file)).rejects.toThrow('Invalid profile data:');
-      await expect(importProfileFromJson(file)).rejects.toThrow('Email');
+      await expect(importProfileFromJson(file, mockT)).rejects.toThrow('Invalid profile data:');
+      await expect(importProfileFromJson(file, mockT)).rejects.toThrow('Email');
     });
 
     it('should throw error for invalid signatureDataUrl (not a string)', async () => {
@@ -332,7 +370,7 @@ describe('persistence', () => {
       });
       (readFileAsText as any).mockResolvedValue(JSON.stringify(invalidProfile));
 
-      await expect(importProfileFromJson(file)).rejects.toThrow('Invalid profile data:');
+      await expect(importProfileFromJson(file, mockT)).rejects.toThrow('Invalid profile data:');
     });
 
     it('should accept optional employeeId field', async () => {
@@ -344,7 +382,7 @@ describe('persistence', () => {
       });
       (readFileAsText as any).mockResolvedValue(JSON.stringify(profileToImport));
 
-      await expect(importProfileFromJson(file)).resolves.not.toThrow();
+      await expect(importProfileFromJson(file, mockT)).resolves.not.toThrow();
       expect(mockSetProfile).toHaveBeenCalledWith(expect.any(Object));
     });
 
@@ -358,7 +396,7 @@ describe('persistence', () => {
       });
       (readFileAsText as any).mockResolvedValue(JSON.stringify(profileWithExtraField));
 
-      await expect(importProfileFromJson(file)).resolves.not.toThrow();
+      await expect(importProfileFromJson(file, mockT)).resolves.not.toThrow();
       expect(mockSetProfile).toHaveBeenCalledWith(
         expect.objectContaining({
           fullName: validProfile.fullName,
@@ -374,7 +412,7 @@ describe('persistence', () => {
       const file = new File([JSON.stringify(validProfile)], 'user-details.json', { type: 'application/json' });
       (readFileAsText as any).mockRejectedValue(new Error('Read error'));
 
-      await expect(importProfileFromJson(file)).rejects.toThrow(
+      await expect(importProfileFromJson(file, mockT)).rejects.toThrow(
         'Failed to import profile: Read error'
       );
       expect(mockSetProfile).not.toHaveBeenCalled();
@@ -396,9 +434,9 @@ describe('persistence', () => {
       });
       (readFileAsText as any).mockResolvedValue(JSON.stringify(invalidProfile));
 
-      await expect(importProfileFromJson(file)).rejects.toThrow('Invalid profile data:');
-      await expect(importProfileFromJson(file)).rejects.toThrow('Full Name');
-      await expect(importProfileFromJson(file)).rejects.toThrow('Email');
+      await expect(importProfileFromJson(file, mockT)).rejects.toThrow('Invalid profile data:');
+      await expect(importProfileFromJson(file, mockT)).rejects.toThrow('Full Name');
+      await expect(importProfileFromJson(file, mockT)).rejects.toThrow('Email');
       expect(mockSetProfile).not.toHaveBeenCalled();
       expect(mockSetSignature).not.toHaveBeenCalled();
     });
@@ -407,7 +445,7 @@ describe('persistence', () => {
       const file = new File([JSON.stringify(validProfile)], 'user-details.json', { type: 'application/json' });
       (readFileAsText as any).mockRejectedValue('String error');
 
-      await expect(importProfileFromJson(file)).rejects.toThrow(
+      await expect(importProfileFromJson(file, mockT)).rejects.toThrow(
         'Failed to import profile: Unknown error'
       );
       expect(mockSetProfile).not.toHaveBeenCalled();
@@ -485,8 +523,8 @@ describe('persistence', () => {
       });
       (readFileAsText as any).mockResolvedValue(JSON.stringify(invalidProfile));
 
-      await expect(importProfileFromJson(file)).rejects.toThrow('Invalid profile data:');
-      await expect(importProfileFromJson(file)).rejects.toThrow('Email');
+      await expect(importProfileFromJson(file, mockT)).rejects.toThrow('Invalid profile data:');
+      await expect(importProfileFromJson(file, mockT)).rejects.toThrow('Email');
     });
 
     it('should handle empty JSON file', async () => {
@@ -496,7 +534,7 @@ describe('persistence', () => {
       });
       (readFileAsText as any).mockResolvedValue(JSON.stringify(emptyProfile));
 
-      await expect(importProfileFromJson(file)).resolves.not.toThrow();
+      await expect(importProfileFromJson(file, mockT)).resolves.not.toThrow();
       expect(mockSetProfile).toHaveBeenCalledWith(
         expect.objectContaining({
           companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',

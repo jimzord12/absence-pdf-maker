@@ -8,22 +8,22 @@ import { downloadLeaveRequestPdf } from '../../services/pdf/pdf.service';
 import { exportProfileToJson, importProfileFromJson } from '../../services/persistence';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { useLocaleStore } from '../../state/locale.store';
+import { useTranslation } from 'react-i18next';
 
 /**
  * ReviewAndGenerate component displays a summary of the form data and provides
  * actions for exporting/importing profile data and generating the PDF document.
  */
 export const ReviewAndGenerate: React.FC = () => {
-  // Track if component has mounted to prevent animation replay on re-renders
+  const { t } = useTranslation() as { t: (key: string, options?: Record<string, unknown>) => string };
+
   const [hasAnimated, setHasAnimated] = useState(false);
 
-  // Set hasAnimated to true after animation completes (300ms + 100ms delay)
   useEffect(() => {
     const timer = setTimeout(() => setHasAnimated(true), 400);
     return () => clearTimeout(timer);
   }, []);
 
-  // Store selectors
   const profile = useLeaveRequestStore(state => state.profile);
   const leaveDraft = useLeaveRequestStore(state => state.leaveDraft);
   const signature = useLeaveRequestStore(state => state.signature);
@@ -50,10 +50,10 @@ export const ReviewAndGenerate: React.FC = () => {
 
   // Format leave type for display
   const leaveTypeLabels: Record<LeaveType, string> = {
-    annual: 'Annual Leave',
-    sick: 'Sick Leave',
-    unpaid: 'Unpaid Leave',
-    other: 'Other',
+    annual: t('forms.leave.types.annual'),
+    sick: t('forms.leave.types.sick'),
+    unpaid: t('forms.leave.types.unpaid'),
+    other: t('forms.leave.types.other'),
   };
 
   /**
@@ -61,8 +61,8 @@ export const ReviewAndGenerate: React.FC = () => {
    */
   const handleExport = () => {
     try {
-      exportProfileToJson();
-      showSuccess('Profile exported successfully!');
+      exportProfileToJson(t);
+      showSuccess(t('messages.persistence.exportSuccess'));
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to export profile';
       showError(message);
@@ -77,8 +77,7 @@ export const ReviewAndGenerate: React.FC = () => {
     if (!file) return;
 
     try {
-      await importProfileFromJson(file, () => {
-        // Force form reset after successful import to sync with updated store
+      await importProfileFromJson(file, t, () => {
         triggerForceFormReset();
       });
     } catch (error) {
@@ -86,7 +85,6 @@ export const ReviewAndGenerate: React.FC = () => {
       showError(message);
     }
 
-    // Reset the file input so the same file can be selected again
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -108,8 +106,8 @@ export const ReviewAndGenerate: React.FC = () => {
       position: '',
     });
     clearSignature();
-    triggerForceFormReset(); // Force form to reset
-    showSuccess('Profile cleared successfully!');
+    triggerForceFormReset();
+    showSuccess(t('common.cleared'));
   };
 
   /**
@@ -117,17 +115,14 @@ export const ReviewAndGenerate: React.FC = () => {
    * Shows a loading state for at least 2 seconds to ensure the spinner is visible.
    */
   const handleGeneratePdf = async () => {
-    // Validate all fields using the form's trigger function
-    // This ensures validation runs on all fields, even untouched ones
     if (triggerValidation) {
       const isValid = await triggerValidation();
       if (!isValid) {
-        showError('Please correct the validation errors before generating the PDF.');
+        showError(t('pdf.validationErrors'));
         return;
       }
     }
 
-    // Fallback validation if trigger is not available
     if (
       !profile.fullName ||
       !profile.fathersName ||
@@ -135,12 +130,12 @@ export const ReviewAndGenerate: React.FC = () => {
       !profile.identityNumber ||
       !profile.companyName
     ) {
-      showError('Please fill in all required personal and employment details before generating.');
+      showError(t('pdf.missingDetails'));
       return;
     }
 
     if (!leaveDraft.startDate || !leaveDraft.endDate) {
-      showError('Please select start and end dates for your leave.');
+      showError(t('pdf.missingDates'));
       return;
     }
 
@@ -166,10 +161,10 @@ export const ReviewAndGenerate: React.FC = () => {
         minLoadTime,
       ]);
 
-      showSuccess('PDF generated successfully!');
+      showSuccess(t('pdf.generationSuccess'));
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to generate PDF';
-      showError(message);
+      showError(t('pdf.generationFailed', { message }));
     } finally {
       setIsGeneratingPdf(false);
     }
@@ -184,43 +179,43 @@ export const ReviewAndGenerate: React.FC = () => {
       <section aria-labelledby="review-personal-details-heading">
         <Card>
           <h2 id="review-personal-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
-            Personal Details Summary
+            {t('forms.personal.heading')}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">Full Name</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('messages.fields.fullName')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">{profile.fullName || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">Father's Name</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('messages.fields.fathersName')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">{profile.fathersName || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">Email</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('messages.fields.email')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">{profile.email || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">Phone</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('messages.fields.phone')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">{profile.phone || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">Identity Number</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('messages.fields.identityNumber')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">{profile.identityNumber || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">Employee ID</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('messages.fields.employeeId')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">{profile.employeeId || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">Company Name</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('messages.fields.companyName')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">{profile.companyName || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">Department</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('messages.fields.department')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">{profile.department || '—'}</p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">Position</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('messages.fields.position')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">{profile.position || '—'}</p>
             </div>
           </div>
@@ -231,7 +226,7 @@ export const ReviewAndGenerate: React.FC = () => {
       <section aria-labelledby="review-leave-details-heading">
         <Card>
           <h2 id="review-leave-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
-            Leave Details Summary
+            {t('forms.leave.heading')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex-col justify-between">
@@ -242,7 +237,7 @@ export const ReviewAndGenerate: React.FC = () => {
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">Leave Allowance</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">{leaveDraft.leaveAllowance ? 'Yes' : 'No'}</p>
+              <p className="font-medium text-[color:var(--color-text-primary)]">{leaveDraft.leaveAllowance ? t('common.yes') : t('common.no')}</p>
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">Start Date</span>
@@ -268,23 +263,23 @@ export const ReviewAndGenerate: React.FC = () => {
               <h3 className="font-semibold mb-2 text-[color:var(--color-text-primary)]">Absence Days Calculation</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <span className="text-[color:var(--color-text-secondary)] block">Total Days</span>
+                  <span className="text-[color:var(--color-text-secondary)] block">{t('forms.leave.absence.totalDays')}</span>
                   <span className="font-medium text-lg text-[color:var(--color-text-primary)]">{absenceBreakdown.totalDays}</span>
                 </div>
                 <div>
-                  <span className="text-[color:var(--color-text-secondary)] block">Weekend Days</span>
+                  <span className="text-[color:var(--color-text-secondary)] block">{t('forms.leave.absence.weekendDays')}</span>
                   <span className="font-medium text-lg text-[color:var(--color-text-muted)]">
                     {absenceBreakdown.weekendDays}
                   </span>
                 </div>
                 <div>
-                  <span className="text-[color:var(--color-text-secondary)] block">Holiday Days</span>
+                  <span className="text-[color:var(--color-text-secondary)] block">{t('forms.leave.absence.holidayDays')}</span>
                   <span className="font-medium text-lg text-[color:var(--color-text-muted)]">
                     {absenceBreakdown.holidayDays}
                   </span>
                 </div>
                 <div>
-                  <span className="text-[color:var(--color-text-secondary)] block">Absence Days</span>
+                  <span className="text-[color:var(--color-text-secondary)] block">{t('forms.leave.absence.absenceDays')}</span>
                   <span className="font-medium text-lg text-[color:var(--color-info-700)] dark:text-[color:var(--color-info-300)]">
                     {absenceBreakdown.absenceDays}
                   </span>
@@ -295,19 +290,19 @@ export const ReviewAndGenerate: React.FC = () => {
 
           {/* Signature Status */}
           <div className="mt-4">
-            <span className="text-sm text-[color:var(--color-text-secondary)]">Signature</span>
-            <div className="flex items-center justify-between mt-1">
-              <p className="font-medium text-[color:var(--color-text-primary)]">
-                {signature.signatureDataUrl ? (
-                  <span className="text-[color:var(--color-success)]">✓ Signed</span>
-                ) : (
-                  <span className="text-[color:var(--color-error)]">✗ Not signed</span>
-                )}
-              </p>
-              <Button variant="secondary" size="sm" onClick={toggleSignatureModal}>
-                {signature.signatureDataUrl ? 'Update Signature' : 'Add Signature'}
-              </Button>
-            </div>
+            <span className="text-sm text-[color:var(--color-text-secondary)]">{t('forms.signature.label')}</span>
+             <div className="flex items-center justify-between mt-1">
+               <p className="font-medium text-[color:var(--color-text-primary)]">
+                 {signature.signatureDataUrl ? (
+                   <span className="text-[color:var(--color-success)]">{t('forms.signature.signed')}</span>
+                 ) : (
+                   <span className="text-[color:var(--color-error)]">{t('forms.signature.notSigned')}</span>
+                 )}
+               </p>
+               <Button variant="secondary" size="sm" onClick={toggleSignatureModal}>
+                 {signature.signatureDataUrl ? t('forms.signature.update') : t('forms.signature.add')}
+               </Button>
+             </div>
           </div>
         </Card>
       </section>
@@ -316,7 +311,7 @@ export const ReviewAndGenerate: React.FC = () => {
       <section aria-labelledby="review-actions-heading">
         <Card>
           <h2 id="review-actions-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
-            Actions
+            {t('forms.actions.heading')}
           </h2>
           <div className="space-y-4">
             {/* Profile Management */}
@@ -344,11 +339,11 @@ export const ReviewAndGenerate: React.FC = () => {
 
             {/* PDF Generation */}
             <div>
-              <Button
+               <Button
                 variant="primary"
                 onClick={handleGeneratePdf}
                 isLoading={isGeneratingPdf}
-                loadingText="Generating PDF..."
+                loadingText={t('pdf.loadingMessage')}
                 size="lg"
                 disabled={
                   !profile.fullName ||
@@ -364,12 +359,12 @@ export const ReviewAndGenerate: React.FC = () => {
                 }
                 className="w-full md:w-auto"
               >
-                Generate PDF
+                {t('pdf.clickToGenerate')}
               </Button>
               <p className="text-sm text-[color:var(--color-text-secondary)] mt-2">
                 {isGeneratingPdf
-                  ? 'Please wait while we generate your PDF document...'
-                  : 'Click to generate and download your leave request PDF'}
+                  ? t('pdf.loadingMessage')
+                  : t('pdf.clickToGenerate')}
               </p>
             </div>
           </div>

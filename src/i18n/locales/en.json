@@ -1,15 +1,95 @@
 {
-  "common": {},
+  "common": {
+    "cleared": "Profile cleared successfully!",
+    "yes": "Yes",
+    "no": "No"
+  },
   "forms": {
-    "personal": {},
+    "actions": {
+      "heading": "Actions"
+    },
+    "personal": {
+      "heading": "Personal Details Summary"
+    },
     "employment": {},
-    "leave": {},
+    "leave": {
+      "heading": "Leave Details Summary",
+      "types": {
+        "annual": "Annual Leave",
+        "sick": "Sick Leave",
+        "unpaid": "Unpaid Leave",
+        "other": "Other"
+      },
+      "absence": {
+        "calculationHeading": "Absence Days Calculation",
+        "totalDays": "Total Days",
+        "weekendDays": "Weekend Days",
+        "holidayDays": "Holiday Days",
+        "absenceDays": "Absence Days"
+      }
+    },
     "dateRange": {},
-    "signature": {},
+    "signature": {
+      "label": "Signature",
+      "signed": "Signed",
+      "notSigned": "Not signed",
+      "update": "Update Signature",
+      "add": "Add Signature"
+    },
+    "pdf": {}
+  },
+    "personal": {
+      "heading": "Personal Details Summary"
+    },
+    "employment": {},
+    "leave": {
+      "heading": "Leave Details Summary",
+      "types": {
+        "annual": "Annual Leave",
+        "sick": "Sick Leave",
+        "unpaid": "Unpaid Leave",
+        "other": "Other"
+      },
+      "absence": {
+        "calculationHeading": "Absence Days Calculation",
+        "totalDays": "Total Days",
+        "weekendDays": "Weekend Days",
+        "holidayDays": "Holiday Days",
+        "absenceDays": "Absence Days"
+      }
+    },
+    "dateRange": {},
+    "signature": {
+      "label": "Signature",
+      "signed": "Signed",
+      "notSigned": "Not signed",
+      "update": "Update Signature",
+      "add": "Add Signature"
+    },
     "pdf": {}
   },
   "validation": {},
-  "messages": {},
+  "messages": {
+    "persistence": {
+      "exportSuccess": "Profile exported successfully!",
+      "noDataToExport": "No profile data to export. Please fill in your details first.",
+      "exportFailed": "Failed to export profile: {{message}}",
+      "importSuccess": "Profile imported successfully!",
+      "importWithMissingFields": "Profile imported with missing fields: {{fields}}. Please fill in the missing information.",
+      "importFailed": "Failed to import profile: {{message}}",
+      "invalidJsonFormat": "Invalid JSON format. Please check the file and try again.",
+      "invalidProfileData": "Invalid profile data:\n{{errors}}"
+    },
+    "pdf": {
+      "generationSuccess": "PDF generated successfully!",
+      "validationErrors": "Please correct the validation errors before generating the PDF.",
+      "missingDetails": "Please fill in all required personal and employment details before generating.",
+      "missingDates": "Please select start and end dates for your leave.",
+      "generationFailed": "Failed to generate PDF: {{message}}",
+      "loadingMessage": "Please wait while we generate your PDF document...",
+      "clickToGenerate": "Click to generate and download your leave request PDF"
+    }
+  },
   "pdf": {
     "en": {},
     "gr": {}

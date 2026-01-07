@@ -3,43 +3,20 @@ import { ProfileImportSchema, type ProfileImportResult } from '../model/leaveReq
 import { downloadFile, readFileAsText } from '../../../shared/lib/file';
 import { showSuccess, showWarning } from '../../../shared/lib/toast';
 
-/**
- * Generates a field label for error messages
- */
-const getFieldLabel = (field: string): string => {
-  const labels: Record<string, string> = {
-    fullName: 'Full Name',
-    fathersName: "Father's Name",
-    email: 'Email',
-    phone: 'Phone',
-    identityNumber: 'Identity Number',
-    employeeId: 'Employee ID',
-    companyName: 'Company Name',
-    department: 'Department',
-    position: 'Position',
-  };
-  return labels[field] || field;
+const getFieldLabel = (t: (key: string, options?: Record<string, unknown>) => string, field: string): string => {
+  return t(`messages.fields.${field}`);
 };
 
-/**
- * Exports the current user profile and signature data from the Zustand store to a JSON file.
- * The downloaded file is named "user-details.json" and contains both profile fields
- * and optional signature data URL.
- *
- * @throws Error if the profile is empty or fails to export
- */
-export const exportProfileToJson = (): void => {
+export const exportProfileToJson = (t: (key: string, options?: Record<string, unknown>) => string): void => {
   const { profile, signature } = useLeaveRequestStore.getState();
 
-  // Check if profile has any meaningful data
   const hasData = Object.values(profile).some((value) => value && value !== '');
 
   if (!hasData) {
-    throw new Error('No profile data to export. Please fill in your details first.');
+    throw new Error(t('messages.persistence.noDataToExport'));
   }
 
   try {
-    // Combine profile and signature data for export
     const exportData = {
       ...profile,
       signatureDataUrl: signature.signatureDataUrl || undefined,
@@ -49,7 +26,7 @@ export const exportProfileToJson = (): void => {
     downloadFile('user-details.json', jsonContent, 'application/json');
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
-    throw new Error(`Failed to export profile: ${message}`);
+    throw new Error(t('messages.persistence.exportFailed', { message }));
   }
 };
 
@@ -73,6 +50,7 @@ export const exportProfileToJson = (): void => {
  */
 export const importProfileFromJson = async (
   file: File,
+  t: (key: string, options?: Record<string, unknown>) => string,
   onSuccess?: () => void
 ): Promise<void> => {
   try {
@@ -95,12 +73,11 @@ export const importProfileFromJson = async (
     const validationResult = ProfileImportSchema.safeParse(cleanedData);
 
     if (!validationResult.success) {
-      // Build a descriptive error message from Zod validation errors
       const errorMessages = validationResult.error.issues.map(
-        (issue) => `${getFieldLabel(issue.path[0] as string) || issue.path.join('.')}: ${issue.message}`
+        (issue) => `${getFieldLabel(t, issue.path[0] as string) || issue.path.join('.')}: ${issue.message}`
       );
       throw new Error(
-        `Invalid profile data:\n${errorMessages.join('\n')}`
+        t('messages.persistence.invalidProfileData', { errors: errorMessages.join('\n') })
       );
     }
 
@@ -122,7 +99,7 @@ export const importProfileFromJson = async (
 
     requiredFields.forEach(field => {
       if (!validData[field] || validData[field] === '') {
-        missingFields.push(getFieldLabel(field));
+        missingFields.push(getFieldLabel(t, field));
       }
     });
 
@@ -151,11 +128,11 @@ export const importProfileFromJson = async (
     // Show appropriate toast message
     if (missingFields.length > 0) {
       showWarning(
-        `Profile imported with missing fields: ${missingFields.join(', ')}. Please fill in the missing information.`,
+        t('messages.persistence.importWithMissingFields', { fields: missingFields.join(', ') }),
         { duration: 10000 }
       );
     } else {
-      showSuccess('Profile imported successfully!');
+      showSuccess(t('messages.persistence.importSuccess'));
     }
 
     // Call success callback if provided (e.g., to reset form)
@@ -164,9 +141,9 @@ export const importProfileFromJson = async (
     }
   } catch (error) {
     if (error instanceof SyntaxError) {
-      throw new Error('Invalid JSON format. Please check the file and try again.');
+      throw new Error(t('messages.persistence.invalidJsonFormat'));
     }
     const message = error instanceof Error ? error.message : 'Unknown error';
-    throw new Error(`Failed to import profile: ${message}`);
+    throw new Error(t('messages.persistence.importFailed', { message }));
   }
 };
