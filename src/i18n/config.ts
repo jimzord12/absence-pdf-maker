@@ -5,6 +5,7 @@ import { initReactI18next } from 'react-i18next';
  * i18next Configuration
  *
  * This config initializes react-i18next with English and Greek language support.
+ * Uses multiple namespaces (common, forms, validation, messages, pdf) for better organization.
  * Default language is 'gr' (matching locale.store.ts) with 'en' as fallback.
  * HTML escaping is disabled as React handles this.
  */
@@ -13,12 +14,22 @@ i18n.use(initReactI18next).init({
   fallbackLng: 'en',
   lng: 'gr',
   supportedLngs: ['en', 'gr'],
+  defaultNS: 'common',
+  ns: ['common', 'forms', 'validation', 'messages', 'pdf'],
   resources: {
     en: {
-      translation: {},
+      common: {},
+      forms: {},
+      validation: {},
+      messages: {},
+      pdf: {},
     },
     gr: {
-      translation: {},
+      common: {},
+      forms: {},
+      validation: {},
+      messages: {},
+      pdf: {},
     },
   },
   interpolation: {

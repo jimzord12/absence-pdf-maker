@@ -1,0 +1,17 @@
+{
+  "common": {},
+  "forms": {
+    "personal": {},
+    "employment": {},
+    "leave": {},
+    "dateRange": {},
+    "signature": {},
+    "pdf": {}
+  },
+  "validation": {},
+  "messages": {},
+  "pdf": {
+    "en": {},
+    "gr": {}
+  }
+}
