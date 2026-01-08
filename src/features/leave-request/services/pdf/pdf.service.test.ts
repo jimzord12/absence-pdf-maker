@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
 
-// Mock @react-pdf/renderer
 vi.mock('@react-pdf/renderer', () => ({
   pdf: vi.fn().mockReturnValue({
     toBlob: vi.fn().mockResolvedValue(new Blob(['PDF content'], { type: 'application/pdf' })),
@@ -19,7 +18,6 @@ vi.mock('@react-pdf/renderer', () => ({
   },
 }));
 
-// Mock URL and document for download tests
 const mockUrl = 'blob:test-url';
 const mockRevokeObjectURL = vi.fn();
 const mockClick = vi.fn();
@@ -30,24 +28,27 @@ const mockLink = {
   click: mockClick,
 };
 
-// Dynamic import of service functions after mocks are set up
 let generateLeaveRequestPdf: typeof import('./pdf.service').generateLeaveRequestPdf;
 let downloadLeaveRequestPdf: typeof import('./pdf.service').downloadLeaveRequestPdf;
+
+const mockT = vi.fn((key: string, options?: Record<string, unknown>) => {
+  if (options?.message) {
+    return `${key}: ${options.message}`;
+  }
+  return key;
+});
 
 describe('PDF Service', () => {
   beforeEach(async () => {
     vi.restoreAllMocks();
 
-    // Re-import to apply fresh mocks
     const serviceModule = await import('./pdf.service');
     generateLeaveRequestPdf = serviceModule.generateLeaveRequestPdf;
     downloadLeaveRequestPdf = serviceModule.downloadLeaveRequestPdf;
 
-    // Mock URL.createObjectURL
     global.URL.createObjectURL = vi.fn(() => mockUrl);
     global.URL.revokeObjectURL = mockRevokeObjectURL;
 
-    // Mock document.createElement and body methods
     Object.defineProperty(document, 'createElement', {
       value: vi.fn().mockReturnValue(mockLink),
       writable: true,
@@ -90,15 +91,15 @@ describe('PDF Service', () => {
 
   describe('generateLeaveRequestPdf', () => {
     it('should generate a PDF blob', async () => {
-      const blob = await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays);
+      const blob = await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT);
       expect(blob).toBeInstanceOf(Blob);
       expect(blob.type).toBe('application/pdf');
     });
   });
 
   describe('downloadLeaveRequestPdf', () => {
-    it('should generate and download the PDF with new filename format', async () => {
-      await downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays);
+    it('should generate and download PDF with new filename format', async () => {
+      await downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT);
 
       expect(global.URL.createObjectURL).toHaveBeenCalled();
       expect(document.createElement).toHaveBeenCalledWith('a');
@@ -119,7 +120,7 @@ describe('PDF Service', () => {
         },
       };
 
-      await downloadLeaveRequestPdf(requestWithSpecialChars, mockHolidays);
+      await downloadLeaveRequestPdf(requestWithSpecialChars, mockHolidays, mockT);
 
       expect(mockLink.download).toBe(
         'LeaveRequest_John-The-Rock-Doe_01-01-2025_05-01-2025_Acme-Corp-Inc.pdf'
@@ -136,7 +137,7 @@ describe('PDF Service', () => {
         },
       };
 
-      await downloadLeaveRequestPdf(requestWithGreek, mockHolidays);
+      await downloadLeaveRequestPdf(requestWithGreek, mockHolidays, mockT);
 
       expect(mockLink.download).toBe(
         'LeaveRequest_Γιάννης-Παπαδόπουλος_01-01-2025_05-01-2025_Ελληνική-Εταιρεία-ΑΕ.pdf'
@@ -153,7 +154,7 @@ describe('PDF Service', () => {
         },
       };
 
-      await downloadLeaveRequestPdf(requestWithMissingFields, mockHolidays);
+      await downloadLeaveRequestPdf(requestWithMissingFields, mockHolidays, mockT);
 
       expect(mockLink.download).toBe(
         'LeaveRequest_unknown_01-01-2025_05-01-2025_unknown.pdf'
@@ -167,7 +168,7 @@ describe('PDF Service', () => {
         endDate: new Date('2025-01-15'),
       };
 
-      await downloadLeaveRequestPdf(requestWithDifferentDates, mockHolidays);
+      await downloadLeaveRequestPdf(requestWithDifferentDates, mockHolidays, mockT);
 
       expect(mockLink.download).toBe(
         'LeaveRequest_John-Doe_31-12-2024_15-01-2025_Acme-Corp.pdf'
@@ -181,7 +182,7 @@ describe('PDF Service', () => {
         endDate: new Date('2025-12-31'),
       };
 
-      await downloadLeaveRequestPdf(requestWithEdgeDates, mockHolidays);
+      await downloadLeaveRequestPdf(requestWithEdgeDates, mockHolidays, mockT);
 
       expect(mockLink.download).toBe(
         'LeaveRequest_John-Doe_09-01-2025_31-12-2025_Acme-Corp.pdf'
@@ -189,16 +190,14 @@ describe('PDF Service', () => {
     });
 
     it('should handle errors gracefully', async () => {
-      // Mock failure
       const { pdf } = await import('@react-pdf/renderer');
       vi.mocked(pdf).mockImplementationOnce(() => {
         throw new Error('Generation failed');
       });
 
-      await expect(downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays)).rejects.toThrow(
-        'Failed to download PDF: Generation failed'
+      await expect(downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT)).rejects.toThrow(
+        'messages.pdf.generationFailed: Generation failed'
       );
     });
   });
 });
-

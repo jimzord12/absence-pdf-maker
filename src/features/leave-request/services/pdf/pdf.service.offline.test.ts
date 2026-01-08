@@ -16,6 +16,13 @@ let mockToBlobCalls: any[] = [];
 let mockPdfCalls: any[] = [];
 let mockFontRegistrations: any[] = [];
 
+const mockT = vi.fn((key: string, options?: Record<string, unknown>) => {
+  if (options?.message) {
+    return `${key}: ${options.message}`;
+  }
+  return key;
+});
+
 vi.mock('@react-pdf/renderer', () => ({
   pdf: vi.fn((element) => {
     mockPdfCalls.push(element);
@@ -36,7 +43,6 @@ vi.mock('@react-pdf/renderer', () => ({
   Image: () => null,
   Font: {
     register: vi.fn((fontConfig) => {
-      // Track font registration calls
       mockFontRegistrations.push(fontConfig);
       return fontConfig;
     }),
@@ -55,14 +61,11 @@ describe('Offline PDF Generation', () => {
     mockFetchCalls = [];
     mockFontRegistrations = [];
 
-    // Mock fetch to track all network requests
     global.fetch = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
       mockFetchCalls.push({ input, init, timestamp: Date.now() });
-      // Simulate offline: reject all fetch calls
       return Promise.reject(new Error('Offline: Network request failed'));
     }) as any;
 
-    // Mock URL and document for download tests
     global.URL.createObjectURL = vi.fn(() => 'blob:test-url');
     global.URL.revokeObjectURL = vi.fn();
     Object.defineProperty(document, 'createElement', {
@@ -81,7 +84,6 @@ describe('Offline PDF Generation', () => {
       writable: true,
     });
 
-    // Import component to trigger Font.register
     await import('./LeaveRequestPdf');
   });
 
@@ -121,11 +123,9 @@ describe('Offline PDF Generation', () => {
       expect(fontRegistration).toBeDefined();
       expect(fontRegistration.family).toBe('Roboto');
 
-      // Font.register can be called multiple times - check if fonts array exists
       if (fontRegistration.fonts) {
         expect(Array.isArray(fontRegistration.fonts)).toBe(true);
 
-        // Check that all font sources are local paths, not URLs
         fontRegistration.fonts.forEach((font: any) => {
           expect(font.src).toMatch(/^\/fonts\//);
           expect(font.src).not.toMatch(/^https?:\/\//);
@@ -139,17 +139,13 @@ describe('Offline PDF Generation', () => {
       if (mockFontRegistrations.length > 0) {
         expect(mockFontRegistrations[0].family).toBe('Roboto');
       } else {
-        // If mock didn't capture the registration, skip this test
         expect(true).toBe(true);
       }
     });
 
     it('should use local font paths', async () => {
       if (mockFontRegistrations.length > 0 && mockFontRegistrations[0].fonts) {
-        // Verify fonts are registered with Roboto family
         expect(mockFontRegistrations[0].family).toBe('Roboto');
-        // The actual path verification happens during PDF generation
-        // when @react-pdf/renderer loads fonts
       } else {
         expect(true).toBe(true);
       }
@@ -160,34 +156,27 @@ describe('Offline PDF Generation', () => {
     it('should not make any network requests during PDF generation', async () => {
       const { generateLeaveRequestPdf } = await import('./pdf.service');
 
-      // Reset fetch call counter
       mockFetchCalls = [];
 
-      // Generate PDF
-      await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays);
+      await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT);
 
-      // Verify no network requests were made
       expect(mockFetchCalls.length).toBe(0);
     });
 
     it('should not make network requests during PDF download', async () => {
       const { downloadLeaveRequestPdf } = await import('./pdf.service');
 
-      // Reset fetch call counter
       mockFetchCalls = [];
 
-      // Download PDF
-      await downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays);
+      await downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT);
 
-      // Verify no network requests were made
       expect(mockFetchCalls.length).toBe(0);
     });
 
     it('should work even when fetch is blocked (offline)', async () => {
       const { generateLeaveRequestPdf } = await import('./pdf.service');
 
-      // Generate PDF with mocked fetch that rejects
-      const blob = await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays);
+      const blob = await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT);
 
       expect(blob).toBeInstanceOf(Blob);
       expect(blob.type).toBe('application/pdf');
@@ -196,12 +185,10 @@ describe('Offline PDF Generation', () => {
     it('should not fetch fonts from CDN', async () => {
       const { generateLeaveRequestPdf } = await import('./pdf.service');
 
-      // Reset fetch call counter
       mockFetchCalls = [];
 
-      await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays);
+      await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT);
 
-      // Check that no fetch calls were made to font CDNs
       mockFetchCalls.forEach((call) => {
         if (typeof call.input === 'string') {
           expect(call.input).not.toMatch(/googleapis\.com/);
@@ -215,7 +202,7 @@ describe('Offline PDF Generation', () => {
     it('should generate PDF successfully in offline mode', async () => {
       const { generateLeaveRequestPdf } = await import('./pdf.service');
 
-      const blob = await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays);
+      const blob = await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT);
 
       expect(blob).toBeInstanceOf(Blob);
       expect(blob.type).toBe('application/pdf');
@@ -225,17 +212,15 @@ describe('Offline PDF Generation', () => {
     it('should download PDF successfully in offline mode', async () => {
       const { downloadLeaveRequestPdf } = await import('./pdf.service');
 
-      // Should not throw even when offline
       await expect(
-        downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays)
+        downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT)
       ).resolves.not.toThrow();
     });
 
     it('should handle offline errors gracefully', async () => {
       const { generateLeaveRequestPdf } = await import('./pdf.service');
 
-      // Even with fetch blocked, should work
-      const blob = await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays);
+      const blob = await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT);
 
       expect(blob).toBeDefined();
       expect(blob.size).toBeGreaterThan(0);
@@ -244,11 +229,10 @@ describe('Offline PDF Generation', () => {
     it('should work with multiple sequential PDF generations offline', async () => {
       const { generateLeaveRequestPdf } = await import('./pdf.service');
 
-      // Generate multiple PDFs
       const blobs = await Promise.all([
-        generateLeaveRequestPdf(mockLeaveRequest, mockHolidays),
-        generateLeaveRequestPdf(mockLeaveRequest, mockHolidays),
-        generateLeaveRequestPdf(mockLeaveRequest, mockHolidays),
+        generateLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT),
+        generateLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT),
+        generateLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT),
       ]);
 
       expect(blobs).toHaveLength(3);
@@ -257,7 +241,6 @@ describe('Offline PDF Generation', () => {
         expect(blob.type).toBe('application/pdf');
       });
 
-      // Verify no network requests across all generations
       expect(mockFetchCalls.length).toBe(0);
     });
   });
@@ -276,12 +259,11 @@ describe('Offline PDF Generation', () => {
         reason: 'Προσωπικοί λόγοι',
       };
 
-      const blob = await generateLeaveRequestPdf(dataWithGreek, mockHolidays);
+      const blob = await generateLeaveRequestPdf(dataWithGreek, mockHolidays, mockT);
 
       expect(blob).toBeInstanceOf(Blob);
       expect(blob.type).toBe('application/pdf');
 
-      // Verify Greek text is included in the PDF generation
       expect(mockPdfCalls.length).toBeGreaterThan(0);
     });
 
@@ -299,7 +281,7 @@ describe('Offline PDF Generation', () => {
         reason: 'Family vacation / Οικογενειακές διακοπές',
       };
 
-      const blob = await generateLeaveRequestPdf(dataMixed, mockHolidays);
+      const blob = await generateLeaveRequestPdf(dataMixed, mockHolidays, mockT);
 
       expect(blob).toBeInstanceOf(Blob);
       expect(blob.type).toBe('application/pdf');
@@ -316,8 +298,8 @@ describe('Offline PDF Generation', () => {
         endDate: null,
       } as any;
 
-      await expect(generateLeaveRequestPdf(incompleteData, mockHolidays)).rejects.toThrow(
-        'Start date and end date are required for PDF generation'
+      await expect(generateLeaveRequestPdf(incompleteData, mockHolidays, mockT)).rejects.toThrow(
+        'validation.datesRequired'
       );
     });
 
@@ -325,13 +307,12 @@ describe('Offline PDF Generation', () => {
       const { downloadLeaveRequestPdf } = await import('./pdf.service');
       const { pdf } = await import('@react-pdf/renderer');
 
-      // Mock PDF generation to fail
       vi.mocked(pdf).mockImplementationOnce(() => {
         throw new Error('PDF generation failed');
       });
 
-      await expect(downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays)).rejects.toThrow(
-        'Failed to download PDF: PDF generation failed'
+      await expect(downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT)).rejects.toThrow(
+        'messages.pdf.generationFailed: PDF generation failed'
       );
     });
 
@@ -339,13 +320,12 @@ describe('Offline PDF Generation', () => {
       const { downloadLeaveRequestPdf } = await import('./pdf.service');
       const { pdf } = await import('@react-pdf/renderer');
 
-      // Mock PDF generation to fail with unknown error
       vi.mocked(pdf).mockImplementationOnce(() => {
         throw new Error();
       });
 
-      await expect(downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays)).rejects.toThrow(
-        'Failed to download PDF:'
+      await expect(downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT)).rejects.toThrow(
+        'messages.pdf.generationFailed: '
       );
     });
   });
@@ -355,36 +335,27 @@ describe('Offline PDF Generation', () => {
       if (mockFontRegistrations.length > 0) {
         expect(mockFontRegistrations[0].family).toBe('Roboto');
       } else {
-        // If mock didn't capture the registration, skip this test
         expect(true).toBe(true);
       }
 
-      // The actual file verification is done by checking the implementation
-      // and ensuring fonts are bundled in public/fonts/
+      expect.assertions(1);
     });
 
     it('should not reference external font URLs in registration', async () => {
       if (mockFontRegistrations.length > 0 && mockFontRegistrations[0].fonts) {
-        // Verify fonts are registered with Roboto family
         expect(mockFontRegistrations[0].family).toBe('Roboto');
       } else {
-        // If mock didn't capture the registration, skip this test
         expect(true).toBe(true);
       }
 
-      // The actual URL verification happens during PDF generation
-      // No network requests should be made
+      expect.assertions(1);
     });
   });
 
   describe('Integration with Vite Config', () => {
     it('should have font files configured in PWA precache', () => {
-      // This is more of a build-time verification
-      // We verify that the implementation uses the correct pattern
       expect.assertions(1);
-      // The actual verification is done by checking the vite.config.ts
-      // which should include 'fonts/*.ttf' in includeAssets
-      expect(true).toBe(true); // Placeholder for manual verification
+      expect(true).toBe(true);
     });
   });
 
@@ -392,15 +363,12 @@ describe('Offline PDF Generation', () => {
     it('should complete full PDF generation workflow offline', async () => {
       const { downloadLeaveRequestPdf } = await import('./pdf.service');
 
-      // Simulate complete offline scenario
       mockFetchCalls = [];
 
-      await downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays);
+      await downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT);
 
-      // Verify no network requests
       expect(mockFetchCalls.length).toBe(0);
 
-      // Verify download was triggered
       expect(global.URL.createObjectURL).toHaveBeenCalled();
       expect(document.createElement).toHaveBeenCalledWith('a');
     });
@@ -408,19 +376,15 @@ describe('Offline PDF Generation', () => {
     it('should generate consistent PDFs online and offline', async () => {
       const { generateLeaveRequestPdf } = await import('./pdf.service');
 
-      // Generate first PDF
-      const blob1 = await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays);
+      const blob1 = await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT);
 
-      // Generate second PDF (simulating offline)
       mockFetchCalls = [];
-      const blob2 = await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays);
+      const blob2 = await generateLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT);
 
-      // Both should be valid PDFs
       expect(blob1).toBeInstanceOf(Blob);
       expect(blob2).toBeInstanceOf(Blob);
       expect(blob1.type).toBe(blob2.type);
 
-      // No network requests in second generation
       expect(mockFetchCalls.length).toBe(0);
     });
   });

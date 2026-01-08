@@ -6,6 +6,24 @@
     "loading": "Φόρτωση...",
     "required": "Απαιτείται",
     "optional": "Προαιρετικό",
+    "buttons": {
+      "reset": "Επαναφορά Φόρμας",
+      "installApp": "Εγκατάσταση Εφαρμογής",
+      "exportProfile": "Εξαγωγή Προφίλ",
+      "importProfile": "Εισαγωγή Προφίλ",
+      "clearProfile": "Καθαρισμός Προφίλ",
+      "generatePdf": "Δημιουργία PDF"
+    },
+    "status": {
+      "signed": "Έχει υπογραφεί",
+      "notSigned": "Δεν έχει υπογραφεί",
+      "update": "Ενημέρωση Υπογραφής",
+      "add": "Προσθήκη Υπογραφής"
+    },
+    "page": {
+      "title": "Αίτηση Άδειας",
+      "subtitle": "Υποβάλετε την αίτησή σας για άδεια και δημιουργήστε ένα έγγραφο PDF"
+    },
     "labels": {
       "selectDateRange": "Επιλέξτε Εμβέλεια Ημερομηνιών",
       "clearDates": "Καθαρισμός Ημερομηνιών",
@@ -17,6 +35,15 @@
       "holidays": "Αργίες",
       "weekends": "Σαββατοκύριακα",
       "absenceDays": "Ημέρες Απουσίας"
+    },
+    "aria": {
+      "modal": {
+        "closeBackdrop": "Κλείσιμο παραθύρου",
+        "closeButton": "Κλείσιμο παραθύρου"
+      },
+      "alert": {
+        "dismiss": "Απόρριψη"
+      }
     }
   },
   "forms": {
@@ -24,7 +51,12 @@
       "heading": "Ενέργειες",
       "exportProfile": "Εξαγωγή Προφίλ",
       "importProfile": "Εισαγωγή Προφίλ",
-      "clearProfile": "Καθαρισμός Προφίλ"
+      "clearProfile": "Καθαρισμός Προφίλ",
+      "importProfileAria": "Εισαγωγή προφίλ από αρχείο JSON",
+      "pdfLanguage": "Γλώσσα PDF"
+    },
+    "review": {
+      "heading": "Προεπισκόπηση και Δημιουργία"
     },
     "personal": {
       "heading": "Φόρμα Προσωπικών Στοιχείων",

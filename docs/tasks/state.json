@@ -44,9 +44,9 @@
       "location": "archive"
     },
     "121-impl-bilingual-pdf": {
-      "state": "completed",
-      "lastUpdated": "2026-01-08T13:09:50.512Z",
-      "location": "active",
+      "state": "committed",
+      "lastUpdated": "2026-01-08T14:07:38.650Z",
+      "location": "archive",
       "blockedBy": []
     },
     "121-refactor-pdf-component-for-bilingual": {

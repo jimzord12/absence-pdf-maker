@@ -24,15 +24,17 @@ const sanitizeForFilename = (str: string): string => {
  *
  * @param data - The leave request data
  * @param holidays - Set of holiday dates
+ * @param t - Translation function for error messages
  * @returns Promise<Blob>
  */
 export const generateLeaveRequestPdf = async (
   data: LeaveRequest,
-  holidays: Set<string>
+  holidays: Set<string>,
+  t: (key: string, options?: Record<string, unknown>) => string
 ): Promise<Blob> => {
   // Validate dates before generating PDF
   if (!data.startDate || !data.endDate) {
-    throw new Error('Start date and end date are required for PDF generation');
+    throw new Error(t('validation.datesRequired'));
   }
 
   const absenceBreakdown = calculateAbsenceDays(data.startDate, data.endDate, holidays);
@@ -55,15 +57,17 @@ export const generateLeaveRequestPdf = async (
  *
  * @param data - The leave request data
  * @param holidays - Set of holiday dates
+ * @param t - Translation function for error messages
  * @returns Promise<void>
  * @throws Error if PDF generation or download fails
  */
 export const downloadLeaveRequestPdf = async (
   data: LeaveRequest,
-  holidays: Set<string>
+  holidays: Set<string>,
+  t: (key: string, options?: Record<string, unknown>) => string
 ): Promise<void> => {
   try {
-    const blob = await generateLeaveRequestPdf(data, holidays);
+    const blob = await generateLeaveRequestPdf(data, holidays, t);
 
     // Extract and sanitize employee full name
     const sanitizedName = sanitizeForFilename(data.profile.fullName || 'unknown');
@@ -93,8 +97,8 @@ export const downloadLeaveRequestPdf = async (
     URL.revokeObjectURL(url);
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(`Failed to download PDF: ${error.message}`);
+      throw new Error(t('messages.pdf.generationFailed', { message: error.message }));
     }
-    throw new Error('Failed to download PDF: Unknown error');
+    throw new Error(t('messages.pdf.generationFailed', { message: 'Unknown error' }));
   }
 };

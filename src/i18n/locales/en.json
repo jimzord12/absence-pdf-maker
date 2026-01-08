@@ -6,6 +6,24 @@
     "loading": "Loading...",
     "required": "Required",
     "optional": "Optional",
+    "buttons": {
+      "reset": "Reset Form",
+      "installApp": "Install App",
+      "exportProfile": "Export Profile",
+      "importProfile": "Import Profile",
+      "clearProfile": "Clear Profile",
+      "generatePdf": "Generate PDF"
+    },
+    "status": {
+      "signed": "Signed",
+      "notSigned": "Not signed",
+      "update": "Update Signature",
+      "add": "Add Signature"
+    },
+    "page": {
+      "title": "Leave Request",
+      "subtitle": "Submit your leave request and generate a PDF document"
+    },
     "labels": {
       "selectDateRange": "Select Date Range",
       "clearDates": "Clear Dates",
@@ -17,6 +35,15 @@
       "holidays": "Holidays",
       "weekends": "Weekends",
       "absenceDays": "Absence Days"
+    },
+    "aria": {
+      "modal": {
+        "closeBackdrop": "Close modal",
+        "closeButton": "Close modal"
+      },
+      "alert": {
+        "dismiss": "Dismiss"
+      }
     }
   },
   "forms": {
@@ -24,7 +51,12 @@
       "heading": "Actions",
       "exportProfile": "Export Profile",
       "importProfile": "Import Profile",
-      "clearProfile": "Clear Profile"
+      "clearProfile": "Clear Profile",
+      "importProfileAria": "Import profile from JSON file",
+      "pdfLanguage": "PDF Language"
+    },
+    "review": {
+      "heading": "Review and Generate"
     },
     "personal": {
       "heading": "Personal Details Form",
