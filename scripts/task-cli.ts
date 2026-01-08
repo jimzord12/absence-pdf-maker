@@ -138,7 +138,6 @@ function findTaskFile(taskId: string): { path: string; location: Location } | nu
 }
 
 function parseTaskFile(content: string): ParsedTaskFile {
-  const lines = content.split('\n');
   const result: ParsedTaskFile = {
     id: '',
     priority: 'medium',
@@ -325,14 +324,26 @@ function handleState(taskId: string, newState: string): void {
 
 function handleShow(taskId: string): void {
   const state = loadState();
-  const taskEntry = state.tasks[taskId];
+  let taskEntry = state.tasks[taskId];
 
-  if (!taskEntry) {
-    console.error(`Task not found in state.json: ${taskId}`);
+  // If not in state.json, try to find the task file directly
+  const taskFile = findTaskFile(taskId);
+
+  if (!taskEntry && !taskFile) {
+    console.error(`Task not found: ${taskId}`);
+    console.error(`Searched in state.json and docs/tasks/{backlog,active,archive}/`);
     process.exit(1);
   }
 
-  const taskFile = findTaskFile(taskId);
+  // If task exists as file but not in state.json, infer state from location
+  if (!taskEntry && taskFile) {
+    const inferredState: TaskState = taskFile.location === 'archive' ? 'committed' : 'not_started';
+    taskEntry = {
+      state: inferredState,
+      lastUpdated: new Date().toISOString(),
+      location: taskFile.location,
+    };
+  }
 
   console.log(`\n${'─'.repeat(60)}`);
   console.log(`Task: ${taskId}`);
@@ -395,11 +406,32 @@ function handleList(options: Record<string, string>): void {
   const filterLocation = options.location as Location | undefined;
   const limit = parseInt(options.limit ?? '20', 10);
 
+  // Start with tasks from state.json
   let tasks = Object.entries(state.tasks).map(([id, entry]) => ({
     id,
     ...entry,
     location: entry.location ?? STATE_TO_LOCATION[entry.state],
   }));
+
+  // Also scan backlog and active folders for tasks not in state.json
+  for (const loc of ['backlog', 'active'] as const) {
+    const dir = path.join(TASKS_DIR, loc);
+    if (fs.existsSync(dir)) {
+      const files = fs.readdirSync(dir).filter(f => f.endsWith('.md'));
+      for (const file of files) {
+        const taskId = file.replace('.md', '');
+        // Only add if not already in tasks list
+        if (!tasks.some(t => t.id === taskId)) {
+          tasks.push({
+            id: taskId,
+            state: loc === 'backlog' ? 'not_started' : 'implemented',
+            location: loc,
+            lastUpdated: new Date().toISOString(),
+          });
+        }
+      }
+    }
+  }
 
   // Apply filters
   if (filterState) {
@@ -551,8 +583,8 @@ function handleArchive(taskId: string): void {
 function handleNext(): void {
   const state = loadState();
 
-  // Get all active/not_started tasks
-  const candidates = Object.entries(state.tasks)
+  // Get all active/not_started tasks from state.json
+  let candidates = Object.entries(state.tasks)
     .map(([id, entry]) => ({
       id,
       ...entry,
@@ -560,6 +592,28 @@ function handleNext(): void {
     }))
     .filter(t => t.state !== 'committed' && t.state !== 'cancelled')
     .filter(t => t.location !== 'archive');
+
+  // If no candidates in state.json, scan backlog folder for task files
+  if (candidates.length === 0) {
+    const backlogDir = path.join(TASKS_DIR, 'backlog');
+    if (fs.existsSync(backlogDir)) {
+      const backlogFiles = fs.readdirSync(backlogDir).filter(f => f.endsWith('.md'));
+      const backlogTasks = backlogFiles.map(f => {
+        const taskId = f.replace('.md', '');
+        return {
+          id: taskId,
+          state: 'not_started' as TaskState,
+          location: 'backlog' as Location,
+          lastUpdated: new Date().toISOString(),
+        };
+      });
+
+      if (backlogTasks.length > 0) {
+        // Add discovered backlog tasks to candidates
+        candidates = backlogTasks;
+      }
+    }
+  }
 
   if (candidates.length === 0) {
     console.log('\n🎉 No actionable tasks! All tasks are completed or archived.\n');
@@ -590,8 +644,29 @@ function handleNext(): void {
 
     // Check if all blocking tasks are completed/committed
     return task.blockedBy.every(blockerId => {
-      const blocker = state.tasks[blockerId];
-      return blocker && (blocker.state === 'committed' || blocker.state === 'completed');
+      // Normalize the blocker ID (remove 'task-' prefix if present)
+      const normalizedId = blockerId.replace(/^task-/, '');
+
+      // First check state.json
+      const blocker = state.tasks[blockerId] || state.tasks[normalizedId];
+      if (blocker && (blocker.state === 'committed' || blocker.state === 'completed')) {
+        return true;
+      }
+
+      // Then check if the blocker is in the archive folder (implicitly completed)
+      const archiveDir = path.join(TASKS_DIR, 'archive');
+      if (fs.existsSync(archiveDir)) {
+        const archiveFiles = fs.readdirSync(archiveDir);
+        // Check both original and normalized ID
+        if (
+          archiveFiles.includes(`${blockerId}.md`) ||
+          archiveFiles.includes(`${normalizedId}.md`)
+        ) {
+          return true;
+        }
+      }
+
+      return false;
     });
   });
 
