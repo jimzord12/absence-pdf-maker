@@ -50,9 +50,9 @@
       "blockedBy": []
     },
     "121-refactor-pdf-component-for-bilingual": {
-      "state": "completed",
-      "lastUpdated": "2026-01-08T13:20:31.144Z",
-      "location": "active"
+      "state": "committed",
+      "lastUpdated": "2026-01-08T14:08:04.305Z",
+      "location": "archive"
     },
     "119-update-pdf-service-messages-plan": {
       "state": "not_started",
