@@ -34,9 +34,9 @@
       "location": "active"
     },
     "120-update-shared-ui-components": {
-      "state": "completed",
-      "lastUpdated": "2026-01-08T12:49:12.430Z",
-      "location": "active"
+      "state": "committed",
+      "lastUpdated": "2026-01-08T14:05:55.510Z",
+      "location": "archive"
     },
     "112-migrate-leave-details-section": {
       "state": "completed",

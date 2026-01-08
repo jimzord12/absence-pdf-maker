@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Spinner } from '../Spinner';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'danger';
@@ -25,6 +26,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
+    const { t } = useTranslation();
     const baseStyles =
       'inline-flex items-center justify-center font-medium rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-offset-[color:var(--color-background)]';
 
@@ -55,7 +57,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {isLoading ? (
           <>
             <Spinner size={spinnerSize} className="mr-2" />
-            {loadingText || 'Loading...'}
+            {loadingText || t('loading')}
           </>
         ) : (
           children

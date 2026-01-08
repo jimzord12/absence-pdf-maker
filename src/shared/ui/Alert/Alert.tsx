@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export type AlertVariant = 'info' | 'success' | 'warning' | 'error';
 
@@ -8,6 +9,7 @@ export interface AlertProps {
   children: React.ReactNode;
   className?: string;
   onDismiss?: () => void;
+  dismissAria?: string;
 }
 
 const icons = {
@@ -50,7 +52,8 @@ const icons = {
 } as const;
 
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(
-  ({ variant = 'info', title, children, className = '', onDismiss }, ref) => {
+  ({ variant = 'info', title, children, className = '', onDismiss, dismissAria }, ref) => {
+    const { t } = useTranslation();
     const variantStyles = {
       info: 'bg-[color:var(--color-info-bg)] border-[color:var(--color-info)] text-[color:var(--color-info)]',
       success: 'bg-[color:var(--color-success-bg)] border-[color:var(--color-success)] text-[color:var(--color-success)]',
@@ -84,7 +87,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(
           <button
             onClick={onDismiss}
             className="ml-3 flex-shrink-0 text-current opacity-60 hover:opacity-100 transition-opacity"
-            aria-label="Dismiss"
+            aria-label={dismissAria || t('aria.alert.dismiss')}
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path

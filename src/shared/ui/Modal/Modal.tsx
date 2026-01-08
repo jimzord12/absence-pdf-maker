@@ -1,4 +1,5 @@
 import React, { useEffect, useId, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface ModalProps {
   isOpen: boolean;
@@ -7,6 +8,8 @@ export interface ModalProps {
   children: React.ReactNode;
   closeOnBackdropClick?: boolean;
   showCloseButton?: boolean;
+  closeBackdropAria?: string;
+  closeButtonAria?: string;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -16,7 +19,10 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   closeOnBackdropClick = true,
   showCloseButton = true,
+  closeBackdropAria,
+  closeButtonAria,
 }) => {
+  const { t } = useTranslation();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
@@ -88,7 +94,7 @@ export const Modal: React.FC<ModalProps> = ({
       }}
       role="button"
       tabIndex={0}
-      aria-label="Close modal backdrop"
+      aria-label={closeBackdropAria || t('aria.modal.closeBackdrop')}
     >
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
       <div
@@ -111,7 +117,7 @@ export const Modal: React.FC<ModalProps> = ({
                 ref={closeButtonRef}
                 onClick={onClose}
                 className="p-2 text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text-primary)] transition-colors rounded-full hover:bg-[color:var(--color-surface-hover)] focus:outline-none focus:ring-2 focus:ring-[color:var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[color:var(--color-surface)]"
-                aria-label="Close modal"
+                aria-label={closeButtonAria || t('aria.modal.closeButton')}
               >
                 <svg
                   className="w-5 h-5"
