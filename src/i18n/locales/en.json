@@ -166,7 +166,8 @@
       "missingDates": "Please select start and end dates for your leave.",
       "generationFailed": "Failed to generate PDF: {{message}}",
       "loadingMessage": "Please wait while we generate your PDF document...",
-      "clickToGenerate": "Click to generate and download your leave request PDF"
+      "clickToGenerate": "Click to generate and download your leave request PDF",
+      "unknownError": "Unknown error"
     },
     "fields": {
       "fullName": "Full Name",

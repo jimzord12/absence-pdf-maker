@@ -1,8 +1,10 @@
 import { format } from 'date-fns';
 import { pdf, type DocumentProps } from '@react-pdf/renderer';
 import React from 'react';
+
 import type { LeaveRequest } from '../../model/leaveRequest.types';
 import { calculateAbsenceDays } from '../absenceDays';
+import { usePdfLanguageStore } from '../../state/pdfLanguage.store';
 import { LeaveRequestPdf } from './LeaveRequestPdf';
 
 /**
@@ -39,12 +41,15 @@ export const generateLeaveRequestPdf = async (
 
   const absenceBreakdown = calculateAbsenceDays(data.startDate, data.endDate, holidays);
 
+  const pdfLanguage = usePdfLanguageStore.getState().pdfLanguage;
+
   // Create PDF document
   const pdfElement = React.createElement(
     LeaveRequestPdf,
     {
       data,
       absenceDays: absenceBreakdown.absenceDays,
+      pdfLanguage,
     }
   );
   const blob = await pdf(pdfElement as React.ReactElement<DocumentProps>).toBlob();
@@ -99,6 +104,6 @@ export const downloadLeaveRequestPdf = async (
     if (error instanceof Error) {
       throw new Error(t('messages.pdf.generationFailed', { message: error.message }));
     }
-    throw new Error(t('messages.pdf.generationFailed', { message: 'Unknown error' }));
+    throw new Error(t('messages.pdf.generationFailed', { message: t('messages.pdf.unknownError') }));
   }
 };

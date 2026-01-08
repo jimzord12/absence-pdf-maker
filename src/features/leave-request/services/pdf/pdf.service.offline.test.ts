@@ -321,11 +321,11 @@ describe('Offline PDF Generation', () => {
       const { pdf } = await import('@react-pdf/renderer');
 
       vi.mocked(pdf).mockImplementationOnce(() => {
-        throw new Error();
+        throw 'not an error';
       });
 
       await expect(downloadLeaveRequestPdf(mockLeaveRequest, mockHolidays, mockT)).rejects.toThrow(
-        'messages.pdf.generationFailed: '
+        'messages.pdf.generationFailed: messages.pdf.unknownError'
       );
     });
   });
