@@ -35,36 +35,12 @@ not_started → implemented → unit_tested → review_pass → completed → co
 - If `$ARGUMENTS` contains a task ID:
   - Run: `npm run task show <taskId>` instead
 - The command outputs: identifier, description, constraints, acceptanceCriteria, currentState, location, nextSteps
-- **Only pick ONE task** - never process multiple tasks in one execution
-- If `currentState` is `review_fail`, the task needs fixes based on previous review feedback
 
-### Step 2: Confirm with User
-
-**STOP and display task summary for User confirmation:**
-
-```
-Task: {identifier}
-Priority: {priority}
-Current State: {currentState}
-Location: {location}
-
-Description:
-{description}
-
-Acceptance Criteria:
-{acceptanceCriteria}
-
-Next Steps:
-{nextSteps}
-
-Proceed with implementation? (y/n)
-```
-
-### Step 3: Initialize Planning
+### Step 2: Initialize Planning
 
 - Use the `manage_todo_list` tool to create a structured plan
 - Break down the task into small, actionable steps based on acceptance criteria
-- Include steps for: research, implementation, testing, linting, type-checking
+- Include steps for: research, implementation, testing, reviewing, linting, type-checking
 - Mark the first step as `in-progress`
 
 ### Step 4: Execute Implementation

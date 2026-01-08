@@ -8,47 +8,108 @@ subtask: false
 
 Commit all changes grouped by their corresponding Tasks. Follow these steps:
 
-1. **Check State Cleanup**: Run `tasks_checkArchivedState` tool to verify there are no tasks with `"location": "archive"` in `docs/tasks/state.json`. If archived tasks exist, they **should be removed** before proceeding (state.json should only track non-archived tasks).
+## Step 1: Get Completed Tasks
 
-2. **Read Task State**: Load `docs/tasks/state.json` to see which tasks are in the `completed` state (i.e., NOT `committed`)
+Run in terminal:
 
-3. **Read Task Definitions**: Read individual task files from `docs/tasks/active/<taskId>.md` to understand each task's description, acceptance criteria, and files involved
+```bash
+npm run task list --state=completed
+```
 
-4. **Load Git Changes**: Get all untracked and modified files using `git status` and `git diff`
+This shows all tasks that are ready to be committed. If no tasks are in `completed` state, inform the user and stop.
 
-5. **Map Changes to Tasks**: For each task that is NOT in `committed` state, analyze its description and acceptance criteria to determine which files belong to it. Look for patterns like:
+## Step 2: Get Task Details
 
-   - Task-specific file paths (e.g., `src/features/leave-request/ui/SignatureModal.tsx` for `013-task-signature-modal`)
-   - Component/service names matching task descriptions
-   - Test files corresponding to implementation files
-   - Configuration files mentioned in task acceptance criteria
+For each completed task, run:
 
-6. **Generate Commit Plan**: Create a plan that groups all changes by their corresponding tasks. For each task:
+```bash
+npm run task show <taskId>
+```
 
-   - List all files that belong to it
-   - Create a commit message that describes the task work
-   - Ensure commit message follows the pattern: `<task-identifier>: <brief description>`
+This displays:
 
-7. **Handle Unrelated Changes**: If there are changes that do NOT belong to any task:
+- Task description
+- Acceptance criteria
+- Related files/components (infer from description)
 
-   - List them separately as "Unrelated Changes"
-   - Do NOT add or commit these files
-   - Inform the user about these files
+## Step 3: Load Git Changes
 
-8. **Move Task Files**: Completed Tasks need to be moved from `docs/tasks/active/` to `docs/tasks/archive/` before their changes are committed, in order for commit to reflect on task's completion.
+Run:
 
-8.5. **Add Archived Task Files**: If task files exist in `docs/tasks/archive/`, add them to git with `git add docs/tasks/archive/<taskId>.md`.
+```bash
+git status
+git diff --name-only
+```
 
-9. **Execute Commits**:
+Get all untracked and modified files.
 
-   - For each task: `git add <files>` and `git commit -m "<message>"`
-   - Move task file from `active/` or `backlog/` to `archive/`
-   - **IMPORTANT**: Remove the task entry from `docs/tasks/state.json` (archived tasks are NOT tracked in state.json)
-   - Report successful commits
+## Step 4: Map Changes to Tasks
 
-10. **Report Results**: After all commits, show:
-    - Number of tasks committed
-    - Summary of files committed
-    - Any errors encountered
-    - Current state of task tracking
+For each completed task, analyze its description and acceptance criteria to determine which files belong to it. Look for patterns like:
+
+- Task-specific file paths mentioned in description
+- Component/service names matching task descriptions
+- Test files corresponding to implementation files
+- Configuration files mentioned in acceptance criteria
+
+## Step 5: Generate Commit Plan
+
+Create a plan that groups all changes by their corresponding tasks. For each task:
+
+- List all files that belong to it
+- Create a commit message following the pattern: `<task-identifier>: <brief description>`
+
+## Step 6: Handle Unrelated Changes
+
+If there are changes that do NOT belong to any completed task:
+
+- List them separately as "Unrelated Changes"
+- Do NOT add or commit these files
+- Inform the user about these files
+
+## Step 7: Execute Commits
+
+For each task, in sequence:
+
+1. **Archive the task first** (so the move is included in the commit):
+
+   ```bash
+   npm run task state <taskId> committed
+   ```
+
+   This automatically:
+
+   - Moves the task file from `active/` to `archive/`
+   - Removes the task entry from `state.json`
+
+2. **Stage files**:
+
+   ```bash
+   git add <task-related-files>
+   git add docs/tasks/archive/<taskId>.md
+   git add docs/tasks/state.json
+   ```
+
+3. **Commit**:
+   ```bash
+   git commit -m "<taskId>: <brief description>"
+   ```
+
+## Step 8: Report Results
+
+After all commits, show:
+
+- Number of tasks committed
+- Summary of files committed per task
+- Any errors encountered
+- Remaining tasks (run `npm run task list` to show)
+
+## CLI Command Reference
+
+| Command                               | Purpose                                        |
+| ------------------------------------- | ---------------------------------------------- |
+| `npm run task list --state=completed` | Find tasks ready to commit                     |
+| `npm run task show <id>`              | Get task details                               |
+| `npm run task state <id> committed`   | Archive task (moves file + updates state.json) |
+| `npm run task list`                   | Show remaining tasks                           |
 

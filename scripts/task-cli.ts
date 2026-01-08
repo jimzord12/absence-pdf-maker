@@ -707,7 +707,39 @@ function handleNext(): void {
   });
 
   const nextTask = unblockedTasks[0];
-  const taskFile = findTaskFile(nextTask.id);
+  let taskFile = findTaskFile(nextTask.id);
+
+  // === AUTO-ACTIVATE: Move to active/ and add to state.json if needed ===
+
+  // 1. Ensure task is in state.json
+  if (!state.tasks[nextTask.id]) {
+    state.tasks[nextTask.id] = {
+      state: nextTask.state as TaskState,
+      lastUpdated: new Date().toISOString(),
+      location: nextTask.location as Location,
+    };
+    saveState(state);
+    console.log(`📝 Added ${nextTask.id} to state.json`);
+  }
+
+  // 2. Move file from backlog/ to active/ if it's a not_started task being picked up
+  if (taskFile && taskFile.location === 'backlog') {
+    const newPath = getTaskFilePath(nextTask.id, 'active');
+    fs.renameSync(taskFile.path, newPath);
+
+    // Update state.json location
+    state.tasks[nextTask.id].location = 'active';
+    state.tasks[nextTask.id].lastUpdated = new Date().toISOString();
+    saveState(state);
+
+    console.log(`📦 Moved ${nextTask.id}.md: backlog/ → active/`);
+
+    // Update taskFile reference to new location
+    taskFile = { path: newPath, location: 'active' };
+    nextTask.location = 'active';
+  }
+
+  // === END AUTO-ACTIVATE ===
 
   console.log(`\n${'═'.repeat(60)}`);
   console.log(`NEXT TASK: ${nextTask.id}`);
