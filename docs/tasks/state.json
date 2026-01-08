@@ -23,9 +23,9 @@
       "location": "archive"
     },
     "116-migrate-review-and-generate-impl": {
-      "state": "completed",
-      "lastUpdated": "2026-01-08T12:38:36.777Z",
-      "location": "active",
+      "state": "committed",
+      "lastUpdated": "2026-01-08T14:07:17.069Z",
+      "location": "archive",
       "blockedBy": []
     },
     "116-migrate-review-and-generate": {
