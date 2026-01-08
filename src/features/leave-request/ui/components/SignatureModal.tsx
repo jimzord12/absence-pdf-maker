@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import SignatureCanvas from 'react-signature-canvas';
+import { useTranslation } from 'react-i18next';
 
 import { Button, Input, Modal } from '../../../../shared/ui';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
@@ -41,6 +42,7 @@ const scaleSignatureDataUrl = (
 };
 
 export const SignatureModal: React.FC = () => {
+  const { t } = useTranslation('forms') as { t: (key: string, options?: Record<string, unknown>) => string };
   const sigCanvas = useRef<SignatureCanvas>(null);
   const hasInitializedRef = useRef(false);
   const [hasSignature, setHasSignature] = useState(false);
@@ -125,18 +127,17 @@ export const SignatureModal: React.FC = () => {
     <Modal
       isOpen={isSignatureModalOpen}
       onClose={handleCancel}
-      title="Sign Your Name"
+      title={t('signature.heading')}
       closeOnBackdropClick={false}
       showCloseButton={false}
     >
       <div className="space-y-4">
         <p className="text-sm text-[color:var(--color-text-secondary)]">
-          Please sign in the box below or type your name. Your signature will be saved to the
-          document.
+          {t('signature.description')}
         </p>
 
         {/* Signature Method Toggle */}
-        <div className="flex gap-4 mb-4" role="radiogroup" aria-label="Signature method">
+        <div className="flex gap-4 mb-4" role="radiogroup" aria-label={t('signature.signatureMethodAria')}>
           <label className="flex items-center gap-2">
             <input
               type="radio"
@@ -145,7 +146,7 @@ export const SignatureModal: React.FC = () => {
               onChange={() => setUseTypedSignature(false)}
               className="w-4 h-4 text-[color:var(--color-primary)] focus:ring-2 focus:ring-[color:var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[color:var(--color-background)]"
             />
-            <span className="text-sm text-[color:var(--color-text-primary)]">Draw signature</span>
+            <span className="text-sm text-[color:var(--color-text-primary)]">{t('signature.drawLabel')}</span>
           </label>
           <label className="flex items-center gap-2">
             <input
@@ -155,7 +156,7 @@ export const SignatureModal: React.FC = () => {
               onChange={() => setUseTypedSignature(true)}
               className="w-4 h-4 text-[color:var(--color-primary)] focus:ring-2 focus:ring-[color:var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[color:var(--color-background)]"
             />
-            <span className="text-sm text-[color:var(--color-text-primary)]">Type name</span>
+            <span className="text-sm text-[color:var(--color-text-primary)]">{t('signature.typeLabel')}</span>
           </label>
         </div>
 
@@ -171,30 +172,30 @@ export const SignatureModal: React.FC = () => {
               }}
             />
           </div>
-        ) : (
+         ) : (
           <Input
-            label="Type your full name"
-            placeholder="John Doe"
+            label={t('signature.typeNameLabel')}
+            placeholder={t('signature.typeNamePlaceholder')}
             inputType="text"
             value={typedName}
             onChange={e => {
               setTypedName(e.target.value);
               setHasSignature(e.target.value.trim().length > 0);
             }}
-            aria-label="Type your full name as signature"
+            aria-label={t('signature.typeNameAria')}
           />
         )}
 
         {/* Signature Preview */}
         {signatureDataUrl && signatureDataUrl.length > 0 && (
           <div className="border border-[color:var(--color-border)] rounded-lg p-3">
-            <p className="text-xs text-[color:var(--color-text-muted)] mb-2">Captured Signature:</p>
+            <p className="text-xs text-[color:var(--color-text-muted)] mb-2">{t('signature.capturedLabel')}</p>
             {signatureDataUrl.startsWith('text:') ? (
               <p className="text-xl font-medium text-[color:var(--color-text-primary)]">
                 {signatureDataUrl.replace('text:', '')}
               </p>
             ) : (
-              <img src={signatureDataUrl} alt="Captured signature" className="max-h-24" />
+              <img src={signatureDataUrl} alt={t('signature.capturedAlt')} className="max-h-24" />
             )}
           </div>
         )}
@@ -202,13 +203,13 @@ export const SignatureModal: React.FC = () => {
         {/* Action Buttons */}
         <div className="flex gap-3 justify-end pt-4">
           <Button variant="secondary" onClick={handleCancel} type="button">
-            Cancel
+            {t('signature.cancel')}
           </Button>
           <Button variant="secondary" onClick={handleClear} type="button" disabled={!hasSignature}>
-            Clear
+            {t('signature.clear')}
           </Button>
           <Button variant="primary" onClick={handleSave} type="button" disabled={isSaveDisabled}>
-            Save Signature
+            {t('signature.save')}
           </Button>
         </div>
       </div>

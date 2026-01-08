@@ -6,6 +6,11 @@
       "state": "committed",
       "lastUpdated": "2026-01-08T11:24:48.884Z",
       "location": "archive"
+    },
+    "114-migrate-signature-modal": {
+      "state": "committed",
+      "lastUpdated": "2026-01-08T11:43:09.295Z",
+      "location": "archive"
     }
   }
 }
