@@ -1,6 +1,7 @@
 import React from 'react';
 import type { FieldErrors } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { Card, Input } from '../../../../shared/ui';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
@@ -28,25 +29,26 @@ export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> =
   const methods = useFormContext<LeaveRequest>();
 
   const { register } = methods || {};
+  const { t } = useTranslation('forms') as { t: (key: string, options?: Record<string, unknown>) => string };
 
   return (
     <section aria-labelledby="employment-details-heading">
       <Card>
         <h2 id="employment-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
-          Employment Details Form
+          {t('employment.heading')}
         </h2>
         <div className="space-y-4">
           <Input
-            label="Employee ID (Optional)"
-            placeholder="Leave blank if not applicable"
+            label={t('employment.employeeId')}
+            placeholder={t('employment.employeeIdPlaceholder')}
             inputType="text"
             {...register?.('profile.employeeId')}
             error={errors?.profile?.employeeId?.message}
           />
 
           <Input
-            label="Company Name"
-            placeholder="Enter company name"
+            label={t('employment.companyName')}
+            placeholder={t('employment.companyNamePlaceholder')}
             inputType="text"
             required
             {...register?.('profile.companyName')}
@@ -54,8 +56,8 @@ export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> =
           />
 
           <Input
-            label="Department"
-            placeholder="Engineering"
+            label={t('employment.department')}
+            placeholder={t('employment.departmentPlaceholder')}
             inputType="text"
             required
             {...register?.('profile.department')}
@@ -63,8 +65,8 @@ export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> =
           />
 
           <Input
-            label="Position"
-            placeholder="Software Engineer"
+            label={t('employment.position')}
+            placeholder={t('employment.positionPlaceholder')}
             inputType="text"
             required
             {...register?.('profile.position')}
