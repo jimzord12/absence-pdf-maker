@@ -39,9 +39,9 @@
       "location": "archive"
     },
     "112-migrate-leave-details-section": {
-      "state": "completed",
-      "lastUpdated": "2026-01-08T12:57:53.947Z",
-      "location": "active"
+      "state": "committed",
+      "lastUpdated": "2026-01-08T14:06:23.996Z",
+      "location": "archive"
     },
     "121-impl-bilingual-pdf": {
       "state": "completed",

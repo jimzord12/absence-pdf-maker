@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import type { FieldErrors } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { Card, Select, Textarea } from '../../../../shared/ui';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
@@ -11,14 +12,6 @@ import { DateRangeField } from '../components/DateRangeField';
 interface LeaveDetailsSectionProps {
   errors?: FieldErrors<LeaveRequest>;
 }
-
-// Leave type options for dropdown
-const leaveTypeOptions = [
-  { value: 'annual', label: 'Annual Leave' },
-  { value: 'sick', label: 'Sick Leave' },
-  { value: 'unpaid', label: 'Unpaid Leave' },
-  { value: 'other', label: 'Other' },
-];
 
 /**
  * LeaveDetailsSection component
@@ -38,6 +31,17 @@ export const LeaveDetailsSection: React.FC<LeaveDetailsSectionProps> = ({ errors
   const holidays = useLeaveRequestStore(state => state.holidays.holidaySet);
   const setLeaveDraft = useLeaveRequestStore(state => state.setLeaveDraft);
   const { locale } = useLocaleStore();
+  const { t } = useTranslation('forms') as { t: (key: string, options?: Record<string, unknown>) => string };
+
+  const leaveTypeOptions = useMemo(
+    () => [
+      { value: 'annual', label: t('leave.types.annual') },
+      { value: 'sick', label: t('leave.types.sick') },
+      { value: 'unpaid', label: t('leave.types.unpaid') },
+      { value: 'other', label: t('leave.types.other') },
+    ],
+    [t]
+  );
 
   // Watch form fields to update Zustand store when they change
   const startDate = watch?.('startDate');
@@ -59,13 +63,13 @@ export const LeaveDetailsSection: React.FC<LeaveDetailsSectionProps> = ({ errors
     <section aria-labelledby="leave-details-heading">
       <Card>
         <h2 id="leave-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
-          Leave Details Form
+          {t('leave.heading')}
         </h2>
         <div className="space-y-4">
           <Select
-            label="Leave Type"
+            label={t('leave.leaveType')}
             options={leaveTypeOptions}
-            placeholder="Select leave type"
+            placeholder={t('leave.leaveTypePlaceholder')}
             {...register?.('leaveType')}
             error={errors?.leaveType?.message}
           />
@@ -73,8 +77,8 @@ export const LeaveDetailsSection: React.FC<LeaveDetailsSectionProps> = ({ errors
           <DateRangeField errors={errors} holidaySet={holidays} locale={locale} />
 
           <Textarea
-            label="Reason (Optional)"
-            placeholder="Please provide a reason for your leave request..."
+            label={t('leave.reason')}
+            placeholder={t('leave.reasonPlaceholder')}
             rows={4}
             {...register?.('reason')}
             error={errors?.reason?.message}
