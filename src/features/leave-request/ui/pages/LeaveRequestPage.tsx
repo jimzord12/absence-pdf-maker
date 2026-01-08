@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { usePwaInstall } from '../../../../app/providers/usePwaInstall';
 import { Button, DeveloperPresence, StarsWarsRobotToggle } from '../../../../shared/ui';
 import { loadHolidays } from '../../services/holidays/holidays.service';
@@ -14,6 +15,7 @@ import { SignatureModal } from '../components/SignatureModal';
  * and manages overall layout, header, and page-level state.
  */
 export const LeaveRequestPage: React.FC = () => {
+  const { t } = useTranslation('common');
   const setHolidays = useLeaveRequestStore(state => state.setHolidays);
   const { isInstallable, promptInstall } = usePwaInstall();
   const theme = useThemeStore(state => state.theme);
@@ -36,9 +38,9 @@ export const LeaveRequestPage: React.FC = () => {
           <div className="mb-8">
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-[color:var(--color-text-primary)]">Leave Request</h1>
+              <h1 className="text-3xl font-bold text-[color:var(--color-text-primary)]">{t('page.title')}</h1>
               <p className="mt-2 text-sm text-[color:var(--color-text-secondary)]">
-                Submit your leave request and generate a PDF document
+                {t('page.subtitle')}
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -49,7 +51,7 @@ export const LeaveRequestPage: React.FC = () => {
                   onClick={() => promptInstall()}
                   className="mt-0 sm:mt-1"
                 >
-                  Install App
+                  {t('buttons.installApp')}
                 </Button>
               )}
               <StarsWarsRobotToggle
