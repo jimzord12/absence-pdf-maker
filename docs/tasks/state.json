@@ -1,11 +1,6 @@
 {
   "$schema": "./state.schema.json",
   "version": "2.0",
-  "tasks": {
-    "112-migrate-leave-details-section": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-08T10:44:19.213Z",
-      "location": "active"
-    }
-  }
+  "tasks": {}
 }
+
