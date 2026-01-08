@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import isEqual from 'lodash/isEqual';
 import { useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '../../../../shared/ui';
 import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
@@ -15,6 +16,7 @@ import { LeaveDetailsSection } from '../sections/LeaveDetailsSection';
 import { PersonalDetailsSection } from '../sections/PersonalDetailsSection';
 
 export const LeaveRequestForm = () => {
+  const { t } = useTranslation('common');
   const profile = useLeaveRequestStore(state => state.profile);
   const leaveDraft = useLeaveRequestStore(state => state.leaveDraft);
   const setProfile = useLeaveRequestStore(state => state.setProfile);
@@ -230,7 +232,7 @@ export const LeaveRequestForm = () => {
               });
             }}
           >
-            Reset Form
+            {t('buttons.reset')}
           </Button>
         </div>
       </form>

@@ -11,6 +11,54 @@
       "state": "committed",
       "lastUpdated": "2026-01-08T11:43:09.295Z",
       "location": "archive"
+    },
+    "115-migrate-leave-request-form": {
+      "state": "committed",
+      "lastUpdated": "2026-01-08T14:05:05.321Z",
+      "location": "archive"
+    },
+    "117-migrate-leave-request-page": {
+      "state": "completed",
+      "lastUpdated": "2026-01-08T12:14:56.524Z",
+      "location": "active"
+    },
+    "116-migrate-review-and-generate-impl": {
+      "state": "completed",
+      "lastUpdated": "2026-01-08T12:38:36.777Z",
+      "location": "active",
+      "blockedBy": []
+    },
+    "116-migrate-review-and-generate": {
+      "state": "completed",
+      "lastUpdated": "2026-01-08T12:25:23.651Z",
+      "location": "active"
+    },
+    "120-update-shared-ui-components": {
+      "state": "completed",
+      "lastUpdated": "2026-01-08T12:49:12.430Z",
+      "location": "active"
+    },
+    "112-migrate-leave-details-section": {
+      "state": "completed",
+      "lastUpdated": "2026-01-08T12:57:53.947Z",
+      "location": "active"
+    },
+    "121-impl-bilingual-pdf": {
+      "state": "completed",
+      "lastUpdated": "2026-01-08T13:09:50.512Z",
+      "location": "active",
+      "blockedBy": []
+    },
+    "121-refactor-pdf-component-for-bilingual": {
+      "state": "completed",
+      "lastUpdated": "2026-01-08T13:20:31.144Z",
+      "location": "active"
+    },
+    "119-update-pdf-service-messages-plan": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-08T13:22:50.036Z",
+      "location": "backlog",
+      "blockedBy": []
     }
   }
 }
