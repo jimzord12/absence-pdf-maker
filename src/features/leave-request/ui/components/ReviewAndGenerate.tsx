@@ -9,6 +9,7 @@ import { exportProfileToJson, importProfileFromJson } from '../../services/persi
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { useLocaleStore } from '../../state/locale.store';
 import { useTranslation } from 'react-i18next';
+import { PdfLanguageSelector } from './PdfLanguageSelector';
 
 /**
  * ReviewAndGenerate component displays a summary of the form data and provides
@@ -157,7 +158,7 @@ export const ReviewAndGenerate: React.FC = () => {
       };
 
       await Promise.all([
-        downloadLeaveRequestPdf(leaveRequestData, holidays.holidaySet),
+        downloadLeaveRequestPdf(leaveRequestData, holidays.holidaySet, t),
         minLoadTime,
       ]);
 
@@ -172,7 +173,7 @@ export const ReviewAndGenerate: React.FC = () => {
 
   return (
     <aside
-      aria-label="Review and Generate"
+      aria-label={t('forms.review.heading')}
       className={`space-y-6 ${!hasAnimated ? 'animate-fade-in-up animate-stagger-1' : ''}`}
     >
       {/* Profile Summary Section */}
@@ -230,29 +231,29 @@ export const ReviewAndGenerate: React.FC = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex-col justify-between">
-              <span className="text-sm text-[color:var(--color-text-secondary)]">Leave Type</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('forms.leave.leaveType')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">
                 {leaveDraft.leaveType ? leaveTypeLabels[leaveDraft.leaveType] : '—'}
               </p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">Leave Allowance</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('forms.dateRange.leaveAllowance')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">{leaveDraft.leaveAllowance ? t('common.yes') : t('common.no')}</p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">Start Date</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('forms.dateRange.startDate')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">
                 {leaveDraft.startDate ? formatDate(leaveDraft.startDate, locale) : '—'}
               </p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">End Date</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('forms.dateRange.endDate')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">
                 {leaveDraft.endDate ? formatDate(leaveDraft.endDate, locale) : '—'}
               </p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">Reason</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('forms.leave.reason')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">{leaveDraft.reason || '—'}</p>
             </div>
           </div>
@@ -260,7 +261,7 @@ export const ReviewAndGenerate: React.FC = () => {
           {/* Absence Days Breakdown */}
           {absenceBreakdown && (
             <div className="mt-4 p-4 bg-[color:var(--color-surface-hover)] rounded-lg">
-              <h3 className="font-semibold mb-2 text-[color:var(--color-text-primary)]">Absence Days Calculation</h3>
+              <h3 className="font-semibold mb-2 text-[color:var(--color-text-primary)]">{t('forms.leave.absence.calculationHeading')}</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
                   <span className="text-[color:var(--color-text-secondary)] block">{t('forms.leave.absence.totalDays')}</span>
@@ -291,17 +292,17 @@ export const ReviewAndGenerate: React.FC = () => {
           {/* Signature Status */}
           <div className="mt-4">
             <span className="text-sm text-[color:var(--color-text-secondary)]">{t('forms.signature.label')}</span>
-             <div className="flex items-center justify-between mt-1">
-               <p className="font-medium text-[color:var(--color-text-primary)]">
-                 {signature.signatureDataUrl ? (
-                   <span className="text-[color:var(--color-success)]">{t('forms.signature.signed')}</span>
-                 ) : (
-                   <span className="text-[color:var(--color-error)]">{t('forms.signature.notSigned')}</span>
-                 )}
-               </p>
-               <Button variant="secondary" size="sm" onClick={toggleSignatureModal}>
-                 {signature.signatureDataUrl ? t('forms.signature.update') : t('forms.signature.add')}
-               </Button>
+              <div className="flex items-center justify-between mt-1">
+                <p className="font-medium text-[color:var(--color-text-primary)]">
+                  {signature.signatureDataUrl ? (
+                    <span className="text-[color:var(--color-success)]">{t('common.status.signed')}</span>
+                  ) : (
+                    <span className="text-[color:var(--color-error)]">{t('common.status.notSigned')}</span>
+                  )}
+                </p>
+                <Button variant="secondary" size="sm" onClick={toggleSignatureModal}>
+                  {signature.signatureDataUrl ? t('common.status.update') : t('common.status.add')}
+                </Button>
              </div>
           </div>
         </Card>
@@ -317,10 +318,10 @@ export const ReviewAndGenerate: React.FC = () => {
             {/* Profile Management */}
             <div className="flex flex-wrap gap-3">
               <Button variant="secondary" onClick={handleExport} size="md">
-                Export Profile
+                {t('common.buttons.exportProfile')}
               </Button>
               <Button variant="secondary" onClick={() => fileInputRef.current?.click()} size="md">
-                Import Profile
+                {t('common.buttons.importProfile')}
               </Button>
               <input
                 ref={fileInputRef}
@@ -328,17 +329,18 @@ export const ReviewAndGenerate: React.FC = () => {
                 accept=".json"
                 onChange={handleImport}
                 className="hidden"
-                aria-label="Import profile from JSON file"
+                aria-label={t('common.buttons.importProfile')}
               />
               <Button variant="danger" onClick={handleClearProfile} size="md">
-                Clear Profile
+                {t('common.buttons.clearProfile')}
               </Button>
             </div>
 
             <hr className="border-[color:var(--color-border)]" />
 
             {/* PDF Generation */}
-            <div>
+            <div className="space-y-4">
+              <PdfLanguageSelector />
                <Button
                 variant="primary"
                 onClick={handleGeneratePdf}

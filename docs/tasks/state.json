@@ -29,9 +29,9 @@
       "blockedBy": []
     },
     "116-migrate-review-and-generate": {
-      "state": "completed",
-      "lastUpdated": "2026-01-08T12:25:23.651Z",
-      "location": "active"
+      "state": "committed",
+      "lastUpdated": "2026-01-08T14:06:45.810Z",
+      "location": "archive"
     },
     "120-update-shared-ui-components": {
       "state": "committed",
