@@ -115,10 +115,10 @@ describe('LeaveRequestPage', () => {
   });
 
   describe('3. Header displays correct title and description', () => {
-    it('should render the page title', () => {
+    it('should render page title', () => {
       render(<LeaveRequestPage />);
 
-      const title = screen.getByText('Leave Request');
+      const title = screen.getByText('Αίτηση Άδειας');
       expect(title).toBeInTheDocument();
       expect(title.tagName).toBe('H1');
     });
@@ -126,7 +126,7 @@ describe('LeaveRequestPage', () => {
     it('should render the page description', () => {
       render(<LeaveRequestPage />);
 
-      const description = screen.getByText('Submit your leave request and generate a PDF document');
+      const description = screen.getByText('Υποβάλετε την αίτησή σας για άδεια και δημιουργήστε ένα έγγραφο PDF');
       expect(description).toBeInTheDocument();
       expect(description.tagName).toBe('P');
     });
@@ -134,15 +134,15 @@ describe('LeaveRequestPage', () => {
     it('should apply correct title styling', () => {
       render(<LeaveRequestPage />);
 
-      const title = screen.getByText('Leave Request');
-      expect(title).toHaveClass('text-3xl', 'font-bold', 'text-gray-900');
+      const title = screen.getByText('Αίτηση Άδειας');
+      expect(title).toHaveClass('text-3xl', 'font-bold');
     });
 
     it('should apply correct description styling', () => {
       render(<LeaveRequestPage />);
 
-      const description = screen.getByText('Submit your leave request and generate a PDF document');
-      expect(description).toHaveClass('mt-2', 'text-sm', 'text-gray-600');
+      const description = screen.getByText('Υποβάλετε την αίτησή σας για άδεια και δημιουργήστε ένα έγγραφο PDF');
+      expect(description).toHaveClass('mt-2', 'text-sm');
     });
 
     it('should render header section with proper spacing', () => {
@@ -328,7 +328,7 @@ describe('LeaveRequestPage', () => {
     it('should satisfy: Page includes header with app title', () => {
       render(<LeaveRequestPage />);
 
-      const title = screen.getByText('Leave Request');
+      const title = screen.getByText('Αίτηση Άδειας');
       expect(title).toBeInTheDocument();
       expect(title.tagName).toBe('H1');
     });
@@ -373,7 +373,7 @@ describe('LeaveRequestPage', () => {
     it('should not render install button when isInstallable is false', () => {
       render(<LeaveRequestPage />);
 
-      const installButton = screen.queryByText('Install App');
+      const installButton = screen.queryByText('Εγκατάσταση Εφαρμογής');
       expect(installButton).not.toBeInTheDocument();
     });
 
@@ -386,7 +386,7 @@ describe('LeaveRequestPage', () => {
 
       render(<LeaveRequestPage />);
 
-      const installButton = screen.queryByText('Install App');
+      const installButton = screen.queryByText('Εγκατάσταση Εφαρμογής');
       expect(installButton).toBeInTheDocument();
     });
 
@@ -398,7 +398,7 @@ describe('LeaveRequestPage', () => {
 
       render(<LeaveRequestPage />);
 
-      const installButton = screen.getByText('Install App');
+      const installButton = screen.getByText('Εγκατάσταση Εφαρμογής');
       installButton.click();
 
       expect(mockPromptInstall).toHaveBeenCalledTimes(1);
@@ -410,9 +410,9 @@ describe('LeaveRequestPage', () => {
       render(<LeaveRequestPage />);
 
       // Component should render without errors
-      expect(screen.getByText('Leave Request')).toBeInTheDocument();
+      expect(screen.getByText('Αίτηση Άδειας')).toBeInTheDocument();
       // Install button should not be shown (since isInstallable is false)
-      expect(screen.queryByText('Install App')).not.toBeInTheDocument();
+      expect(screen.queryByText('Εγκατάσταση Εφαρμογής')).not.toBeInTheDocument();
     });
   });
 
@@ -428,7 +428,7 @@ describe('LeaveRequestPage', () => {
       render(<LeaveRequestPage />);
 
       // Component should still render without errors
-      expect(screen.getByText('Leave Request')).toBeInTheDocument();
+      expect(screen.getByText('Αίτηση Άδειας')).toBeInTheDocument();
     });
 
     it('should handle store with profile data', () => {
@@ -447,7 +447,7 @@ describe('LeaveRequestPage', () => {
       render(<LeaveRequestPage />);
 
       // Component should still render without errors
-      expect(screen.getByText('Leave Request')).toBeInTheDocument();
+      expect(screen.getByText('Αίτηση Άδειας')).toBeInTheDocument();
     });
 
     it('should handle store with error message', () => {
@@ -466,7 +466,7 @@ describe('LeaveRequestPage', () => {
       render(<LeaveRequestPage />);
 
       // Component should still render without errors
-      expect(screen.getByText('Leave Request')).toBeInTheDocument();
+      expect(screen.getByText('Αίτηση Άδειας')).toBeInTheDocument();
     });
   });
 });
