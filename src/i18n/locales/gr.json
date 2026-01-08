@@ -5,7 +5,19 @@
     "no": "Όχι",
     "loading": "Φόρτωση...",
     "required": "Απαιτείται",
-    "optional": "Προαιρετικό"
+    "optional": "Προαιρετικό",
+    "labels": {
+      "selectDateRange": "Επιλέξτε Εμβέλεια Ημερομηνιών",
+      "clearDates": "Καθαρισμός Ημερομηνιών",
+      "clearDatesTooltip": "Καθαρισμός επιλεγμένων ημερομηνιών",
+      "calendar": "Ημερολόγιο",
+      "formContextNotAvailable": "Το περιβάλλον της φόρμας δεν είναι διαθέσιμο",
+      "dateRangeSummary": "Σύνοψη Εμβέλειας Ημερομηνιών",
+      "totalDays": "Συνολικές Ημέρες",
+      "holidays": "Αργίες",
+      "weekends": "Σαββατοκύριακα",
+      "absenceDays": "Ημέρες Απουσίας"
+    }
   },
   "forms": {
     "actions": {

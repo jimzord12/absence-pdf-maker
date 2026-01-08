@@ -1,6 +1,11 @@
 {
   "$schema": "./state.schema.json",
   "version": "2.0",
-  "tasks": {}
+  "tasks": {
+    "113-migrate-date-range-field": {
+      "state": "committed",
+      "lastUpdated": "2026-01-08T11:24:48.884Z",
+      "location": "archive"
+    }
+  }
 }
-

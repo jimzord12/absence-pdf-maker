@@ -1,5 +1,6 @@
 import { el } from 'date-fns/locale';
 import React, { useId, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import type { FieldErrors } from 'react-hook-form';
@@ -34,12 +35,20 @@ const MODIFIERS_CLASS_NAMES = {
 } as const;
 
 // Footer component for absence calculation display
-const Footer: React.FC<AbsenceSummary & { hasDates: boolean }> = ({
+interface FooterProps extends AbsenceSummary {
+  hasDates: boolean;
+  tCommon: (key: string, options?: Record<string, unknown>) => string;
+  tForms: (key: string, options?: Record<string, unknown>) => string;
+}
+
+const Footer: React.FC<FooterProps> = ({
   totalDays,
   holidayDays,
   weekendDays,
   absenceDays,
   hasDates,
+  tCommon,
+  tForms,
 }) => {
   // Helper to display value or em dash when no dates are selected
   const displayValue = (value: number) => (hasDates ? value : '—');
@@ -50,10 +59,12 @@ const Footer: React.FC<AbsenceSummary & { hasDates: boolean }> = ({
       role="region"
       aria-live="polite"
     >
-      <p className="text-sm text-info-900 dark:text-info-100 font-medium">Date Range Summary</p>
+      <p className="text-sm text-info-900 dark:text-info-100 font-medium">
+        {tCommon('labels.dateRangeSummary')}
+      </p>
       <div className="mt-2 space-y-1 text-sm text-info-800 dark:text-info-200">
         <div className="flex justify-between">
-          <span>Total Days:</span>
+          <span>{tForms('leave.absence.totalDays')}:</span>
           <span
             className="font-semibold"
             aria-label={`Total days in range: ${displayValue(totalDays)}`}
@@ -62,7 +73,7 @@ const Footer: React.FC<AbsenceSummary & { hasDates: boolean }> = ({
           </span>
         </div>
         <div className="flex justify-between">
-          <span>Holidays:</span>
+          <span>{tForms('leave.absence.holidayDays')}:</span>
           <span
             className="font-semibold"
             aria-label={`Holidays in range: ${displayValue(holidayDays)}`}
@@ -71,7 +82,7 @@ const Footer: React.FC<AbsenceSummary & { hasDates: boolean }> = ({
           </span>
         </div>
         <div className="flex justify-between">
-          <span>Weekends:</span>
+          <span>{tForms('leave.absence.weekendDays')}:</span>
           <span
             className="font-semibold"
             aria-label={`Weekend days in range: ${displayValue(weekendDays)}`}
@@ -80,7 +91,7 @@ const Footer: React.FC<AbsenceSummary & { hasDates: boolean }> = ({
           </span>
         </div>
         <div className="flex justify-between border-t border-info-300 dark:border-info-800 pt-1">
-          <span className="font-semibold">Absence Days:</span>
+          <span className="font-semibold">{tForms('leave.absence.absenceDays')}:</span>
           <span
             className="font-bold text-info-700 dark:text-info-300"
             aria-label={`Total absence days: ${displayValue(absenceDays)}`}
@@ -112,6 +123,13 @@ const Footer: React.FC<AbsenceSummary & { hasDates: boolean }> = ({
  * Component uses useFormContext to access form methods (watch, setValue) for reactive updates.
  */
 export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidaySet, locale }) => {
+  const { t: tCommon } = useTranslation('common') as {
+    t: (key: string, options?: Record<string, unknown>) => string;
+  };
+  const { t: tForms } = useTranslation('forms') as {
+    t: (key: string, options?: Record<string, unknown>) => string;
+  };
+
   const methods = useFormContext<LeaveRequest>();
   const { watch, setValue } = methods || {
     watch: () => undefined,
@@ -233,7 +251,9 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
   if (!methods) {
     return (
       <div className="p-4 bg-warning-50 dark:bg-warning-950 border border-warning-300 dark:border-warning-800 rounded-lg">
-        <p className="text-sm text-warning-900 dark:text-warning-100">Form context not available</p>
+        <p className="text-sm text-warning-900 dark:text-warning-100">
+          {tCommon('labels.formContextNotAvailable')}
+        </p>
       </div>
     );
   }
@@ -244,7 +264,7 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
         id={`${dateFieldId}-label`}
         className="block text-sm font-medium text-[color:var(--color-text-primary)]"
       >
-        Select Date Range
+        {tCommon('labels.selectDateRange')}
       </span>
       <div className="flex justify-between gap-2">
         <HolidaysLegend />
@@ -256,17 +276,17 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
             setValue('startDate', undefined, { shouldDirty: true, shouldValidate: false });
             setValue('endDate', undefined, { shouldDirty: true, shouldValidate: false });
           }}
-          title="Clear selected dates"
-          aria-label="Clear selected dates"
+          title={tCommon('labels.clearDatesTooltip')}
+          aria-label={tCommon('labels.clearDatesTooltip')}
           className="flex-shrink-0"
         >
-          Clear Dates
+          {tCommon('labels.clearDates')}
         </Button>
       </div>
       <div
         className="p-4 border border-[color:var(--color-border)] rounded-lg bg-[color:var(--color-surface)] shadow-sm"
         role="region"
-        aria-label="Calendar"
+        aria-label={tCommon('labels.calendar')}
       >
         <DayPicker
           mode="range"
@@ -290,7 +310,7 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
           )}
         </div>
       )}
-      <Footer {...absenceDaysCalculation} hasDates={!!startDate && !!endDate} />
+      <Footer {...absenceDaysCalculation} hasDates={!!startDate && !!endDate} tCommon={tCommon} tForms={tForms} />
     </div>
   );
 };
