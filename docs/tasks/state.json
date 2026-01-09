@@ -2,17 +2,10 @@
   "$schema": "./state.schema.json",
   "version": "2.0",
   "tasks": {
-    "task-132-disable-i18next-debug-mode": {
-      "state": "completed",
-      "lastUpdated": "2026-01-09T18:45:30.542Z",
-      "location": "active",
-      "fromIssue": "APPLICATION_ISSUES.md",
-      "blockedBy": []
-    },
     "task-133-improve-date-picker-visual-selection": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-09T16:37:44.615Z",
-      "location": "backlog",
+      "state": "completed",
+      "lastUpdated": "2026-01-09T19:29:00.035Z",
+      "location": "active",
       "fromIssue": "APPLICATION_ISSUES.md",
       "blockedBy": []
     },

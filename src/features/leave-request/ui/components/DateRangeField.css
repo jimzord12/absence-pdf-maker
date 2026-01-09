@@ -6,12 +6,20 @@
  */
 
 /* ===== React Day Picker Overrides ===== */
+/* Light mode overrides for react-day-picker selection colors */
+.rdp {
+  --rdp-accent-color: var(--color-primary, #0f172a);
+  --rdp-accent-background-color: #ffffff;
+  --rdp-range_middle-background-color: #e2e8f0;
+  --rdp-range_middle-color: var(--color-text-primary, #0f172a);
+}
+
 /* Dark mode overrides for react-day-picker selection colors */
 [data-theme='dark'] .rdp {
-  --rdp-accent-color: var(--color-dark-primary-400);
-  --rdp-accent-background-color: #ffffff;
-  --rdp-range_middle-background-color: var(--color-dark-primary-600);
-  --rdp-range_middle-color: var(--color-dark-primary-100);
+  --rdp-accent-color: var(--color-dark-primary-200, #e2e8f0);
+  --rdp-accent-background-color: var(--color-primary, #412b6b);
+  --rdp-range_middle-background-color: var(--color-dark-primary-600, #475569);
+  --rdp-range_middle-color: var(--color-dark-primary-100, #f1f5f9);
 }
 
 /* Custom modifier styles for holidays and weekends */
@@ -38,20 +46,34 @@
 }
 
 /* Selected states override modifiers using higher specificity (no !important needed) */
+.rdp-selected,
+.rdp-range_start,
+.rdp-range_end {
+  background-color: var(--rdp-accent-color) !important;
+  color: var(--rdp-accent-background-color) !important;
+  font-weight: 600 !important;
+}
+
 .rdp-selected.rdp-day--holiday,
 .rdp-selected.rdp-day--weekend,
 .rdp-range_start.rdp-day--holiday,
 .rdp-range_start.rdp-day--weekend,
 .rdp-range_end.rdp-day--holiday,
 .rdp-range_end.rdp-day--weekend {
-  background-color: var(--rdp-accent-color);
-  color: var(--rdp-accent-background-color);
+  background-color: var(--rdp-accent-color) !important;
+  color: var(--rdp-accent-background-color) !important;
+  font-weight: 600 !important;
+}
+
+.rdp-range_middle {
+  background-color: var(--rdp-range_middle-background-color) !important;
+  color: var(--rdp-range_middle-color) !important;
 }
 
 .rdp-range_middle.rdp-day--holiday,
 .rdp-range_middle.rdp-day--weekend {
-  background-color: var(--rdp-range_middle-background-color);
-  color: var(--rdp-range_middle-color);
+  background-color: var(--rdp-range_middle-background-color) !important;
+  color: var(--rdp-range_middle-color) !important;
 }
 
 /* Colored borders to indicate holidays/weekends within selected range */

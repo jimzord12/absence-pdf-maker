@@ -118,6 +118,12 @@
   --color-primary: #412b6b;
   --color-primary-hover: #2b1c47;
   --color-primary-light: #573a8f;
+  --color-dark-primary-100: #f1f5f9;
+  --color-dark-primary-200: #e2e8f0;
+  --color-dark-primary-300: #cbd5e1;
+  --color-dark-primary-400: #94a3b8;
+  --color-dark-primary-600: #475569;
+  --color-dark-primary-700: #334155;
   --color-secondary: #f25912;
   --color-secondary-hover: #c6460b;
   --color-background: #0f172a; --color-background-alt: #1e293b;
