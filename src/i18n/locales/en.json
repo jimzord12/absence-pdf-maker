@@ -69,7 +69,9 @@
       "phone": "Phone Number",
       "phonePlaceholder": "+1 (555) 123-4567",
       "identityNumber": "Identity Number (ADT)",
-      "identityNumberPlaceholder": "Enter identity number"
+      "identityNumberPlaceholder": "Enter identity number",
+      "leaveAllowance": "Leave Allowance (Days)",
+      "leaveAllowancePlaceholder": "e.g., 25"
     },
     "employment": {
       "heading": "Employment Details Form",
@@ -110,7 +112,8 @@
       "clearDate": "Clear date",
       "leaveAllowance": "Leave Allowance",
       "iWishAllowance": "I wish to receive leave allowance",
-      "absenceBreakdown": "Absence Days Breakdown"
+      "absenceBreakdown": "Absence Days Breakdown",
+      "days": "days"
     },
     "signature": {
       "label": "Signature",
@@ -144,6 +147,7 @@
     "invalidFathersNameFormat": "Father's name must contain at least 2 characters (Greek or Latin letters only)",
     "invalidNameLength": "Name must be at least 2 characters",
     "endDateBeforeStart": "End date must be after start date",
+    "exceedsAllowance": "Requested absence days ({{absenceDays}}) exceed available leave allowance ({{allowanceDays}})",
     "datesRequired": "Start date and end date are required for PDF generation",
     "missingDetails": "Please fill in all required personal and employment details",
     "missingDates": "Please select start and end dates for your leave"

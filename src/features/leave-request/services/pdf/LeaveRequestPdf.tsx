@@ -296,10 +296,12 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({
           }}
         />
 
-        {/* Allowance Preference */}
+        {/* Allowance Information */}
         <View style={styles.allowanceSection}>
           <Text style={styles.allowanceText}>
-            {data.leaveAllowance ? t.wishAllowance : t.noWishAllowance}
+            {data.leaveAllowance && data.leaveAllowance > 0
+              ? t.wishAllowance.replace('{{days}}', String(data.leaveAllowance))
+              : t.noWishAllowance}
           </Text>
         </View>
 

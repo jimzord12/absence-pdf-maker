@@ -3,9 +3,9 @@
   "version": "2.0",
   "tasks": {
     "task-134-implement-leave-allowance-feature": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-09T16:37:55.718Z",
-      "location": "backlog",
+      "state": "completed",
+      "lastUpdated": "2026-01-09T19:46:22.353Z",
+      "location": "active",
       "fromIssue": "APPLICATION_ISSUES.md",
       "blockedBy": []
     },

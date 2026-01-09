@@ -80,6 +80,16 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ 
             {...register?.('profile.phone')}
             error={errors?.profile?.phone?.message}
           />
+
+          <Input
+            label={t('personal.leaveAllowance')}
+            placeholder={t('personal.leaveAllowancePlaceholder')}
+            inputType="number"
+            {...register?.('leaveAllowance', {
+              valueAsNumber: true,
+            })}
+            error={errors?.leaveAllowance?.message}
+          />
         </div>
       </Card>
     </section>

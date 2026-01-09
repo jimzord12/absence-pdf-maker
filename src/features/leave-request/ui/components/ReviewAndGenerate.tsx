@@ -141,6 +141,21 @@ export const ReviewAndGenerate: React.FC = () => {
       return;
     }
 
+    if (
+      leaveDraft.leaveAllowance !== null &&
+      leaveDraft.leaveAllowance !== undefined &&
+      absenceBreakdown &&
+      absenceBreakdown.absenceDays > leaveDraft.leaveAllowance
+    ) {
+      showError(
+        t('exceedsAllowance', {
+          absenceDays: absenceBreakdown.absenceDays,
+          allowanceDays: leaveDraft.leaveAllowance,
+        })
+      );
+      return;
+    }
+
     setIsGeneratingPdf(true);
 
     // Ensure minimum 2 second loading time
@@ -150,7 +165,7 @@ export const ReviewAndGenerate: React.FC = () => {
       const leaveRequestData = {
         profile: profile as UserProfile,
         leaveType: leaveDraft.leaveType ?? 'other',
-        leaveAllowance: leaveDraft.leaveAllowance || false,
+        leaveAllowance: leaveDraft.leaveAllowance ?? undefined,
         startDate: leaveDraft.startDate,
         endDate: leaveDraft.endDate,
         reason: leaveDraft.reason,
@@ -248,9 +263,17 @@ export const ReviewAndGenerate: React.FC = () => {
               </p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.endDate')}</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('leave.leaveType')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">
-                {leaveDraft.endDate ? formatDate(leaveDraft.endDate, locale) : '—'}
+                {leaveDraft.leaveType ? leaveTypeLabels[leaveDraft.leaveType] : '—'}
+              </p>
+            </div>
+            <div>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.leaveAllowance')}</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">
+                {leaveDraft.leaveAllowance !== null && leaveDraft.leaveAllowance !== undefined
+                  ? `${leaveDraft.leaveAllowance} ${t('dateRange.days')}`
+                  : '—'}
               </p>
             </div>
             <div>

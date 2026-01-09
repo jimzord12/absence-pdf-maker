@@ -223,7 +223,7 @@ export const createLeaveRequestSchema = (t: TranslationFunction) =>
     .object({
       profile: createUserProfileSchema(t),
       leaveType: z.enum(['annual', 'sick', 'unpaid', 'other']),
-      leaveAllowance: z.boolean().default(false),
+      leaveAllowance: z.number().optional(),
       startDate: z.date().optional(),
       endDate: z.date().optional(),
       reason: z.string().optional(),
@@ -232,7 +232,6 @@ export const createLeaveRequestSchema = (t: TranslationFunction) =>
     })
     .refine(
       data => {
-        // Only validate date order if both dates are present
         if (data.startDate && data.endDate) {
           return data.startDate <= data.endDate;
         }
@@ -249,7 +248,7 @@ export const LeaveRequestSchema = z
   .object({
     profile: UserProfileSchema,
     leaveType: z.enum(['annual', 'sick', 'unpaid', 'other']),
-    leaveAllowance: z.boolean().default(false),
+    leaveAllowance: z.number().optional(),
     startDate: z.date().optional(),
     endDate: z.date().optional(),
     reason: z.string().optional(),
