@@ -6,7 +6,7 @@ subtask: true
 
 # Implement Task
 
-Implement **ONE** task completely from `not_started` to `completed`.
+Implement **ONLY ONE** task completely from `not_started` to `completed`.
 
 ## IMPORTANT - AUTOMATED WORKFLOW
 
