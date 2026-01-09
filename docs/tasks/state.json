@@ -1,5 +1,62 @@
 {
   "$schema": "./state.schema.json",
   "version": "2.0",
-  "tasks": {}
+  "tasks": {
+    "task-128-fix-translation-keys-common": {
+      "state": "completed",
+      "lastUpdated": "2026-01-09T16:46:45.209Z",
+      "location": "active",
+      "fromIssue": "APPLICATION_ISSUES.md",
+      "blockedBy": []
+    },
+    "task-129-fix-translation-keys-messages": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-09T16:36:34.592Z",
+      "location": "backlog",
+      "fromIssue": "APPLICATION_ISSUES.md",
+      "blockedBy": []
+    },
+    "task-130-fix-translation-keys-forms": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-09T16:36:48.304Z",
+      "location": "backlog",
+      "fromIssue": "APPLICATION_ISSUES.md",
+      "blockedBy": []
+    },
+    "task-131-fix-translation-keys-absence": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-09T16:37:09.415Z",
+      "location": "backlog",
+      "fromIssue": "APPLICATION_ISSUES.md",
+      "blockedBy": []
+    },
+    "task-132-disable-i18next-debug-mode": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-09T16:37:21.737Z",
+      "location": "backlog",
+      "fromIssue": "APPLICATION_ISSUES.md",
+      "blockedBy": []
+    },
+    "task-133-improve-date-picker-visual-selection": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-09T16:37:44.615Z",
+      "location": "backlog",
+      "fromIssue": "APPLICATION_ISSUES.md",
+      "blockedBy": []
+    },
+    "task-134-implement-leave-allowance-feature": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-09T16:37:55.718Z",
+      "location": "backlog",
+      "fromIssue": "APPLICATION_ISSUES.md",
+      "blockedBy": []
+    },
+    "task-135-improve-pwa-install-button-ux": {
+      "state": "not_started",
+      "lastUpdated": "2026-01-09T16:38:09.176Z",
+      "location": "backlog",
+      "fromIssue": "APPLICATION_ISSUES.md",
+      "blockedBy": []
+    }
+  }
 }

@@ -342,32 +342,32 @@ export const ReviewAndGenerate: React.FC = () => {
             <div className="space-y-4">
               <PdfLanguageSelector />
                <Button
-                variant="primary"
-                onClick={handleGeneratePdf}
-                isLoading={isGeneratingPdf}
-                loadingText={t('pdf.loadingMessage')}
-                size="lg"
-                disabled={
-                  !profile.fullName ||
-                  !profile.email ||
-                  !profile.identityNumber ||
-                  !profile.companyName ||
-                  !profile.department ||
-                  !profile.position ||
-                  !leaveDraft.startDate ||
-                  !leaveDraft.endDate ||
-                  !signature.signatureDataUrl ||
-                  absenceBreakdown?.absenceDays === 0
-                }
-                className="w-full md:w-auto"
-              >
-                {t('pdf.clickToGenerate')}
-              </Button>
-              <p className="text-sm text-[color:var(--color-text-secondary)] mt-2">
-                {isGeneratingPdf
-                  ? t('pdf.loadingMessage')
-                  : t('pdf.clickToGenerate')}
-              </p>
+                 variant="primary"
+                 onClick={handleGeneratePdf}
+                 isLoading={isGeneratingPdf}
+                 loadingText={t('messages.pdf.loadingMessage')}
+                 size="lg"
+                 disabled={
+                   !profile.fullName ||
+                   !profile.email ||
+                   !profile.identityNumber ||
+                   !profile.companyName ||
+                   !profile.department ||
+                   !profile.position ||
+                   !leaveDraft.startDate ||
+                   !leaveDraft.endDate ||
+                   !signature.signatureDataUrl ||
+                   absenceBreakdown?.absenceDays === 0
+                 }
+                 className="w-full md:w-auto"
+               >
+                 {t('messages.pdf.clickToGenerate')}
+               </Button>
+               <p className="text-sm text-[color:var(--color-text-secondary)] mt-2">
+                 {isGeneratingPdf
+                   ? t('messages.pdf.loadingMessage')
+                   : t('messages.pdf.clickToGenerate')}
+               </p>
             </div>
           </div>
         </Card>
