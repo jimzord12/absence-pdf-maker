@@ -10,6 +10,10 @@ import grTranslations from './locales/gr.json';
  * Uses multiple namespaces (common, forms, validation, messages, pdf) for better organization.
  * Default language is 'gr' (matching locale.store.ts) with 'en' as fallback.
  * HTML escaping is disabled as React handles this.
+ *
+ * Debug Mode:
+ * - Development: Enabled (shows all i18next warnings including missing keys)
+ * - Production: Disabled (suppresses missing key warnings to prevent console spam)
  */
 
 i18n.use(initReactI18next).init({
@@ -26,6 +30,11 @@ i18n.use(initReactI18next).init({
     escapeValue: false,
   },
   debug: import.meta.env.DEV,
+  missingKeyHandler: (lng, ns, key) => {
+    if (import.meta.env.DEV) {
+      console.warn(`i18next::translator: missingKey ${lng} ${ns} ${key}`);
+    }
+  },
 });
 
 export default i18n;
