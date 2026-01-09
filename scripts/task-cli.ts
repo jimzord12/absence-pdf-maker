@@ -313,13 +313,20 @@ function handleState(taskId: string, newState: string): void {
     }
   }
 
-  // Update state
-  task.state = targetState;
-  task.location = targetLocation;
-  task.lastUpdated = new Date().toISOString();
-  saveState(state);
+  const isArchivedState = targetState === 'committed' || targetState === 'cancelled';
 
-  console.log(`✓ Updated ${taskId}: ${currentState} → ${targetState}`);
+  if (isArchivedState) {
+    delete state.tasks[taskId];
+    saveState(state);
+    console.log(`✓ Removed ${taskId} from state.json (archived)`);
+    console.log(`✓ Archived ${taskId}: ${currentState} → ${targetState}`);
+  } else {
+    task.state = targetState;
+    task.location = targetLocation;
+    task.lastUpdated = new Date().toISOString();
+    saveState(state);
+    console.log(`✓ Updated ${taskId}: ${currentState} → ${targetState}`);
+  }
 }
 
 function handleShow(taskId: string): void {
