@@ -2,13 +2,6 @@
   "$schema": "./state.schema.json",
   "version": "2.0",
   "tasks": {
-    "task-133-improve-date-picker-visual-selection": {
-      "state": "completed",
-      "lastUpdated": "2026-01-09T19:29:00.035Z",
-      "location": "active",
-      "fromIssue": "APPLICATION_ISSUES.md",
-      "blockedBy": []
-    },
     "task-134-implement-leave-allowance-feature": {
       "state": "not_started",
       "lastUpdated": "2026-01-09T16:37:55.718Z",
