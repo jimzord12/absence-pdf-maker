@@ -63,15 +63,15 @@ describe('Textarea', () => {
     it('should apply error styling to textarea when error is present', () => {
       render(<Textarea error="Error message" />);
       const textarea = screen.getByRole('textbox');
-      expect(textarea).toHaveClass('border-red-500', 'focus-visible:ring-red-500');
-      expect(textarea).not.toHaveClass('border-gray-300');
+      expect(textarea).toHaveClass('border-[color:var(--color-error)]', 'focus-visible:ring-[color:var(--color-error)]');
+      expect(textarea).not.toHaveClass('border-[color:var(--color-border)]');
     });
 
     it('should apply default styling when no error', () => {
       render(<Textarea />);
       const textarea = screen.getByRole('textbox');
-      expect(textarea).toHaveClass('border-gray-300');
-      expect(textarea).not.toHaveClass('border-red-500');
+      expect(textarea).toHaveClass('border-[color:var(--color-border)]');
+      expect(textarea).not.toHaveClass('border-[color:var(--color-error)]');
     });
   });
 

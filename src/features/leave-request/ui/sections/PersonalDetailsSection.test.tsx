@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
@@ -129,7 +129,7 @@ describe('PersonalDetailsSection', () => {
       );
 
       // Card should have the correct styling classes
-      const card = container.querySelector('.bg-white');
+      const card = container.querySelector('const card = container.querySelector('.bg-\[color:var(--color-surface)]')');
       expect(card).toBeInTheDocument();
       expect(card).toHaveClass('rounded-lg');
     });

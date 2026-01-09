@@ -99,14 +99,29 @@ describe('Tailwind CSS Integration', () => {
     });
 
     it('should define .sr-only utility class for accessibility', () => {
-      expect(indexCssContent).toContain('.sr-only');
+      expect(indexCssContent).toContain('@utility sr-only');
       expect(indexCssContent).toMatch(/\.sr-only\s*{[^}]*position:\s*absolute/);
+    });
+
+    it('should define .focus-visible styles', () => {
+      expect(indexCssContent).toContain('@utility focus-visible-custom');
     });
   });
 
   describe('Focus Styles', () => {
     it('should define .focus-visible styles', () => {
       expect(indexCssContent).toContain('.focus-visible');
+      expect(indexCssContent).toContain('@utility focus-visible-custom');
+    });
+
+    it('should define .animate-stagger-0 through .animate-stagger-6 utility classes', () => {
+      expect(indexCssContent).toContain('.animate-stagger-0');
+      expect(indexCssContent).toContain('.animate-stagger-1');
+      expect(indexCssContent).toContain('.animate-stagger-2');
+      expect(indexCssContent).toContain('.animate-stagger-3');
+      expect(indexCssContent).toContain('.animate-stagger-4');
+      expect(indexCssContent).toContain('.animate-stagger-5');
+      expect(indexCssContent).toContain('.animate-stagger-6');
     });
 
     it('should define .focus:not-focus-visible utility', () => {

@@ -17,9 +17,24 @@ describe('Modal', () => {
   });
 
   describe('rendering', () => {
-    it('should render when isOpen is true', () => {
+    it('should render close button by default', () => {
       render(<Modal {...defaultProps} />);
-      expect(screen.getByText('Modal content')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /close modal/i })).toBeInTheDocument();
+    });
+
+    it('should not render close button when showCloseButton is false', () => {
+      render(<Modal {...defaultProps} showCloseButton={false} />);
+      expect(screen.queryByRole('button', { name: /close modal/i })).not.toBeInTheDocument();
+    });
+
+    it('should render header section when title is provided', () => {
+      render(<Modal {...defaultProps} title="Title" />);
+      expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
+    });
+
+    it('should not render header section when neither title nor showCloseButton', () => {
+      render(<Modal {...defaultProps} showCloseButton={false} />);
+      expect(screen.queryByRole('heading')).not.toBeInTheDocument();
     });
 
     it('should not render when isOpen is false', () => {
@@ -39,7 +54,7 @@ describe('Modal', () => {
 
     it('should not render close button when showCloseButton is false', () => {
       render(<Modal {...defaultProps} showCloseButton={false} />);
-      expect(screen.queryByLabelText('Close modal')).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /close modal/i })).not.toBeInTheDocument();
     });
 
     it('should render header section when title is provided', () => {
