@@ -16,7 +16,7 @@ import { PdfLanguageSelector } from './PdfLanguageSelector';
  * actions for exporting/importing profile data and generating the PDF document.
  */
 export const ReviewAndGenerate: React.FC = () => {
-  const { t } = useTranslation() as { t: (key: string, options?: Record<string, unknown>) => string };
+  const { t } = useTranslation('forms') as { t: (key: string, options?: Record<string, unknown>) => string };
 
   const [hasAnimated, setHasAnimated] = useState(false);
 
@@ -51,10 +51,10 @@ export const ReviewAndGenerate: React.FC = () => {
 
   // Format leave type for display
   const leaveTypeLabels: Record<LeaveType, string> = {
-    annual: t('leave.types.annual', { ns: 'forms' }),
-    sick: t('leave.types.sick', { ns: 'forms' }),
-    unpaid: t('leave.types.unpaid', { ns: 'forms' }),
-    other: t('leave.types.other', { ns: 'forms' }),
+    annual: t('leave.types.annual'),
+    sick: t('leave.types.sick'),
+    unpaid: t('leave.types.unpaid'),
+    other: t('leave.types.other'),
   };
 
   /**
@@ -173,14 +173,14 @@ export const ReviewAndGenerate: React.FC = () => {
 
   return (
     <aside
-      aria-label={t('review.heading', { ns: 'forms' })}
+      aria-label={t('review.heading')}
       className={`space-y-6 ${!hasAnimated ? 'animate-fade-in-up animate-stagger-1' : ''}`}
     >
       {/* Profile Summary Section */}
       <section aria-labelledby="review-personal-details-heading">
         <Card>
           <h2 id="review-personal-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
-            {t('personal.heading', { ns: 'forms' })}
+            {t('personal.heading')}
           </h2>
            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -227,33 +227,33 @@ export const ReviewAndGenerate: React.FC = () => {
       <section aria-labelledby="review-leave-details-heading">
         <Card>
           <h2 id="review-leave-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
-            {t('leave.heading', { ns: 'forms' })}
+            {t('leave.heading')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex-col justify-between">
-              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('leave.leaveType', { ns: 'forms' })}</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('leave.leaveType')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">
                 {leaveDraft.leaveType ? leaveTypeLabels[leaveDraft.leaveType] : '—'}
               </p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.leaveAllowance', { ns: 'forms' })}</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.leaveAllowance')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">{leaveDraft.leaveAllowance ? t('common.yes') : t('common.no')}</p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.startDate', { ns: 'forms' })}</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.startDate')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">
                 {leaveDraft.startDate ? formatDate(leaveDraft.startDate, locale) : '—'}
               </p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.endDate', { ns: 'forms' })}</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.endDate')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">
                 {leaveDraft.endDate ? formatDate(leaveDraft.endDate, locale) : '—'}
               </p>
             </div>
             <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('leave.reason', { ns: 'forms' })}</span>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('leave.reason')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">{leaveDraft.reason || '—'}</p>
             </div>
           </div>
@@ -261,26 +261,26 @@ export const ReviewAndGenerate: React.FC = () => {
           {/* Absence Days Breakdown */}
           {absenceBreakdown && (
             <div className="mt-4 p-4 bg-[color:var(--color-surface-hover)] rounded-lg">
-              <h3 className="font-semibold mb-2 text-[color:var(--color-text-primary)]">{t('leave.absence.calculationHeading', { ns: 'forms' })}</h3>
+              <h3 className="font-semibold mb-2 text-[color:var(--color-text-primary)]">{t('leave.absence.calculationHeading')}</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <span className="text-[color:var(--color-text-secondary)] block">{t('leave.absence.totalDays', { ns: 'forms' })}</span>
+                  <span className="text-[color:var(--color-text-secondary)] block">{t('leave.absence.totalDays')}</span>
                   <span className="font-medium text-lg text-[color:var(--color-text-primary)]">{absenceBreakdown.totalDays}</span>
                 </div>
                 <div>
-                  <span className="text-[color:var(--color-text-secondary)] block">{t('leave.absence.weekendDays', { ns: 'forms' })}</span>
+                  <span className="text-[color:var(--color-text-secondary)] block">{t('leave.absence.weekendDays')}</span>
                   <span className="font-medium text-lg text-[color:var(--color-text-muted)]">
                     {absenceBreakdown.weekendDays}
                   </span>
                 </div>
                 <div>
-                  <span className="text-[color:var(--color-text-secondary)] block">{t('leave.absence.holidayDays', { ns: 'forms' })}</span>
+                  <span className="text-[color:var(--color-text-secondary)] block">{t('leave.absence.holidayDays')}</span>
                   <span className="font-medium text-lg text-[color:var(--color-text-muted)]">
                     {absenceBreakdown.holidayDays}
                   </span>
                 </div>
                 <div>
-                  <span className="text-[color:var(--color-text-secondary)] block">{t('leave.absence.absenceDays', { ns: 'forms' })}</span>
+                  <span className="text-[color:var(--color-text-secondary)] block">{t('leave.absence.absenceDays')}</span>
                   <span className="font-medium text-lg text-[color:var(--color-info-700)] dark:text-[color:var(--color-info-300)]">
                     {absenceBreakdown.absenceDays}
                   </span>
@@ -291,17 +291,17 @@ export const ReviewAndGenerate: React.FC = () => {
 
           {/* Signature Status */}
           <div className="mt-4">
-            <span className="text-sm text-[color:var(--color-text-secondary)]">{t('signature.label', { ns: 'forms' })}</span>
+            <span className="text-sm text-[color:var(--color-text-secondary)]">{t('signature.label')}</span>
               <div className="flex items-center justify-between mt-1">
                 <p className="font-medium text-[color:var(--color-text-primary)]">
                   {signature.signatureDataUrl ? (
-                    <span className="text-[color:var(--color-success)]">{t('common.status.signed')}</span>
+                    <span className="text-[color:var(--color-success)]">{t('status.signed', { ns: 'common' })}</span>
                   ) : (
-                    <span className="text-[color:var(--color-error)]">{t('common.status.notSigned')}</span>
+                    <span className="text-[color:var(--color-error)]">{t('status.notSigned', { ns: 'common' })}</span>
                   )}
                 </p>
                 <Button variant="secondary" size="sm" onClick={toggleSignatureModal}>
-                  {signature.signatureDataUrl ? t('common.status.update') : t('common.status.add')}
+                  {signature.signatureDataUrl ? t('status.update', { ns: 'common' }) : t('status.add', { ns: 'common' })}
                 </Button>
              </div>
           </div>
@@ -312,7 +312,7 @@ export const ReviewAndGenerate: React.FC = () => {
       <section aria-labelledby="review-actions-heading">
         <Card>
           <h2 id="review-actions-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
-            {t('actions.heading', { ns: 'forms' })}
+            {t('actions.heading')}
           </h2>
           <div className="space-y-4">
             {/* Profile Management */}

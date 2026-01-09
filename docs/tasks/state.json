@@ -2,13 +2,6 @@
   "$schema": "./state.schema.json",
   "version": "2.0",
   "tasks": {
-    "task-130-fix-translation-keys-forms": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-09T16:36:48.304Z",
-      "location": "backlog",
-      "fromIssue": "APPLICATION_ISSUES.md",
-      "blockedBy": []
-    },
     "task-131-fix-translation-keys-absence": {
       "state": "not_started",
       "lastUpdated": "2026-01-09T16:37:09.415Z",
