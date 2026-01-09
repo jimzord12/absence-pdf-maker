@@ -4,7 +4,7 @@ import { downloadFile, readFileAsText } from '../../../shared/lib/file';
 import { showSuccess, showWarning } from '../../../shared/lib/toast';
 
 const getFieldLabel = (t: (key: string, options?: Record<string, unknown>) => string, field: string): string => {
-  return t(`messages.fields.${field}`);
+  return t(`fields.${field}`, { ns: 'messages' });
 };
 
 export const exportProfileToJson = (t: (key: string, options?: Record<string, unknown>) => string): void => {
@@ -13,7 +13,7 @@ export const exportProfileToJson = (t: (key: string, options?: Record<string, un
   const hasData = Object.values(profile).some((value) => value && value !== '');
 
   if (!hasData) {
-    throw new Error(t('messages.persistence.noDataToExport'));
+    throw new Error(t('persistence.noDataToExport', { ns: 'messages' }));
   }
 
   try {
@@ -26,7 +26,7 @@ export const exportProfileToJson = (t: (key: string, options?: Record<string, un
     downloadFile('user-details.json', jsonContent, 'application/json');
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
-    throw new Error(t('messages.persistence.exportFailed', { message }));
+    throw new Error(t('persistence.exportFailed', { ns: 'messages', message }));
   }
 };
 
@@ -77,7 +77,7 @@ export const importProfileFromJson = async (
         (issue) => `${getFieldLabel(t, issue.path[0] as string) || issue.path.join('.')}: ${issue.message}`
       );
       throw new Error(
-        t('messages.persistence.invalidProfileData', { errors: errorMessages.join('\n') })
+        t('persistence.invalidProfileData', { ns: 'messages', errors: errorMessages.join('\n') })
       );
     }
 
@@ -128,11 +128,11 @@ export const importProfileFromJson = async (
     // Show appropriate toast message
     if (missingFields.length > 0) {
       showWarning(
-        t('messages.persistence.importWithMissingFields', { fields: missingFields.join(', ') }),
+        t('persistence.importWithMissingFields', { ns: 'messages', fields: missingFields.join(', ') }),
         { duration: 10000 }
       );
     } else {
-      showSuccess(t('messages.persistence.importSuccess'));
+      showSuccess(t('persistence.importSuccess', { ns: 'messages' }));
     }
 
     // Call success callback if provided (e.g., to reset form)
@@ -141,9 +141,9 @@ export const importProfileFromJson = async (
     }
   } catch (error) {
     if (error instanceof SyntaxError) {
-      throw new Error(t('messages.persistence.invalidJsonFormat'));
+      throw new Error(t('persistence.invalidJsonFormat', { ns: 'messages' }));
     }
     const message = error instanceof Error ? error.message : 'Unknown error';
-    throw new Error(t('messages.persistence.importFailed', { message }));
+    throw new Error(t('persistence.importFailed', { ns: 'messages', message }));
   }
 };
