@@ -1,11 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { PersonalDetailsSection } from './PersonalDetailsSection';
+import { renderWithI18n } from '../../../../test-utils';
 
 // Wrapper component to provide form context
 const FormWrapper = ({
@@ -67,7 +68,7 @@ describe('PersonalDetailsSection', () => {
 
   describe('1. Component renders correctly', () => {
     it('should render the section with correct heading', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -77,7 +78,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should render all three input fields with correct labels', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -89,7 +90,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should render fields with correct input types', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -105,7 +106,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should render fields with correct placeholders', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -121,7 +122,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should be wrapped in a Card component with correct styling', () => {
-      const { container } = render(
+      const { container } = renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -136,7 +137,7 @@ describe('PersonalDetailsSection', () => {
 
   describe('2. Form fields are properly registered', () => {
     it('should allow typing in Full Name field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -149,7 +150,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should allow typing in Email Address field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -162,7 +163,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should allow typing in Phone Number field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -175,7 +176,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should have proper ARIA attributes for accessibility', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -195,7 +196,7 @@ describe('PersonalDetailsSection', () => {
 
   describe('3. Email validation works correctly', () => {
     it('should accept valid email format', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -212,7 +213,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should accept invalid email format without validation trigger when mode is onTouched', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -228,7 +229,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should accept invalid email format - missing domain', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -243,7 +244,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should accept invalid email format - missing local part', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -258,7 +259,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should accept invalid email format - no top-level domain', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -273,7 +274,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should accept email with special characters', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -289,7 +290,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should handle email field value updates', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -313,7 +314,7 @@ describe('PersonalDetailsSection', () => {
 
   describe('4. Validation errors display properly', () => {
     it('should display validation errors for empty required fields', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -349,7 +350,7 @@ describe('PersonalDetailsSection', () => {
         },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -368,7 +369,7 @@ describe('PersonalDetailsSection', () => {
         },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -381,7 +382,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should not show errors initially when form is untouched', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -401,7 +402,7 @@ describe('PersonalDetailsSection', () => {
         },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -430,7 +431,7 @@ describe('PersonalDetailsSection', () => {
         },
       });
 
-      render(
+      renderWithI18n(
         <FormWrapper
           defaultValues={{
             profile: {
@@ -467,7 +468,7 @@ describe('PersonalDetailsSection', () => {
         },
       });
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -481,20 +482,20 @@ describe('PersonalDetailsSection', () => {
 
   describe('6. Card styling is applied', () => {
     it('should have correct background and border styling', () => {
-      const { container } = render(
+      const { container } = renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
       );
 
-      const card = container.querySelector('.bg-white');
+      const card = container.querySelector('.bg-\\[color\\:var\\(--color-surface\\)]');
       expect(card).toBeInTheDocument();
       expect(card).toHaveClass('rounded-lg');
-      expect(card).toHaveClass('border-gray-200');
+      expect(card).toHaveClass('border-\\[color\\:var\\(--color-border\\)]');
     });
 
     it('should have shadow styling applied', () => {
-      const { container } = render(
+      const { container } = renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -505,7 +506,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should have padding applied from Card component', () => {
-      const { container } = render(
+      const { container } = renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -516,7 +517,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should have heading with correct styling', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -529,7 +530,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should have proper spacing between form fields', () => {
-      const { container } = render(
+      const { container } = renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -543,7 +544,7 @@ describe('PersonalDetailsSection', () => {
 
   describe('7. Field labels are clear and descriptive', () => {
     it('should have "Full Name" as label for first field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -554,7 +555,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should have "Email Address" as label for second field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -565,7 +566,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should have "Phone Number" as label for third field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -576,7 +577,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should have labels with correct styling', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -588,12 +589,12 @@ describe('PersonalDetailsSection', () => {
       labelElements.forEach(label => {
         expect(label).toHaveClass('text-sm');
         expect(label).toHaveClass('font-medium');
-        expect(label).toHaveClass('text-gray-700');
+        expect(label).toHaveClass('text-[color:var(--color-text-primary)]');
       });
     });
 
     it('should have descriptive placeholders that guide user input', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -611,7 +612,7 @@ describe('PersonalDetailsSection', () => {
 
   describe('8. Edge cases and additional behaviors', () => {
     it('should handle whitespace-only values for Full Name', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -626,7 +627,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should handle whitespace-only values for Phone Number', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -641,7 +642,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should work without errors prop', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -654,7 +655,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should handle null errors prop gracefully', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection errors={undefined} />
         </FormWrapper>
@@ -664,7 +665,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should accept phone numbers in various formats', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -695,7 +696,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it("should render in correct order: Full Name, Father's Name, Identity Number, Email, Phone", () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>
@@ -711,7 +712,7 @@ describe('PersonalDetailsSection', () => {
     });
 
     it('should have focusable input fields', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <PersonalDetailsSection />
         </FormWrapper>

@@ -81,6 +81,11 @@
       "lastUpdated": "2026-01-08T15:21:22.734Z",
       "location": "archive",
       "blockedBy": []
+    },
+    "123-update-component-tests-for-translations": {
+      "state": "committed",
+      "lastUpdated": "2026-01-09T13:43:47.498Z",
+      "location": "archive"
     }
   }
 }

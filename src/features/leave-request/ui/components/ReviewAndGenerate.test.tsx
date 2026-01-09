@@ -1,8 +1,9 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { ReviewAndGenerate } from './ReviewAndGenerate';
+import { renderWithI18n } from '../../../../test-utils';
 
 // Mock persistence services
 const mockExportProfileToJson = vi.fn();
@@ -98,7 +99,7 @@ beforeEach(() => {
 describe('ReviewAndGenerate', () => {
   describe('1. Component renders correctly', () => {
     it('should render all sections', () => {
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       // Check Personal Details Summary Section
       expect(screen.getByText('Personal Details Summary')).toBeInTheDocument();
@@ -117,7 +118,7 @@ describe('ReviewAndGenerate', () => {
     });
 
     it('should render file input hidden', () => {
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const fileInput = screen.getByLabelText(/Import profile from JSON file/i);
       expect(fileInput).toBeInTheDocument();
@@ -125,7 +126,7 @@ describe('ReviewAndGenerate', () => {
     });
 
     it('should render with empty data placeholders', () => {
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       // Get all '—' elements
       const dashes = screen.getAllByText('—');
@@ -159,7 +160,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('Full Name')).toBeInTheDocument();
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -179,7 +180,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('Email')).toBeInTheDocument();
       expect(screen.getByText('john@example.com')).toBeInTheDocument();
@@ -200,7 +201,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('Phone')).toBeInTheDocument();
       expect(screen.getByText('123-456-7890')).toBeInTheDocument();
@@ -220,7 +221,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('Employee ID')).toBeInTheDocument();
       expect(screen.getByText('EMP001')).toBeInTheDocument();
@@ -240,7 +241,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('Department')).toBeInTheDocument();
       expect(screen.getByText('Engineering')).toBeInTheDocument();
@@ -261,7 +262,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('Position')).toBeInTheDocument();
       expect(screen.getByText('Developer')).toBeInTheDocument();
@@ -281,7 +282,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
       expect(screen.getByText('jane@example.com')).toBeInTheDocument();
@@ -292,7 +293,7 @@ describe('ReviewAndGenerate', () => {
     });
 
     it('should show placeholders when fields are empty', () => {
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       // All profile fields should show '—' when empty
       expect(screen.getByText('Full Name').parentElement?.textContent).toContain('—');
@@ -317,7 +318,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('Leave Type')).toBeInTheDocument();
       expect(screen.getByText('Annual Leave')).toBeInTheDocument();
@@ -343,7 +344,7 @@ describe('ReviewAndGenerate', () => {
           });
         });
 
-        const { unmount } = render(<ReviewAndGenerate />);
+        const { unmount } = renderWithI18n(<ReviewAndGenerate />);
         expect(screen.getByText(label)).toBeInTheDocument();
         unmount();
       });
@@ -362,7 +363,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('Start Date')).toBeInTheDocument();
       expect(screen.getByText('2025-12-01')).toBeInTheDocument();
@@ -381,7 +382,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('End Date')).toBeInTheDocument();
       expect(screen.getByText('2025-12-05')).toBeInTheDocument();
@@ -399,7 +400,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('Reason')).toBeInTheDocument();
       expect(screen.getByText('Medical appointment')).toBeInTheDocument();
@@ -424,7 +425,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('Absence Days Calculation')).toBeInTheDocument();
       expect(screen.getByText('10')).toBeInTheDocument(); // Total Days
@@ -436,7 +437,7 @@ describe('ReviewAndGenerate', () => {
     it('should not display absence days breakdown when dates are not set', () => {
       mockCalculateAbsenceDays.mockReturnValue(null);
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.queryByText('Absence Days Calculation')).not.toBeInTheDocument();
     });
@@ -450,7 +451,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('Signature')).toBeInTheDocument();
       expect(screen.getByText('✓ Signed')).toBeInTheDocument();
@@ -466,7 +467,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('Signature')).toBeInTheDocument();
       expect(screen.getByText('✗ Not signed')).toBeInTheDocument();
@@ -495,7 +496,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('Annual Leave')).toBeInTheDocument();
       expect(screen.getByText('2025-12-01')).toBeInTheDocument();
@@ -509,7 +510,7 @@ describe('ReviewAndGenerate', () => {
   describe('4. Export profile button triggers download', () => {
     it('should call exportProfileToJson when Export Profile button is clicked', async () => {
       const user = userEvent.setup();
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const exportButton = screen.getByRole('button', { name: 'Export Profile' });
       await user.click(exportButton);
@@ -521,7 +522,7 @@ describe('ReviewAndGenerate', () => {
       const user = userEvent.setup();
       mockExportProfileToJson.mockResolvedValue(undefined);
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const exportButton = screen.getByRole('button', { name: 'Export Profile' });
       await user.click(exportButton);
@@ -538,7 +539,7 @@ describe('ReviewAndGenerate', () => {
         throw new Error('Export failed');
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const exportButton = screen.getByRole('button', { name: 'Export Profile' });
       await user.click(exportButton);
@@ -552,7 +553,7 @@ describe('ReviewAndGenerate', () => {
   describe('5. Import profile button handles file upload', () => {
     it('should trigger file input when Import Profile button is clicked', async () => {
       const user = userEvent.setup();
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const importButton = screen.getByRole('button', { name: 'Import Profile' });
       const fileInput = screen.getByLabelText(/Import profile from JSON file/i);
@@ -570,7 +571,7 @@ describe('ReviewAndGenerate', () => {
       const user = userEvent.setup();
       mockImportProfileFromJson.mockResolvedValue(undefined);
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const fileInput = screen.getByLabelText(/Import profile from JSON file/i);
       const file = new File(['{"profile":{}}'], 'profile.json', { type: 'application/json' });
@@ -585,7 +586,7 @@ describe('ReviewAndGenerate', () => {
       const user = userEvent.setup();
       mockImportProfileFromJson.mockResolvedValue(undefined);
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const fileInput = screen.getByLabelText(/Import profile from JSON file/i);
       const file = new File(['{"profile":{}}'], 'profile.json', { type: 'application/json' });
@@ -601,7 +602,7 @@ describe('ReviewAndGenerate', () => {
       const user = userEvent.setup();
       mockImportProfileFromJson.mockRejectedValue(new Error('Invalid JSON format'));
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const fileInput = screen.getByLabelText(/Import profile from JSON file/i);
       const file = new File(['invalid'], 'invalid.json', { type: 'application/json' });
@@ -614,7 +615,7 @@ describe('ReviewAndGenerate', () => {
     });
 
     it('should handle no file selected gracefully', () => {
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const fileInput = screen.getByLabelText(/Import profile from JSON file/i);
 
@@ -633,7 +634,7 @@ describe('ReviewAndGenerate', () => {
       const user = userEvent.setup();
       mockImportProfileFromJson.mockResolvedValue(undefined);
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const fileInput = screen.getByLabelText(/Import profile from JSON file/i) as HTMLInputElement;
       const file = new File(['{"profile":{}}'], 'profile.json', { type: 'application/json' });
@@ -672,7 +673,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       // Verify profile is populated
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -703,7 +704,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(screen.getByText('✓ Signed')).toBeInTheDocument();
 
@@ -731,7 +732,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const clearButton = screen.getByRole('button', { name: 'Clear Profile' });
       await user.click(clearButton);
@@ -757,7 +758,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const clearButton = screen.getByRole('button', { name: 'Clear Profile' });
       await user.click(clearButton);
@@ -795,7 +796,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const generateButton = screen.getByRole('button', { name: 'Generate PDF' });
       expect(generateButton).toBeDisabled();
@@ -824,7 +825,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const generateButton = screen.getByRole('button', { name: 'Generate PDF' });
       expect(generateButton).not.toBeDisabled();
@@ -855,7 +856,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const generateButton = screen.getByRole('button', { name: 'Generate PDF' });
       await user.click(generateButton);
@@ -891,7 +892,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const generateButton = screen.getByRole('button', { name: 'Generate PDF' });
       await user.click(generateButton);
@@ -939,7 +940,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const generateButton = screen.getByRole('button', { name: /Generating PDF\.\.\./i });
       expect(generateButton).toBeInTheDocument();
@@ -977,7 +978,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const generateButton = screen.getByRole('button', { name: 'Generate PDF' });
       expect(generateButton).toBeInTheDocument();
@@ -1015,7 +1016,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(
         screen.getByText('Please wait while we generate your PDF document...')
@@ -1053,7 +1054,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       expect(
         screen.getByText('Click to generate and download your leave request PDF')
@@ -1068,7 +1069,7 @@ describe('ReviewAndGenerate', () => {
         throw new Error('First error');
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const exportButton = screen.getByRole('button', { name: 'Export Profile' });
       await user.click(exportButton);
@@ -1082,7 +1083,7 @@ describe('ReviewAndGenerate', () => {
       const user = userEvent.setup();
       mockImportProfileFromJson.mockRejectedValueOnce(new Error('Invalid JSON format'));
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const fileInput = screen.getByLabelText(/Import profile from JSON file/i);
       const file = new File(['invalid'], 'invalid.json', { type: 'application/json' });
@@ -1102,7 +1103,7 @@ describe('ReviewAndGenerate', () => {
         throw new Error('First error');
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const exportButton = screen.getByRole('button', { name: 'Export Profile' });
       await user.click(exportButton);
@@ -1131,7 +1132,7 @@ describe('ReviewAndGenerate', () => {
       // First import fails
       mockImportProfileFromJson.mockRejectedValueOnce(new Error('First error'));
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const fileInput = screen.getByLabelText(/Import profile from JSON file/i);
       const file = new File(['invalid'], 'invalid.json', { type: 'application/json' });
@@ -1162,7 +1163,7 @@ describe('ReviewAndGenerate', () => {
       const user = userEvent.setup();
       mockExportProfileToJson.mockResolvedValue(undefined);
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const exportButton = screen.getByRole('button', { name: 'Export Profile' });
       await user.click(exportButton);
@@ -1176,7 +1177,7 @@ describe('ReviewAndGenerate', () => {
       const user = userEvent.setup();
       mockImportProfileFromJson.mockResolvedValue(undefined);
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const fileInput = screen.getByLabelText(/Import profile from JSON file/i);
       const file = new File(['{"profile":{}}'], 'profile.json', { type: 'application/json' });
@@ -1204,7 +1205,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const clearButton = screen.getByRole('button', { name: 'Clear Profile' });
       await user.click(clearButton);
@@ -1239,7 +1240,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       const generateButton = screen.getByRole('button', { name: 'Generate PDF' });
       await user.click(generateButton);
@@ -1272,7 +1273,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       // The errorMessage is stored in the UI state but is not displayed
       // directly in the component since we now use toast notifications
@@ -1299,7 +1300,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       // The errorMessage is stored in the UI state but is not displayed
       // directly in the component since we now use toast notifications
@@ -1328,7 +1329,7 @@ describe('ReviewAndGenerate', () => {
         });
       });
 
-      render(<ReviewAndGenerate />);
+      renderWithI18n(<ReviewAndGenerate />);
 
       // The mock should be called with the correct arguments
       const calls = mockCalculateAbsenceDays.mock.calls;

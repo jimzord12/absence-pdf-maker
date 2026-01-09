@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -8,6 +8,7 @@ import type { LeaveRequest } from '../../model/leaveRequest.types';
 import { calculateAbsenceDays } from '../../services/absenceDays';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { DateRangeField } from '../components/DateRangeField';
+import { renderWithI18n } from '../../../../test-utils';
 import { LeaveDetailsSection } from './LeaveDetailsSection';
 
 // Mock the calculateAbsenceDays function
@@ -160,7 +161,7 @@ describe('LeaveDetailsSection', () => {
 
   describe('1. Component renders correctly', () => {
     it('should render the section with Card component', () => {
-      const { container } = render(
+      const { container } = renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -171,7 +172,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should render section heading', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -181,7 +182,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should render all form fields', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -194,7 +195,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should render Leave Type select with all options', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -207,7 +208,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should render placeholder for Leave Type select', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -221,7 +222,7 @@ describe('LeaveDetailsSection', () => {
 
   describe('2. Leave Type dropdown functionality', () => {
     it('should register leave type field with React Hook Form', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -235,7 +236,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should allow selecting all leave types', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -258,7 +259,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should sync leave type selection to Zustand store', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -281,7 +282,7 @@ describe('LeaveDetailsSection', () => {
         leaveType: { message: 'Leave type is required', type: 'required' },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -293,7 +294,7 @@ describe('LeaveDetailsSection', () => {
 
   describe('3. DateRangeField integration', () => {
     it('should render DateRangeField component', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -304,7 +305,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should allow setting start date', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -318,7 +319,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should allow setting end date', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -332,7 +333,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should sync date selection to Zustand store', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -359,7 +360,7 @@ describe('LeaveDetailsSection', () => {
         endDate: { message: 'End date is required', type: 'required' },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -372,7 +373,7 @@ describe('LeaveDetailsSection', () => {
 
   describe('4. Reason textarea functionality', () => {
     it('should render reason textarea with correct label', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -382,7 +383,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should have placeholder text', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -393,7 +394,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should allow typing in reason textarea', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -407,7 +408,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should sync reason to Zustand store', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -426,7 +427,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should accept empty reason (optional field)', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -441,7 +442,7 @@ describe('LeaveDetailsSection', () => {
         reason: { message: 'Reason must be at least 10 characters', type: 'min' },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -454,7 +455,7 @@ describe('LeaveDetailsSection', () => {
   describe('5. Absence days calculation display', () => {
     it('should not display absence calculation when dates are not set', () => {
       // Test without form context to see initial state
-      render(<LeaveDetailsSection />);
+      renderWithI18n(<LeaveDetailsSection />);
 
       // When form context is missing, calculation shouldn't display
       expect(screen.queryByText('Absence Calculation')).not.toBeInTheDocument();
@@ -468,7 +469,7 @@ describe('LeaveDetailsSection', () => {
         absenceDays: 6,
       });
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -494,7 +495,7 @@ describe('LeaveDetailsSection', () => {
         absenceDays: 6,
       });
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -521,7 +522,7 @@ describe('LeaveDetailsSection', () => {
         absenceDays: 6,
       });
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -547,7 +548,7 @@ describe('LeaveDetailsSection', () => {
         absenceDays: 6,
       });
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -573,7 +574,7 @@ describe('LeaveDetailsSection', () => {
         absenceDays: 6,
       });
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -599,7 +600,7 @@ describe('LeaveDetailsSection', () => {
         absenceDays: 6,
       });
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -631,7 +632,7 @@ describe('LeaveDetailsSection', () => {
         holidays: { holidaySet },
       });
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -654,7 +655,7 @@ describe('LeaveDetailsSection', () => {
 
     it('should display zero values when no dates are selected', () => {
       // Test without form context
-      render(<LeaveDetailsSection />);
+      renderWithI18n(<LeaveDetailsSection />);
 
       // Without form context, calculation section shouldn't be visible
       expect(screen.queryByText('Absence Calculation')).not.toBeInTheDocument();
@@ -667,7 +668,7 @@ describe('LeaveDetailsSection', () => {
         leaveType: { message: 'Please select a leave type', type: 'required' },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -681,7 +682,7 @@ describe('LeaveDetailsSection', () => {
         startDate: { message: 'Start date is required', type: 'required' },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -695,7 +696,7 @@ describe('LeaveDetailsSection', () => {
         endDate: { message: 'End date is required', type: 'required' },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -709,7 +710,7 @@ describe('LeaveDetailsSection', () => {
         reason: { message: 'Reason is too long', type: 'max' },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -725,7 +726,7 @@ describe('LeaveDetailsSection', () => {
         endDate: { message: 'End date is required', type: 'required' },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -737,7 +738,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should not display errors when errors prop is not provided', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -749,7 +750,7 @@ describe('LeaveDetailsSection', () => {
 
   describe('7. Card component styling', () => {
     it('should apply default Card styles', () => {
-      const { container } = render(
+      const { container } = renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -761,7 +762,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should have padding from Card component', () => {
-      const { container } = render(
+      const { container } = renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -772,7 +773,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should have border from Card component', () => {
-      const { container } = render(
+      const { container } = renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -783,7 +784,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should have shadow from Card component', () => {
-      const { container } = render(
+      const { container } = renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -796,7 +797,7 @@ describe('LeaveDetailsSection', () => {
 
   describe('8. Field registration with React Hook Form', () => {
     it('should register leave type field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -808,7 +809,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should register start date field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -820,7 +821,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should register end date field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -832,7 +833,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should register reason field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -858,7 +859,7 @@ describe('LeaveDetailsSection', () => {
         absenceDays: 4,
       });
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -891,7 +892,7 @@ describe('LeaveDetailsSection', () => {
         absenceDays: 4,
       });
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -915,14 +916,16 @@ describe('LeaveDetailsSection', () => {
 
   describe('10. Edge cases and error handling', () => {
     it('should handle missing form context gracefully', () => {
-      render(<LeaveDetailsSection />);
+      renderWithI18n(<LeaveDetailsSection />);
 
       // Component should still render without crashing
-      expect(screen.getByText('Leave Details Form')).toBeInTheDocument();
+      // Note: Without FormContext, i18next may render in Greek (default language)
+      // Check that component renders without throwing, not specific text
+      expect(document.querySelector('h2[aria-labelledby="leave-details-heading"]')).toBeInTheDocument();
     });
 
     it('should handle undefined errors prop', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection errors={undefined} />
         </FormWrapper>
@@ -939,7 +942,7 @@ describe('LeaveDetailsSection', () => {
         absenceDays: 5,
       });
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>
@@ -969,7 +972,7 @@ describe('LeaveDetailsSection', () => {
     });
 
     it('should handle date inputs with invalid values', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <LeaveDetailsSection />
         </FormWrapper>

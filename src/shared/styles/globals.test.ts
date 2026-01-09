@@ -100,7 +100,7 @@ describe('Tailwind CSS Integration', () => {
 
     it('should define .sr-only utility class for accessibility', () => {
       expect(indexCssContent).toContain('.sr-only');
-      expect(indexCssContent).toMatch(/\.sr-only\s*{[^}]*@apply\s+absolute/);
+      expect(indexCssContent).toMatch(/\.sr-only\s*{[^}]*position:\s*absolute/);
     });
   });
 

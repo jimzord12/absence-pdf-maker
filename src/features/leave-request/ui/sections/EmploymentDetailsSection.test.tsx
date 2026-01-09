@@ -1,11 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { EmploymentDetailsSection } from './EmploymentDetailsSection';
+import { renderWithI18n } from '../../../../test-utils';
 
 // Wrapper component to provide form context
 const FormWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -58,7 +59,7 @@ describe('EmploymentDetailsSection', () => {
 
   describe('1. Component renders correctly', () => {
     it('should render the section with correct heading', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -68,7 +69,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should render all four input fields with correct labels', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -81,7 +82,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should render fields with correct input types', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -97,7 +98,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should render fields with correct placeholders', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -130,7 +131,7 @@ describe('EmploymentDetailsSection', () => {
 
   describe('2. Form fields are properly registered', () => {
     it('should allow typing in Employee ID field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -143,7 +144,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should allow typing in Department field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -156,7 +157,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should allow typing in Position field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -169,7 +170,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should have proper ARIA attributes for accessibility', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -189,7 +190,7 @@ describe('EmploymentDetailsSection', () => {
 
   describe('3. Required field validation', () => {
     it('should accept valid Employee ID', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -206,7 +207,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should accept valid Company Name', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -225,7 +226,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should accept valid Department', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -244,7 +245,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should accept valid Position', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -263,7 +264,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should handle Employee ID field value updates', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -285,7 +286,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should handle Company Name field value updates', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -311,7 +312,7 @@ describe('EmploymentDetailsSection', () => {
 
   describe('4. Validation errors display properly', () => {
     it('should not show errors initially when form is untouched', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -338,7 +339,7 @@ describe('EmploymentDetailsSection', () => {
         },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -357,7 +358,7 @@ describe('EmploymentDetailsSection', () => {
         },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -381,7 +382,7 @@ describe('EmploymentDetailsSection', () => {
         },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -401,7 +402,7 @@ describe('EmploymentDetailsSection', () => {
         },
       } as any;
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection errors={mockErrors} />
         </FormWrapper>
@@ -430,7 +431,7 @@ describe('EmploymentDetailsSection', () => {
         },
       });
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -459,7 +460,7 @@ describe('EmploymentDetailsSection', () => {
         },
       });
 
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -508,7 +509,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should have heading with correct styling', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -535,7 +536,7 @@ describe('EmploymentDetailsSection', () => {
 
   describe('7. Field labels are clear and descriptive', () => {
     it('should have "Employee ID" as label for first field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -546,7 +547,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should have "Company Name" as label for second field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -557,7 +558,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should have "Department" as label for third field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -568,7 +569,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should have "Position" as label for third field', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -579,7 +580,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should have labels with correct styling', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -596,7 +597,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should have descriptive placeholders that guide user input', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -616,7 +617,7 @@ describe('EmploymentDetailsSection', () => {
 
   describe('8. Edge cases and additional behaviors', () => {
     it('should handle whitespace-only values for Employee ID', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -631,7 +632,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should handle whitespace-only values for Department', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -646,7 +647,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should handle whitespace-only values for Position', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -661,7 +662,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should work without errors prop', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -674,7 +675,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should handle null errors prop gracefully', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection errors={undefined} />
         </FormWrapper>
@@ -684,7 +685,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should accept various Employee ID formats', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -709,7 +710,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should accept various department names', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -736,7 +737,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should accept various position titles', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -770,7 +771,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should render in correct order: Employee ID, Company Name, Department, Position', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -785,7 +786,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should have focusable input fields', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -806,7 +807,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should handle special characters in Department name', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -824,7 +825,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should handle special characters in Position title', async () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
@@ -859,7 +860,7 @@ describe('EmploymentDetailsSection', () => {
     });
 
     it('should have the same heading styling as PersonalDetailsSection', () => {
-      render(
+      renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>

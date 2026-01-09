@@ -32,31 +32,31 @@ describe('Alert', () => {
     it('should render info variant by default', () => {
       render(<Alert {...defaultProps} />);
       const alert = screen.getByText('Alert message content').parentElement?.parentElement;
-      expect(alert).toHaveClass('bg-blue-50', 'border-blue-200', 'text-blue-800');
+      expect(alert).toHaveClass('bg-[color:var(--color-info-bg)]', 'border-[color:var(--color-info)]', 'text-[color:var(--color-info)]');
     });
 
     it('should render info variant explicitly', () => {
       render(<Alert {...defaultProps} variant="info" />);
       const alert = screen.getByText('Alert message content').parentElement?.parentElement;
-      expect(alert).toHaveClass('bg-blue-50', 'border-blue-200', 'text-blue-800');
+      expect(alert).toHaveClass('bg-[color:var(--color-info-bg)]', 'border-[color:var(--color-info)]', 'text-[color:var(--color-info)]');
     });
 
     it('should render success variant', () => {
       render(<Alert {...defaultProps} variant="success" />);
       const alert = screen.getByText('Alert message content').parentElement?.parentElement;
-      expect(alert).toHaveClass('bg-green-50', 'border-green-200', 'text-green-800');
+      expect(alert).toHaveClass('bg-[color:var(--color-success-bg)]', 'border-[color:var(--color-success)]', 'text-[color:var(--color-success)]');
     });
 
     it('should render warning variant', () => {
       render(<Alert {...defaultProps} variant="warning" />);
       const alert = screen.getByText('Alert message content').parentElement?.parentElement;
-      expect(alert).toHaveClass('bg-yellow-50', 'border-yellow-200', 'text-yellow-800');
+      expect(alert).toHaveClass('bg-[color:var(--color-warning-bg)]', 'border-[color:var(--color-warning)]', 'text-[color:var(--color-warning)]');
     });
 
     it('should render error variant', () => {
       render(<Alert {...defaultProps} variant="error" />);
       const alert = screen.getByText('Alert message content').parentElement?.parentElement;
-      expect(alert).toHaveClass('bg-red-50', 'border-red-200', 'text-red-800');
+      expect(alert).toHaveClass('bg-[color:var(--color-error-bg)]', 'border-[color:var(--color-error)]', 'text-[color:var(--color-error)]');
     });
   });
 
@@ -67,7 +67,7 @@ describe('Alert', () => {
       const container = screen.getByText('Alert message content').parentElement?.parentElement;
       const iconContainer = container?.querySelector('div');
       expect(iconContainer).toBeInTheDocument();
-      expect(iconContainer).toHaveClass('flex-shrink-0', 'mr-3', 'text-blue-600');
+      expect(iconContainer).toHaveClass('flex-shrink-0', 'mr-3', 'text-[color:var(--color-info)]');
       expect(iconContainer?.querySelector('svg')).toBeInTheDocument();
     });
 
@@ -76,7 +76,7 @@ describe('Alert', () => {
       const container = screen.getByText('Alert message content').parentElement?.parentElement;
       const iconContainer = container?.querySelector('div');
       expect(iconContainer).toBeInTheDocument();
-      expect(iconContainer).toHaveClass('flex-shrink-0', 'mr-3', 'text-green-600');
+      expect(iconContainer).toHaveClass('flex-shrink-0', 'mr-3', 'text-[color:var(--color-success)]');
       expect(iconContainer?.querySelector('svg')).toBeInTheDocument();
     });
 
@@ -85,7 +85,7 @@ describe('Alert', () => {
       const container = screen.getByText('Alert message content').parentElement?.parentElement;
       const iconContainer = container?.querySelector('div');
       expect(iconContainer).toBeInTheDocument();
-      expect(iconContainer).toHaveClass('flex-shrink-0', 'mr-3', 'text-yellow-600');
+      expect(iconContainer).toHaveClass('flex-shrink-0', 'mr-3', 'text-[color:var(--color-warning)]');
       expect(iconContainer?.querySelector('svg')).toBeInTheDocument();
     });
 
@@ -94,7 +94,7 @@ describe('Alert', () => {
       const container = screen.getByText('Alert message content').parentElement?.parentElement;
       const iconContainer = container?.querySelector('div');
       expect(iconContainer).toBeInTheDocument();
-      expect(iconContainer).toHaveClass('flex-shrink-0', 'mr-3', 'text-red-600');
+      expect(iconContainer).toHaveClass('flex-shrink-0', 'mr-3', 'text-[color:var(--color-error)]');
       expect(iconContainer?.querySelector('svg')).toBeInTheDocument();
     });
 
@@ -102,22 +102,22 @@ describe('Alert', () => {
       const { rerender } = render(<Alert {...defaultProps} variant="info" />);
       let container = screen.getByText('Alert message content').parentElement?.parentElement;
       let iconContainer = container?.querySelector('div');
-      expect(iconContainer).toHaveClass('text-blue-600');
+      expect(iconContainer).toHaveClass('text-[color:var(--color-info)]');
 
       rerender(<Alert {...defaultProps} variant="success" />);
       container = screen.getByText('Alert message content').parentElement?.parentElement;
       iconContainer = container?.querySelector('div');
-      expect(iconContainer).toHaveClass('text-green-600');
+      expect(iconContainer).toHaveClass('text-[color:var(--color-success)]');
 
       rerender(<Alert {...defaultProps} variant="warning" />);
       container = screen.getByText('Alert message content').parentElement?.parentElement;
       iconContainer = container?.querySelector('div');
-      expect(iconContainer).toHaveClass('text-yellow-600');
+      expect(iconContainer).toHaveClass('text-[color:var(--color-warning)]');
 
       rerender(<Alert {...defaultProps} variant="error" />);
       container = screen.getByText('Alert message content').parentElement?.parentElement;
       iconContainer = container?.querySelector('div');
-      expect(iconContainer).toHaveClass('text-red-600');
+      expect(iconContainer).toHaveClass('text-[color:var(--color-error)]');
     });
   });
 
@@ -260,9 +260,9 @@ describe('Alert', () => {
       const alerts = screen.getAllByRole('generic'); // divs don't have specific roles
       expect(alerts.length).toBeGreaterThanOrEqual(3);
       // Check that different variants exist
-      expect(screen.getByText('Info message').closest('[class*="bg-blue-50"]')).toBeInTheDocument();
-      expect(screen.getByText('Success message').closest('[class*="bg-green-50"]')).toBeInTheDocument();
-      expect(screen.getByText('Error message').closest('[class*="bg-red-50"]')).toBeInTheDocument();
+      expect(screen.getByText('Info message').closest('[class*="bg-[color:var(--color-info-bg)]"]')).toBeInTheDocument();
+      expect(screen.getByText('Success message').closest('[class*="bg-[color:var(--color-success-bg)]"]')).toBeInTheDocument();
+      expect(screen.getByText('Error message').closest('[class*="bg-[color:var(--color-error-bg)]"]')).toBeInTheDocument();
     });
   });
 

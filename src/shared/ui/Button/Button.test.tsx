@@ -10,13 +10,13 @@ describe('Button', () => {
     it('should render primary variant by default', () => {
       render(<Button>Click me</Button>);
       const button = screen.getByRole('button', { name: 'Click me' });
-      expect(button).toHaveClass('bg-black', 'text-white');
+      expect(button).toHaveClass('bg-[color:var(--color-primary)]', 'text-[color:var(--color-text-inverse)]');
     });
 
     it('should render primary variant when specified', () => {
       render(<Button variant="primary">Primary</Button>);
       const button = screen.getByRole('button', { name: 'Primary' });
-      expect(button).toHaveClass('bg-black', 'text-white');
+      expect(button).toHaveClass('bg-[color:var(--color-primary)]', 'text-[color:var(--color-text-inverse)]');
     });
 
     it('should render secondary variant', () => {
@@ -28,7 +28,7 @@ describe('Button', () => {
     it('should render danger variant', () => {
       render(<Button variant="danger">Danger</Button>);
       const button = screen.getByRole('button', { name: 'Danger' });
-      expect(button).toHaveClass('bg-red-600', 'text-white');
+      expect(button).toHaveClass('bg-[color:var(--color-error)]', 'text-white');
     });
   });
 
