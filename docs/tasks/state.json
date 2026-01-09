@@ -2,13 +2,6 @@
   "$schema": "./state.schema.json",
   "version": "2.0",
   "tasks": {
-    "task-134-implement-leave-allowance-feature": {
-      "state": "completed",
-      "lastUpdated": "2026-01-09T19:46:22.353Z",
-      "location": "active",
-      "fromIssue": "APPLICATION_ISSUES.md",
-      "blockedBy": []
-    },
     "task-135-improve-pwa-install-button-ux": {
       "state": "not_started",
       "lastUpdated": "2026-01-09T16:38:09.176Z",
