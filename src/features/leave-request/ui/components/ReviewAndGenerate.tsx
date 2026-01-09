@@ -17,6 +17,7 @@ import { PdfLanguageSelector } from './PdfLanguageSelector';
  */
 export const ReviewAndGenerate: React.FC = () => {
   const { t } = useTranslation('forms') as { t: (key: string, options?: Record<string, unknown>) => string };
+  const { t: tCommon } = useTranslation('common') as { t: (key: string, options?: Record<string, unknown>) => string };
 
   const [hasAnimated, setHasAnimated] = useState(false);
 
@@ -108,7 +109,7 @@ export const ReviewAndGenerate: React.FC = () => {
     });
     clearSignature();
     triggerForceFormReset();
-    showSuccess(t('common.cleared'));
+    showSuccess(tCommon('cleared'));
   };
 
   /**
@@ -238,7 +239,7 @@ export const ReviewAndGenerate: React.FC = () => {
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.leaveAllowance')}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">{leaveDraft.leaveAllowance ? t('common.yes') : t('common.no')}</p>
+              <p className="font-medium text-[color:var(--color-text-primary)]">{leaveDraft.leaveAllowance ? tCommon('yes') : tCommon('no')}</p>
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.startDate')}</span>
@@ -318,10 +319,10 @@ export const ReviewAndGenerate: React.FC = () => {
             {/* Profile Management */}
             <div className="flex flex-wrap gap-3">
               <Button variant="secondary" onClick={handleExport} size="md">
-                {t('common.buttons.exportProfile')}
+                {tCommon('buttons.exportProfile')}
               </Button>
               <Button variant="secondary" onClick={() => fileInputRef.current?.click()} size="md">
-                {t('common.buttons.importProfile')}
+                {tCommon('buttons.importProfile')}
               </Button>
               <input
                 ref={fileInputRef}
@@ -329,10 +330,10 @@ export const ReviewAndGenerate: React.FC = () => {
                 accept=".json"
                 onChange={handleImport}
                 className="hidden"
-                aria-label={t('common.buttons.importProfile')}
+                aria-label={tCommon('buttons.importProfile')}
               />
               <Button variant="danger" onClick={handleClearProfile} size="md">
-                {t('common.buttons.clearProfile')}
+                {tCommon('buttons.clearProfile')}
               </Button>
             </div>
 
