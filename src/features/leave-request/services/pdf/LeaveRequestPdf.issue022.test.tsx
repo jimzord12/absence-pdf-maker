@@ -62,7 +62,7 @@ const createMockLeaveRequest = (): LeaveRequest => ({
     position: 'Developer',
   },
   leaveType: 'annual',
-  leaveAllowance: false,
+  leaveAllowance: undefined,
   startDate: new Date('2025-01-01'),
   endDate: new Date('2025-01-05'),
   reason: 'Για οικογενειακούς λόγους',

@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePwaInstall } from '../../../../app/providers/usePwaInstall';
-import { Button, DeveloperPresence, StarsWarsRobotToggle } from '../../../../shared/ui';
+import { DeveloperPresence, StarsWarsRobotToggle } from '../../../../shared/ui';
 import { loadHolidays } from '../../services/holidays/holidays.service';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { useThemeStore } from '../../../../shared/state/theme.store';
@@ -17,7 +16,6 @@ import { SignatureModal } from '../components/SignatureModal';
 export const LeaveRequestPage: React.FC = () => {
   const { t } = useTranslation('common');
   const setHolidays = useLeaveRequestStore(state => state.setHolidays);
-  const { isInstallable, promptInstall } = usePwaInstall();
   const theme = useThemeStore(state => state.theme);
   const toggleTheme = useThemeStore(state => state.toggleTheme);
 
@@ -44,16 +42,6 @@ export const LeaveRequestPage: React.FC = () => {
               </p>
             </div>
             <div className="flex items-center gap-4">
-              {isInstallable && (
-                <Button
-                  variant="primary"
-                  size="md"
-                  onClick={() => promptInstall()}
-                  className="mt-0 sm:mt-1"
-                >
-                  {t('buttons.installApp')}
-                </Button>
-              )}
               <StarsWarsRobotToggle
                 checked={theme === 'dark'}
                 onChange={toggleTheme}

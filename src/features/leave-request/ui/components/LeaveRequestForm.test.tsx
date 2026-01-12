@@ -26,7 +26,7 @@ vi.mock('../../state/leaveRequest.store', () => {
       startDate: null,
       endDate: null,
       reason: '',
-      leaveAllowance: false,
+      leaveAllowance: undefined,
     },
     signature: {
       signatureDataUrl: '',
@@ -84,7 +84,7 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
         position: '',
       },
       leaveType: 'annual',
-      leaveAllowance: false,
+      leaveAllowance: undefined,
       startDate: undefined,
       endDate: undefined,
       reason: '',

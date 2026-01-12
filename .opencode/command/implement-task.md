@@ -116,7 +116,32 @@ Ready for: git commit (use /commit-tasks command)
 
 **STOP HERE** - do NOT proceed to the next task automatically.
 
-### Step 8: Handover (ONLY if task cannot be completed)
+### Step 8: Issue Management (IF APPLICABLE)
+
+If the task is linked to an issue (check `**Issue ID:**` field in task file),
+
+1. **Check if issue exists**: Run `npm run issue -- show <issueId>`
+2. **If issue exists**, resolve it: `npm run issue -- resolve <issueId>`
+   - This updates issue status to `Resolved`
+   - Moves issue file from any location (`open/`, `in-progress/`, etc.) to `docs/issues/closed/`
+   - Updates the `**Status:**` field in the issue file
+3. **If issue does not exist**: Skip this step (no issue linked)
+
+**Example**:
+```bash
+# Check if issue exists
+npm run issue -- show 021
+
+# Resolve the issue
+npm run issue -- resolve 021
+# Output:
+# Moved 021.md: open/ → closed/
+# ✓ Updated 021: status → Resolved
+```
+
+**Note**: The issue CLI automatically searches all issue folders (`open/`, `in-progress/`, `closed/`, `discarded/`) to find the issue.
+
+### Step 9: Handover (ONLY if task cannot be completed)
 
 If after multiple attempts the task still cannot be completed:
 

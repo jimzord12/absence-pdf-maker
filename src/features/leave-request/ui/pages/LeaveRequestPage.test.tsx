@@ -378,10 +378,13 @@ describe('LeaveRequestPage', () => {
     });
 
     it('should render install button when isInstallable is true', () => {
-      // Dynamically change the mock for this test
+      // Dynamically change mock for this test
       vi.mocked(usePwaInstall).mockReturnValue({
         isInstallable: true,
+        canShowInstall: true,
         promptInstall: mockPromptInstall,
+        dismiss: vi.fn(),
+        snooze: vi.fn(),
       });
 
       render(<LeaveRequestPage />);
@@ -393,7 +396,25 @@ describe('LeaveRequestPage', () => {
     it('should call promptInstall when install button is clicked', () => {
       vi.mocked(usePwaInstall).mockReturnValue({
         isInstallable: true,
+        canShowInstall: true,
         promptInstall: mockPromptInstall,
+        dismiss: vi.fn(),
+        snooze: vi.fn(),
+      });
+
+      render(<LeaveRequestPage />);
+
+      const installButton = screen.queryByText('Εγκατάσταση Εφαρμογής');
+      expect(installButton).toBeInTheDocument();
+    });
+
+    it('should call promptInstall when install button is clicked', () => {
+      vi.mocked(usePwaInstall).mockReturnValue({
+        isInstallable: true,
+        canShowInstall: true,
+        promptInstall: mockPromptInstall,
+        dismiss: vi.fn(),
+        snooze: vi.fn(),
       });
 
       render(<LeaveRequestPage />);

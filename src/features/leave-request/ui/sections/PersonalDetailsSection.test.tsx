@@ -1,12 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { renderWithI18n } from '../../../../test-utils';
 import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { PersonalDetailsSection } from './PersonalDetailsSection';
-import { renderWithI18n } from '../../../../test-utils';
 
 // Wrapper component to provide form context
 const FormWrapper = ({
@@ -46,7 +46,7 @@ describe('PersonalDetailsSection', () => {
         startDate: null,
         endDate: null,
         reason: '',
-        leaveAllowance: false,
+        leaveAllowance: undefined,
       },
       signature: {
         signatureDataUrl: '',
@@ -60,7 +60,7 @@ describe('PersonalDetailsSection', () => {
         lastGeneratedFileName: '',
         errorMessage: null,
         triggerValidation: null,
-      forceFormReset: false,
+        forceFormReset: false,
       },
     });
     vi.clearAllMocks();
@@ -129,7 +129,7 @@ describe('PersonalDetailsSection', () => {
       );
 
       // Card should have the correct styling classes
-      const card = container.querySelector('const card = container.querySelector('.bg-\[color:var(--color-surface)]')');
+      const card = container.querySelector('.bg-[color:var(--color-surface)]');
       expect(card).toBeInTheDocument();
       expect(card).toHaveClass('rounded-lg');
     });

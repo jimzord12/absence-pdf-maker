@@ -111,7 +111,7 @@ const PRIORITY_ORDER: Record<string, number> = {
 // Utility Functions
 // ============================================================================
 
-function loadState(): StateJson {
+export function loadState(): StateJson {
   if (!fs.existsSync(STATE_FILE)) {
     console.error(`State file not found at ${STATE_FILE}`);
     process.exit(1);
@@ -119,15 +119,15 @@ function loadState(): StateJson {
   return JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
 }
 
-function saveState(state: StateJson): void {
+export function saveState(state: StateJson): void {
   fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2) + '\n');
 }
 
-function getTaskFilePath(taskId: string, location: Location): string {
+export function getTaskFilePath(taskId: string, location: Location): string {
   return path.join(TASKS_DIR, location, `${taskId}.md`);
 }
 
-function findTaskFile(taskId: string): { path: string; location: Location } | null {
+export function findTaskFile(taskId: string): { path: string; location: Location } | null {
   for (const loc of LOCATIONS) {
     const filePath = getTaskFilePath(taskId, loc);
     if (fs.existsSync(filePath)) {
@@ -137,7 +137,7 @@ function findTaskFile(taskId: string): { path: string; location: Location } | nu
   return null;
 }
 
-function parseTaskFile(content: string): ParsedTaskFile {
+export function parseTaskFile(content: string): ParsedTaskFile {
   const result: ParsedTaskFile = {
     id: '',
     priority: 'medium',
@@ -200,7 +200,7 @@ function parseTaskFile(content: string): ParsedTaskFile {
   return result;
 }
 
-function formatDate(isoDate: string): string {
+export function formatDate(isoDate: string): string {
   return new Date(isoDate).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
@@ -210,7 +210,7 @@ function formatDate(isoDate: string): string {
   });
 }
 
-function parseArgs(args: string[]): { positional: string[]; options: Record<string, string> } {
+export function parseArgs(args: string[]): { positional: string[]; options: Record<string, string> } {
   const positional: string[] = [];
   const options: Record<string, string> = {};
 
@@ -234,7 +234,7 @@ function parseArgs(args: string[]): { positional: string[]; options: Record<stri
 // Command Handlers
 // ============================================================================
 
-function showHelp(): void {
+export function showHelp(): void {
   console.log(`
 Task Management CLI v2.0
 
@@ -272,7 +272,7 @@ Examples:
 `);
 }
 
-function handleState(taskId: string, newState: string): void {
+export function handleState(taskId: string, newState: string): void {
   if (!VALID_STATES.includes(newState as TaskState)) {
     console.error(`Invalid state: ${newState}`);
     console.error(`Valid states: ${VALID_STATES.join(', ')}`);
@@ -316,6 +316,7 @@ function handleState(taskId: string, newState: string): void {
   const isArchivedState = targetState === 'committed' || targetState === 'cancelled';
 
   if (isArchivedState) {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete state.tasks[taskId];
     saveState(state);
     console.log(`✓ Removed ${taskId} from state.json (archived)`);
@@ -329,7 +330,7 @@ function handleState(taskId: string, newState: string): void {
   }
 }
 
-function handleShow(taskId: string): void {
+export function handleShow(taskId: string): void {
   const state = loadState();
   let taskEntry = state.tasks[taskId];
 
@@ -407,7 +408,7 @@ function handleShow(taskId: string): void {
   console.log(`${'─'.repeat(60)}\n`);
 }
 
-function handleList(options: Record<string, string>): void {
+export function handleList(options: Record<string, string>): void {
   const state = loadState();
   const filterState = options.state as TaskState | undefined;
   const filterLocation = options.location as Location | undefined;
@@ -478,7 +479,7 @@ function handleList(options: Record<string, string>): void {
   console.log();
 }
 
-function handleCreate(taskId: string, options: Record<string, string>): void {
+export function handleCreate(taskId: string, options: Record<string, string>): void {
   const state = loadState();
 
   // Check if task already exists
@@ -545,7 +546,7 @@ function handleCreate(taskId: string, options: Record<string, string>): void {
   console.log(`\nEdit the task file to add details.`);
 }
 
-function handleMove(taskId: string, targetLocation: string): void {
+export function handleMove(taskId: string, targetLocation: string): void {
   if (!LOCATIONS.includes(targetLocation as Location)) {
     console.error(`Invalid location: ${targetLocation}`);
     console.error(`Valid locations: ${LOCATIONS.join(', ')}`);
@@ -583,11 +584,11 @@ function handleMove(taskId: string, targetLocation: string): void {
   console.log(`✓ Moved ${taskId}: ${currentLocation}/ → ${target}/`);
 }
 
-function handleArchive(taskId: string): void {
+export function handleArchive(taskId: string): void {
   handleMove(taskId, 'archive');
 }
 
-function handleNext(): void {
+export function handleNext(): void {
   const state = loadState();
 
   // Get all active/not_started tasks from state.json
@@ -822,7 +823,7 @@ function handleNext(): void {
 // Main Entry Point
 // ============================================================================
 
-function main(): void {
+export function main(): void {
   const args = process.argv.slice(2);
 
   if (args.length === 0) {

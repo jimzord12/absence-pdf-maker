@@ -10,6 +10,7 @@ import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { useLocaleStore } from '../../state/locale.store';
 import { useTranslation } from 'react-i18next';
 import { PdfLanguageSelector } from './PdfLanguageSelector';
+import { PwaInstallToast } from '../../../../shared/ui/PwaInstallToast/PwaInstallToast';
 
 /**
  * ReviewAndGenerate component displays a summary of the form data and provides
@@ -40,6 +41,7 @@ export const ReviewAndGenerate: React.FC = () => {
   const clearSignature = useLeaveRequestStore(state => state.clearSignature);
   const toggleSignatureModal = useLeaveRequestStore(state => state.toggleSignatureModal);
   const triggerForceFormReset = useLeaveRequestStore(state => state.triggerForceFormReset);
+  const incrementPdfGenerationCount = useLeaveRequestStore(state => state.incrementPdfGenerationCount);
 
   // Component state
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -179,6 +181,7 @@ export const ReviewAndGenerate: React.FC = () => {
       ]);
 
       showSuccess(t('generationSuccess', { ns: 'pdf' }));
+      incrementPdfGenerationCount();
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to generate PDF';
       showError(t('generationFailed', { ns: 'pdf', message }));
@@ -396,6 +399,8 @@ export const ReviewAndGenerate: React.FC = () => {
           </div>
         </Card>
       </section>
+
+      <PwaInstallToast />
     </aside>
   );
 };

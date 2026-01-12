@@ -79,7 +79,7 @@ describe('PDF Service', () => {
       companyName: 'Acme Corp',
     },
     leaveType: 'annual',
-    leaveAllowance: true,
+    leaveAllowance: 15,
     startDate: new Date('2025-01-01'),
     endDate: new Date('2025-01-05'),
     reason: 'Vacation',

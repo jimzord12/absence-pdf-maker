@@ -123,7 +123,7 @@ describe('EmploymentDetailsSection', () => {
       );
 
       // Card should have the correct styling classes
-      const card = container.querySelector('const card = container.querySelector('.bg-\[color:var(--color-surface)]')');
+      const card = container.querySelector('.bg-[color:var(--color-surface)]');
       expect(card).toBeInTheDocument();
       expect(card).toHaveClass('rounded-lg');
     });
@@ -480,7 +480,7 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const card = container.querySelector('const card = container.querySelector('.bg-\[color:var(--color-surface)]')');
+      const card = container.querySelector('.bg-[color:var(--color-surface)]');
       expect(card).toBeInTheDocument();
       expect(card).toHaveClass('rounded-lg');
       expect(card).toHaveClass('border-gray-200');
@@ -852,7 +852,7 @@ describe('EmploymentDetailsSection', () => {
       );
 
       // Card should have the same base styling
-      const card = container.querySelector('const card = container.querySelector('.bg-\[color:var(--color-surface)]')');
+      const card = container.querySelector('.bg-[color:var(--color-surface)]');
       expect(card).toHaveClass('rounded-lg');
       expect(card).toHaveClass('border-gray-200');
       expect(card).toHaveClass('shadow-sm');

@@ -831,7 +831,7 @@ describe('DateRangeField', () => {
       );
 
       const clearButton = screen.getByText('Clear Dates');
-      expect(clearButton).toHaveClass('bg-red-600');
+      expect(clearButton).toHaveClass('bg-[color:var(--color-error)]');
       expect(clearButton).toHaveClass('text-white');
     });
 

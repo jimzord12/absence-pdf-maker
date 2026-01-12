@@ -50,7 +50,7 @@ describe('HolidaysLegend', () => {
     it('should have consistent app typography', () => {
       render(<HolidaysLegend />);
       const region = screen.getByRole('region', { name: 'Holidays legend' });
-      expect(region).toHaveClass('text-sm', 'bg-gray-50', 'border', 'rounded-md');
+      expect(region).toHaveClass('text-sm', 'bg-[color:var(--color-surface-hover)]', 'border', 'rounded-md');
     });
 
     it('should have proper spacing and layout', () => {

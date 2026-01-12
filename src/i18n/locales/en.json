@@ -14,6 +14,12 @@
       "clearProfile": "Clear Profile",
       "generatePdf": "Generate PDF"
     },
+    "pwa": {
+      "installTitle": "Install This App",
+      "installDescription": "Get offline access and a faster experience by installing this app to your device.",
+      "remindLater": "Remind me later",
+      "dismiss": "Don't show again"
+    },
     "status": {
       "signed": "Signed",
       "notSigned": "Not signed",

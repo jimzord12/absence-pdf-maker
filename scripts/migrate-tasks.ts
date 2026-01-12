@@ -66,7 +66,6 @@ interface MigrationResult {
 const TASKS_DIR = path.join(process.cwd(), 'docs/tasks');
 const TASKS_MD_PATH = path.join(TASKS_DIR, 'TASKS.md');
 const STATE_JSON_PATH = path.join(TASKS_DIR, 'state.json');
-const TEMPLATE_PATH = path.join(process.cwd(), 'docs/templates/TASK-TEMPLATE.md');
 
 const FOLDERS = {
   archive: path.join(TASKS_DIR, 'archive'),
@@ -109,7 +108,7 @@ function parseTasksFromMarkdown(content: string): LegacyTask[] {
       /\*\*Constraints:\*\*\s*([\s\S]*?)(?=\*\*Acceptance Criteria:|$)/
     );
     const acMatch = rawContent.match(
-      /\*\*Acceptance Criteria:\*\*\s*([\s\S]*?)(?=^---\s*$|^### |\Z)/m
+      /\*\*Acceptance Criteria:\*\*\s*([\s\S]*?)(?=^---\s*$|^### |$)/m
     );
 
     tasks.push({

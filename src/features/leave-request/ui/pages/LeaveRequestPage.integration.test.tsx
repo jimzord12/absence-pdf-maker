@@ -95,7 +95,7 @@ const clearAllData = () => {
       startDate: null,
       endDate: null,
       reason: '',
-      leaveAllowance: false,
+      leaveAllowance: undefined,
     },
     signature: {
       signatureDataUrl: '',
@@ -611,7 +611,7 @@ describe('Integration Tests - User Flows', () => {
           endDate,
           leaveType: 'annual',
           reason: 'Test',
-          leaveAllowance: false,
+          leaveAllowance: undefined,
         });
       });
 

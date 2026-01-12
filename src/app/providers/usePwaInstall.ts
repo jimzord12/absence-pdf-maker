@@ -1,17 +1,38 @@
 import { useState, useEffect } from 'react'
+import { useLeaveRequestStore } from '../../features/leave-request/state/leaveRequest.store'
 
 export interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
 }
 
+function getSnoozeDelayHours(snoozeCount: number): number {
+  const DELAY_MAP: Record<number, number> = {
+    0: 24,
+    1: 24 * 7,
+    2: 24 * 30,
+  }
+  return DELAY_MAP[Math.min(snoozeCount, 2)] || 24 * 30
+}
+
 export function usePwaInstall() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [isInstallable, setIsInstallable] = useState(false)
 
+  const completedPdfGenerations = useLeaveRequestStore(state => state.pwa.completedPdfGenerations)
+  const dismissedPwaInstall = useLeaveRequestStore(state => state.pwa.dismissedPwaInstall)
+  const pwaInstallSnoozeUntil = useLeaveRequestStore(state => state.pwa.pwaInstallSnoozeUntil)
+  const pwaInstallSnoozeCount = useLeaveRequestStore(state => state.pwa.pwaInstallSnoozeCount)
+  const snoozePwaInstall = useLeaveRequestStore(state => state.snoozePwaInstall)
+
+  const canShowInstall =
+    isInstallable &&
+    completedPdfGenerations > 0 &&
+    !dismissedPwaInstall &&
+    (pwaInstallSnoozeUntil === null || new Date() >= pwaInstallSnoozeUntil)
+
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
-      // Prevent the mini-infobar from appearing on mobile
       e.preventDefault()
       const promptEvent = e as BeforeInstallPromptEvent
       setDeferredPrompt(promptEvent)
@@ -19,12 +40,10 @@ export function usePwaInstall() {
     }
 
     const handleAppInstalled = () => {
-      // Clear the deferredPrompt so it can be garbage collected
       setDeferredPrompt(null)
       setIsInstallable(false)
     }
 
-    // Listen for the beforeinstallprompt event
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
     window.addEventListener('appinstalled', handleAppInstalled)
 
@@ -40,16 +59,10 @@ export function usePwaInstall() {
     }
 
     try {
-      // Show the install prompt
       await deferredPrompt.prompt()
-
-      // Wait for the user to respond to the prompt
       const { outcome } = await deferredPrompt.userChoice
-
-      // We've used the prompt, and can't use it again, throw it away
       setDeferredPrompt(null)
       setIsInstallable(false)
-
       return outcome
     } catch (error) {
       console.error('Error during PWA install prompt:', error)
@@ -57,8 +70,23 @@ export function usePwaInstall() {
     }
   }
 
+  const dismiss = () => {
+    setDeferredPrompt(null)
+    setIsInstallable(false)
+  }
+
+  const snooze = () => {
+    const hours = getSnoozeDelayHours(pwaInstallSnoozeCount)
+    dismiss()
+    snoozePwaInstall(hours)
+    setDeferredPrompt(null)
+  }
+
   return {
     isInstallable,
+    canShowInstall,
     promptInstall,
+    dismiss,
+    snooze,
   }
 }

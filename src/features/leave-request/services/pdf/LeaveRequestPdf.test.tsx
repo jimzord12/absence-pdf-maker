@@ -54,7 +54,7 @@ describe('LeaveRequestPdf', () => {
       position: 'Developer',
     },
     leaveType: 'annual',
-    leaveAllowance: true,
+    leaveAllowance: 15,
     startDate: new Date('2025-01-01'),
     endDate: new Date('2025-01-05'),
     reason: 'Vacation',
@@ -338,7 +338,7 @@ describe('LeaveRequestPdf', () => {
 
   describe('Leave Allowance Section', () => {
     it('should render allowance preference when true', () => {
-      const data = createMockLeaveRequest({ leaveAllowance: true });
+      const data = createMockLeaveRequest({ leaveAllowance: 15 });
       const absenceDays = 5;
 
       const { container } = render(<LeaveRequestPdf data={data} absenceDays={absenceDays} />);
@@ -353,7 +353,7 @@ describe('LeaveRequestPdf', () => {
     });
 
     it('should render no allowance preference when false', () => {
-      const data = createMockLeaveRequest({ leaveAllowance: false });
+      const data = createMockLeaveRequest({ leaveAllowance: undefined });
       const absenceDays = 5;
 
       const { container } = render(<LeaveRequestPdf data={data} absenceDays={absenceDays} />);
@@ -560,7 +560,7 @@ describe('LeaveRequestPdf', () => {
           companyName: 'Complete Corp',
         },
         leaveType: 'annual',
-        leaveAllowance: true,
+        leaveAllowance: 15,
         startDate: new Date('2025-02-01'),
         endDate: new Date('2025-02-05'),
         reason: 'Complete test reason',

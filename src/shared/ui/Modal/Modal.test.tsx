@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { Modal } from './Modal';
 import { ThemeProvider } from '../../../app/providers/ThemeProvider';
 import { useThemeStore } from '../../../shared/state/theme.store';
@@ -19,12 +19,14 @@ describe('Modal', () => {
   describe('rendering', () => {
     it('should render close button by default', () => {
       render(<Modal {...defaultProps} />);
-      expect(screen.getByRole('button', { name: /close modal/i })).toBeInTheDocument();
+      const modalDialog = screen.getByRole('dialog');
+      expect(within(modalDialog).getByRole('button', { name: /close modal/i })).toBeInTheDocument();
     });
 
     it('should not render close button when showCloseButton is false', () => {
       render(<Modal {...defaultProps} showCloseButton={false} />);
-      expect(screen.queryByRole('button', { name: /close modal/i })).not.toBeInTheDocument();
+      const modalDialog = screen.getByRole('dialog');
+      expect(within(modalDialog).queryByRole('button', { name: /close modal/i })).not.toBeInTheDocument();
     });
 
     it('should render header section when title is provided', () => {
@@ -49,7 +51,8 @@ describe('Modal', () => {
 
     it('should render close button by default', () => {
       render(<Modal {...defaultProps} />);
-      expect(screen.getByLabelText('Close modal')).toBeInTheDocument();
+      const modalDialog = screen.getByRole('dialog');
+      expect(within(modalDialog).getByRole('button', { name: /close modal/i })).toBeInTheDocument();
     });
 
     it('should not render close button when showCloseButton is false', () => {
@@ -72,10 +75,11 @@ describe('Modal', () => {
     it('should call onClose when close button is clicked', () => {
       const onClose = vi.fn();
       render(<Modal {...defaultProps} onClose={onClose} />);
-
-      const closeButton = screen.getByLabelText('Close modal');
+ 
+      const modalDialog = screen.getByRole('dialog');
+      const closeButton = within(modalDialog).getByRole('button', { name: /close modal/i });
       fireEvent.click(closeButton);
-
+ 
       expect(onClose).toHaveBeenCalledTimes(1);
     });
 
@@ -229,8 +233,9 @@ describe('Modal', () => {
       const innerDiv = screen.getByText('Modal content').parentElement;
       const contentWrapper = innerDiv?.parentElement;
       expect(contentWrapper).toHaveClass(
-        'relative', 'w-full', 'max-w-lg', 'bg-white', 'rounded-lg',
-        'shadow-lg', 'max-h-[90vh]', 'overflow-hidden', 'flex', 'flex-col'
+        'relative', 'w-full', 'max-w-lg', 'bg-[color:var(--color-surface)]', 'rounded-lg',
+          'text-[color:var(--color-text-primary)]',
+          'shadow-lg', 'max-h-[90vh]', 'overflow-hidden', 'flex', 'flex-col'
       );
     });
   });
@@ -239,13 +244,15 @@ describe('Modal', () => {
     it('should render header with title and close button', () => {
       render(<Modal {...defaultProps} title="Test Title" />);
       expect(screen.getByText('Test Title')).toBeInTheDocument();
-      expect(screen.getByLabelText('Close modal')).toBeInTheDocument();
+      const modalDialog = screen.getByRole('dialog');
+      expect(within(modalDialog).getByRole('button', { name: /close modal/i })).toBeInTheDocument();
     });
 
     it('should render header with title only when showCloseButton is false', () => {
       render(<Modal {...defaultProps} title="Test Title" showCloseButton={false} />);
       expect(screen.getByText('Test Title')).toBeInTheDocument();
-      expect(screen.queryByLabelText('Close modal')).not.toBeInTheDocument();
+      const modalDialog = screen.getByRole('dialog');
+      expect(within(modalDialog).queryByRole('button', { name: /close modal/i })).not.toBeInTheDocument();
     });
 
     it('should not render header when title is not provided and showCloseButton is false', () => {
@@ -257,7 +264,8 @@ describe('Modal', () => {
   describe('close button accessibility', () => {
     it('should have aria-label for close button', () => {
       render(<Modal {...defaultProps} />);
-      expect(screen.getByLabelText('Close modal')).toBeInTheDocument();
+      const modalDialog = screen.getByRole('dialog');
+      expect(within(modalDialog).getByRole('button', { name: /close modal/i })).toBeInTheDocument();
     });
   });
 
@@ -321,7 +329,8 @@ describe('Modal', () => {
         </ThemeProvider>
       );
       expect(screen.getByText('Dark Mode Modal')).toBeInTheDocument();
-      expect(screen.getByLabelText('Close modal')).toBeInTheDocument();
+      const modalDialog = screen.getByRole('dialog');
+      expect(within(modalDialog).getByRole('button', { name: /close modal/i })).toBeInTheDocument();
     });
   });
 });

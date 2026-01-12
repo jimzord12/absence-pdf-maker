@@ -206,9 +206,15 @@ describe('Select', () => {
       render(<Select options={mockOptions} />);
       const select = screen.getByRole('combobox');
       expect(select).toHaveClass(
-        'w-full', 'px-3', 'py-2', 'rounded-md', 'border', 'bg-white',
-        'focus-visible:outline-none', 'focus-visible:ring-2', 'focus-visible:ring-black',
-        'focus-visible:border-transparent', 'transition-colors'
+        'w-full', 'px-3', 'py-2', 'rounded-md', 'border',
+        'bg-[color:var(--color-surface)]',
+        'focus-visible:outline-none', 'focus-visible:ring-2',
+        'focus-visible:ring-offset-2', 'focus-visible:ring-[color:var(--color-primary)]',
+        'focus-visible:border-transparent',
+        'disabled:opacity-50', 'disabled:cursor-not-allowed',
+        'focus-visible:ring-offset-[color:var(--color-background)]',
+        'transition-colors', 'text-[color:var(--color-text-primary)]',
+        'border-[color:var(--color-border)]'
       );
     });
   });

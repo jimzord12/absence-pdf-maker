@@ -42,6 +42,8 @@ This repository is optimized for GitHub Copilot.
 - `npm run test -- --reporter=verbose` - Run tests with verbose output
 - `npm run lint` - Run ESLint linter
 - `npm run typecheck` - Run TypeScript type checking (`tsc --noEmit`)
+- `npm run task next` - Get next actionable task
+- `npm run issue list` - List all issues
 
 ## Task Management System
 
@@ -103,6 +105,56 @@ The following tools are available for AI agents via `.opencode/tool/`:
 | `review_pass` → `completed`   | Task done      | Stays in `active/`     |
 | `completed` → `committed`     | Git commit     | `active/` → `archive/` |
 | Any → `cancelled`             | Task cancelled | Current → `archive/`   |
+
+## Issue Management System
+
+### Issue Locations
+
+Issues are organized by status in separate folders:
+
+| Folder                  | Contents | Description                    |
+| ----------------------- | -------- | ------------------------------ |
+| `docs/issues/open/`      | `*.md`   | Issues not yet started        |
+| `docs/issues/in-progress/` | `*.md`   | Issues currently in progress    |
+| `docs/issues/closed/`      | `*.md`   | Resolved/closed issues       |
+| `docs/issues/discarded/`    | `*.md`   | Discarded issues             |
+
+### Issue Status Tracking
+
+- **Issue details:** Individual `.md` files in respective folders
+- **Template:** `docs/templates/ISSUE-TEMPLATE.md`
+
+### CLI Commands
+
+| Command                                 | Description               |
+| --------------------------------------- | ------------------------- |
+| `npm run issue show <id>`                | Display issue details      |
+| `npm run issue list`                     | List all issues           |
+| `npm run issue list --state=Open`         | Filter by state           |
+| `npm run issue list --priority=High`      | Filter by priority        |
+| `npm run issue state <id> <state>`       | Update issue status        |
+| `npm run issue create <id>`              | Create issue from template |
+| `npm run issue move <id> <location>`     | Move issue to folder      |
+| `npm run issue resolve <id>`             | Set issue to Resolved     |
+| `npm run issue close <id>`               | Set issue to Closed       |
+| `npm run issue open <id>`                | Set issue to Open         |
+
+### Workflow for Agents
+
+1. Use `npm run issue list` to see all issues
+2. Use `npm run issue show <id>` to view issue details
+3. Investigate and fix the issue
+4. Use `npm run issue resolve <id>` or `npm run issue close <id>` when done
+5. Issue files auto-move between folders based on status changes
+
+### Status to Location Mapping
+
+| Status                | Folder           |
+| --------------------- | ---------------- |
+| `Open`               | `open/`           |
+| `In Progress`         | `in-progress/`     |
+| `Resolved`            | `closed/`          |
+| `Closed`              | `closed/`          |
 
 ## Code Style
 

@@ -3,11 +3,16 @@
   "version": "2.0",
   "tasks": {
     "task-135-improve-pwa-install-button-ux": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-09T16:38:09.176Z",
-      "location": "backlog",
-      "fromIssue": "APPLICATION_ISSUES.md",
+      "state": "completed",
+      "lastUpdated": "2026-01-09T20:15:17.945Z",
+      "location": "active",
+      "fromIssue": "022",
       "blockedBy": []
+    },
+    "124-fix-remaining-tailwind-v4-test-failures": {
+      "state": "completed",
+      "lastUpdated": "2026-01-12T20:34:06.892Z",
+      "location": "active"
     }
   }
 }

@@ -33,13 +33,22 @@ interface Ui {
   forceFormReset: boolean;
 }
 
-// Complete state interface for the leave request store
+// PWA state tracks installation prompts and user preferences
+interface Pwa {
+  completedPdfGenerations: number;
+  dismissedPwaInstall: boolean;
+  pwaInstallSnoozeCount: number;
+  pwaInstallSnoozeUntil: Date | null;
+}
+
+// Complete state interface for leave request store
 interface LeaveRequestState {
   profile: Partial<UserProfile>;
   leaveDraft: Partial<LeaveDraft>;
   signature: Partial<Signature>;
   holidays: Holidays;
   ui: Ui;
+  pwa: Pwa;
 }
 
 // Actions interface for updating store state
@@ -49,6 +58,7 @@ interface LeaveRequestActions {
   setSignature: (signature: Partial<Signature>) => void;
   setHolidays: (holidays: Holidays) => void;
   setUi: (ui: Partial<Ui>) => void;
+  setPwa: (pwa: Partial<Pwa>) => void;
   resetFormDrafts: () => void;
   clearSignature: () => void;
   clearErrorMessage: () => void;
@@ -56,6 +66,9 @@ interface LeaveRequestActions {
   setIsGeneratingPdf: (isGenerating: boolean) => void;
   setTriggerValidation: (trigger: (() => Promise<boolean>) | null) => void;
   triggerForceFormReset: () => void;
+  incrementPdfGenerationCount: () => void;
+  dismissPwaInstall: () => void;
+  snoozePwaInstall: (hours: number) => void;
 }
 
 // Initial state values - exported for reuse in reset actions
@@ -91,6 +104,12 @@ export const initialState: LeaveRequestState = {
     errorMessage: null,
     triggerValidation: null,
     forceFormReset: false,
+  },
+  pwa: {
+    completedPdfGenerations: 0,
+    dismissedPwaInstall: false,
+    pwaInstallSnoozeCount: 0,
+    pwaInstallSnoozeUntil: null,
   },
 };
 
@@ -171,13 +190,40 @@ export const useLeaveRequestStore = create<LeaveRequestState & LeaveRequestActio
 
       triggerForceFormReset: () =>
         set(state => ({ ui: { ...state.ui, forceFormReset: true } })),
+
+      setPwa: pwa => set(state => ({ pwa: { ...state.pwa, ...pwa } })),
+
+      incrementPdfGenerationCount: () =>
+        set(state => ({
+          pwa: {
+            ...state.pwa,
+            completedPdfGenerations: state.pwa.completedPdfGenerations + 1,
+          },
+        })),
+
+      dismissPwaInstall: () =>
+        set(state => ({
+          pwa: {
+            ...state.pwa,
+            dismissedPwaInstall: true,
+          },
+        })),
+
+      snoozePwaInstall: (hours: number) =>
+        set(state => ({
+          pwa: {
+            ...state.pwa,
+            pwaInstallSnoozeCount: state.pwa.pwaInstallSnoozeCount + 1,
+            pwaInstallSnoozeUntil: new Date(Date.now() + hours * 60 * 60 * 1000),
+          },
+        })),
     }),
     {
       name: 'leave-request-storage',
-      partialize: state => ({ profile: state.profile, signature: state.signature }),
+      partialize: state => ({ profile: state.profile, signature: state.signature, pwa: state.pwa }),
       storage: customStorage,
       skipHydration: false,
-      onRehydrateStorage: () => state => {
+      onRehydrateStorage: (state) => {
         if (import.meta.env.DEV) {
           console.log('[Store] Hydration complete', state);
         }

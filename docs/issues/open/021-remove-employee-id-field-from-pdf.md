@@ -3,7 +3,7 @@
 **Issue ID:** 021
 **Component:** PDF Template
 **Date Discovered:** 2026-01-04
-**Status:** In Progress
+**Status:** Open
 **Priority:** Medium
 **Task ID:** 071-fix-issue-021-remove-employee-id-from-pdf
 

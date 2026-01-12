@@ -105,7 +105,7 @@ describe('Offline PDF Generation', () => {
       companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
     },
     leaveType: 'annual',
-    leaveAllowance: true,
+    leaveAllowance: 15,
     startDate: new Date('2025-01-01'),
     endDate: new Date('2025-01-05'),
     reason: 'Προσωπικοί λόγοι',
