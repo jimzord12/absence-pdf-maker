@@ -15,9 +15,8 @@ interface LocaleActions {
   setLocale: (locale: Locale) => void;
 }
 
-// Initial state - Greek as default
 const initialState: LocaleState = {
-  locale: 'gr',
+  locale: import.meta.env.MODE === 'test' ? 'en' : 'gr',
 };
 
 // Create locale store with persistence

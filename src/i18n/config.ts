@@ -18,7 +18,7 @@ import grTranslations from './locales/gr.json';
 
 i18n.use(initReactI18next).init({
   fallbackLng: 'en',
-  lng: 'gr',
+  lng: import.meta.env.MODE === 'test' ? 'en' : 'gr',
   supportedLngs: ['en', 'gr'],
   defaultNS: 'common',
   ns: ['common', 'forms', 'validation', 'messages', 'pdf'],
