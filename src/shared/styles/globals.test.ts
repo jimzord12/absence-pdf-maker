@@ -100,7 +100,8 @@ describe('Tailwind CSS Integration', () => {
 
     it('should define .sr-only utility class for accessibility', () => {
       expect(indexCssContent).toContain('@utility sr-only');
-      expect(indexCssContent).toMatch(/\.sr-only\s*{[^}]*position:\s*absolute/);
+      // Tailwind v4 uses @utility directive instead of .sr-only class
+      expect(indexCssContent).toMatch(/@utility sr-only\s*{[^}]*position:\s*absolute/);
     });
 
     it('should define .focus-visible styles', () => {
@@ -110,18 +111,17 @@ describe('Tailwind CSS Integration', () => {
 
   describe('Focus Styles', () => {
     it('should define .focus-visible styles', () => {
-      expect(indexCssContent).toContain('.focus-visible');
       expect(indexCssContent).toContain('@utility focus-visible-custom');
     });
 
-    it('should define .animate-stagger-0 through .animate-stagger-6 utility classes', () => {
-      expect(indexCssContent).toContain('.animate-stagger-0');
-      expect(indexCssContent).toContain('.animate-stagger-1');
-      expect(indexCssContent).toContain('.animate-stagger-2');
-      expect(indexCssContent).toContain('.animate-stagger-3');
-      expect(indexCssContent).toContain('.animate-stagger-4');
-      expect(indexCssContent).toContain('.animate-stagger-5');
-      expect(indexCssContent).toContain('.animate-stagger-6');
+    it('should define animate-stagger-0 through animate-stagger-6 utility classes', () => {
+      expect(indexCssContent).toContain('@utility animate-stagger-0');
+      expect(indexCssContent).toContain('@utility animate-stagger-1');
+      expect(indexCssContent).toContain('@utility animate-stagger-2');
+      expect(indexCssContent).toContain('@utility animate-stagger-3');
+      expect(indexCssContent).toContain('@utility animate-stagger-4');
+      expect(indexCssContent).toContain('@utility animate-stagger-5');
+      expect(indexCssContent).toContain('@utility animate-stagger-6');
     });
 
     it('should define .focus:not-focus-visible utility', () => {
@@ -130,23 +130,23 @@ describe('Tailwind CSS Integration', () => {
   });
 
   describe('Custom Animations', () => {
-    it('should define .animate-stagger-0 through .animate-stagger-6 utility classes', () => {
-      expect(indexCssContent).toContain('.animate-stagger-0');
-      expect(indexCssContent).toContain('.animate-stagger-1');
-      expect(indexCssContent).toContain('.animate-stagger-2');
-      expect(indexCssContent).toContain('.animate-stagger-3');
-      expect(indexCssContent).toContain('.animate-stagger-4');
-      expect(indexCssContent).toContain('.animate-stagger-5');
-      expect(indexCssContent).toContain('.animate-stagger-6');
+    it('should define animate-stagger-0 through animate-stagger-6 utility classes', () => {
+      expect(indexCssContent).toContain('@utility animate-stagger-0');
+      expect(indexCssContent).toContain('@utility animate-stagger-1');
+      expect(indexCssContent).toContain('@utility animate-stagger-2');
+      expect(indexCssContent).toContain('@utility animate-stagger-3');
+      expect(indexCssContent).toContain('@utility animate-stagger-4');
+      expect(indexCssContent).toContain('@utility animate-stagger-5');
+      expect(indexCssContent).toContain('@utility animate-stagger-6');
     });
 
     it('should have correct animation delays for stagger classes', () => {
-      expect(indexCssContent).toMatch(/\.animate-stagger-1\s*{[^}]*animation-delay:\s*50ms/);
-      expect(indexCssContent).toMatch(/\.animate-stagger-2\s*{[^}]*animation-delay:\s*100ms/);
-      expect(indexCssContent).toMatch(/\.animate-stagger-3\s*{[^}]*animation-delay:\s*150ms/);
-      expect(indexCssContent).toMatch(/\.animate-stagger-4\s*{[^}]*animation-delay:\s*200ms/);
-      expect(indexCssContent).toMatch(/\.animate-stagger-5\s*{[^}]*animation-delay:\s*250ms/);
-      expect(indexCssContent).toMatch(/\.animate-stagger-6\s*{[^}]*animation-delay:\s*300ms/);
+      expect(indexCssContent).toMatch(/@utility animate-stagger-1\s*{[^}]*animation-delay:\s*50ms/);
+      expect(indexCssContent).toMatch(/@utility animate-stagger-2\s*{[^}]*animation-delay:\s*100ms/);
+      expect(indexCssContent).toMatch(/@utility animate-stagger-3\s*{[^}]*animation-delay:\s*150ms/);
+      expect(indexCssContent).toMatch(/@utility animate-stagger-4\s*{[^}]*animation-delay:\s*200ms/);
+      expect(indexCssContent).toMatch(/@utility animate-stagger-5\s*{[^}]*animation-delay:\s*250ms/);
+      expect(indexCssContent).toMatch(/@utility animate-stagger-6\s*{[^}]*animation-delay:\s*300ms/);
     });
 
     it('should respect user motion preferences for accessibility', () => {

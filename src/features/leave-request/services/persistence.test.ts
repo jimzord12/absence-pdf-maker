@@ -25,29 +25,35 @@ let importProfileFromJson: typeof import('./persistence').importProfileFromJson;
 
 describe('persistence', () => {
   const mockT = vi.fn((key: string, options?: Record<string, unknown>) => {
-    if (key === 'messages.persistence.noDataToExport') {
+    const ns = options?.ns as string;
+    const fullKey = ns ? `${ns}:${key}` : key;
+
+    // Handle messages namespace
+    if (fullKey === 'messages:persistence.noDataToExport' || key === 'persistence.noDataToExport') {
       return 'No profile data to export. Please fill in your details first.';
     }
-    if (key === 'messages.persistence.exportFailed') {
+    if (fullKey === 'messages:persistence.exportFailed' || key === 'persistence.exportFailed') {
       return `Failed to export profile: ${options?.message || 'Unknown error'}`;
     }
-    if (key === 'messages.persistence.invalidProfileData') {
+    if (fullKey === 'messages:persistence.invalidProfileData' || key === 'persistence.invalidProfileData') {
       return `Invalid profile data:\n${options?.errors || ''}`;
     }
-    if (key === 'messages.persistence.importWithMissingFields') {
-      return `Profile imported with missing fields: ${options?.fields || ''}. Please fill in the missing information.`;
+    if (fullKey === 'messages:persistence.importWithMissingFields' || key === 'persistence.importWithMissingFields') {
+      return `Profile imported with missing fields: ${options?.fields || ''}. Please fill in missing information.`;
     }
-    if (key === 'messages.persistence.importSuccess') {
+    if (fullKey === 'messages:persistence.importSuccess' || key === 'persistence.importSuccess') {
       return 'Profile imported successfully!';
     }
-    if (key === 'messages.persistence.invalidJsonFormat') {
+    if (fullKey === 'messages:persistence.invalidJsonFormat' || key === 'persistence.invalidJsonFormat') {
       return 'Invalid JSON format. Please check the file and try again.';
     }
-    if (key === 'messages.persistence.importFailed') {
+    if (fullKey === 'messages:persistence.importFailed' || key === 'persistence.importFailed') {
       return `Failed to import profile: ${options?.message || 'Unknown error'}`;
     }
-    if (key.startsWith('messages.fields.')) {
-      const field = key.replace('messages.fields.', '');
+
+    // Handle fields namespace
+    if (fullKey.startsWith('messages:fields.') || key.startsWith('fields.')) {
+      const field = (ns === 'messages' ? key : key.replace('fields.', '')).replace('fields.', '');
       const labels: Record<string, string> = {
         fullName: 'Full Name',
         fathersName: "Father's Name",
@@ -465,7 +471,7 @@ describe('persistence', () => {
       (readFileAsText as any).mockResolvedValue(JSON.stringify(partialProfile));
 
       const onResetMock = vi.fn();
-      await expect(importProfileFromJson(file, onResetMock)).resolves.not.toThrow();
+      await expect(importProfileFromJson(file, mockT, onResetMock)).resolves.not.toThrow();
       expect(mockSetProfile).toHaveBeenCalledWith(
         expect.objectContaining({
           fullName: 'Jane Smith',
@@ -497,7 +503,7 @@ describe('persistence', () => {
       (readFileAsText as any).mockResolvedValue(JSON.stringify(partialProfile));
 
       const onResetMock = vi.fn();
-      await expect(importProfileFromJson(file, onResetMock)).resolves.not.toThrow();
+      await expect(importProfileFromJson(file, mockT, onResetMock)).resolves.not.toThrow();
       expect(mockSetProfile).toHaveBeenCalledWith(
         expect.objectContaining({
           fullName: 'John Doe',

@@ -1,9 +1,10 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SignatureModal } from './SignatureModal';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
+import { renderWithI18n } from '../../../../test-utils';
 
 // Create a proper mock for SignatureCanvas
 const mockClear = vi.fn();
@@ -57,8 +58,8 @@ afterEach(() => {
 
 describe('SignatureModal', () => {
   // Helper to open the modal
-  const openModal = () => {
-    act(() => {
+  const openModal = async () => {
+    await act(async () => {
       useLeaveRequestStore.setState({
         profile: {},
         leaveDraft: {},
@@ -71,8 +72,8 @@ describe('SignatureModal', () => {
   };
 
   // Helper to close the modal
-  const closeModal = () => {
-    act(() => {
+  const closeModal = async () => {
+    await act(async () => {
       useLeaveRequestStore.setState({
         profile: {},
         leaveDraft: {},
@@ -86,11 +87,7 @@ describe('SignatureModal', () => {
 
   // Helper to render component
   const renderComponent = () => {
-    return render(
-      <>
-        <SignatureModal />
-      </>
-    );
+    return renderWithI18n(<SignatureModal />);
   };
 
   describe('rendering', () => {
@@ -99,54 +96,54 @@ describe('SignatureModal', () => {
       expect(screen.queryByText('Sign Your Name')).not.toBeInTheDocument();
     });
 
-    it('should render modal when isSignatureModalOpen is true', () => {
+    it('should render modal when isSignatureModalOpen is true', async () => {
       renderComponent();
-      openModal();
+      await openModal();
       expect(screen.getByText('Sign Your Name')).toBeInTheDocument();
     });
 
-    it('should render signature canvas when modal is open', () => {
+    it('should render signature canvas when modal is open', async () => {
       renderComponent();
-      openModal();
+      await openModal();
       expect(screen.getByTestId('signature-canvas')).toBeInTheDocument();
     });
 
-    it('should render Clear button', () => {
+    it('should render Clear button', async () => {
       renderComponent();
-      openModal();
+      await openModal();
       expect(screen.getByRole('button', { name: 'Clear' })).toBeInTheDocument();
     });
 
-    it('should render Save Signature button', () => {
+    it('should render Save Signature button', async () => {
       renderComponent();
-      openModal();
+      await openModal();
       expect(screen.getByRole('button', { name: 'Save Signature' })).toBeInTheDocument();
     });
 
-    it('should render Cancel button', () => {
+    it('should render Cancel button', async () => {
       renderComponent();
-      openModal();
+      await openModal();
       expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
     });
 
-    it('should render instructions text', () => {
+    it('should render instructions text', async () => {
       renderComponent();
-      openModal();
+      await openModal();
       expect(screen.getByText(/Please sign in the box below/)).toBeInTheDocument();
       expect(screen.getByText(/Your signature will be saved to the document/)).toBeInTheDocument();
     });
   });
 
   describe('signature preview', () => {
-    it('should not render signature preview when no signature is captured', () => {
+    it('should not render signature preview when no signature is captured', async () => {
       renderComponent();
-      openModal();
+      await openModal();
       expect(screen.queryByText('Captured Signature:')).not.toBeInTheDocument();
     });
 
-    it('should render signature preview when signature is captured', () => {
+    it('should render signature preview when signature is captured', async () => {
       const testDataUrl = 'data:image/png;base64,testsignature';
-      act(() => {
+      await act(async () => {
         useLeaveRequestStore.setState({
           profile: {},
           leaveDraft: {},
@@ -168,7 +165,7 @@ describe('SignatureModal', () => {
     it('should close modal when Cancel button is clicked', async () => {
       const user = userEvent.setup();
       renderComponent();
-      openModal();
+      await openModal();
 
       expect(screen.getByText('Sign Your Name')).toBeInTheDocument();
 
@@ -187,7 +184,7 @@ describe('SignatureModal', () => {
     it('should not save signature when Cancel button is clicked', async () => {
       const user = userEvent.setup();
       renderComponent();
-      openModal();
+      await openModal();
 
       const cancelButton = screen.getByRole('button', { name: 'Cancel' });
       await user.click(cancelButton);
@@ -201,7 +198,7 @@ describe('SignatureModal', () => {
     it('should call clear method on signature canvas when Clear button is clicked', async () => {
       const user = userEvent.setup();
       renderComponent();
-      openModal();
+      await openModal();
 
       const clearButton = screen.getByRole('button', { name: 'Clear' });
       await user.click(clearButton);
@@ -211,19 +208,19 @@ describe('SignatureModal', () => {
   });
 
   describe('Save button interaction', () => {
-    it('should have Save Signature button in DOM', () => {
+    it('should have Save Signature button in DOM', async () => {
       renderComponent();
-      openModal();
+      await openModal();
 
       expect(screen.getByRole('button', { name: 'Save Signature' })).toBeInTheDocument();
     });
 
-    it('should be disabled when canvas is empty', () => {
+    it('should be disabled when canvas is empty', async () => {
       // Mock that canvas is empty (reset to default behavior)
       mockIsEmpty.mockReturnValue(true);
 
       renderComponent();
-      openModal();
+      await openModal();
 
       const saveButton = screen.getByRole('button', { name: 'Save Signature' });
 
@@ -233,12 +230,12 @@ describe('SignatureModal', () => {
   });
 
   describe('canvas clearing on modal open', () => {
-    it('should clear canvas when modal opens', () => {
+    it('should clear canvas when modal opens', async () => {
       renderComponent();
 
       // Mock signature data before opening
       const testDataUrl = 'data:image/png;base64,oldsignature';
-      act(() => {
+      await act(async () => {
         useLeaveRequestStore.setState({
           profile: {},
           leaveDraft: {},
@@ -250,7 +247,7 @@ describe('SignatureModal', () => {
       });
 
       // Open modal
-      openModal();
+      await openModal();
 
       // Clear should be called
       expect(mockClear).toHaveBeenCalled();
@@ -259,25 +256,25 @@ describe('SignatureModal', () => {
   });
 
   describe('Modal integration', () => {
-    it('should use shared Modal component with correct props', () => {
+    it('should use shared Modal component with correct props', async () => {
       renderComponent();
-      openModal();
+      await openModal();
 
       // Check that the Modal has the correct title
       expect(screen.getByText('Sign Your Name')).toBeInTheDocument();
     });
 
-    it('should have closeOnBackdropClick set to false', () => {
+    it('should have closeOnBackdropClick set to false', async () => {
       renderComponent();
-      openModal();
+      await openModal();
 
       // Modal should be rendered
       expect(screen.getByText('Sign Your Name')).toBeInTheDocument();
     });
 
-    it('should have showCloseButton set to false', () => {
+    it('should have showCloseButton set to false', async () => {
       renderComponent();
-      openModal();
+      await openModal();
 
       // Modal should not have the default close button in the header
       // The close button is tested in Modal tests
@@ -286,26 +283,26 @@ describe('SignatureModal', () => {
   });
 
   describe('store integration', () => {
-    it('should be controlled by Zustand isSignatureModalOpen state', () => {
+    it('should be controlled by Zustand isSignatureModalOpen state', async () => {
       renderComponent();
 
       // Start with modal closed
       expect(screen.queryByText('Sign Your Name')).not.toBeInTheDocument();
 
       // Open modal by updating store
-      openModal();
+      await openModal();
       expect(screen.getByText('Sign Your Name')).toBeInTheDocument();
 
       // Close modal by updating store
-      closeModal();
+      await closeModal();
       expect(screen.queryByText('Sign Your Name')).not.toBeInTheDocument();
     });
   });
 
   describe('accessibility', () => {
-    it('should have proper button labels', () => {
+    it('should have proper button labels', async () => {
       renderComponent();
-      openModal();
+      await openModal();
 
       const allButtons = screen.getAllByRole('button');
       expect(allButtons.find(b => b.textContent === 'Cancel')).toBeInTheDocument();
@@ -313,10 +310,10 @@ describe('SignatureModal', () => {
       expect(allButtons.find(b => b.textContent === 'Save Signature')).toBeInTheDocument();
     });
 
-    it('should have alt text for signature preview', () => {
+    it('should have alt text for signature preview', async () => {
       const testDataUrl = 'data:image/png;base64,testsignature';
 
-      act(() => {
+      await act(async () => {
         useLeaveRequestStore.setState({
           profile: {},
           leaveDraft: {},

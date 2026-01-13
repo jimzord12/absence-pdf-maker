@@ -57,7 +57,8 @@ describe('Modal', () => {
 
     it('should not render close button when showCloseButton is false', () => {
       render(<Modal {...defaultProps} showCloseButton={false} />);
-      expect(screen.queryByRole('button', { name: /close modal/i })).not.toBeInTheDocument();
+      const modalDialog = screen.getByRole('dialog');
+      expect(within(modalDialog).queryByRole('button', { name: /close modal/i })).not.toBeInTheDocument();
     });
 
     it('should render header section when title is provided', () => {

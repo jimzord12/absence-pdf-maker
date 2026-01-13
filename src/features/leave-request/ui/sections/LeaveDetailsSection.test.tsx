@@ -167,8 +167,9 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const card = container.querySelector('.bg-white.rounded-lg');
+      const card = container.querySelector('.rounded-lg');
       expect(card).toBeInTheDocument();
+      expect(card).toHaveClass('bg-[color:var(--color-surface)]');
     });
 
     it('should render section heading', () => {
@@ -756,9 +757,10 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const card = container.querySelector('.bg-white.rounded-lg');
+      const card = container.querySelector('.rounded-lg');
       expect(card).toBeInTheDocument();
-      expect(card).toHaveClass('bg-white', 'rounded-lg');
+      expect(card).toHaveClass('bg-[color:var(--color-surface)]');
+      expect(card).toHaveClass('rounded-lg');
     });
 
     it('should have padding from Card component', () => {
@@ -768,7 +770,7 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const card = container.querySelector('.bg-white.rounded-lg');
+      const card = container.querySelector('.rounded-lg');
       expect(card).toHaveClass('p-6'); // default padding
     });
 
@@ -779,8 +781,8 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const card = container.querySelector('.bg-white.rounded-lg');
-      expect(card).toHaveClass('border', 'border-gray-200');
+      const card = container.querySelector('.rounded-lg');
+      expect(card).toHaveClass('border', 'border-[color:var(--color-border)]');
     });
 
     it('should have shadow from Card component', () => {
@@ -790,8 +792,9 @@ describe('LeaveDetailsSection', () => {
         </FormWrapper>
       );
 
-      const card = container.querySelector('.bg-white.rounded-lg');
+      const card = container.querySelector('.rounded-lg');
       expect(card).toHaveClass('shadow-sm');
+
     });
   });
 
@@ -921,7 +924,7 @@ describe('LeaveDetailsSection', () => {
       // Component should still render without crashing
       // Note: Without FormContext, i18next may render in Greek (default language)
       // Check that component renders without throwing, not specific text
-      expect(document.querySelector('h2[aria-labelledby="leave-details-heading"]')).toBeInTheDocument();
+      expect(document.querySelector('h2#leave-details-heading')).toBeInTheDocument();
     });
 
     it('should handle undefined errors prop', () => {

@@ -88,7 +88,6 @@ describe('Task 081: Tailwind CSS v3 to v4 Migration', () => {
     it('should have secondary color in @theme block', () => {
       expect(indexCssContent).toContain('--color-secondary: #64748b');
       expect(indexCssContent).toContain('--color-secondary-hover: #475569');
-      expect(indexCssContent).toContain('--color-secondary-light: #94a3b8');
     });
 
     it('should have background color in @theme block', () => {

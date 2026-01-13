@@ -420,7 +420,7 @@ describe('useLeaveRequestStore', () => {
         startDate: null,
         endDate: null,
         reason: '',
-        leaveAllowance: undefined,
+        leaveAllowance: null,
       });
     });
 

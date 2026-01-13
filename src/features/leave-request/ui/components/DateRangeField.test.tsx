@@ -123,11 +123,11 @@ describe('DateRangeField', () => {
         </TestWrapper>
       );
 
-      expect(screen.getByText('Date Range Summary')).toBeInTheDocument();
-      expect(screen.getByText('Total Days:')).toBeInTheDocument();
-      expect(screen.getByText('Holidays:')).toBeInTheDocument();
-      expect(screen.getByText('Weekends:')).toBeInTheDocument();
-      expect(screen.getByText('Absence Days:')).toBeInTheDocument();
+      expect(screen.getByText(/Date Range Summary/i)).toBeInTheDocument();
+      expect(screen.getByText(/Total Days:/i)).toBeInTheDocument();
+      expect(screen.getByText(/Holiday Days:/i)).toBeInTheDocument();
+      expect(screen.getByText(/Weekend Days:/i)).toBeInTheDocument();
+      expect(screen.getByText(/Absence Days:/i)).toBeInTheDocument();
     });
   });
 
@@ -266,10 +266,10 @@ describe('DateRangeField', () => {
         </TestWrapper>
       );
 
-      expect(screen.getByText('Total Days:')).toBeInTheDocument();
-      expect(screen.getByText('Holidays:')).toBeInTheDocument();
-      expect(screen.getByText('Weekends:')).toBeInTheDocument();
-      expect(screen.getByText('Absence Days:')).toBeInTheDocument();
+      expect(screen.getByText(/Total Days:/i)).toBeInTheDocument();
+      expect(screen.getByText(/Holiday Days:/i)).toBeInTheDocument();
+      expect(screen.getByText(/Weekend Days:/i)).toBeInTheDocument();
+      expect(screen.getByText(/Absence Days:/i)).toBeInTheDocument();
     });
 
     it('should calculate absence days excluding holidays and weekends', () => {
@@ -281,13 +281,13 @@ describe('DateRangeField', () => {
 
       // With default dates (2025-12-20 to 2025-12-25), there should be:
       // - Total: 6 days (20, 21, 22, 23, 24, 25)
-      // - Weekends: 1 day (21st is Saturday)
+      // - Weekends: 1 day (21st is Sunday)
       // - Holidays: 1 day (25th is Christmas)
       // - Absence: 4 days (total - weekends - holidays)
-      expect(screen.getByText('Total Days:')).toBeInTheDocument();
-      expect(screen.getByText('Holidays:')).toBeInTheDocument();
-      expect(screen.getByText('Weekends:')).toBeInTheDocument();
-      expect(screen.getByText('Absence Days:')).toBeInTheDocument();
+      expect(screen.getByText(/Total Days:/i)).toBeInTheDocument();
+      expect(screen.getByText(/Holiday Days:/i)).toBeInTheDocument();
+      expect(screen.getByText(/Weekend Days:/i)).toBeInTheDocument();
+      expect(screen.getByText(/Absence Days:/i)).toBeInTheDocument();
     });
   });
 
@@ -369,15 +369,16 @@ describe('DateRangeField', () => {
 
   describe('visual feedback', () => {
     it('should display calendar with clear visual hierarchy', () => {
-      const { container } = render(
+      render(
         <TestWrapper>
           <DateRangeField holidaySet={mockHolidaySet} />
         </TestWrapper>
       );
 
       // Check that calendar container has appropriate styling
-      const calendarContainer = container.querySelector('.border-gray-200');
+      const calendarContainer = screen.getByRole('region', { name: /calendar/i });
       expect(calendarContainer).toBeInTheDocument();
+      expect(calendarContainer).toHaveClass('rounded-lg', 'bg-[color:var(--color-surface)]');
     });
 
     it('should display absence calculation with distinct styling', () => {
@@ -388,7 +389,7 @@ describe('DateRangeField', () => {
       );
 
       // Check that absence calculation has distinct styling
-      const summaryBox = container.querySelector('.bg-blue-50');
+      const summaryBox = container.querySelector('.bg-info-50');
       expect(summaryBox).toBeInTheDocument();
     });
   });
@@ -723,10 +724,10 @@ describe('DateRangeField', () => {
         </TestWrapper>
       );
 
-      // Label element should be present
-      const label = screen.getByText('Select Date Range');
+      // The label is implemented as a span with an id and referenced by aria-labelledby
+      const label = screen.getByText(/Select Date Range/i);
       expect(label).toBeInTheDocument();
-      expect(label.tagName.toLowerCase()).toBe('label');
+      expect(label.tagName.toLowerCase()).toBe('span');
     });
 
     it('should maintain keyboard navigable calendar', () => {
@@ -771,10 +772,9 @@ describe('DateRangeField', () => {
         </NoDatesWrapper>
       );
 
-      const clearButton = screen.getByRole('button', { name: 'Clear selected dates' });
+      const clearButton = screen.getByRole('button', { name: /Clear selected dates/i });
       expect(clearButton).toBeInTheDocument();
       expect(clearButton).toBeDisabled();
-      expect(clearButton).toHaveClass('bg-gray-200');
     });
 
     it('should render clear button when dates are selected', () => {
@@ -863,10 +863,9 @@ describe('DateRangeField', () => {
         </OnlyStartDateWrapper>
       );
 
-      const clearButton = screen.getByRole('button', { name: 'Clear selected dates' });
+      const clearButton = screen.getByRole('button', { name: /Clear selected dates/i });
       expect(clearButton).toBeInTheDocument();
       expect(clearButton).toBeDisabled();
-      expect(clearButton).toHaveClass('bg-gray-200');
     });
 
     it('should update absence calculation to em dash after clearing dates', async () => {

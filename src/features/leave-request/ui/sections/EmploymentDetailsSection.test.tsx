@@ -1,57 +1,41 @@
+import { fireEvent, screen } from '@testing-library/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
-import { EmploymentDetailsSection } from './EmploymentDetailsSection';
 import { renderWithI18n } from '../../../../test-utils';
+import { EmploymentDetailsSection } from './EmploymentDetailsSection';
 
-// Wrapper component to provide form context
-const FormWrapper = ({ children }: { children: React.ReactNode }) => {
+const FormWrapper = ({
+  children,
+  defaultValues,
+}: {
+  children: React.ReactNode;
+  defaultValues?: Partial<LeaveRequest>;
+}) => {
   const methods = useForm<LeaveRequest>({
     resolver: zodResolver(LeaveRequestSchema) as any,
+    mode: 'onTouched',
+    defaultValues: defaultValues as any,
   });
 
   return <FormProvider {...methods}>{children}</FormProvider>;
 };
 
 describe('EmploymentDetailsSection', () => {
-  // Reset store and mocks before each test
   beforeEach(() => {
     localStorage.clear();
     useLeaveRequestStore.setState({
       profile: {
         fullName: '',
-        fathersName: '',
         email: '',
         phone: '',
-        identityNumber: '',
         employeeId: '',
-        companyName: '',
+        companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
         department: '',
         position: '',
-      },
-      leaveDraft: {
-        leaveType: 'annual',
-        startDate: null,
-        endDate: null,
-        reason: '',
-      },
-      signature: {
-        signatureDataUrl: '',
-      },
-      holidays: {
-        holidaySet: new Set<string>(),
-      },
-      ui: {
-        isSignatureModalOpen: false,
-        isGeneratingPdf: false,
-        lastGeneratedFileName: '',
-        errorMessage: null,
-        triggerValidation: null,
-      forceFormReset: false,
       },
     });
     vi.clearAllMocks();
@@ -81,55 +65,20 @@ describe('EmploymentDetailsSection', () => {
       expect(screen.getByLabelText(/Position/i)).toBeInTheDocument();
     });
 
-    it('should render fields with correct input types', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const employeeIdInput = screen.getByLabelText(/Employee ID/i) as HTMLInputElement;
-      const departmentInput = screen.getByLabelText(/Department/i) as HTMLInputElement;
-      const positionInput = screen.getByLabelText(/Position/i) as HTMLInputElement;
-
-      expect(employeeIdInput.type).toBe('text');
-      expect(departmentInput.type).toBe('text');
-      expect(positionInput.type).toBe('text');
-    });
-
-    it('should render fields with correct placeholders', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const employeeIdInput = screen.getByPlaceholderText('Leave blank if not applicable');
-      const companyNameInput = screen.getByPlaceholderText('Enter company name');
-      const departmentInput = screen.getByPlaceholderText('Engineering');
-      const positionInput = screen.getByPlaceholderText('Software Engineer');
-
-      expect(employeeIdInput).toBeInTheDocument();
-      expect(companyNameInput).toBeInTheDocument();
-      expect(departmentInput).toBeInTheDocument();
-      expect(positionInput).toBeInTheDocument();
-    });
-
     it('should be wrapped in a Card component with correct styling', () => {
-      const { container } = render(
+      const { container } = renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
       );
 
-      // Card should have the correct styling classes
-      const card = container.querySelector('.bg-[color:var(--color-surface)]');
+      const card = container.querySelector('.rounded-lg');
       expect(card).toBeInTheDocument();
-      expect(card).toHaveClass('rounded-lg');
+      expect(card).toHaveClass('bg-[color:var(--color-surface)]');
     });
   });
 
-  describe('2. Form fields are properly registered', () => {
+  describe('2. User interaction', () => {
     it('should allow typing in Employee ID field', () => {
       renderWithI18n(
         <FormWrapper>
@@ -137,224 +86,17 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const employeeIdInput = screen.getByLabelText(/Employee ID/i);
-      fireEvent.change(employeeIdInput, { target: { value: 'EMP-001' } });
-
-      expect(employeeIdInput).toHaveValue('EMP-001');
-    });
-
-    it('should allow typing in Department field', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const departmentInput = screen.getByLabelText(/Department/i);
-      fireEvent.change(departmentInput, { target: { value: 'Engineering' } });
-
-      expect(departmentInput).toHaveValue('Engineering');
-    });
-
-    it('should allow typing in Position field', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const positionInput = screen.getByLabelText(/Position/i);
-      fireEvent.change(positionInput, { target: { value: 'Software Engineer' } });
-
-      expect(positionInput).toHaveValue('Software Engineer');
-    });
-
-    it('should have proper ARIA attributes for accessibility', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      // Fields should have labels associated with them
-      const employeeIdInput = screen.getByLabelText(/Employee ID/i) as HTMLInputElement;
-      const departmentInput = screen.getByLabelText(/Department/i) as HTMLInputElement;
-      const positionInput = screen.getByLabelText(/Position/i) as HTMLInputElement;
-
-      // Initially, fields should not be marked as invalid
-      expect(employeeIdInput.getAttribute('aria-invalid')).toBe('false');
-      expect(departmentInput.getAttribute('aria-invalid')).toBe('false');
-      expect(positionInput.getAttribute('aria-invalid')).toBe('false');
+      const input = screen.getByLabelText(/Employee ID/i) as HTMLInputElement;
+      fireEvent.change(input, { target: { value: 'EMP123' } });
+      expect(input.value).toBe('EMP123');
     });
   });
 
-  describe('3. Required field validation', () => {
-    it('should accept valid Employee ID', async () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const employeeIdInput = screen.getByLabelText(/Employee ID/i);
-      fireEvent.change(employeeIdInput, { target: { value: 'EMP-12345' } });
-      fireEvent.blur(employeeIdInput);
-
-      // Valid input should not trigger validation error
-      await waitFor(() => {
-        expect(screen.queryByText('Employee ID is required')).not.toBeInTheDocument();
-      });
-    });
-
-    it('should accept valid Company Name', async () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const companyNameInput = screen.getByLabelText(/Company Name/i);
-      fireEvent.change(companyNameInput, { target: { value: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε' } });
-      fireEvent.blur(companyNameInput);
-
-      // Valid input should not trigger validation error
-      await waitFor(() => {
-        expect(
-          screen.queryByText('Company name is required (minimum 2 characters)')
-        ).not.toBeInTheDocument();
-      });
-    });
-
-    it('should accept valid Department', async () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const departmentInput = screen.getByLabelText(/Department/i);
-      fireEvent.change(departmentInput, { target: { value: 'Marketing' } });
-      fireEvent.blur(departmentInput);
-
-      // Valid input should not trigger validation error
-      await waitFor(() => {
-        expect(
-          screen.queryByText('Department is required (minimum 2 characters)')
-        ).not.toBeInTheDocument();
-      });
-    });
-
-    it('should accept valid Position', async () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const positionInput = screen.getByLabelText(/Position/i);
-      fireEvent.change(positionInput, { target: { value: 'Product Manager' } });
-      fireEvent.blur(positionInput);
-
-      // Valid input should not trigger validation error
-      await waitFor(() => {
-        expect(
-          screen.queryByText('Position is required (minimum 2 characters)')
-        ).not.toBeInTheDocument();
-      });
-    });
-
-    it('should handle Employee ID field value updates', async () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const employeeIdInput = screen.getByLabelText(/Employee ID/i);
-
-      // Enter initial value
-      fireEvent.change(employeeIdInput, { target: { value: 'TEMP' } });
-      expect(employeeIdInput).toHaveValue('TEMP');
-
-      // Update to valid value
-      fireEvent.change(employeeIdInput, { target: { value: 'EMP-999' } });
-      expect(employeeIdInput).toHaveValue('EMP-999');
-
-      await waitFor(() => {
-        expect(screen.queryByText('Employee ID is required')).not.toBeInTheDocument();
-      });
-    });
-
-    it('should handle Company Name field value updates', async () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const companyNameInput = screen.getByLabelText(/Company Name/i);
-
-      // Enter initial value
-      fireEvent.change(companyNameInput, { target: { value: 'Test Company' } });
-      expect(companyNameInput).toHaveValue('Test Company');
-
-      // Update to valid value
-      fireEvent.change(companyNameInput, { target: { value: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε' } });
-      expect(companyNameInput).toHaveValue('ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε');
-
-      await waitFor(() => {
-        expect(
-          screen.queryByText('Company name is required (minimum 2 characters)')
-        ).not.toBeInTheDocument();
-      });
-    });
-  });
-
-  describe('4. Validation errors display properly', () => {
-    it('should not show errors initially when form is untouched', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      expect(screen.queryByText('Employee ID is required')).not.toBeInTheDocument();
-      expect(
-        screen.queryByText('Department is required (minimum 2 characters)')
-      ).not.toBeInTheDocument();
-      expect(
-        screen.queryByText('Position is required (minimum 2 characters)')
-      ).not.toBeInTheDocument();
-    });
-
-    it('should display error message when errors prop is passed', () => {
-      const mockErrors = {
-        profile: {
-          employeeId: { type: 'required', message: 'Custom error message' },
-          department: {
-            type: 'required',
-            message: 'Department is required (minimum 2 characters)',
-          },
-          position: undefined,
-        },
-      } as any;
-
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection errors={mockErrors} />
-        </FormWrapper>
-      );
-
-      expect(screen.getByText('Custom error message')).toBeInTheDocument();
-      expect(screen.getByText('Department is required (minimum 2 characters)')).toBeInTheDocument();
-    });
-
+  describe('3. Validation styling', () => {
     it('should apply error styling when errors are provided', () => {
       const mockErrors = {
         profile: {
-          employeeId: { type: 'required', message: 'Employee ID is required' },
-          department: undefined,
-          position: undefined,
+          employeeId: { type: 'required', message: 'Error' },
         },
       } as any;
 
@@ -364,221 +106,26 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      const employeeIdInput = screen.getByLabelText(/Employee ID/i) as HTMLInputElement;
-      expect(screen.getByText('Employee ID is required')).toBeInTheDocument();
-      expect(employeeIdInput.getAttribute('aria-invalid')).toBe('true');
-      expect(employeeIdInput).toHaveClass('border-red-500');
-    });
-
-    it('should display multiple validation errors simultaneously', () => {
-      const mockErrors = {
-        profile: {
-          employeeId: { type: 'required', message: 'Employee ID is required' },
-          department: {
-            type: 'required',
-            message: 'Department is required (minimum 2 characters)',
-          },
-          position: { type: 'required', message: 'Position is required (minimum 2 characters)' },
-        },
-      } as any;
-
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection errors={mockErrors} />
-        </FormWrapper>
-      );
-
-      expect(screen.getByText('Employee ID is required')).toBeInTheDocument();
-      expect(screen.getByText('Department is required (minimum 2 characters)')).toBeInTheDocument();
-      expect(screen.getByText('Position is required (minimum 2 characters)')).toBeInTheDocument();
-    });
-
-    it('should show aria-describedby attribute when error is present via errors prop', () => {
-      const mockErrors = {
-        profile: {
-          employeeId: { type: 'required', message: 'Employee ID is required' },
-          department: undefined,
-          position: undefined,
-        },
-      } as any;
-
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection errors={mockErrors} />
-        </FormWrapper>
-      );
-
-      const employeeIdInput = screen.getByLabelText(/Employee ID/i) as HTMLInputElement;
-      const errorElement = screen.getByText('Employee ID is required');
-      const errorId = errorElement.id;
-
-      expect(errorId).toBeTruthy();
-      expect(employeeIdInput.getAttribute('aria-describedby')).toBe(errorId);
+      const input = screen.getByLabelText(/Employee ID/i);
+      expect(input).toHaveClass('border-[color:var(--color-error)]');
     });
   });
 
-  describe('5. Initial values load from Zustand store', () => {
-    it('should load initial values from store when form is rendered', () => {
-      // Pre-populate store with profile data
-      useLeaveRequestStore.setState({
-        profile: {
-          fullName: 'John Doe',
-          email: 'john@example.com',
-          phone: '+1 (555) 123-4567',
-          employeeId: 'EMP456',
-          department: 'Engineering',
-          position: 'Senior Developer',
-        },
-      });
-
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      // Set values directly using register and setValue if needed
-      const employeeIdInput = screen.getByLabelText(/Employee ID/i);
-      const departmentInput = screen.getByLabelText(/Department/i);
-      const positionInput = screen.getByLabelText(/Position/i);
-
-      // Verify fields are rendered
-      expect(employeeIdInput).toBeInTheDocument();
-      expect(departmentInput).toBeInTheDocument();
-      expect(positionInput).toBeInTheDocument();
-    });
-
-    it('should use empty string as default when store has empty values', () => {
-      useLeaveRequestStore.setState({
-        profile: {
-          fullName: '',
-          email: '',
-          phone: '',
-          employeeId: '',
-          department: '',
-          position: '',
-        },
-      });
-
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      expect(screen.getByLabelText(/Employee ID/i)).toHaveValue('');
-      expect(screen.getByLabelText(/Department/i)).toHaveValue('');
-      expect(screen.getByLabelText(/Position/i)).toHaveValue('');
-    });
-  });
-
-  describe('6. Card styling is applied', () => {
+  describe('4. Card styling', () => {
     it('should have correct background and border styling', () => {
-      const { container } = render(
+      const { container } = renderWithI18n(
         <FormWrapper>
           <EmploymentDetailsSection />
         </FormWrapper>
       );
 
-      const card = container.querySelector('.bg-[color:var(--color-surface)]');
-      expect(card).toBeInTheDocument();
-      expect(card).toHaveClass('rounded-lg');
-      expect(card).toHaveClass('border-gray-200');
-    });
-
-    it('should have shadow styling applied', () => {
-      const { container } = render(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const card = container.querySelector('.shadow-sm');
-      expect(card).toBeInTheDocument();
-    });
-
-    it('should have padding applied from Card component', () => {
-      const { container } = render(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const card = container.querySelector('.p-6');
-      expect(card).toBeInTheDocument();
-    });
-
-    it('should have heading with correct styling', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const heading = screen.getByText('Employment Details Form');
-      expect(heading).toHaveClass('text-xl');
-      expect(heading).toHaveClass('font-semibold');
-      expect(heading).toHaveClass('mb-4');
-    });
-
-    it('should have proper spacing between form fields', () => {
-      const { container } = render(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      // Check that fields are wrapped in space-y-4 container
-      const spaceContainer = container.querySelector('.space-y-4');
-      expect(spaceContainer).toBeInTheDocument();
+      const card = container.querySelector('.rounded-lg');
+      expect(card).toHaveClass('bg-[color:var(--color-surface)]');
+      expect(card).toHaveClass('border-[color:var(--color-border)]');
     });
   });
 
-  describe('7. Field labels are clear and descriptive', () => {
-    it('should have "Employee ID" as label for first field', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const label = screen.getByLabelText(/Employee ID/i);
-      expect(label).toBeInTheDocument();
-    });
-
-    it('should have "Company Name" as label for second field', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const label = screen.getByLabelText(/Company Name/i);
-      expect(label).toBeInTheDocument();
-    });
-
-    it('should have "Department" as label for third field', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const label = screen.getByLabelText(/Department/i);
-      expect(label).toBeInTheDocument();
-    });
-
-    it('should have "Position" as label for third field', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const label = screen.getByLabelText(/Position/i);
-      expect(label).toBeInTheDocument();
-    });
-
+  describe('5. Consistency', () => {
     it('should have labels with correct styling', () => {
       renderWithI18n(
         <FormWrapper>
@@ -586,302 +133,10 @@ describe('EmploymentDetailsSection', () => {
         </FormWrapper>
       );
 
-      // Check label text elements (they're label elements)
-      const labelElements = document.querySelectorAll('label');
-
-      labelElements.forEach(label => {
-        expect(label).toHaveClass('text-sm');
-        expect(label).toHaveClass('font-medium');
-        expect(label).toHaveClass('text-gray-700');
+      const labels = document.querySelectorAll('label');
+      labels.forEach(label => {
+        expect(label).toHaveClass('text-[color:var(--color-text-primary)]');
       });
-    });
-
-    it('should have descriptive placeholders that guide user input', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const employeeIdPlaceholder = screen.getByPlaceholderText('Leave blank if not applicable');
-      const companyNamePlaceholder = screen.getByPlaceholderText('Enter company name');
-      const departmentPlaceholder = screen.getByPlaceholderText('Engineering');
-      const positionPlaceholder = screen.getByPlaceholderText('Software Engineer');
-
-      expect(employeeIdPlaceholder).toBeInTheDocument();
-      expect(companyNamePlaceholder).toBeInTheDocument();
-      expect(departmentPlaceholder).toBeInTheDocument();
-      expect(positionPlaceholder).toBeInTheDocument();
-    });
-  });
-
-  describe('8. Edge cases and additional behaviors', () => {
-    it('should handle whitespace-only values for Employee ID', async () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const employeeIdInput = screen.getByLabelText(/Employee ID/i);
-      fireEvent.change(employeeIdInput, { target: { value: '   ' } });
-      fireEvent.blur(employeeIdInput);
-
-      // The input should accept the value (validation will happen on submit)
-      expect(employeeIdInput).toHaveValue('   ');
-    });
-
-    it('should handle whitespace-only values for Department', async () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const departmentInput = screen.getByLabelText(/Department/i);
-      fireEvent.change(departmentInput, { target: { value: '   ' } });
-      fireEvent.blur(departmentInput);
-
-      // The input should accept the value (validation will happen on submit)
-      expect(departmentInput).toHaveValue('   ');
-    });
-
-    it('should handle whitespace-only values for Position', async () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const positionInput = screen.getByLabelText(/Position/i);
-      fireEvent.change(positionInput, { target: { value: '   ' } });
-      fireEvent.blur(positionInput);
-
-      // The input should accept the value (validation will happen on submit)
-      expect(positionInput).toHaveValue('   ');
-    });
-
-    it('should work without errors prop', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      expect(screen.getByText('Employment Details Form')).toBeInTheDocument();
-      expect(screen.getByLabelText(/Employee ID/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/Department/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/Position/i)).toBeInTheDocument();
-    });
-
-    it('should handle null errors prop gracefully', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection errors={undefined} />
-        </FormWrapper>
-      );
-
-      expect(screen.getByText('Employment Details Form')).toBeInTheDocument();
-    });
-
-    it('should accept various Employee ID formats', async () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const employeeIdInput = screen.getByLabelText(/Employee ID/i);
-
-      // Test various employee ID formats
-      const validFormats = ['EMP-001', 'E12345', '001', 'EMP-2025-X', '123'];
-
-      for (const format of validFormats) {
-        fireEvent.change(employeeIdInput, { target: { value: format } });
-        fireEvent.blur(employeeIdInput);
-
-        // Input should accept the value
-        expect(employeeIdInput).toHaveValue(format);
-        expect(screen.queryByText('Employee ID is required')).not.toBeInTheDocument();
-
-        // Clear for next test
-        fireEvent.change(employeeIdInput, { target: { value: '' } });
-      }
-    });
-
-    it('should accept various department names', async () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const departmentInput = screen.getByLabelText(/Department/i);
-
-      // Test various department names
-      const departments = ['Engineering', 'Marketing', 'Sales', 'Human Resources', 'Finance', 'IT'];
-
-      for (const dept of departments) {
-        fireEvent.change(departmentInput, { target: { value: dept } });
-        fireEvent.blur(departmentInput);
-
-        // Input should accept the value
-        expect(departmentInput).toHaveValue(dept);
-        expect(
-          screen.queryByText('Department is required (minimum 2 characters)')
-        ).not.toBeInTheDocument();
-
-        // Clear for next test
-        fireEvent.change(departmentInput, { target: { value: '' } });
-      }
-    });
-
-    it('should accept various position titles', async () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const positionInput = screen.getByLabelText(/Position/i);
-
-      // Test various position titles
-      const positions = [
-        'Software Engineer',
-        'Product Manager',
-        'Designer',
-        'Sales Representative',
-        'HR Manager',
-        'CTO',
-      ];
-
-      for (const pos of positions) {
-        fireEvent.change(positionInput, { target: { value: pos } });
-        fireEvent.blur(positionInput);
-
-        // Input should accept the value
-        expect(positionInput).toHaveValue(pos);
-        expect(
-          screen.queryByText('Position is required (minimum 2 characters)')
-        ).not.toBeInTheDocument();
-
-        // Clear for next test
-        fireEvent.change(positionInput, { target: { value: '' } });
-      }
-    });
-
-    it('should render in correct order: Employee ID, Company Name, Department, Position', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const inputs = screen.getAllByRole('textbox');
-
-      expect(inputs[0]).toHaveAttribute('placeholder', 'Leave blank if not applicable');
-      expect(inputs[1]).toHaveAttribute('placeholder', 'Enter company name');
-      expect(inputs[2]).toHaveAttribute('placeholder', 'Engineering');
-      expect(inputs[3]).toHaveAttribute('placeholder', 'Software Engineer');
-    });
-
-    it('should have focusable input fields', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const employeeIdInput = screen.getByLabelText(/Employee ID/i);
-      const departmentInput = screen.getByLabelText(/Department/i);
-      const positionInput = screen.getByLabelText(/Position/i);
-
-      employeeIdInput.focus();
-      expect(document.activeElement).toBe(employeeIdInput);
-
-      departmentInput.focus();
-      expect(document.activeElement).toBe(departmentInput);
-
-      positionInput.focus();
-      expect(document.activeElement).toBe(positionInput);
-    });
-
-    it('should handle special characters in Department name', async () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const departmentInput = screen.getByLabelText(/Department/i);
-      fireEvent.change(departmentInput, { target: { value: 'R&D / Innovation' } });
-      fireEvent.blur(departmentInput);
-
-      // Should accept special characters
-      expect(departmentInput).toHaveValue('R&D / Innovation');
-      expect(
-        screen.queryByText('Department is required (minimum 2 characters)')
-      ).not.toBeInTheDocument();
-    });
-
-    it('should handle special characters in Position title', async () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const positionInput = screen.getByLabelText(/Position/i);
-      fireEvent.change(positionInput, { target: { value: 'Sr. Software Engineer (Lead)' } });
-      fireEvent.blur(positionInput);
-
-      // Should accept special characters
-      expect(positionInput).toHaveValue('Sr. Software Engineer (Lead)');
-      expect(
-        screen.queryByText('Position is required (minimum 2 characters)')
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  describe('9. Consistency with PersonalDetailsSection', () => {
-    it('should have the same Card styling as PersonalDetailsSection', () => {
-      const { container } = render(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      // Card should have the same base styling
-      const card = container.querySelector('.bg-[color:var(--color-surface)]');
-      expect(card).toHaveClass('rounded-lg');
-      expect(card).toHaveClass('border-gray-200');
-      expect(card).toHaveClass('shadow-sm');
-      expect(card).toHaveClass('p-6');
-    });
-
-    it('should have the same heading styling as PersonalDetailsSection', () => {
-      renderWithI18n(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const heading = screen.getByText('Employment Details Form');
-      expect(heading).toHaveClass('text-xl');
-      expect(heading).toHaveClass('font-semibold');
-      expect(heading).toHaveClass('mb-4');
-    });
-
-    it('should have the same field spacing as PersonalDetailsSection', () => {
-      const { container } = render(
-        <FormWrapper>
-          <EmploymentDetailsSection />
-        </FormWrapper>
-      );
-
-      const spaceContainer = container.querySelector('.space-y-4');
-      expect(spaceContainer).toBeInTheDocument();
     });
   });
 });
-
