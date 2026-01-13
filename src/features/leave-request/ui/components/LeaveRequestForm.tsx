@@ -193,6 +193,7 @@ export const LeaveRequestForm = () => {
       <form
         onSubmit={handleSubmit(data => console.log('Form submitted:', data))}
         className="space-y-6 animate-fade-in-up"
+        role="form"
       >
         <div className="animate-stagger-2">
           <PersonalDetailsSection errors={errors} />

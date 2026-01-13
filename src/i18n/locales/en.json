@@ -21,8 +21,8 @@
       "dismiss": "Don't show again"
     },
     "status": {
-      "signed": "Signed",
-      "notSigned": "Not signed",
+      "signed": "✓ Signed",
+      "notSigned": "✗ Not signed",
       "update": "Update Signature",
       "add": "Add Signature"
     },
@@ -66,6 +66,7 @@
     },
     "personal": {
       "heading": "Personal Details Form",
+      "summaryHeading": "Personal Details Summary",
       "fullName": "Full Name",
       "fullNamePlaceholder": "Enter your full name",
       "fathersName": "Father's Name",
@@ -81,6 +82,7 @@
     },
     "employment": {
       "heading": "Employment Details Form",
+      "summaryHeading": "Employment Details Summary",
       "employeeId": "Employee ID (Optional)",
       "employeeIdPlaceholder": "Leave blank if not applicable",
       "companyName": "Company Name",
@@ -92,6 +94,7 @@
     },
     "leave": {
       "heading": "Leave Details Form",
+      "summaryHeading": "Leave Details Summary",
       "leaveType": "Leave Type",
       "leaveTypePlaceholder": "Select leave type",
       "reason": "Reason (Optional)",

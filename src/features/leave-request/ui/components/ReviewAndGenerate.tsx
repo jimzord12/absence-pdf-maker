@@ -84,6 +84,7 @@ export const ReviewAndGenerate: React.FC = () => {
       await importProfileFromJson(file, t, () => {
         triggerForceFormReset();
       });
+      showSuccess(t('persistence.importSuccess', { ns: 'messages' }));
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to import profile';
       showError(message);
@@ -180,11 +181,11 @@ export const ReviewAndGenerate: React.FC = () => {
         minLoadTime,
       ]);
 
-      showSuccess(t('generationSuccess', { ns: 'pdf' }));
+      showSuccess(t('pdf.generationSuccess', { ns: 'messages' }));
       incrementPdfGenerationCount();
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to generate PDF';
-      showError(t('generationFailed', { ns: 'pdf', message }));
+      showError(t('pdf.generationFailed', { ns: 'messages', message }));
     } finally {
       setIsGeneratingPdf(false);
     }
@@ -199,7 +200,7 @@ export const ReviewAndGenerate: React.FC = () => {
       <section aria-labelledby="review-personal-details-heading">
         <Card>
           <h2 id="review-personal-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
-            {t('personal.heading')}
+            {t('personal.summaryHeading')}
           </h2>
            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -242,30 +243,13 @@ export const ReviewAndGenerate: React.FC = () => {
         </Card>
       </section>
 
-      {/* Leave Details Summary Section */}
       <section aria-labelledby="review-leave-details-heading">
         <Card>
           <h2 id="review-leave-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
-            {t('leave.heading')}
+            {t('leave.summaryHeading')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex-col justify-between">
-              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('leave.leaveType')}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">
-                {leaveDraft.leaveType ? leaveTypeLabels[leaveDraft.leaveType] : '—'}
-              </p>
-            </div>
-            <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.leaveAllowance')}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">{leaveDraft.leaveAllowance ? tCommon('yes') : tCommon('no')}</p>
-            </div>
-            <div>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.startDate')}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">
-                {leaveDraft.startDate ? formatDate(leaveDraft.startDate, locale) : '—'}
-              </p>
-            </div>
-            <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('leave.leaveType')}</span>
               <p className="font-medium text-[color:var(--color-text-primary)]">
                 {leaveDraft.leaveType ? leaveTypeLabels[leaveDraft.leaveType] : '—'}
@@ -277,6 +261,18 @@ export const ReviewAndGenerate: React.FC = () => {
                 {leaveDraft.leaveAllowance !== null && leaveDraft.leaveAllowance !== undefined
                   ? `${leaveDraft.leaveAllowance} ${t('dateRange.days')}`
                   : '—'}
+              </p>
+            </div>
+            <div>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.startDate')}</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">
+                {leaveDraft.startDate ? formatDate(leaveDraft.startDate, locale) : '—'}
+              </p>
+            </div>
+            <div>
+              <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.endDate')}</span>
+              <p className="font-medium text-[color:var(--color-text-primary)]">
+                {leaveDraft.endDate ? formatDate(leaveDraft.endDate, locale) : '—'}
               </p>
             </div>
             <div>
@@ -356,7 +352,7 @@ export const ReviewAndGenerate: React.FC = () => {
                 accept=".json"
                 onChange={handleImport}
                 className="hidden"
-                aria-label={tCommon('buttons.importProfile')}
+                aria-label={t('actions.importProfileAria')}
               />
               <Button variant="danger" onClick={handleClearProfile} size="md">
                 {tCommon('buttons.clearProfile')}
@@ -388,8 +384,9 @@ export const ReviewAndGenerate: React.FC = () => {
                  }
                  className="w-full md:w-auto"
                >
-                  {t('pdf.clickToGenerate', { ns: 'messages' })}
-               </Button>
+                  {tCommon('buttons.generatePdf')}
+                </Button>
+
                <p className="text-sm text-[color:var(--color-text-secondary)] mt-2">
                   {isGeneratingPdf
                     ? t('pdf.loadingMessage', { ns: 'messages' })
