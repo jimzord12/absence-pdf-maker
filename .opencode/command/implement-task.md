@@ -128,6 +128,7 @@ If the task is linked to an issue (check `**Issue ID:**` field in task file),
 3. **If issue does not exist**: Skip this step (no issue linked)
 
 **Example**:
+
 ```bash
 # Check if issue exists
 npm run issue -- show 021
