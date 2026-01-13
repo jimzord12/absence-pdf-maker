@@ -20,12 +20,14 @@ Test PDF generation in both English and Greek to ensure correct content and lang
 
 ## Acceptance Criteria
 
-- [ ] Test generates PDF in Greek
-- [ ] Test generates PDF in English
-- [ ] Test verifies PDF language does not affect UI language
-- [ ] Test verifies UI language does not affect PDF language
-- [ ] Both PDF outputs have correct language content
+- [x] Test generates PDF in Greek
+- [x] Test generates PDF in English
+- [x] Test verifies PDF language does not affect UI language
+- [x] Test verifies UI language does not affect PDF language
+- [x] Both PDF outputs have correct language content
 
 ## Notes
 
-No notes.
+- Implemented unit tests for `LeaveRequestPdf` component to verify bilingual rendering.
+- Implemented integration tests for `pdf.service` to verify store language is correctly passed to the PDF component.
+- Verified that PDF language selection is independent of UI language by mocking the Zustand store and component props.

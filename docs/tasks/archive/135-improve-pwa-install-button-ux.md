@@ -1,4 +1,4 @@
-# task-135-improve-pwa-install-button-ux
+# 135-improve-pwa-install-button-ux
 
 **Priority:** low
 **Blocks:** none
@@ -31,6 +31,7 @@ Review and improve PWA Install button UX that appeared during form interaction a
 ## Notes
 
 No notes.
+
 # Task 135: Improve PWA Install Button UX - Implementation Note
 
 ## Implementation Summary
@@ -38,25 +39,30 @@ No notes.
 ### What Was Implemented
 
 1. **PWA State Tracking (leaveRequest.store.ts)**
+
    - Added Pwa interface with state for tracking PDF completions and user preferences
    - Added PWA state to LeaveRequestState interface
    - Added actions: incrementPdfGenerationCount(), dismissPwaInstall(), snoozePwaInstall()
    - Updated partialize to persist PWA state
-   
+
 2. **Enhanced usePwaInstall Hook (usePwaInstall.ts)**
+
    - Added conditional display logic based on PDF completions and user preferences
    - Progressive snooze delays: 24h, 7 days, 30 days
    - Returns canShowInstall boolean for controlling visibility
-   
+
 3. **Removed Header Button (LeaveRequestPage.tsx)**
+
    - Removed prominent PWA install button from header
-   
+
 4. **Created PwaInstallToast Component (shared/ui/PwaInstallToast/PwaInstallToast.tsx)**
+
    - Dismissible toast notification
    - Install button, Remind later button, Dismiss X button
    - Less prominent styling than header button
-   
+
 5. **Updated ReviewAndGenerate (ReviewAndGenerate.tsx)**
+
    - Added call to incrementPdfGenerationCount() after successful PDF generation
 
 6. **Added Translations (en.json, gr.json)**
@@ -65,6 +71,7 @@ No notes.
 ### Test Results
 
 Most tests passing (899 passed):
+
 - usePwaInstall functionality working
 - Store state management working
 - PDF generation tracking working
@@ -75,7 +82,8 @@ Most tests passing (899 passed):
 
 **Error:** "Expected ',' expected"
 
-**Impact:** 
+**Impact:**
+
 - Prevents successful build
 - Blocks test runs (esbuild transforms fail)
 - Does NOT affect runtime functionality (dev server runs)
@@ -89,22 +97,27 @@ Most tests passing (899 passed):
 ### Acceptance Criteria Status
 
 - ✅ PWA install button does not interrupt user workflow during form interactions
+
   - Button removed from header, moved to toast that appears after PDF generation
-  
+
 - ✅ Button is less prominent or moved to a settings menu
+
   - Toast is less prominent than primary button in header (gray styling instead of primary blue)
-  
+
 - ✅ Install prompt only appears after user has completed at least one form submission
+
   - Uses `completedPdfGenerations > 0` check in `canShowInstall` logic
-  
+
 - ✅ User has option to dismiss/snooze the install prompt
+
   - Dismiss button (permanent), Remind later button (temporary with progressive delays)
-  
+
 - ✅ Button placement and timing follow PWA best practices
+
   - Shows only when appropriate (after PDF generation, not dismissed, not in snooze period)
   - Uses progressive snooze to avoid nagging
   - Less intrusive toast instead of prominent header button
-  
+
 - ❓ No console warnings related to beforeinstallprompt event handling
   - Cannot verify without successful build
 
@@ -116,26 +129,31 @@ Most tests passing (899 passed):
 ## Files Modified
 
 1. src/features/leave-request/state/leaveRequest.store.ts
+
    - Added Pwa interface, updated LeaveRequestState
    - Added PWA actions (increment, dismiss, snooze)
    - Added PWA state to initialState
    - Updated partialize to include pwa state
 
 2. src/app/providers/usePwaInstall.ts
+
    - Complete rewrite with state tracking integration
    - Added progressive snooze logic
    - Added dismiss and snooze methods
 
 3. src/features/leave-request/ui/pages/LeaveRequestPage.tsx
+
    - Removed usePwaInstall import
    - Removed PWA install button from header
 
 4. src/features/leave-request/ui/components/ReviewAndGenerate.tsx
+
    - Added PwaInstallToast import
    - Added incrementPdfGenerationCount() call after successful PDF
    - Added toast component to JSX
 
 5. src/i18n/locales/en.json
+
    - Added pwa translations (installTitle, installDescription, remindLater, dismiss)
 
 6. src/i18n/locales/gr.json
@@ -144,6 +162,7 @@ Most tests passing (899 passed):
 ## Next Steps
 
 1. **Debug store typecheck error** - The persistent errors at lines 167, 178, 181 need investigation
+
    - Try restoring from git again and applying changes differently
    - Check for encoding issues or invisible characters
    - Consider if there's a TypeScript/ESBuild compatibility issue
