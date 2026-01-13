@@ -123,7 +123,7 @@ export const ReviewAndGenerate: React.FC = () => {
     if (triggerValidation) {
       const isValid = await triggerValidation();
       if (!isValid) {
-        showError(t('validationErrors', { ns: 'pdf' }));
+        showError(t('pdf.validationErrors', { ns: 'messages' }));
         return;
       }
     }
@@ -135,12 +135,12 @@ export const ReviewAndGenerate: React.FC = () => {
       !profile.identityNumber ||
       !profile.companyName
     ) {
-      showError(t('missingDetails', { ns: 'pdf' }));
+      showError(t('pdf.missingDetails', { ns: 'messages' }));
       return;
     }
 
     if (!leaveDraft.startDate || !leaveDraft.endDate) {
-      showError(t('missingDates', { ns: 'pdf' }));
+      showError(t('pdf.missingDates', { ns: 'messages' }));
       return;
     }
 
