@@ -42,7 +42,7 @@ No notes.
 
    - Added Pwa interface with state for tracking PDF completions and user preferences
    - Added PWA state to LeaveRequestState interface
-   - Added actions: incrementPdfGenerationCount(), dismissPwaInstall(), snoozePwaInstall()
+   - Added actions: incrementPdfGenerationCount(), dismissPwaInstall(), snoozePwaInstall()Bu
    - Updated partialize to persist PWA state
 
 2. **Enhanced usePwaInstall Hook (usePwaInstall.ts)**
