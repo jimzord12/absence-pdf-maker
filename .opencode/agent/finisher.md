@@ -45,6 +45,21 @@ Your report enables the `orchestrator` to update the task state from `completed`
 
 ## Responsibilities
 
+### Clean Up Temporary Files
+
+Before committing, clean up ephemeral work artifacts:
+
+```bash
+# Remove task screenshots (if directory exists)
+rm -rf .opencode/tmp/screenshots/<taskId>/
+
+# Remove empty parent directory if no other task folders remain
+rmdir .opencode/tmp/screenshots/ 2>/dev/null || true
+rmdir .opencode/tmp/ 2>/dev/null || true
+```
+
+**Important:** Do NOT delete `docs/baselines/` - those are permanent visual regression baselines.
+
 ### Summarize Changes
 
 - Read the task file from `docs/tasks/active/<taskId>.md` to understand the task scope
@@ -320,6 +335,7 @@ Accepts #001
 5. **Check for Secrets**: Ensure no API keys, passwords, or secrets are included
 6. **Verify Build**: Ensure the project builds successfully before committing
 7. **Test Passing**: Verify all tests pass before committing
+8. **Final Baseline Check**: Run `npm run lint`, `npm run typecheck`, and `npm run test -- --run` to confirm no regressions before committing
 
 ## Important Notes
 

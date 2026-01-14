@@ -51,44 +51,80 @@ This project uses **Context Layering**. You MUST refer to the following for rule
 
 ## MCP Server Usage
 
-| Server             | Use Case                             | When to Use                                 |
-| ------------------ | ------------------------------------ | ------------------------------------------- |
-| `chrome-devtools`  | Live debugging, inspect DOM, network | Debugging UI issues, viewing console errors |
-| `playwright`       | Automated testing, cross-browser     | E2E tests, reproducing user flows           |
-| `web-search-prime` | Documentation, solutions             | Researching APIs, finding examples          |
-| `web-reader`       | Fetch page content                   | Reading external docs as markdown           |
-| `zread`            | GitHub exploration                   | Studying library implementations            |
-| `context7`         | Library docs                         | Getting up-to-date API documentation        |
+| Server             | Use Case                         | When to Use                                     |
+| ------------------ | -------------------------------- | ----------------------------------------------- |
+| `playwright`       | Automated testing, cross-browser | E2E tests, reproducing user flows, debugging UI |
+| `web-search-prime` | Documentation, solutions         | Researching APIs, finding examples              |
+| `web-reader`       | Fetch page content               | Reading external docs as markdown               |
+| `zread`            | GitHub exploration               | Studying library implementations                |
+| `context7`         | Library docs                     | Getting up-to-date API documentation            |
 
 ## Workflow
 
-### Phase 0: MCP State Verification (REQUIRED)
+### CRITICAL: Read Verification Protocol First
 
-**Before making ANY changes, you MUST capture the initial state using MCP tools.**
+**Before doing ANY work, read `docs/verification-protocol.md`.**
 
-#### Capturing Initial State
+Your report will be REJECTED if it doesn't include:
 
-Use `chrome-devtools` or `playwright` to document the current state:
+- Acceptance Criteria Evidence table
+- Before/After Playwright screenshots
+- Console messages check (no new errors)
+- Actual terminal output from lint/typecheck
+- Code Quality Baseline Comparison table (before/after)
 
-```plaintext
-1. Take a screenshot of the relevant UI area
-2. Check console for existing errors/warnings
-3. Note any relevant network requests
-4. Document current behavior if testing interactivity
+### Phase 0: MCP State Verification (MANDATORY - NOT OPTIONAL)
+
+**You CANNOT skip this phase. Reports without Playwright evidence will be REJECTED.**
+
+#### Capturing Initial State (REQUIRED)
+
+Use Playwright MCP to document the current state BEFORE making any changes:
+
+1. **Activate browser tools**: Call `activate_browser_navigation_tools`
+2. **Navigate to app**: Go to `http://localhost:5173` (or relevant page)
+3. **Take screenshot**: Save to `.opencode/tmp/screenshots/<taskId>/before-changes.png`
+4. **Check console**: Call `mcp_playwright_browser_console_messages` → note any existing errors
+5. **Take snapshot**: Use `take_snapshot` to capture accessibility tree
+
+#### Capturing Code Quality Baseline (REQUIRED)
+
+Run these commands and **save the output** BEFORE making any changes:
+
+```bash
+npm run lint 2>&1 | tail -20      # Record: X errors, Y warnings
+npm run typecheck 2>&1 | tail -20  # Record: X errors
+npm run test -- --run 2>&1 | tail -30  # Record: X passed, Y failed
 ```
 
-**MCP Tool Selection:**
+**Update the task file:** Record baseline values in the "Code Quality Baselines → Before Changes" table at `docs/tasks/active/<taskId>.md`
 
-| Scenario                   | Recommended Tool  | Reason                                  |
-| -------------------------- | ----------------- | --------------------------------------- |
-| Quick visual check         | `chrome-devtools` | Faster for single screenshots           |
-| Interactive testing        | `playwright`      | Better for simulating user interactions |
-| Checking console/network   | `chrome-devtools` | Better DevTools integration             |
-| Cross-browser verification | `playwright`      | Supports multiple browsers              |
+**Use Playwright MCP Server for ALL verification.** It provides consistent, reproducible evidence.
 
-## Self-Reflection Checklist
+| Action                 | Playwright Command                                           |
+| ---------------------- | ------------------------------------------------------------ |
+| Navigate               | `activate_browser_navigation_tools` → `navigate`             |
+| Screenshot             | `activate_snapshot_and_screenshot_tools` → `take_screenshot` |
+| Accessibility snapshot | `take_snapshot`                                              |
+| Click/interact         | `activate_form_input_tools` → `click`, `fill`, `press_key`   |
+| Console check          | `mcp_playwright_browser_console_messages`                    |
 
-Before returning to the `orchestrator`, you MUST perform a self-reflection:
+## Self-Reflection Checklist (BLOCKING)
+
+**Your report will be REJECTED if any of these are "NO":**
+
+### Evidence Requirements (MANDATORY)
+
+- [ ] Did I include the **Acceptance Criteria Evidence table**?
+- [ ] Did I take **BEFORE screenshot** with Playwright?
+- [ ] Did I take **AFTER screenshot** with Playwright?
+- [ ] Did I check **console messages** and include the results?
+- [ ] Did I include **actual terminal output** from `npm run lint` and `npm run typecheck`?
+- [ ] Did I include the **Code Quality Baseline Comparison table**?
+- [ ] Did I verify **NO REGRESSIONS** (no new lint/type errors, no newly failing tests)?
+- [ ] Is EVERY acceptance criterion marked with evidence in my table?
+
+### Code Quality
 
 1.  **Requirement Adherence**: Did I implement ALL acceptance criteria?
 2.  **Code Quality**: Did I follow the project's code style and naming conventions?
@@ -96,26 +132,25 @@ Before returning to the `orchestrator`, you MUST perform a self-reflection:
 4.  **Error Handling**: Are all edge cases handled with user-friendly messages?
 5.  **Performance**: Did I introduce any unnecessary re-renders or heavy computations?
 6.  **Accessibility**: Did I use semantic HTML and ARIA attributes where needed?
-7.  **Verification**: Did I run `npm run lint` and `npm run typecheck`?
-8.  **MCP Verification**: Did I capture the final state with screenshots and console checks?
 
 **Example Initial State Capture:**
 
 ```plaintext
-Using chrome-devtools:
-1. take_screenshot → save as "initial-state.png"
-2. list_console_messages → note any warnings/errors
-3. take_snapshot → capture accessibility tree
+Using Playwright:
+1. activate_browser_navigation_tools → navigate to http://localhost:5173
+2. activate_snapshot_and_screenshot_tools → take_screenshot ("initial-state")
+3. mcp_playwright_browser_console_messages → [note any existing errors]
+4. take_snapshot → [capture accessibility tree]
 ```
 
-### Phase 1: Analyze Requirements (Critical)
+### Phase 1: Analyze Requirements (CRITICAL)
 
 This is the **MOST CRUCIAL** step. You must achieve **≥95% confidence** before proceeding.
 
 1. Read the task requirements thoroughly
 2. Identify affected features, components, and services
 3. If unclear, use MCP servers to gather context:
-   - `chrome-devtools` / `playwright` → View and interact with the app
+   - `playwright` → View and interact with the app
    - `web-search-prime` → Research solutions
    - `zread` → Explore GitHub repositories
    - `context7` → Get library documentation
@@ -170,42 +205,51 @@ npm run typecheck   # Zero errors
 npm run test        # All passing (if tests exist)
 ```
 
-### Phase 6: MCP Final State Verification (REQUIRED)
+### Phase 6: Playwright Final State Verification (MANDATORY)
 
-**After completing changes, you MUST verify the final state using MCP tools.**
+**You CANNOT skip this phase. Reports without this evidence will be REJECTED.**
 
-#### Capturing Final State
+#### Capturing Final State (REQUIRED)
 
-Use `chrome-devtools` or `playwright` to verify your changes:
+Use Playwright MCP to verify your changes AFTER completing implementation:
 
-```plaintext
-1. Take a screenshot showing the implemented changes
-2. Verify NO new console errors were introduced
-3. Test the UI interactively if applicable
-4. Compare against initial state to confirm improvements
-```
+1. **Refresh the page**: Ensure latest code is loaded
+2. **Take screenshot**: Save to `.opencode/tmp/screenshots/<taskId>/after-changes.png`
+3. **Test interactions**: Use `click`, `fill`, `press_key` to test the feature
+4. **Check console**: Call `mcp_playwright_browser_console_messages` → MUST show NO NEW ERRORS
+5. **Compare states**: Document what changed between initial and final
 
-**Verification Checklist:**
+#### Update Task File (REQUIRED)
+
+After capturing final state:
+
+1. **Update baselines**: Fill in "Code Quality Baselines → After Changes" table in `docs/tasks/active/<taskId>.md`
+2. **Update screenshots table**: Record screenshot paths in the "Screenshots" section
+3. **Check regression boxes**: Verify and check all boxes in "Regression Status"
+
+**Verification Checklist (ALL REQUIRED):**
 
 - [ ] Screenshot shows expected visual changes
 - [ ] No new console errors or warnings
-- [ ] Interactive features work as expected
+- [ ] Interactive features work as expected (tested with Playwright)
 - [ ] Accessibility tree reflects proper structure
-- [ ] Performance is acceptable (no obvious slowdowns)
+- [ ] Task file updated with baseline data
 
 **Example Final State Verification:**
 
 ```plaintext
-Using playwright:
-1. take_screenshot → save as "final-state.png"
-2. browser_console_messages → verify no new errors
-3. click/type actions → test interactivity
-4. take_snapshot → verify accessibility
+Using Playwright:
+1. Refresh page → navigate to http://localhost:5173
+2. activate_snapshot_and_screenshot_tools → take_screenshot ("after-changes")
+3. mcp_playwright_browser_console_messages → verify no new errors
+4. activate_form_input_tools → click buttons, fill forms to test interactivity
+5. take_snapshot → verify accessibility
+6. Update task file with baseline comparison
 ```
 
-### Phase 7: Handoff Report
+### Phase 7: Handoff Report (MANDATORY FORMAT)
 
-Compile a comprehensive report for the `orchestrator`:
+Compile a comprehensive report for the `orchestrator`. **Reports missing required sections will be REJECTED.**
 
 ```markdown
 ## Implementation Report
@@ -214,16 +258,45 @@ Compile a comprehensive report for the `orchestrator`:
 
 [Brief description of what was implemented]
 
+### Acceptance Criteria Evidence (MANDATORY)
+
+| #   | Criterion                   | Status      | Evidence                              |
+| --- | --------------------------- | ----------- | ------------------------------------- |
+| 1   | [Copy exact criterion text] | ✅ VERIFIED | [Screenshot name + what it proves]    |
+| 2   | [Copy exact criterion text] | ✅ VERIFIED | [Test/code location that covers this] |
+| 3   | [Copy exact criterion text] | ❌ NOT MET  | [Explain what's blocking]             |
+
 ### Initial State Observations
 
-- Screenshot: [description]
-- Console: [any pre-existing issues]
-- Behavior: [how it worked before]
+- Screenshot: [description of what initial-state screenshot shows]
+- Console: [list any pre-existing errors/warnings]
+- Behavior: [how it worked before changes]
 
-### Changes Made
+### Final State Verification (Playwright)
 
-- [File 1]: [what was changed]
-- [File 2]: [what was changed]
+- Screenshot: [description of what final-state screenshot shows]
+- Console output: [paste actual console messages check result]
+- Interactivity test: [describe what you clicked/filled and the result]
+
+### Code Quality Baseline Comparison (MANDATORY)
+
+| Metric        | Before   | After    | Status |
+| ------------- | -------- | -------- | ------ |
+| Lint errors   | [number] | [number] | ✅/❌  |
+| Lint warnings | [number] | [number] | ✅/⚠️  |
+| Type errors   | [number] | [number] | ✅/❌  |
+| Tests passing | [number] | [number] | ✅/❌  |
+| Tests failing | [number] | [number] | ✅/❌  |
+
+**Regression detected:** Yes/No
+**New issues introduced:** [List any new warnings/errors, or "None"]
+
+### Lint/Typecheck/Test Output
+```
+
+[PASTE ACTUAL TERMINAL OUTPUT HERE - NOT A SUMMARY]
+
+```
 
 ### Files Created
 
@@ -237,17 +310,18 @@ Compile a comprehensive report for the `orchestrator`:
 
 - [List of deleted files, if any]
 
-### Final State Verification
-
-- Screenshot: [confirms visual changes]
-- Console: [no new errors]
-- Interactivity: [tested and working]
-- Lint/Typecheck: [passing]
-
 ### Notes for Orchestrator
 
 - [Any concerns, trade-offs, or follow-up items]
 ```
+
+**CRITICAL: Your report will be REJECTED if:**
+
+- Missing Acceptance Criteria Evidence table
+- Any criterion is ❌ NOT MET without explanation
+- Missing before/after Playwright screenshots
+- Console check not included
+- Lint/typecheck output is summarized instead of actual output
 
 Leave the code in a testable state for the Testing Agent:
 

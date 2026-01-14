@@ -77,34 +77,20 @@ Implement the following task/request:
 {detailed description of what needs to be done}
 
 **Acceptance Criteria:**
-{list of acceptance criteria}
+{list of acceptance criteria - numbered}
 
 **Constraints:**
 {any constraints or requirements}
 
-**IMPORTANT - MCP Verification Requirements:**
+**MANDATORY: Read docs/verification-protocol.md before starting.**
 
-Before making any changes:
-1. Use `chrome-devtools` or `playwright` to capture the **INITIAL STATE**:
-   - Take a screenshot of the current UI
-   - Capture relevant console messages
-   - Note any relevant network requests
-   - Document the current behavior
+Your report MUST include:
+1. Acceptance Criteria Evidence table (see protocol)
+2. Before/After Playwright screenshots
+3. Console messages check results
+4. Actual terminal output from lint/typecheck
 
-After completing changes:
-2. Use `chrome-devtools` or `playwright` to verify the **FINAL STATE**:
-   - Take a screenshot showing the implemented changes
-   - Verify no console errors were introduced
-   - Confirm the UI behaves as expected
-   - Run lint and typecheck
-
-**Report Requirements:**
-When complete, provide:
-- Summary of changes made
-- Files created/modified/deleted
-- Initial state observations
-- Final state verification results
-- Any notes or concerns for the orchestrator
+Reports missing evidence will be REJECTED.
 ```
 
 ### Phase 4: Receive Implementation Report
@@ -112,10 +98,10 @@ When complete, provide:
 When the `frontend-developer` returns:
 
 1. **Review the Report**: Check the summary, files changed, and verification results
-2. **Update Task State**: If this is a tracked task, update `docs/tasks/state.json`:
-   - Change state from `not_started` to `implemented`
-   - Update `lastUpdated` timestamp
-3. **Proceed to Testing**: Deploy the `tester` subagent
+2. **Update Task State**: Use the `npm run task -- state <taskId> implemented` command to update `docs/tasks/state.json`:
+   - Update `lastUpdated` timestamp in the markdown file
+3. Verify that change was recorded correctly by running `npm run task -- list --state=implemented`.
+4. **Proceed to Testing**: Deploy the `tester` subagent
 
 ### Phase 5: Deploy Tester
 
@@ -130,18 +116,18 @@ Write and run tests for the recently implemented changes.
 **Files Changed:**
 {list from frontend-developer report}
 
-**Requirements:**
-1. Write comprehensive unit tests for new/modified code
-2. Write integration tests for component interactions
-3. Run all tests: `npm run test -- --run`
-4. Ensure all tests pass before returning
+**Acceptance Criteria:**
+{list from task - tester must verify each}
 
-**Report Requirements:**
-When complete, provide:
-- Number of tests written
-- Test files created
-- Pass/fail status with details
-- Any issues found during testing
+**MANDATORY: Read docs/verification-protocol.md before starting.**
+
+Your report MUST include:
+1. Acceptance Criteria Evidence table showing which tests cover which criteria
+2. ACTUAL terminal output from test run (full output, not summary)
+3. Playwright E2E verification for UI changes
+4. Console messages check
+
+Reports missing evidence will be REJECTED.
 ```
 
 When the `tester` returns with passing tests:
@@ -164,19 +150,18 @@ Review the code changes for quality and best practices.
 **Files to Review:**
 {list of files changed}
 
-**Focus Areas:**
-- React patterns and hooks usage
-- TypeScript types and Zod schema consistency
-- Performance and unnecessary re-renders
-- Code organization and architecture
-- Error handling
+**Acceptance Criteria:**
+{list from task - reviewer must independently verify}
 
-**Report Requirements:**
-Provide structured feedback:
-- PASS or FAIL determination
-- Blocking issues (if FAIL)
-- Improvements (nice to have)
-- Nits (minor issues)
+**MANDATORY: Read docs/verification-protocol.md before starting.**
+
+Your report MUST include:
+1. Independent Playwright verification (your own screenshots, not trusting previous reports)
+2. Acceptance Criteria Evidence table with YOUR verification
+3. Console messages check
+4. PASS/FAIL with evidence-based rationale
+
+Reports missing independent verification will be REJECTED.
 ```
 
 When the `reviewer` returns:
@@ -275,6 +260,52 @@ not_started → implemented → unit_tested → review_pass → completed → co
 6. **ONLY commit** when explicitly requested by user
 7. **Provide clear summaries** after each subagent returns
 8. **Update task file checkboxes** when task reaches `completed` state (update `[ ]` to `[x]` in acceptance criteria)
+
+## Subagent Report Validation (MANDATORY)
+
+**Before accepting ANY subagent report, validate it has required evidence.**
+
+Subagents must read and follow `docs/verification-protocol.md`.
+
+### Validation Checklist
+
+| Check                                  | Required For           | Reject If Missing |
+| -------------------------------------- | ---------------------- | ----------------- |
+| Acceptance Criteria Evidence table     | All reports            | ✅ YES            |
+| Before/After Playwright screenshots    | UI changes             | ✅ YES            |
+| Console messages check (no new errors) | All changes            | ✅ YES            |
+| Actual terminal output (not summaries) | Tests, lint, typecheck | ✅ YES            |
+| Code Quality Baseline Comparison table | All code changes       | ✅ YES            |
+| No regressions (lint/types/tests)      | All code changes       | ✅ YES            |
+| Each criterion has ✅ VERIFIED status  | Completion claims      | ✅ YES            |
+
+### Rejection Protocol
+
+If a subagent report is missing required evidence:
+
+1. **Do NOT proceed** to the next phase
+2. **Return to the subagent** with specific feedback:
+
+   ```
+   Your report is incomplete. Missing:
+   - [List specific missing items]
+
+   Refer to docs/verification-protocol.md and resubmit with:
+   - [Specific evidence needed]
+   ```
+
+3. **Do NOT update task state** until valid report received
+
+### Quick Spot-Check
+
+Before accepting a "task complete" claim, ask:
+
+1. Can I see a screenshot proving the UI works?
+2. Can I see the actual test output (not "tests pass")?
+3. Is every acceptance criterion mapped to evidence?
+4. Did they check for console errors?
+
+If any answer is "no", reject the report.
 
 ## Handling Ad-Hoc Requests
 

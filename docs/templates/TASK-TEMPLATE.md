@@ -24,6 +24,47 @@
 - [ ] {{Test requirement}}
 - [ ] {{Documentation requirement}}
 
+## Code Quality Baselines
+
+<!-- Agents MUST update this section before and after making changes -->
+
+### Before Changes
+
+| Metric        | Value | Captured By | Timestamp |
+| ------------- | ----- | ----------- | --------- |
+| Lint errors   | -     | -           | -         |
+| Lint warnings | -     | -           | -         |
+| Type errors   | -     | -           | -         |
+| Tests passing | -     | -           | -         |
+| Tests failing | -     | -           | -         |
+
+### After Changes
+
+| Metric        | Value | Captured By | Timestamp |
+| ------------- | ----- | ----------- | --------- |
+| Lint errors   | -     | -           | -         |
+| Lint warnings | -     | -           | -         |
+| Type errors   | -     | -           | -         |
+| Tests passing | -     | -           | -         |
+| Tests failing | -     | -           | -         |
+
+### Regression Status
+
+- [ ] No new lint errors
+- [ ] No new type errors
+- [ ] No newly failing tests
+- [ ] Test count same or increased
+
+## Screenshots
+
+<!-- Agents should save work screenshots to .opencode/tmp/screenshots/ during the task -->
+<!-- These are ephemeral and will be cleaned up by the finisher agent before commit -->
+
+| Phase  | Description | Path |
+| ------ | ----------- | ---- |
+| Before | -           | -    |
+| After  | -           | -    |
+
 ## Notes
 
 {{Optional: Related links, context, handover notes, etc.}}

@@ -112,12 +112,12 @@ The following tools are available for AI agents via `.opencode/tool/`:
 
 Issues are organized by status in separate folders:
 
-| Folder                  | Contents | Description                    |
-| ----------------------- | -------- | ------------------------------ |
-| `docs/issues/open/`      | `*.md`   | Issues not yet started        |
-| `docs/issues/in-progress/` | `*.md`   | Issues currently in progress    |
+| Folder                     | Contents | Description                  |
+| -------------------------- | -------- | ---------------------------- |
+| `docs/issues/open/`        | `*.md`   | Issues not yet started       |
+| `docs/issues/in-progress/` | `*.md`   | Issues currently in progress |
 | `docs/issues/closed/`      | `*.md`   | Resolved/closed issues       |
-| `docs/issues/discarded/`    | `*.md`   | Discarded issues             |
+| `docs/issues/discarded/`   | `*.md`   | Discarded issues             |
 
 ### Issue Status Tracking
 
@@ -126,18 +126,18 @@ Issues are organized by status in separate folders:
 
 ### CLI Commands
 
-| Command                                 | Description               |
-| --------------------------------------- | ------------------------- |
-| `npm run issue show <id>`                | Display issue details      |
-| `npm run issue list`                     | List all issues           |
-| `npm run issue list --state=Open`         | Filter by state           |
-| `npm run issue list --priority=High`      | Filter by priority        |
-| `npm run issue state <id> <state>`       | Update issue status        |
-| `npm run issue create <id>`              | Create issue from template |
-| `npm run issue move <id> <location>`     | Move issue to folder      |
-| `npm run issue resolve <id>`             | Set issue to Resolved     |
-| `npm run issue close <id>`               | Set issue to Closed       |
-| `npm run issue open <id>`                | Set issue to Open         |
+| Command                              | Description                |
+| ------------------------------------ | -------------------------- |
+| `npm run issue show <id>`            | Display issue details      |
+| `npm run issue list`                 | List all issues            |
+| `npm run issue list --state=Open`    | Filter by state            |
+| `npm run issue list --priority=High` | Filter by priority         |
+| `npm run issue state <id> <state>`   | Update issue status        |
+| `npm run issue create <id>`          | Create issue from template |
+| `npm run issue move <id> <location>` | Move issue to folder       |
+| `npm run issue resolve <id>`         | Set issue to Resolved      |
+| `npm run issue close <id>`           | Set issue to Closed        |
+| `npm run issue open <id>`            | Set issue to Open          |
 
 ### Workflow for Agents
 
@@ -149,12 +149,12 @@ Issues are organized by status in separate folders:
 
 ### Status to Location Mapping
 
-| Status                | Folder           |
-| --------------------- | ---------------- |
-| `Open`               | `open/`           |
-| `In Progress`         | `in-progress/`     |
-| `Resolved`            | `closed/`          |
-| `Closed`              | `closed/`          |
+| Status        | Folder         |
+| ------------- | -------------- |
+| `Open`        | `open/`        |
+| `In Progress` | `in-progress/` |
+| `Resolved`    | `closed/`      |
+| `Closed`      | `closed/`      |
 
 ## Code Style
 
@@ -325,20 +325,7 @@ Documentation and code examples for programming libraries and frameworks:
 
 **Use cases:** Finding documentation for React, TypeScript, Zustand, or any other library/framework; getting code examples; learning API usage patterns
 
-### 6. chrome-devtools
-
-Browser interaction and debugging via Chrome DevTools:
-
-- Page management: list, new, navigate, select, close tabs
-- Interaction: click, hover, drag, type, fill forms, press keys, upload files
-- Data capture: take snapshots, take screenshots, list console messages, list network requests
-- Scripting: evaluate JavaScript
-- Testing: handle dialogs, emulate (geolocation, network, CPU throttling), resize window
-- Performance: start/stop trace recording, analyze performance insights
-
-**Use cases:** Manual testing, debugging web apps, capturing screenshots, network debugging
-
-### 7. playwright
+### 6. playwright
 
 Cross-browser automation and testing:
 
@@ -357,7 +344,7 @@ Cross-browser automation and testing:
 
 To ensure efficient and autonomous operation, use the following heuristics to select the appropriate tool for a given task.
 
-### 1. UI Interaction & Debugging (Chrome DevTools / Playwright)
+### 1. UI Interaction & Debugging (Playwright)
 
 **Triggers:**
 
@@ -368,8 +355,7 @@ To ensure efficient and autonomous operation, use the following heuristics to se
 
 **Selection:**
 
-- Use **Chrome DevTools** for deep debugging, performance tracing, and real-time DOM/CSS inspection.
-- Use **Playwright** for automated end-to-end flows, cross-browser verification, and repeatable UI tests.
+- Use **Playwright** for automated end-to-end flows, cross-browser verification, debugging, and repeatable UI tests.
 - Use **ZAI (`ui_diff_check`)** to compare screenshots captured via `npm run capture-baselines` to ensure no unintended visual regressions.
 
 ### 2. Library & Framework Research (Context7)

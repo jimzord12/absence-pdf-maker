@@ -7,3 +7,6 @@ dev-dist
 *.png
 !Dimitrios-Stamatakis-github-img.png
 !docs/baselines/*.png
+
+# Temporary agent work files
+.opencode/tmp/
