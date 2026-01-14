@@ -333,7 +333,32 @@ export const ReviewAndGenerate: React.FC = () => {
             {t('actions.heading')}
           </h2>
           <div className="space-y-4">
-            {/* Profile Management */}
+            <div>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setProfile({
+                    fullName: '',
+                    fathersName: '',
+                    email: '',
+                    phone: '',
+                    identityNumber: '',
+                    employeeId: '',
+                    companyName: '',
+                    department: '',
+                    position: '',
+                  });
+                  triggerForceFormReset();
+                  showSuccess(tCommon('cleared'));
+                }}
+                size="md"
+              >
+                {tCommon('buttons.reset')}
+              </Button>
+            </div>
+
+            <hr className="border-[color:var(--color-border)]" />
+
             <div className="flex flex-wrap gap-3">
               <Button variant="secondary" onClick={handleExport} size="md">
                 {tCommon('buttons.exportProfile')}

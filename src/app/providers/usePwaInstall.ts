@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useLeaveRequestStore } from '../../features/leave-request/state/leaveRequest.store'
 
 export interface BeforeInstallPromptEvent extends Event {
@@ -53,7 +53,7 @@ export function usePwaInstall() {
     }
   }, [])
 
-  const promptInstall = async () => {
+  const promptInstall = useCallback(async () => {
     if (!deferredPrompt) {
       return 'not_supported' as const
     }
@@ -68,19 +68,19 @@ export function usePwaInstall() {
       console.error('Error during PWA install prompt:', error)
       return 'dismissed' as const
     }
-  }
+  }, [deferredPrompt])
 
-  const dismiss = () => {
+  const dismiss = useCallback(() => {
     setDeferredPrompt(null)
     setIsInstallable(false)
-  }
+  }, [])
 
-  const snooze = () => {
+  const snooze = useCallback(() => {
     const hours = getSnoozeDelayHours(pwaInstallSnoozeCount)
     dismiss()
     snoozePwaInstall(hours)
     setDeferredPrompt(null)
-  }
+  }, [dismiss, pwaInstallSnoozeCount, snoozePwaInstall])
 
   return {
     isInstallable,

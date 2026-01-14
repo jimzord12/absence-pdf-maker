@@ -2,9 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import isEqual from 'lodash/isEqual';
 import { useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
-import { Button } from '../../../../shared/ui';
 import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
 import {
   useLeaveRequestStore,
@@ -16,7 +14,6 @@ import { LeaveDetailsSection } from '../sections/LeaveDetailsSection';
 import { PersonalDetailsSection } from '../sections/PersonalDetailsSection';
 
 export const LeaveRequestForm = () => {
-  const { t } = useTranslation('common');
   const profile = useLeaveRequestStore(state => state.profile);
   const leaveDraft = useLeaveRequestStore(state => state.leaveDraft);
   const setProfile = useLeaveRequestStore(state => state.setProfile);
@@ -207,36 +204,6 @@ export const LeaveRequestForm = () => {
 
         <div className="animate-stagger-4">
           <LeaveDetailsSection errors={errors} />
-        </div>
-
-        <div className="flex justify-end gap-4 pt-4 animate-stagger-5">
-          <Button
-            variant="secondary"
-            type="button"
-            onClick={() => {
-              reset({
-                profile: {
-                  fullName: '',
-                  fathersName: '',
-                  email: '',
-                  phone: '',
-                  identityNumber: '',
-                  employeeId: '',
-                  companyName: 'ICS ΚΑΡΑΦΥΛΛΗΣ Α.Ε',
-                  department: '',
-                  position: '',
-                },
-                leaveType: 'annual',
-                leaveAllowance: undefined,
-                startDate: undefined,
-                endDate: undefined,
-                reason: '',
-                createdAt: new Date(),
-              });
-            }}
-          >
-            {t('buttons.reset')}
-          </Button>
         </div>
       </form>
     </FormProvider>

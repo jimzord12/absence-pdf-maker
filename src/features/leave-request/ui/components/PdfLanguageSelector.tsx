@@ -18,7 +18,7 @@ export const PdfLanguageSelector: React.FC<PdfLanguageSelectorProps> = ({ classN
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <label htmlFor="pdf-language-selector" className="text-sm font-medium text-gray-700">
+      <label htmlFor="pdf-language-selector" className="text-sm font-medium text-[color:var(--color-text-primary)]">
         PDF Language:
       </label>
       <Select

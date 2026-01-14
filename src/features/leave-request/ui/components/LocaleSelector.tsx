@@ -19,7 +19,7 @@ export const LocaleSelector: React.FC<LocaleSelectorProps> = ({ className = '' }
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <label htmlFor="locale-selector" className="text-sm font-medium text-gray-700">
+      <label htmlFor="locale-selector" className="text-sm font-medium text-[color:var(--color-text-primary)]">
         Language:
       </label>
       <Select

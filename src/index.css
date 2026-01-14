@@ -115,9 +115,9 @@
 
 /* Dark Theme Override */
 [data-theme="dark"] {
-  --color-primary: #412b6b;
-  --color-primary-hover: #2b1c47;
-  --color-primary-light: #573a8f;
+  --color-primary: #7c3aed;
+  --color-primary-hover: #6d28d9;
+  --color-primary-light: #8b5cf6;
   --color-dark-primary-100: #f1f5f9;
   --color-dark-primary-200: #e2e8f0;
   --color-dark-primary-300: #cbd5e1;

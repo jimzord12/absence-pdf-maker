@@ -201,20 +201,20 @@ export const useLeaveRequestStore = create<LeaveRequestState & LeaveRequestActio
           },
         })),
 
-      dismissPwaInstall: () =>
-        set(state => ({
-          pwa: {
-            ...state.pwa,
-            dismissedPwaInstall: true,
-          },
-        })),
-
       snoozePwaInstall: (hours: number) =>
         set(state => ({
           pwa: {
             ...state.pwa,
             pwaInstallSnoozeCount: state.pwa.pwaInstallSnoozeCount + 1,
             pwaInstallSnoozeUntil: new Date(Date.now() + hours * 60 * 60 * 1000),
+          },
+        })),
+
+      dismissPwaInstall: () =>
+        set(state => ({
+          pwa: {
+            ...state.pwa,
+            dismissedPwaInstall: true,
           },
         })),
     }),
