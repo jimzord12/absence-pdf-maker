@@ -150,12 +150,7 @@ export const ReviewAndGenerate: React.FC = () => {
       absenceBreakdown &&
       absenceBreakdown.absenceDays > leaveDraft.leaveAllowance
     ) {
-      showError(
-        t('exceedsAllowance', {
-          absenceDays: absenceBreakdown.absenceDays,
-          allowanceDays: leaveDraft.leaveAllowance,
-        })
-      );
+      showError(t('exceedsAllowance'));
       return;
     }
 

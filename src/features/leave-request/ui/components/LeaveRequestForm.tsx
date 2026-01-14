@@ -104,6 +104,7 @@ export const LeaveRequestForm = () => {
   // Sync form changes to store using subscription to avoid extra re-renders
   // Note: React Compiler cannot optimize watch() subscription - this is expected
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/incompatible-library
     const subscription = watch(value => {
       const { profile: formProfile, ...formLeaveDraft } = value;
 
@@ -190,9 +191,11 @@ export const LeaveRequestForm = () => {
 
   return (
     <FormProvider {...methods}>
+      {/* eslint-disable-next-line jsx-a11y/no-redundant-roles -- Required for integration tests */}
       <form
         onSubmit={handleSubmit(data => console.log('Form submitted:', data))}
         className="space-y-6 animate-fade-in-up"
+        role="form"
       >
         <div className="animate-stagger-2">
           <PersonalDetailsSection errors={errors} />

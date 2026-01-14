@@ -223,7 +223,7 @@ export const createLeaveRequestSchema = (t: TranslationFunction) =>
     .object({
       profile: createUserProfileSchema(t),
       leaveType: z.enum(['annual', 'sick', 'unpaid', 'other']),
-      leaveAllowance: z.number().optional(),
+      leaveAllowance: z.number().nullable().optional(),
       startDate: z.date().optional(),
       endDate: z.date().optional(),
       reason: z.string().optional(),
@@ -248,7 +248,7 @@ export const LeaveRequestSchema = z
   .object({
     profile: UserProfileSchema,
     leaveType: z.enum(['annual', 'sick', 'unpaid', 'other']),
-    leaveAllowance: z.number().optional(),
+    leaveAllowance: z.number().nullable().optional(),
     startDate: z.date().optional(),
     endDate: z.date().optional(),
     reason: z.string().optional(),

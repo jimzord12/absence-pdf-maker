@@ -86,7 +86,7 @@ export const PersonalDetailsSection: React.FC<PersonalDetailsSectionProps> = ({ 
             placeholder={t('personal.leaveAllowancePlaceholder')}
             inputType="number"
             {...register?.('leaveAllowance', {
-              valueAsNumber: true,
+              setValueAs: (value) => value === '' ? null : Number(value),
             })}
             error={errors?.leaveAllowance?.message}
           />

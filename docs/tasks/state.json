@@ -8,12 +8,6 @@
       "location": "backlog",
       "blockedBy": []
     },
-    "140-form-logic-and-messaging-enhancements": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-14T09:41:47.633Z",
-      "location": "backlog",
-      "blockedBy": []
-    },
     "141-accessibility-and-e2e-testing": {
       "state": "not_started",
       "lastUpdated": "2026-01-14T09:41:48.349Z",
