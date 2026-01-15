@@ -109,6 +109,7 @@ describe('LeaveRequestPdf Bilingual Generation', () => {
       .join(' ');
 
     expect(allText).toContain('ΕΠΙΘΥΜΩ αναλογία επιδόματος αδείας');
+    expect(allText).toContain('(15 ημέρες)');
   });
 
   it('should handle leave allowance text in English', () => {
@@ -120,5 +121,6 @@ describe('LeaveRequestPdf Bilingual Generation', () => {
       .join(' ');
 
     expect(allText).toContain('I wish to receive leave allowance');
+    expect(allText).toContain('(15 days)');
   });
 });

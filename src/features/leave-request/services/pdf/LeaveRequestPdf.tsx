@@ -197,6 +197,10 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({
     return phone.startsWith('+30') ? phone.replace('+30', '+30 ') : phone;
   };
 
+  const leaveAllowance = data.leaveAllowance;
+  const hasLeaveAllowance = typeof leaveAllowance === 'number' && Number.isFinite(leaveAllowance);
+  const adjustedLeaveAllowance = hasLeaveAllowance ? Math.max(leaveAllowance - absenceDays, 0) : null;
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -299,8 +303,8 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({
         {/* Allowance Information */}
         <View style={styles.allowanceSection}>
           <Text style={styles.allowanceText}>
-            {data.leaveAllowance && data.leaveAllowance > 0
-              ? t.wishAllowance.replace('{{days}}', String(data.leaveAllowance))
+            {hasLeaveAllowance
+              ? t.wishAllowance.replace('{{days}}', String(adjustedLeaveAllowance))
               : t.noWishAllowance}
           </Text>
         </View>
@@ -335,4 +339,3 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({
     </Document>
   );
 };
-
