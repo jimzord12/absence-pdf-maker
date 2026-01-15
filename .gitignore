@@ -10,3 +10,7 @@ dev-dist
 
 # Temporary agent work files
 .opencode/tmp/
+
+# Test artifacts
+playwright-report/
+test-results/
