@@ -266,22 +266,23 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
       >
         {tCommon('labels.selectDateRange')}
       </span>
-      <div className="flex justify-between gap-2">
+      <div className="flex flex-col gap-2">
         <HolidaysLegend />
-        <Button
-          variant={startDate && endDate ? 'danger' : 'secondary'}
-          size="sm"
-          disabled={!startDate || !endDate}
-          onClick={() => {
-            setValue('startDate', undefined, { shouldDirty: true, shouldValidate: false });
-            setValue('endDate', undefined, { shouldDirty: true, shouldValidate: false });
-          }}
-          title={tCommon('labels.clearDatesTooltip')}
-          aria-label={tCommon('labels.clearDatesTooltip')}
-          className="flex-shrink-0"
-        >
-          {tCommon('labels.clearDates')}
-        </Button>
+        <div className="self-end">
+          <Button
+            variant={startDate && endDate ? 'danger' : 'secondary'}
+            size="sm"
+            disabled={!startDate || !endDate}
+            onClick={() => {
+              setValue('startDate', undefined, { shouldDirty: true, shouldValidate: false });
+              setValue('endDate', undefined, { shouldDirty: true, shouldValidate: false });
+            }}
+            title={tCommon('labels.clearDatesTooltip')}
+            aria-label={tCommon('labels.clearDatesTooltip')}
+          >
+            {tCommon('labels.clearDates')}
+          </Button>
+        </div>
       </div>
       <div
         className="p-4 border border-[color:var(--color-border)] rounded-lg bg-[color:var(--color-surface)] shadow-sm"

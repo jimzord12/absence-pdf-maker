@@ -16,7 +16,7 @@ import React from 'react';
 export const HolidaysLegend: React.FC = () => {
   return (
     <div
-      className="flex items-start gap-2 px-3 py-2 text-sm bg-[color:var(--color-surface-hover)] border border-[color:var(--color-border)] rounded-md"
+      className="flex items-start gap-2 px-3 py-2 text-sm bg-[color:var(--color-surface)] border border-[color:var(--color-border)] rounded-md"
       role="region"
       aria-label="Holidays legend"
     >

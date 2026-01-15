@@ -318,7 +318,12 @@ export const ReviewAndGenerate: React.FC = () => {
                     <span className="text-[color:var(--color-error)]">{t('status.notSigned', { ns: 'common' })}</span>
                   )}
                 </p>
-                <Button variant="secondary" size="sm" onClick={toggleSignatureModal}>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={toggleSignatureModal}
+                  aria-label={signature.signatureDataUrl ? t('status.update', { ns: 'common' }) : t('status.add', { ns: 'common' })}
+                >
                   {signature.signatureDataUrl ? t('status.update', { ns: 'common' }) : t('status.add', { ns: 'common' })}
                 </Button>
              </div>
@@ -352,6 +357,7 @@ export const ReviewAndGenerate: React.FC = () => {
                   showSuccess(tCommon('cleared'));
                 }}
                 size="md"
+                aria-label={t('actions.resetAria')}
               >
                 {tCommon('buttons.reset')}
               </Button>
@@ -360,10 +366,15 @@ export const ReviewAndGenerate: React.FC = () => {
             <hr className="border-[color:var(--color-border)]" />
 
             <div className="flex flex-wrap gap-3">
-              <Button variant="secondary" onClick={handleExport} size="md">
+              <Button variant="secondary" onClick={handleExport} size="md" aria-label={t('actions.exportProfileAria')}>
                 {tCommon('buttons.exportProfile')}
               </Button>
-              <Button variant="secondary" onClick={() => fileInputRef.current?.click()} size="md">
+              <Button
+                variant="secondary"
+                onClick={() => fileInputRef.current?.click()}
+                size="md"
+                aria-label={t('actions.importProfileAria')}
+              >
                 {tCommon('buttons.importProfile')}
               </Button>
               <input
@@ -374,45 +385,45 @@ export const ReviewAndGenerate: React.FC = () => {
                 className="hidden"
                 aria-label={t('actions.importProfileAria')}
               />
-              <Button variant="danger" onClick={handleClearProfile} size="md">
+              <Button variant="danger" onClick={handleClearProfile} size="md" aria-label={t('actions.clearProfileAria')}>
                 {tCommon('buttons.clearProfile')}
               </Button>
             </div>
 
             <hr className="border-[color:var(--color-border)]" />
 
-            {/* PDF Generation */}
-            <div className="space-y-4">
-              <PdfLanguageSelector />
-               <Button
-                 variant="primary"
-                 onClick={handleGeneratePdf}
-                 isLoading={isGeneratingPdf}
-                  loadingText={t('pdf.loadingMessage', { ns: 'messages' })}
-                 size="lg"
-                 disabled={
-                   !profile.fullName ||
-                   !profile.email ||
-                   !profile.identityNumber ||
-                   !profile.companyName ||
-                   !profile.department ||
-                   !profile.position ||
-                   !leaveDraft.startDate ||
-                   !leaveDraft.endDate ||
-                   !signature.signatureDataUrl ||
-                   absenceBreakdown?.absenceDays === 0
-                 }
-                 className="w-full md:w-auto"
-               >
-                  {tCommon('buttons.generatePdf')}
-                </Button>
+             <div className="space-y-4">
+               <PdfLanguageSelector />
+                <Button
+                  variant="primary"
+                  onClick={handleGeneratePdf}
+                  isLoading={isGeneratingPdf}
+                   loadingText={t('pdf.loadingMessage', { ns: 'messages' })}
+                  size="lg"
+                  disabled={
+                    !profile.fullName ||
+                    !profile.email ||
+                    !profile.identityNumber ||
+                    !profile.companyName ||
+                    !profile.department ||
+                    !profile.position ||
+                    !leaveDraft.startDate ||
+                    !leaveDraft.endDate ||
+                    !signature.signatureDataUrl ||
+                    absenceBreakdown?.absenceDays === 0
+                  }
+                  className="w-full md:w-auto"
+                  aria-label={isGeneratingPdf ? t('pdf.loadingMessage', { ns: 'messages' }) : tCommon('buttons.generatePdf')}
+                >
+                   {tCommon('buttons.generatePdf')}
+                 </Button>
 
-               <p className="text-sm text-[color:var(--color-text-secondary)] mt-2">
-                  {isGeneratingPdf
-                    ? t('pdf.loadingMessage', { ns: 'messages' })
-                    : t('pdf.clickToGenerate', { ns: 'messages' })}
+                <p className="text-sm text-[color:var(--color-text-secondary)] mt-2">
+                   {isGeneratingPdf
+                     ? t('pdf.loadingMessage', { ns: 'messages' })
+                     : t('pdf.clickToGenerate', { ns: 'messages' })}
                </p>
-            </div>
+             </div>
           </div>
         </Card>
       </section>

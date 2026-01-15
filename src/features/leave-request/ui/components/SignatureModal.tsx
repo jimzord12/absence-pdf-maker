@@ -200,15 +200,14 @@ export const SignatureModal: React.FC = () => {
           </div>
         )}
 
-        {/* Action Buttons */}
         <div className="flex gap-3 justify-end pt-4">
-          <Button variant="secondary" onClick={handleCancel} type="button">
+          <Button variant="secondary" onClick={handleCancel} type="button" aria-label={t('signature.cancelAria')}>
             {t('signature.cancel')}
           </Button>
-          <Button variant="secondary" onClick={handleClear} type="button" disabled={!hasSignature}>
+          <Button variant="secondary" onClick={handleClear} type="button" disabled={!hasSignature} aria-label={t('signature.clearAria')}>
             {t('signature.clear')}
           </Button>
-          <Button variant="primary" onClick={handleSave} type="button" disabled={isSaveDisabled}>
+          <Button variant="primary" onClick={handleSave} type="button" disabled={isSaveDisabled} aria-label={t('signature.saveAria')}>
             {t('signature.save')}
           </Button>
         </div>
