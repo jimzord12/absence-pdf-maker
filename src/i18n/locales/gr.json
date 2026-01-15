@@ -54,14 +54,17 @@
   },
   "forms": {
     "exceedsAllowance": "Έχετε υπερβεί το επίδομα αδείας σας.",
-    "actions": {
-      "heading": "Ενέργειες",
-      "exportProfile": "Εξαγωγή Προφίλ",
-      "importProfile": "Εισαγωγή Προφίλ",
-      "clearProfile": "Καθαρισμός Προφίλ",
-      "importProfileAria": "Εισαγωγή προφίλ από αρχείο JSON",
-      "pdfLanguage": "Γλώσσα PDF"
-    },
+     "actions": {
+       "heading": "Ενέργειες",
+       "exportProfile": "Εξαγωγή Προφίλ",
+       "exportProfileAria": "Εξαγωγή προφίλ",
+       "importProfile": "Εισαγωγή Προφίλ",
+       "importProfileAria": "Εισαγωγή προφίλ",
+       "clearProfile": "Καθαρισμός Προφίλ",
+       "clearProfileAria": "Καθαρισμός δεδομένων προφίλ",
+       "resetAria": "Επαναφορά φόρμας",
+       "pdfLanguage": "Γλώσσα PDF"
+     },
     "review": {
       "heading": "Προεπισκόπηση και Δημιουργία"
     },
@@ -142,6 +145,9 @@
       "capturedLabel": "Αποθηκευμένη Υπογραφή:",
       "capturedAlt": "Αποθηκευμένη υπογραφή",
       "signatureMethodAria": "Μέθοδος υπογραφής",
+      "cancelAria": "Ακύρωση υπογραφής",
+      "clearAria": "Καθαρισμός καμβάς υπογραφής",
+      "saveAria": "Αποθήκευση υπογραφής",
       "clear": "Καθαρισμός",
       "save": "Αποθήκευση Υπογραφής",
       "cancel": "Ακύρωση"

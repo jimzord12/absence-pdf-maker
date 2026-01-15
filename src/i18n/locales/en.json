@@ -57,9 +57,12 @@
      "actions": {
        "heading": "Actions",
        "exportProfile": "Export Profile",
+       "exportProfileAria": "Export profile",
        "importProfile": "Import Profile",
+       "importProfileAria": "Import profile",
        "clearProfile": "Clear Profile",
-       "importProfileAria": "Import profile from JSON file",
+       "clearProfileAria": "Clear profile data",
+       "resetAria": "Reset form",
        "pdfLanguage": "PDF Language"
      },
     "review": {
@@ -142,6 +145,9 @@
       "capturedLabel": "Captured Signature:",
       "capturedAlt": "Captured signature",
       "signatureMethodAria": "Signature method",
+      "cancelAria": "Cancel signature",
+      "clearAria": "Clear signature canvas",
+      "saveAria": "Save signature",
       "clear": "Clear",
       "save": "Save Signature",
       "cancel": "Cancel"

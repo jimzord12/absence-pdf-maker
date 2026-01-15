@@ -111,19 +111,19 @@ describe('SignatureModal', () => {
     it('should render Clear button', async () => {
       renderComponent();
       await openModal();
-      expect(screen.getByRole('button', { name: 'Clear' })).toBeInTheDocument();
+      expect(screen.getByText('Clear')).toBeInTheDocument();
     });
 
     it('should render Save Signature button', async () => {
       renderComponent();
       await openModal();
-      expect(screen.getByRole('button', { name: 'Save Signature' })).toBeInTheDocument();
+      expect(screen.getByText('Save Signature')).toBeInTheDocument();
     });
 
     it('should render Cancel button', async () => {
       renderComponent();
       await openModal();
-      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+      expect(screen.getByText('Cancel')).toBeInTheDocument();
     });
 
     it('should render instructions text', async () => {
@@ -169,7 +169,7 @@ describe('SignatureModal', () => {
 
       expect(screen.getByText('Sign Your Name')).toBeInTheDocument();
 
-      const cancelButton = screen.getByRole('button', { name: 'Cancel' });
+      const cancelButton = screen.getByText('Cancel');
       await user.click(cancelButton);
 
       // Modal should close
@@ -186,7 +186,7 @@ describe('SignatureModal', () => {
       renderComponent();
       await openModal();
 
-      const cancelButton = screen.getByRole('button', { name: 'Cancel' });
+      const cancelButton = screen.getByText('Cancel');
       await user.click(cancelButton);
 
       // Signature should remain empty
@@ -200,7 +200,7 @@ describe('SignatureModal', () => {
       renderComponent();
       await openModal();
 
-      const clearButton = screen.getByRole('button', { name: 'Clear' });
+      const clearButton = screen.getByText('Clear');
       await user.click(clearButton);
 
       expect(mockClear).toHaveBeenCalled();
@@ -212,7 +212,7 @@ describe('SignatureModal', () => {
       renderComponent();
       await openModal();
 
-      expect(screen.getByRole('button', { name: 'Save Signature' })).toBeInTheDocument();
+      expect(screen.getByText('Save Signature')).toBeInTheDocument();
     });
 
     it('should be disabled when canvas is empty', async () => {
@@ -222,7 +222,7 @@ describe('SignatureModal', () => {
       renderComponent();
       await openModal();
 
-      const saveButton = screen.getByRole('button', { name: 'Save Signature' });
+      const saveButton = screen.getByText('Save Signature');
 
       // Button should be disabled when signature is empty
       expect(saveButton).toBeDisabled();

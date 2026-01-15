@@ -2,15 +2,21 @@
   "$schema": "./state.schema.json",
   "version": "2.0",
   "tasks": {
-    "139-dark-mode-ui-ux-refinement": {
+    "141-plan": {
       "state": "not_started",
-      "lastUpdated": "2026-01-14T09:41:47.501Z",
-      "location": "backlog",
+      "lastUpdated": "2026-01-14T17:25:55.397Z",
+      "location": "active",
       "blockedBy": []
     },
-    "141-accessibility-and-e2e-testing": {
+    "142-desktop-3-column-layout": {
+      "state": "completed",
+      "lastUpdated": "2026-01-14T19:49:14.170Z",
+      "location": "active",
+      "blockedBy": []
+    },
+    "142-desktop-3-column-layout-plan": {
       "state": "not_started",
-      "lastUpdated": "2026-01-14T09:41:48.349Z",
+      "lastUpdated": "2026-01-14T17:26:12.951Z",
       "location": "backlog",
       "blockedBy": []
     }

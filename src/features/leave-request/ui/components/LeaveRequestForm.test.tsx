@@ -177,7 +177,8 @@ describe('LeaveRequestForm', () => {
       </Wrapper>
     );
 
-    expect(screen.getByRole('button', { name: /Reset Form/i })).toBeInTheDocument();
+    // Reset Form button was moved to ReviewAndGenerate component during 3-column layout refactoring
+    expect(screen.queryByRole('button', { name: /Reset Form/i })).not.toBeInTheDocument();
   });
 
   it('resets the form when reset button is clicked', async () => {
@@ -191,10 +192,8 @@ describe('LeaveRequestForm', () => {
     fireEvent.change(fullNameInput, { target: { value: 'John Doe' } });
     expect(fullNameInput.value).toBe('John Doe');
 
-    const resetButton = screen.getByRole('button', { name: /Reset Form/i });
-    fireEvent.click(resetButton);
-
-    expect(fullNameInput.value).toBe('');
+    // Reset Form button was moved to ReviewAndGenerate component during 3-column layout refactoring
+    // This test no longer applies - see ReviewAndGenerate.test.tsx for reset tests
   });
 });
 

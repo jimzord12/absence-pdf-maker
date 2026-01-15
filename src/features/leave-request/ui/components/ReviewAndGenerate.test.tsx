@@ -128,7 +128,10 @@ describe('ReviewAndGenerate', () => {
     it('should render file input hidden', () => {
       renderWithI18n(<ReviewAndGenerate />);
 
-      const fileInput = screen.getByLabelText(/Import profile from JSON file/i);
+      // Use getAllByLabelText and filter by type to avoid conflict with button that has same aria-label
+      const [fileInput] = screen.getAllByLabelText(/Import profile/i).filter(
+        el => el.tagName === 'INPUT',
+      );
       expect(fileInput).toBeInTheDocument();
       expect(fileInput).toHaveClass('hidden');
     });
@@ -374,9 +377,14 @@ describe('ReviewAndGenerate', () => {
 
       renderWithI18n(<ReviewAndGenerate />);
 
-      const fileInput = screen.getByLabelText(/Import profile from JSON file/i);
+      // Find the button that triggers the file input
+      const importButton = screen.getByText(/Import Profile/i);
+      const fileInput = screen.getAllByLabelText(/Import profile/i).filter(
+        el => el.tagName === 'INPUT',
+      )[0];
       const file = new File(['{"profile":{}}'], 'profile.json', { type: 'application/json' });
 
+      await user.click(importButton);
       await user.upload(fileInput, file);
 
       expect(mockImportProfileFromJson).toHaveBeenCalledWith(file);
@@ -388,7 +396,9 @@ describe('ReviewAndGenerate', () => {
 
       renderWithI18n(<ReviewAndGenerate />);
 
-      const fileInput = screen.getByLabelText(/Import profile from JSON file/i);
+      const fileInput = screen.getAllByLabelText(/Import profile/i).filter(
+        el => el.tagName === 'INPUT',
+      )[0];
       const file = new File(['{"profile":{}}'], 'profile.json', { type: 'application/json' });
 
       await user.upload(fileInput, file);

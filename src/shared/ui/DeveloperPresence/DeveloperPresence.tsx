@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useEffect, useRef, useState } from 'react';
 import type { DeveloperPresenceProps, DeveloperPresenceSize } from './DeveloperPresence.types';
 
 const DEFAULT_GITHUB_URL = 'https://github.com/jimzord12/absence-pdf-maker';
@@ -28,9 +28,7 @@ export const DeveloperPresence = ({
   githubUrl = DEFAULT_GITHUB_URL,
   size = 'md',
   className = '',
-  ariaLabel = `Developer profile for ${name}`,
 }: DeveloperPresenceProps) => {
-  const [isHovered, setIsHovered] = useState(false);
   const [shouldShowInfo, setShouldShowInfo] = useState(false);
   const [hasFlippedForward, setHasFlippedForward] = useState(false);
   const revertTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -38,45 +36,39 @@ export const DeveloperPresence = ({
   const config = SIZE_CONFIG[size];
 
   useEffect(() => {
-    if (isHovered) {
-      setShouldShowInfo(true);
-      if (revertTimerRef.current) {
-        clearTimeout(revertTimerRef.current);
-        revertTimerRef.current = null;
-      }
-    } else {
-      if (revertTimerRef.current) {
-        clearTimeout(revertTimerRef.current);
-        revertTimerRef.current = null;
-      }
-      if (hasFlippedForward) {
-        revertTimerRef.current = setTimeout(() => {
-          setShouldShowInfo(false);
-        }, REVERT_DELAY);
-      }
-    }
-
     return () => {
       if (revertTimerRef.current) {
         clearTimeout(revertTimerRef.current);
       }
     };
-  }, [isHovered, hasFlippedForward]);
+  }, [hasFlippedForward]);
+
+  useLayoutEffect(() => {
+    if (hasFlippedForward) {
+      if (revertTimerRef.current) {
+        clearTimeout(revertTimerRef.current);
+        revertTimerRef.current = null;
+      }
+      revertTimerRef.current = setTimeout(() => {
+        setShouldShowInfo(false);
+      }, REVERT_DELAY);
+    }
+  }, [hasFlippedForward]);
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
+    setShouldShowInfo(true);
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
+    setShouldShowInfo(false);
   };
 
   const handleFocus = () => {
-    setIsHovered(true);
+    setShouldShowInfo(true);
   };
 
   const handleBlur = () => {
-    setIsHovered(false);
+    setShouldShowInfo(false);
   };
 
   return (
@@ -87,9 +79,6 @@ export const DeveloperPresence = ({
       onMouseLeave={handleMouseLeave}
       onFocus={handleFocus}
       onBlur={handleBlur}
-      aria-label={ariaLabel}
-      role="button"
-      tabIndex={0}
     >
       <motion.div
         className="absolute -inset-2 rounded-full opacity-50"
@@ -222,7 +211,6 @@ export const DeveloperPresence = ({
               transition={{ delay: 0.2, duration: 0.3, type: 'spring', stiffness: 300 }}
               aria-label={`Visit ${name}'s GitHub profile`}
               onClick={e => e.stopPropagation()}
-              onBlur={() => setIsHovered(false)}
             >
               <GitHubIcon className={config.iconSize} />
             </motion.a>
