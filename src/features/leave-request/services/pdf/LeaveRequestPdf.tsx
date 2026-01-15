@@ -199,7 +199,7 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({
 
   const leaveAllowance = data.leaveAllowance;
   const hasLeaveAllowance = typeof leaveAllowance === 'number' && Number.isFinite(leaveAllowance);
-  const adjustedLeaveAllowance = hasLeaveAllowance ? Math.max(leaveAllowance - absenceDays, 0) : null;
+  const remainingLeaveAllowance = hasLeaveAllowance ? Math.max(leaveAllowance - absenceDays, 0) : 0;
 
   return (
     <Document>
@@ -304,7 +304,7 @@ export const LeaveRequestPdf: React.FC<LeaveRequestPdfProps> = ({
         <View style={styles.allowanceSection}>
           <Text style={styles.allowanceText}>
             {hasLeaveAllowance
-              ? t.wishAllowance.replace('{{days}}', String(adjustedLeaveAllowance))
+              ? t.wishAllowance.replace('{{days}}', String(remainingLeaveAllowance))
               : t.noWishAllowance}
           </Text>
         </View>
