@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useThemeStore } from '../../../../shared/state/theme.store';
 import { DeveloperPresence, StarsWarsRobotToggle } from '../../../../shared/ui';
 import { loadHolidays } from '../../services/holidays/holidays.service';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
-import { useThemeStore } from '../../../../shared/state/theme.store';
 import { LeaveRequestForm } from '../components/LeaveRequestForm';
 import { LocaleSelector } from '../components/LocaleSelector';
 import { ReviewAndGenerate } from '../components/ReviewAndGenerate';
@@ -30,13 +30,15 @@ export const LeaveRequestPage: React.FC = () => {
   }, [setHolidays]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[color:var(--color-background)] to-[color:var(--color-surface)] py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-radial-[at_50%_80%] from-white to-blue-300 dark:bg-radial-[at_50%_50%] dark:from-(--color-background) dark:to-border py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Page Header */}
-          <div className="mb-8">
+        <div className="mb-8">
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-[color:var(--color-text-primary)]">{t('page.title')}</h1>
+              <h1 className="text-3xl font-bold text-[color:var(--color-text-primary)]">
+                {t('page.title')}
+              </h1>
               <p className="mt-2 text-sm text-[color:var(--color-text-secondary)]">
                 {t('page.subtitle')}
               </p>

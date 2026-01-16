@@ -202,7 +202,7 @@ vi.mock('../components/ReviewAndGenerate', () => ({
     it('should apply gradient background to page container', () => {
       const { container } = render(<LeaveRequestPage />);
       const mainContainer = container.querySelector('.min-h-screen');
-      expect(mainContainer).toHaveClass('bg-gradient-to-br');
+      expect(mainContainer).toHaveClass('bg-radial');
     });
 
     it('should use responsive grid layout with media queries', () => {
