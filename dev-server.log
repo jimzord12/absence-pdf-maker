@@ -1,0 +1,47 @@
+
+> absence-pdf-maker@1.0.0 dev
+> vite
+
+
+  VITE v7.3.0  ready in 118 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+
+PWA v1.2.0
+mode      generateSW
+precache  2 entries (0.12 KiB)
+files generated
+  dev-dist/sw.js
+  dev-dist/workbox-2ae722a1.js
+10:12:06 PM [vite] (client) hmr update /src/index.css
+10:13:16 PM [vite] (client) hmr update /src/index.css
+10:21:33 PM [vite] (client) hmr update /src/index.css
+10:27:04 PM [vite] (client) page reload playwright-report/index.html
+10:34:11 PM [vite] (client) hmr update /src/index.css
+10:34:37 PM [vite] (client) hmr update /src/index.css
+10:39:36 PM [vite] (client) hmr update /src/index.css
+10:39:36 PM [vite] (client) hmr update /src/index.css
+10:40:04 PM [vite] (client) hmr update /src/index.css
+10:40:29 PM [vite] (client) hmr update /src/index.css
+10:41:33 PM [vite] (client) hmr update /src/index.css
+10:43:01 PM [vite] (client) hmr update /src/index.css
+10:43:24 PM [vite] (client) hmr update /src/index.css
+10:43:24 PM [vite] (client) hmr update /src/index.css
+10:44:56 PM [vite] (client) hmr update /src/index.css
+10:46:20 PM [vite] (client) hmr update /src/index.css
+10:47:21 PM [vite] (client) hmr update /src/index.css
+10:48:05 PM [vite] (client) hmr update /src/index.css
+10:49:44 PM [vite] (client) hmr update /src/index.css
+10:49:44 PM [vite] (client) hmr update /src/index.css
+10:51:26 PM [vite] (client) hmr update /src/index.css
+10:52:02 PM [vite] (client) hmr update /src/index.css
+10:52:02 PM [vite] (client) hmr update /src/index.css
+10:53:25 PM [vite] (client) hmr update /src/index.css
+10:53:25 PM [vite] (client) hmr update /src/index.css
+10:54:41 PM [vite] (client) hmr update /src/index.css
+10:57:13 PM [vite] (client) hmr update /src/index.css
+10:59:29 PM [vite] (client) hmr update /src/index.css
+10:59:48 PM [vite] (client) hmr update /src/index.css
+11:05:15 PM [vite] (client) page reload playwright-report/index.html
+11:05:15 PM [vite] (client) page reload playwright-report/index.html

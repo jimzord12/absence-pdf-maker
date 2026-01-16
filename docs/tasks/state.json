@@ -1,18 +1,5 @@
 {
   "$schema": "./state.schema.json",
   "version": "2.0",
-  "tasks": {
-    "141-plan": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-14T17:25:55.397Z",
-      "location": "active",
-      "blockedBy": []
-    },
-    "142-desktop-3-column-layout-plan": {
-      "state": "not_started",
-      "lastUpdated": "2026-01-14T17:26:12.951Z",
-      "location": "backlog",
-      "blockedBy": []
-    }
-  }
+  "tasks": {}
 }
