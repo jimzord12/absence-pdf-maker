@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useId } from 'react';
 import type { FieldErrors } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -33,6 +33,9 @@ export const LeaveDetailsSection: React.FC<LeaveDetailsSectionProps> = ({ errors
   const { locale } = useLocaleStore();
   const { t } = useTranslation('forms') as { t: (key: string, options?: Record<string, unknown>) => string };
 
+  // Generate unique ID for accessibility (WCAG 2.1 Level A: unique id attribute values)
+  const headingId = useId();
+
   const leaveTypeOptions = useMemo(
     () => [
       { value: 'annual', label: t('leave.types.annual') },
@@ -60,9 +63,9 @@ export const LeaveDetailsSection: React.FC<LeaveDetailsSectionProps> = ({ errors
   }, [leaveType, startDate, endDate, reason, setLeaveDraft]);
 
   return (
-    <section aria-labelledby="leave-details-heading">
+    <section aria-labelledby={`leave-details-heading-${headingId}`}>
       <Card>
-        <h2 id="leave-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
+        <h2 id={`leave-details-heading-${headingId}`} className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
           {t('leave.heading')}
         </h2>
         <div className="space-y-4">

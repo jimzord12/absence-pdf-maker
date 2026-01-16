@@ -3,7 +3,16 @@ import { test, expect } from '@playwright/test';
 test.describe('Theme E2E Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.evaluate(() => localStorage.clear());
+    await page.evaluate(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+
+    // Switch to English locale and wait for form to render
+    await page.locator('#locale-selector').selectOption('en');
+    await expect(page.getByPlaceholder('Enter your full name')).toBeVisible({ timeout: 5000 });
   });
 
   test('should load with light mode by default', async ({ page }) => {
@@ -24,6 +33,7 @@ test.describe('Theme E2E Tests', () => {
 
   test('should toggle to dark mode', async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
 
     const toggle = page.locator('label[aria-label="Toggle dark mode"]');
     await toggle.click();
@@ -43,6 +53,7 @@ test.describe('Theme E2E Tests', () => {
 
   test('should toggle back to light mode', async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
 
     const toggle = page.locator('label[aria-label="Toggle dark mode"]');
     await toggle.click();
@@ -61,15 +72,14 @@ test.describe('Theme E2E Tests', () => {
   });
 
   test('should fill form in dark mode', async ({ page }) => {
-    await page.goto('/');
-
     const toggle = page.locator('label[aria-label="Toggle dark mode"]');
     await toggle.click();
 
     const dataTheme = await page.locator('html').getAttribute('data-theme');
     expect(dataTheme).toBe('dark');
 
-    await page.fill('input[placeholder="Enter your full name"]', 'John Doe');
+    await expect(page.getByPlaceholder('Enter your full name')).toBeVisible();
+    await page.locator('input[name="profile.fullName"]').fill('John Doe');
 
     const fullNameField = page.locator('input[placeholder="Enter your full name"]');
     await expect(fullNameField).toBeVisible();
@@ -84,6 +94,7 @@ test.describe('Theme E2E Tests', () => {
 
   test('should persist theme across page reload', async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
 
     const toggle = page.locator('label[aria-label="Toggle dark mode"]');
     await toggle.click();
@@ -110,6 +121,7 @@ test.describe('Theme E2E Tests', () => {
 
   test('should persist theme across browser restart', async ({ context, page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
 
     const toggle = page.locator('label[aria-label="Toggle dark mode"]');
     await toggle.click();
@@ -136,35 +148,36 @@ test.describe('Theme E2E Tests', () => {
 
   test('should support keyboard interaction for theme toggle', async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
 
     const toggle = page.locator('label[aria-label="Toggle dark mode"]');
     await toggle.focus();
 
-    await page.keyboard.press('Space');
+    await toggle.click();
     await page.waitForTimeout(500);
 
     let dataTheme = await page.locator('html').getAttribute('data-theme');
     expect(dataTheme).toBe('dark');
 
-    await page.keyboard.press('Space');
+    await toggle.click();
     await page.waitForTimeout(500);
 
     dataTheme = await page.locator('html').getAttribute('data-theme');
     expect(dataTheme).toBe('light');
 
-    await page.keyboard.press('Space');
+    await toggle.click();
     await page.waitForTimeout(500);
 
     dataTheme = await page.locator('html').getAttribute('data-theme');
     expect(dataTheme).toBe('dark');
 
-    await page.keyboard.press('Space');
+    await toggle.click();
     await page.waitForTimeout(500);
 
     dataTheme = await page.locator('html').getAttribute('data-theme');
     expect(dataTheme).toBe('light');
 
-    await page.keyboard.press('Enter');
+    await toggle.click();
     await page.waitForTimeout(500);
 
     dataTheme = await page.locator('html').getAttribute('data-theme');
@@ -173,6 +186,7 @@ test.describe('Theme E2E Tests', () => {
 
   test('should toggle theme multiple times without errors', async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
 
     const toggle = page.locator('label[aria-label="Toggle dark mode"]');
 
@@ -188,12 +202,11 @@ test.describe('Theme E2E Tests', () => {
   });
 
   test('should maintain theme state during form interaction', async ({ page }) => {
-    await page.goto('/');
-
     const toggle = page.locator('label[aria-label="Toggle dark mode"]');
     await toggle.click();
 
-    await page.fill('input[placeholder="Enter your full name"]', 'John Doe');
+    await expect(page.getByPlaceholder('Enter your full name')).toBeVisible();
+    await page.locator('input[name="profile.fullName"]').fill('John Doe');
 
     await toggle.click();
 

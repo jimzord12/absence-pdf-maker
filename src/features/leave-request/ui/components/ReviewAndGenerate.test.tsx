@@ -340,7 +340,7 @@ describe('ReviewAndGenerate', () => {
 
       expect(screen.getByText(/^Signature$/i)).toBeInTheDocument();
       expect(screen.getByText('✗ Not signed')).toBeInTheDocument();
-      expect(screen.getByText('✗ Not signed')).toHaveClass('text-[color:var(--color-error)]');
+      expect(screen.getByText('✗ Not signed')).toHaveClass('text-[color:var(--color-error-text)]');
     });
   });
 

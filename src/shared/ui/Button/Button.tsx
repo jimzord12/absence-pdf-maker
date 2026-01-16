@@ -36,7 +36,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       secondary:
         'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500 dark:bg-[color:var(--color-surface-hover)] dark:text-[color:var(--color-text-primary)] dark:border dark:border-[color:var(--color-border)] dark:hover:bg-[color:var(--color-border)]',
       danger:
-        'bg-[color:var(--color-error)] text-white hover:bg-[color:var(--color-error-hover)] focus:ring-[color:var(--color-error)]',
+        'bg-[color:var(--color-error)] text-white hover:bg-[color:var(--color-error-hover)] focus:ring-[color:var(--color-error)] dark:text-white dark:bg-[color:var(--color-error-light)] dark:hover:bg-[color:var(--color-error-hover)]',
     };
 
     const sizeStyles = {

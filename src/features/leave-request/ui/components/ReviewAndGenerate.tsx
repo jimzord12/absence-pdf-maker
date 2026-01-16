@@ -333,7 +333,7 @@ export const ReviewAndGenerate: React.FC = () => {
                   {signature.signatureDataUrl ? (
                     <span className="text-[color:var(--color-success)]">{t('status.signed', { ns: 'common' })}</span>
                   ) : (
-                    <span className="text-[color:var(--color-error)]">{t('status.notSigned', { ns: 'common' })}</span>
+                    <span className="text-[color:var(--color-error-text)]">{t('status.notSigned', { ns: 'common' })}</span>
                   )}
                 </div>
                 <Button variant="secondary" size="sm" onClick={toggleSignatureModal}>
@@ -408,18 +408,23 @@ export const ReviewAndGenerate: React.FC = () => {
                  isLoading={isGeneratingPdf}
                   loadingText={t('pdf.loadingMessage', { ns: 'messages' })}
                  size="lg"
-                 disabled={
-                   !profile.fullName ||
-                   !profile.email ||
-                   !profile.identityNumber ||
-                   !profile.companyName ||
-                   !profile.department ||
-                   !profile.position ||
-                   !leaveDraft.startDate ||
-                   !leaveDraft.endDate ||
-                   !signature.signatureDataUrl ||
-                   absenceBreakdown?.absenceDays === 0
-                 }
+                  disabled={
+                    !profile.fullName ||
+                    !profile.email ||
+                    !profile.identityNumber ||
+                    !profile.companyName ||
+                    !profile.department ||
+                    !profile.position ||
+                    !leaveDraft.startDate ||
+                    !leaveDraft.endDate ||
+                    !signature.signatureDataUrl ||
+                    absenceBreakdown?.absenceDays === 0 ||
+                    (leaveDraft.leaveAllowance !== null &&
+                      leaveDraft.leaveAllowance !== undefined &&
+                      absenceBreakdown !== undefined &&
+                      absenceBreakdown !== null &&
+                      absenceBreakdown.absenceDays > leaveDraft.leaveAllowance)
+                  }
                  className="w-full md:w-auto"
                >
                   {tCommon('buttons.generatePdf')}

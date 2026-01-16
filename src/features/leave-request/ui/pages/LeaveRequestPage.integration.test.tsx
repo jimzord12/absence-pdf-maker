@@ -419,7 +419,7 @@ describe('Integration Tests - User Flows', () => {
       await user.click(importButton);
 
       // Get the hidden file input
-      const fileInput = screen.getByLabelText(/import profile from json file/i);
+      const fileInput = screen.getByLabelText(/import profile/i);
       expect(fileInput).toBeInTheDocument();
 
       // Simulate file selection
@@ -452,8 +452,8 @@ describe('Integration Tests - User Flows', () => {
       const importButton = screen.getByRole('button', { name: /import profile/i });
       await user.click(importButton);
 
-      // Get the hidden file input
-      const fileInput = screen.getByLabelText(/import profile from json file/i);
+      // Get hidden file input
+      const fileInput = screen.getByLabelText(/Import profile/i);
 
       // Simulate file selection
       await user.upload(fileInput, mockFile);
@@ -498,8 +498,8 @@ describe('Integration Tests - User Flows', () => {
       const importButton = screen.getByRole('button', { name: /import profile/i });
       await user.click(importButton);
 
-      // Get the hidden file input
-      const fileInput = screen.getByLabelText(/import profile from json file/i);
+      // Get hidden file input
+      const fileInput = screen.getByLabelText(/Import profile/i);
 
       // Simulate file selection
       await user.upload(fileInput, mockFile);

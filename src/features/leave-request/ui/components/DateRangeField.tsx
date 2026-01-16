@@ -42,11 +42,11 @@ interface FooterProps extends AbsenceSummary {
 }
 
 const Footer: React.FC<FooterProps> = ({
+  hasDates,
   totalDays,
   holidayDays,
   weekendDays,
   absenceDays,
-  hasDates,
   tCommon,
   tForms,
 }) => {
@@ -59,44 +59,44 @@ const Footer: React.FC<FooterProps> = ({
       role="region"
       aria-live="polite"
     >
-      <p className="text-sm text-info-900 dark:text-info-100 font-medium">
+      <p className="text-sm text-[color:var(--color-text-secondary)] dark:text-[color:var(--color-text-muted)] font-medium">
         {tCommon('labels.dateRangeSummary')}
       </p>
-      <div className="mt-2 space-y-1 text-sm text-info-800 dark:text-info-200">
+      <div className="mt-2 space-y-1 text-sm text-[color:var(--color-text-secondary)] dark:text-[color:var(--color-text-muted)]">
         <div className="flex justify-between">
-          <span>{tForms('leave.absence.totalDays')}:</span>
+          <span className="text-[color:var(--color-text-secondary)]">{tForms('leave.absence.totalDays')}:</span>
           <span
-            className="font-semibold"
+            className="font-semibold text-[color:var(--color-text-primary)]"
             aria-label={`Total days in range: ${displayValue(totalDays)}`}
           >
             {displayValue(totalDays)}
           </span>
         </div>
         <div className="flex justify-between">
-          <span>{tForms('leave.absence.holidayDays')}:</span>
+          <span className="text-[color:var(--color-text-secondary)]">{tForms('leave.absence.holidayDays')}:</span>
           <span
-            className="font-semibold"
+            className="font-semibold text-[color:var(--color-text-primary)]"
             aria-label={`Holidays in range: ${displayValue(holidayDays)}`}
           >
             {displayValue(holidayDays)}
           </span>
         </div>
-        <div className="flex justify-between">
-          <span>{tForms('leave.absence.weekendDays')}:</span>
+        <div className="flex justify-between border-t border-[color:var(--color-border)] dark:border-[color:var(--color-border-dark)] pt-1">
+          <span className="font-semibold text-[color:var(--color-text-secondary)]">{tForms('leave.absence.absenceDays')}:</span>
           <span
-            className="font-semibold"
-            aria-label={`Weekend days in range: ${displayValue(weekendDays)}`}
-          >
-            {displayValue(weekendDays)}
-          </span>
-        </div>
-        <div className="flex justify-between border-t border-info-300 dark:border-info-800 pt-1">
-          <span className="font-semibold">{tForms('leave.absence.absenceDays')}:</span>
-          <span
-            className="font-bold text-info-700 dark:text-info-300"
+            className="font-bold text-[color:var(--color-text-primary)]"
             aria-label={`Total absence days: ${displayValue(absenceDays)}`}
           >
             {displayValue(absenceDays)}
+          </span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-[color:var(--color-text-primary)]">{tForms('leave.absence.weekendDays')}:</span>
+          <span
+            className="font-semibold text-[color:var(--color-text-secondary)]"
+            aria-label={`Weekend days in range: ${displayValue(weekendDays)}`}
+          >
+            {displayValue(weekendDays)}
           </span>
         </div>
       </div>
@@ -266,23 +266,22 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
       >
         {tCommon('labels.selectDateRange')}
       </span>
-      <div className="flex flex-col gap-2">
+      <div className="flex justify-between gap-2">
         <HolidaysLegend />
-        <div className="self-end">
-          <Button
-            variant={startDate && endDate ? 'danger' : 'secondary'}
-            size="sm"
-            disabled={!startDate || !endDate}
-            onClick={() => {
-              setValue('startDate', undefined, { shouldDirty: true, shouldValidate: false });
-              setValue('endDate', undefined, { shouldDirty: true, shouldValidate: false });
-            }}
-            title={tCommon('labels.clearDatesTooltip')}
-            aria-label={tCommon('labels.clearDatesTooltip')}
-          >
-            {tCommon('labels.clearDates')}
-          </Button>
-        </div>
+        <Button
+          variant="primary"
+          size="sm"
+          disabled={!startDate || !endDate}
+          onClick={() => {
+            setValue('startDate', undefined, { shouldDirty: true, shouldValidate: false });
+            setValue('endDate', undefined, { shouldDirty: true, shouldValidate: false });
+          }}
+          title={tCommon('labels.clearDatesTooltip')}
+          aria-label={tCommon('labels.clearDatesTooltip')}
+          className="flex-shrink-0"
+        >
+          {tCommon('labels.clearDates')}
+        </Button>
       </div>
       <div
         className="p-4 border border-[color:var(--color-border)] rounded-lg bg-[color:var(--color-surface)] shadow-sm"
@@ -311,7 +310,15 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
           )}
         </div>
       )}
-      <Footer {...absenceDaysCalculation} hasDates={!!startDate && !!endDate} tCommon={tCommon} tForms={tForms} />
+      <Footer
+        totalDays={absenceDaysCalculation.totalDays}
+        holidayDays={absenceDaysCalculation.holidayDays}
+        weekendDays={absenceDaysCalculation.weekendDays}
+        absenceDays={absenceDaysCalculation.absenceDays}
+        hasDates={!!startDate && !!endDate}
+        tCommon={tCommon}
+        tForms={tForms}
+      />
     </div>
   );
 };

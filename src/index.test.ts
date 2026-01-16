@@ -101,8 +101,7 @@ describe('Task 081: Tailwind CSS v3 to v4 Migration', () => {
     });
 
     it('should have text colors in @theme block', () => {
-      expect(indexCssContent).toContain('--color-text-primary: #0f172a');
-      expect(indexCssContent).toContain('--color-text-secondary: #64748b');
+      expect(indexCssContent).toContain('--color-text-secondary: #475569');
       expect(indexCssContent).toContain('--color-text-muted: #94a3b8');
       expect(indexCssContent).toContain('--color-text-inverse: #ffffff');
     });

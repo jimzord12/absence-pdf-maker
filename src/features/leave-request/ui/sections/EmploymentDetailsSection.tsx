@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import type { FieldErrors } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -31,10 +31,13 @@ export const EmploymentDetailsSection: React.FC<EmploymentDetailsSectionProps> =
   const { register } = methods || {};
   const { t } = useTranslation('forms') as { t: (key: string, options?: Record<string, unknown>) => string };
 
+  // Generate unique ID for accessibility (WCAG 2.1 Level A: unique id attribute values)
+  const headingId = useId();
+
   return (
-    <section aria-labelledby="employment-details-heading">
+    <section aria-labelledby={`employment-details-heading-${headingId}`}>
       <Card>
-        <h2 id="employment-details-heading" className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
+        <h2 id={`employment-details-heading-${headingId}`} className="text-xl font-semibold mb-4 text-[color:var(--color-text-primary)]">
           {t('employment.heading')}
         </h2>
         <div className="space-y-4">

@@ -16,7 +16,7 @@ import React from 'react';
 export const HolidaysLegend: React.FC = () => {
   return (
     <div
-      className="flex items-start gap-2 px-3 py-2 text-sm bg-[color:var(--color-surface)] border border-[color:var(--color-border)] rounded-md"
+      className="flex items-start gap-2 px-3 py-2 text-sm bg-[color:var(--color-surface-hover)] border border-[color:var(--color-border)] rounded-md"
       role="region"
       aria-label="Holidays legend"
     >
@@ -42,7 +42,7 @@ export const HolidaysLegend: React.FC = () => {
         <p className="font-medium text-[color:var(--color-text-primary)]">
           <span className="text-(--color-holiday-text)">H</span> = Holiday
         </p>
-        <p className="text-xs text-[color:var(--color-text-secondary)]">
+        <p className="text-xs text-[color:var(--color-text-primary)]">
           Holidays are highlighted in the calendar and are{' '}
           <strong className="text-[color:var(--color-holiday-text)]">not counted</strong> toward
           absence days.

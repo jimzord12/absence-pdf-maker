@@ -8,7 +8,6 @@ export interface ModalProps {
   children: React.ReactNode;
   closeOnBackdropClick?: boolean;
   showCloseButton?: boolean;
-  closeBackdropAria?: string;
   closeButtonAria?: string;
 }
 
@@ -19,7 +18,6 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   closeOnBackdropClick = true,
   showCloseButton = true,
-  closeBackdropAria,
   closeButtonAria,
 }) => {
   const { t } = useTranslation();
@@ -87,14 +85,7 @@ export const Modal: React.FC<ModalProps> = ({
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm dark:bg-black/70"
       onClick={handleBackdropClick}
-      onKeyDown={e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          handleBackdropClick(e as unknown as React.MouseEvent<HTMLDivElement>);
-        }
-      }}
-      role="button"
-      tabIndex={0}
-      aria-label={closeBackdropAria || t('aria.modal.closeBackdrop')}
+      role="presentation"
     >
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
       <div

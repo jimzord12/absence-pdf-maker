@@ -831,8 +831,8 @@ describe('DateRangeField', () => {
       );
 
       const clearButton = screen.getByText('Clear Dates');
-      expect(clearButton).toHaveClass('bg-[color:var(--color-error)]');
-      expect(clearButton).toHaveClass('text-white');
+      expect(clearButton).toHaveClass('bg-[color:var(--color-primary)]');
+      expect(clearButton).toHaveClass('text-[color:var(--color-text-inverse)]');
     });
 
     it('should render clear button but disabled when only one date is selected', () => {

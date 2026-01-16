@@ -924,7 +924,8 @@ describe('LeaveDetailsSection', () => {
       // Component should still render without crashing
       // Note: Without FormContext, i18next may render in Greek (default language)
       // Check that component renders without throwing, not specific text
-      expect(document.querySelector('h2#leave-details-heading')).toBeInTheDocument();
+      const heading = document.querySelector('h2[id^="leave-details-heading-"]');
+      expect(heading).toBeInTheDocument();
     });
 
     it('should handle undefined errors prop', () => {

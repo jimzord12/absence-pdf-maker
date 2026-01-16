@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 
 import { Select } from '../../../../shared/ui';
 import type { PdfLanguage } from '../../state/pdfLanguage.store';
@@ -9,20 +9,22 @@ const pdfLanguageOptions = [
   { value: 'en', label: '🇺🇸 English' },
 ];
 
-interface PdfLanguageSelectorProps {
+interface LocaleSelectorProps {
   className?: string;
 }
 
-export const PdfLanguageSelector: React.FC<PdfLanguageSelectorProps> = ({ className = '' }) => {
+export const PdfLanguageSelector: React.FC<LocaleSelectorProps> = ({ className = '' }) => {
   const { pdfLanguage, setPdfLanguage } = usePdfLanguageStore();
+  const generatedId = useId();
+  const pdfLanguageId = `pdf-language-selector-${generatedId}`;
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <label htmlFor="pdf-language-selector" className="text-sm font-medium text-[color:var(--color-text-primary)]">
+      <label htmlFor={pdfLanguageId} className="text-sm font-medium text-[color:var(--color-text-primary)]">
         PDF Language:
       </label>
       <Select
-        id="pdf-language-selector"
+        id={pdfLanguageId}
         options={pdfLanguageOptions}
         value={pdfLanguage}
         onChange={e => setPdfLanguage(e.target.value as PdfLanguage)}
