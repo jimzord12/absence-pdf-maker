@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { formatDate } from '../../../../shared/lib/dates';
 import { showError, showSuccess } from '../../../../shared/lib/toast';
-import { Button, Card } from '../../../../shared/ui';
+import { Button, Card, TruncatedText } from '../../../../shared/ui';
 import type { LeaveType, UserProfile } from '../../model/leaveRequest.types';
 import { calculateAbsenceDays } from '../../services/absenceDays';
 import { downloadLeaveRequestPdf } from '../../services/pdf/pdf.service';
@@ -200,39 +200,57 @@ export const ReviewAndGenerate: React.FC = () => {
            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('fields.fullName', { ns: 'messages' })}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.fullName || '—'}</p>
+              <div className="font-medium text-[color:var(--color-text-primary)]">
+                <TruncatedText text={profile.fullName} maxLength={50} />
+              </div>
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('fields.fathersName', { ns: 'messages' })}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.fathersName || '—'}</p>
+              <div className="font-medium text-[color:var(--color-text-primary)]">
+                <TruncatedText text={profile.fathersName} maxLength={50} />
+              </div>
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('fields.email', { ns: 'messages' })}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.email || '—'}</p>
+              <div className="font-medium text-[color:var(--color-text-primary)]">
+                <TruncatedText text={profile.email} maxLength={40} className="break-all" />
+              </div>
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('fields.phone', { ns: 'messages' })}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.phone || '—'}</p>
+              <div className="font-medium text-[color:var(--color-text-primary)]">
+                <TruncatedText text={profile.phone} maxLength={25} />
+              </div>
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('fields.identityNumber', { ns: 'messages' })}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.identityNumber || '—'}</p>
+              <div className="font-medium text-[color:var(--color-text-primary)]">
+                <TruncatedText text={profile.identityNumber} maxLength={25} />
+              </div>
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('fields.employeeId', { ns: 'messages' })}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.employeeId || '—'}</p>
+              <div className="font-medium text-[color:var(--color-text-primary)]">
+                <TruncatedText text={profile.employeeId} maxLength={30} />
+              </div>
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('fields.companyName', { ns: 'messages' })}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.companyName || '—'}</p>
+              <div className="font-medium text-[color:var(--color-text-primary)]">
+                <TruncatedText text={profile.companyName} maxLength={60} />
+              </div>
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('fields.department', { ns: 'messages' })}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.department || '—'}</p>
+              <div className="font-medium text-[color:var(--color-text-primary)]">
+                <TruncatedText text={profile.department} maxLength={60} />
+              </div>
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('fields.position', { ns: 'messages' })}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">{profile.position || '—'}</p>
+              <div className="font-medium text-[color:var(--color-text-primary)]">
+                <TruncatedText text={profile.position} maxLength={60} />
+              </div>
             </div>
           </div>
         </Card>
@@ -246,33 +264,33 @@ export const ReviewAndGenerate: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex-col justify-between">
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('leave.leaveType')}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">
+              <div className="font-medium text-[color:var(--color-text-primary)]">
                 {leaveDraft.leaveType ? leaveTypeLabels[leaveDraft.leaveType] : '—'}
-              </p>
+              </div>
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.leaveAllowance')}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">
+              <div className="font-medium text-[color:var(--color-text-primary)]">
                 {leaveDraft.leaveAllowance !== null && leaveDraft.leaveAllowance !== undefined
                   ? `${leaveDraft.leaveAllowance} ${t('dateRange.days')}`
                   : '—'}
-              </p>
+              </div>
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.startDate')}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">
+              <div className="font-medium text-[color:var(--color-text-primary)]">
                 {leaveDraft.startDate ? formatDate(leaveDraft.startDate, locale) : '—'}
-              </p>
+              </div>
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('dateRange.endDate')}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">
+              <div className="font-medium text-[color:var(--color-text-primary)]">
                 {leaveDraft.endDate ? formatDate(leaveDraft.endDate, locale) : '—'}
-              </p>
+              </div>
             </div>
             <div>
               <span className="text-sm text-[color:var(--color-text-secondary)]">{t('leave.reason')}</span>
-              <p className="font-medium text-[color:var(--color-text-primary)]">{leaveDraft.reason || '—'}</p>
+              <div className="font-medium text-[color:var(--color-text-primary)]">{leaveDraft.reason || '—'}</div>
             </div>
           </div>
 
@@ -311,19 +329,14 @@ export const ReviewAndGenerate: React.FC = () => {
           <div className="mt-4">
             <span className="text-sm text-[color:var(--color-text-secondary)]">{t('signature.label')}</span>
               <div className="flex items-center justify-between mt-1">
-                <p className="font-medium text-[color:var(--color-text-primary)]">
+                <div className="font-medium text-[color:var(--color-text-primary)]">
                   {signature.signatureDataUrl ? (
                     <span className="text-[color:var(--color-success)]">{t('status.signed', { ns: 'common' })}</span>
                   ) : (
                     <span className="text-[color:var(--color-error)]">{t('status.notSigned', { ns: 'common' })}</span>
                   )}
-                </p>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={toggleSignatureModal}
-                  aria-label={signature.signatureDataUrl ? t('status.update', { ns: 'common' }) : t('status.add', { ns: 'common' })}
-                >
+                </div>
+                <Button variant="secondary" size="sm" onClick={toggleSignatureModal}>
                   {signature.signatureDataUrl ? t('status.update', { ns: 'common' }) : t('status.add', { ns: 'common' })}
                 </Button>
              </div>
@@ -357,7 +370,6 @@ export const ReviewAndGenerate: React.FC = () => {
                   showSuccess(tCommon('cleared'));
                 }}
                 size="md"
-                aria-label={t('actions.resetAria')}
               >
                 {tCommon('buttons.reset')}
               </Button>
@@ -366,15 +378,10 @@ export const ReviewAndGenerate: React.FC = () => {
             <hr className="border-[color:var(--color-border)]" />
 
             <div className="flex flex-wrap gap-3">
-              <Button variant="secondary" onClick={handleExport} size="md" aria-label={t('actions.exportProfileAria')}>
+              <Button variant="secondary" onClick={handleExport} size="md">
                 {tCommon('buttons.exportProfile')}
               </Button>
-              <Button
-                variant="secondary"
-                onClick={() => fileInputRef.current?.click()}
-                size="md"
-                aria-label={t('actions.importProfileAria')}
-              >
+              <Button variant="secondary" onClick={() => fileInputRef.current?.click()} size="md">
                 {tCommon('buttons.importProfile')}
               </Button>
               <input
@@ -385,45 +392,45 @@ export const ReviewAndGenerate: React.FC = () => {
                 className="hidden"
                 aria-label={t('actions.importProfileAria')}
               />
-              <Button variant="danger" onClick={handleClearProfile} size="md" aria-label={t('actions.clearProfileAria')}>
+              <Button variant="danger" onClick={handleClearProfile} size="md">
                 {tCommon('buttons.clearProfile')}
               </Button>
             </div>
 
             <hr className="border-[color:var(--color-border)]" />
 
-             <div className="space-y-4">
-               <PdfLanguageSelector />
-                <Button
-                  variant="primary"
-                  onClick={handleGeneratePdf}
-                  isLoading={isGeneratingPdf}
-                   loadingText={t('pdf.loadingMessage', { ns: 'messages' })}
-                  size="lg"
-                  disabled={
-                    !profile.fullName ||
-                    !profile.email ||
-                    !profile.identityNumber ||
-                    !profile.companyName ||
-                    !profile.department ||
-                    !profile.position ||
-                    !leaveDraft.startDate ||
-                    !leaveDraft.endDate ||
-                    !signature.signatureDataUrl ||
-                    absenceBreakdown?.absenceDays === 0
-                  }
-                  className="w-full md:w-auto"
-                  aria-label={isGeneratingPdf ? t('pdf.loadingMessage', { ns: 'messages' }) : tCommon('buttons.generatePdf')}
-                >
-                   {tCommon('buttons.generatePdf')}
-                 </Button>
+            {/* PDF Generation */}
+            <div className="space-y-4">
+              <PdfLanguageSelector />
+               <Button
+                 variant="primary"
+                 onClick={handleGeneratePdf}
+                 isLoading={isGeneratingPdf}
+                  loadingText={t('pdf.loadingMessage', { ns: 'messages' })}
+                 size="lg"
+                 disabled={
+                   !profile.fullName ||
+                   !profile.email ||
+                   !profile.identityNumber ||
+                   !profile.companyName ||
+                   !profile.department ||
+                   !profile.position ||
+                   !leaveDraft.startDate ||
+                   !leaveDraft.endDate ||
+                   !signature.signatureDataUrl ||
+                   absenceBreakdown?.absenceDays === 0
+                 }
+                 className="w-full md:w-auto"
+               >
+                  {tCommon('buttons.generatePdf')}
+                </Button>
 
-                <p className="text-sm text-[color:var(--color-text-secondary)] mt-2">
-                   {isGeneratingPdf
-                     ? t('pdf.loadingMessage', { ns: 'messages' })
-                     : t('pdf.clickToGenerate', { ns: 'messages' })}
+               <p className="text-sm text-[color:var(--color-text-secondary)] mt-2">
+                  {isGeneratingPdf
+                    ? t('pdf.loadingMessage', { ns: 'messages' })
+                    : t('pdf.clickToGenerate', { ns: 'messages' })}
                </p>
-             </div>
+            </div>
           </div>
         </Card>
       </section>

@@ -20,6 +20,8 @@ export type { SpinnerProps } from './Spinner';
 export { Card } from './Card';
 export type { CardProps } from './Card';
 
+export { TruncatedText } from './TruncatedText/TruncatedText';
+
 export { Alert } from './Alert';
 export type { AlertProps, AlertVariant } from './Alert';
 
