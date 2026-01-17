@@ -1,14 +1,14 @@
-import { screen, waitFor } from '@testing-library/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { renderWithI18n } from '../../../../test-utils';
 import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
 import { calculateAbsenceDays } from '../../services/absenceDays';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { DateRangeField } from '../components/DateRangeField';
-import { renderWithI18n } from '../../../../test-utils';
 import { LeaveDetailsSection } from './LeaveDetailsSection';
 
 // Mock the calculateAbsenceDays function
@@ -145,7 +145,8 @@ describe('LeaveDetailsSection', () => {
         lastGeneratedFileName: '',
         errorMessage: null,
         triggerValidation: null,
-      forceFormReset: false,
+        forceFormReset: false,
+        refreshFormField: null,
       },
     });
     vi.clearAllMocks();
@@ -794,7 +795,6 @@ describe('LeaveDetailsSection', () => {
 
       const card = container.querySelector('.rounded-lg');
       expect(card).toHaveClass('shadow-sm');
-
     });
   });
 

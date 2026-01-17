@@ -110,6 +110,7 @@ const clearAllData = () => {
       errorMessage: null,
       triggerValidation: null,
       forceFormReset: false,
+      refreshFormField: null,
     },
   }));
 };
@@ -566,7 +567,9 @@ describe('Integration Tests - User Flows', () => {
 
       // Verify leave details section is rendered (use heading to be specific)
       const form = screen.getByRole('form');
-      expect(within(form).getByRole('heading', { name: /^leave details form$/i })).toBeInTheDocument();
+      expect(
+        within(form).getByRole('heading', { name: /^leave details form$/i })
+      ).toBeInTheDocument();
 
       // Select leave type
       const leaveTypeSelect = screen.getByLabelText(/leave type/i);
@@ -611,7 +614,6 @@ describe('Integration Tests - User Flows', () => {
           endDate,
           leaveType: 'annual',
           reason: 'Test',
-          leaveAllowance: undefined,
         });
       });
 

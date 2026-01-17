@@ -8,7 +8,8 @@ const mockHolidaySet = new Set<string>(['2025-01-01', '2025-12-25', '2025-07-04'
 
 vi.mock('../../services/holidays/holidays.service', () => ({
   loadHolidays: () => mockHolidaySet,
-  isHoliday: (date: Date, holidaySet: Set<string>) => holidaySet.has(date.toISOString().split('T')[0]),
+  isHoliday: (date: Date, holidaySet: Set<string>) =>
+    holidaySet.has(date.toISOString().split('T')[0]),
 }));
 
 const mockPromptInstall = vi.fn().mockResolvedValue('accepted');
@@ -24,7 +25,11 @@ vi.mock('../../../../app/providers/usePwaInstall', () => ({
 }));
 
 vi.mock('../components/LeaveRequestForm', () => ({
-  LeaveRequestForm: () => <div data-testid="leave-request-form" role="form">Leave Request Form</div>,
+  LeaveRequestForm: () => (
+    <div data-testid="leave-request-form" role="form">
+      Leave Request Form
+    </div>
+  ),
 }));
 
 vi.mock('../components/ReviewAndGenerate', () => ({
@@ -35,7 +40,9 @@ vi.mock('../components/ReviewAndGenerate', () => ({
         Review and Generate
         {canShowInstall && (
           <div data-testid="pwa-install-container">
-            <button onClick={promptInstall} aria-label="Install App">Install App</button>
+            <button onClick={promptInstall} aria-label="Install App">
+              Install App
+            </button>
           </div>
         )}
       </div>
@@ -43,108 +50,108 @@ vi.mock('../components/ReviewAndGenerate', () => ({
   },
 }));
 
-  describe('5. PWA install button rendering and behavior', () => {
-    beforeEach(() => {
-      localStorage.clear();
-      // Reset all mocks before each test
-      (usePwaInstall as any).mockReturnValue({
-        isInstallable: false,
-        canShowInstall: false,
-        promptInstall: mockPromptInstall,
-        dismiss: vi.fn(),
-        snooze: vi.fn(),
-      });
-      useLeaveRequestStore.setState({
-        profile: {
-          fullName: '',
-          fathersName: '',
-          email: '',
-          phone: '',
-          identityNumber: '',
-          employeeId: '',
-          companyName: 'ICS ΚΑΡΑΦΥΛΗΣ Α.Ε',
-          department: '',
-          position: '',
-        },
-        leaveDraft: {
-          leaveType: 'annual',
-          startDate: null,
-          endDate: null,
-          reason: '',
-          leaveAllowance: null,
-        },
-        signature: {
-          signatureDataUrl: '',
-        },
-        holidays: {
-          holidaySet: new Set<string>(),
-        },
-        ui: {
-          isSignatureModalOpen: false,
-          isGeneratingPdf: false,
-          lastGeneratedFileName: '',
-          errorMessage: null,
-          triggerValidation: null,
-          forceFormReset: false,
-        },
-        pwa: {
-          completedPdfGenerations: 0,
-          dismissedPwaInstall: false,
-          pwaInstallSnoozeCount: 0,
-          pwaInstallSnoozeUntil: null,
-        },
-      });
-      vi.resetAllMocks();
+describe('5. PWA install button rendering and behavior', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    // Reset all mocks before each test
+    (usePwaInstall as any).mockReturnValue({
+      isInstallable: false,
+      canShowInstall: false,
+      promptInstall: mockPromptInstall,
+      dismiss: vi.fn(),
+      snooze: vi.fn(),
     });
-
-    afterEach(() => {
-      vi.restoreAllMocks();
+    useLeaveRequestStore.setState({
+      profile: {
+        fullName: '',
+        fathersName: '',
+        email: '',
+        phone: '',
+        identityNumber: '',
+        employeeId: '',
+        companyName: 'ICS ΚΑΡΑΦΥΛΗΣ Α.Ε',
+        department: '',
+        position: '',
+      },
+      leaveDraft: {
+        leaveType: 'annual',
+        startDate: null,
+        endDate: null,
+        reason: '',
+      },
+      signature: {
+        signatureDataUrl: '',
+      },
+      holidays: {
+        holidaySet: new Set<string>(),
+      },
+      ui: {
+        isSignatureModalOpen: false,
+        isGeneratingPdf: false,
+        lastGeneratedFileName: '',
+        errorMessage: null,
+        triggerValidation: null,
+        forceFormReset: false,
+        refreshFormField: null,
+      },
+      pwa: {
+        completedPdfGenerations: 0,
+        dismissedPwaInstall: false,
+        pwaInstallSnoozeCount: 0,
+        pwaInstallSnoozeUntil: null,
+      },
     });
+    vi.resetAllMocks();
+  });
 
-    it('should NOT render install button when canShowInstall is false', () => {
-      render(<LeaveRequestPage />);
-      expect(screen.queryByText('Install App')).not.toBeInTheDocument();
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should NOT render install button when canShowInstall is false', () => {
+    render(<LeaveRequestPage />);
+    expect(screen.queryByText('Install App')).not.toBeInTheDocument();
+  });
+
+  it('should NOT render install button when canShowInstall is false (default)', () => {
+    render(<LeaveRequestPage />);
+    expect(screen.queryByText('Install App')).not.toBeInTheDocument();
+  });
+
+  it('should render install button when canShowInstall is true', () => {
+    (usePwaInstall as any).mockReturnValue({
+      isInstallable: true,
+      canShowInstall: true,
+      promptInstall: mockPromptInstall,
+      dismiss: vi.fn(),
+      snooze: vi.fn(),
     });
+    render(<LeaveRequestPage />);
+    const installButton = screen.getByRole('button', { name: /Install App/i });
+    expect(installButton).toHaveAttribute('aria-label', 'Install App');
+    expect(installButton).toBeInTheDocument();
+  });
 
-    it('should NOT render install button when canShowInstall is false (default)', () => {
-      render(<LeaveRequestPage />);
-      expect(screen.queryByText('Install App')).not.toBeInTheDocument();
+  it('should call promptInstall when install button is clicked', async () => {
+    (usePwaInstall as any).mockReturnValue({
+      isInstallable: true,
+      canShowInstall: true,
+      promptInstall: mockPromptInstall,
+      dismiss: vi.fn(),
+      snooze: vi.fn(),
     });
+    render(<LeaveRequestPage />);
+    const installButtons = screen.getAllByRole('button', { name: /Install App/i });
+    const installButton = installButtons.find(
+      btn => btn.getAttribute('aria-label') === 'Install App'
+    ) as HTMLElement | undefined;
+    if (installButton) {
+      installButton.click();
+    }
+    expect(mockPromptInstall).toHaveBeenCalledTimes(installButton ? 1 : 0);
+  });
 
-    it('should render install button when canShowInstall is true', () => {
-      (usePwaInstall as any).mockReturnValue({
-        isInstallable: true,
-        canShowInstall: true,
-        promptInstall: mockPromptInstall,
-        dismiss: vi.fn(),
-        snooze: vi.fn(),
-      });
-      render(<LeaveRequestPage />);
-      const installButton = screen.getByRole('button', { name: /Install App/i });
-      expect(installButton).toHaveAttribute('aria-label', 'Install App');
-      expect(installButton).toBeInTheDocument();
-    });
-
-    it('should call promptInstall when install button is clicked', async () => {
-      (usePwaInstall as any).mockReturnValue({
-        isInstallable: true,
-        canShowInstall: true,
-        promptInstall: mockPromptInstall,
-        dismiss: vi.fn(),
-        snooze: vi.fn(),
-      });
-      render(<LeaveRequestPage />);
-      const installButtons = screen.getAllByRole('button', { name: /Install App/i });
-      const installButton = installButtons.find(
-        btn => btn.getAttribute('aria-label') === 'Install App',
-      ) as HTMLElement | undefined;
-      if (installButton) {
-        installButton.click();
-      }
-      expect(mockPromptInstall).toHaveBeenCalledTimes(installButton ? 1 : 0);
-    });
-
-    describe('1. Component renders without errors', () => {
+  describe('1. Component renders without errors', () => {
     it('should render the page without throwing any errors', () => {
       expect(() => render(<LeaveRequestPage />)).not.toThrow();
     });
@@ -194,7 +201,11 @@ vi.mock('../components/ReviewAndGenerate', () => ({
     it('should apply correct description styling', () => {
       render(<LeaveRequestPage />);
       const description = screen.getByText('Submit your leave request and generate a PDF document');
-      expect(description).toHaveClass('mt-2', 'text-sm', 'text-[color:var(--color-text-secondary)]');
+      expect(description).toHaveClass(
+        'mt-2',
+        'text-sm',
+        'text-[color:var(--color-text-secondary)]'
+      );
     });
   });
 
@@ -248,7 +259,9 @@ vi.mock('../components/ReviewAndGenerate', () => ({
       const { container } = render(<LeaveRequestPage />);
 
       // StarsWarsRobotToggle should not be present
-      const robotToggle = container.querySelector('[data-testid*="stars-wars"], [data-testid*="robot"]');
+      const robotToggle = container.querySelector(
+        '[data-testid*="stars-wars"], [data-testid*="robot"]'
+      );
       expect(robotToggle).not.toBeInTheDocument();
     });
 
@@ -327,10 +340,11 @@ vi.mock('../components/ReviewAndGenerate', () => ({
   describe('6. Store integration', () => {
     it('should handle pre-populated profile data', () => {
       useLeaveRequestStore.setState({
-        profile: { fullName: 'John Doe' }
+        profile: { fullName: 'John Doe' },
       });
       render(<LeaveRequestPage />);
       expect(screen.getByText('Leave Request')).toBeInTheDocument();
     });
   });
 });
+

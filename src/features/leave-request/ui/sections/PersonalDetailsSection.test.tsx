@@ -46,7 +46,6 @@ describe('PersonalDetailsSection', () => {
         startDate: null,
         endDate: null,
         reason: '',
-        leaveAllowance: undefined,
       },
       signature: {
         signatureDataUrl: '',
@@ -61,6 +60,7 @@ describe('PersonalDetailsSection', () => {
         errorMessage: null,
         triggerValidation: null,
         forceFormReset: false,
+        refreshFormField: null,
       },
     });
     vi.clearAllMocks();
