@@ -6,6 +6,7 @@ import svgr from 'vite-plugin-svgr'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/absence-pdf-maker/',
   define: {
     global: 'globalThis',
     Buffer: 'globalThis.Buffer',
@@ -25,17 +26,17 @@ export default defineConfig({
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
-        scope: '/',
-        start_url: '/',
+        scope: '/absence-pdf-maker/',
+        start_url: '/absence-pdf-maker/',
         icons: [
           {
-            src: '/icon-192x192.svg',
+            src: '/absence-pdf-maker/icon-192x192.svg',
             sizes: '192x192',
             type: 'image/svg+xml',
             purpose: 'any maskable',
           },
           {
-            src: '/icon-512x512.svg',
+            src: '/absence-pdf-maker/icon-512x512.svg',
             sizes: '512x512',
             type: 'image/svg+xml',
             purpose: 'any maskable',
@@ -58,7 +59,7 @@ export default defineConfig({
             },
           },
         ],
-        navigateFallback: '/',
+        navigateFallback: '/absence-pdf-maker/',
       },
       devOptions: {
         enabled: true, // Enable PWA in development for testing
