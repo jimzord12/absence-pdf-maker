@@ -177,12 +177,16 @@ export const ReviewAndGenerate: React.FC = () => {
         minLoadTime,
       ]);
 
-      if (leaveDraft.leaveAllowance != null && absenceBreakdown) {
+      if (
+        typeof leaveDraft.leaveAllowance === 'number' &&
+        Number.isFinite(leaveDraft.leaveAllowance) &&
+        absenceBreakdown
+      ) {
         const remainingLeaveAllowance = Math.max(
           leaveDraft.leaveAllowance - absenceBreakdown.absenceDays,
           0
         );
-        setLeaveDraft({ leaveAllowance: remainingLeaveAllowance });
+        setLeaveDraft({ ...leaveDraft, leaveAllowance: remainingLeaveAllowance });
         triggerForceFormReset();
       }
 
