@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useThemeStore } from '../../../../shared/state/theme.store';
-import { DeveloperPresence, StarsWarsRobotToggle } from '../../../../shared/ui';
+import { DeveloperPresence, StarsWarsRobotToggle, ThemeToggle } from '../../../../shared/ui';
 import { loadHolidays } from '../../services/holidays/holidays.service';
 import { useLeaveRequestStore } from '../../state/leaveRequest.store';
 import { LeaveRequestForm } from '../components/LeaveRequestForm';
@@ -30,11 +30,11 @@ export const LeaveRequestPage: React.FC = () => {
   }, [setHolidays]);
 
   return (
-    <div className="min-h-screen bg-radial-[at_50%_80%] from-white to-blue-300 dark:bg-radial-[at_50%_50%] dark:from-(--color-background) dark:to-border py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-radial-[at_50%_80%] from-white to-blue-300 dark:bg-radial-[at_50%_50%] dark:from-(--color-background) dark:to-border py-8 px-4 sm:px-6 lg:px-8 overflow-scroll">
       <div className="max-w-7xl mx-auto">
         {/* Page Header */}
         <div className="mb-8">
-          <div className="flex items-start justify-between">
+          <div className="flex flex-col max-sm:items-start items-center justify-start gap-4 md:flex-row md:justify-between">
             <div>
               <h1 className="text-3xl font-bold text-[color:var(--color-text-primary)]">
                 {t('page.title')}
@@ -42,14 +42,24 @@ export const LeaveRequestPage: React.FC = () => {
               <p className="mt-2 text-sm text-[color:var(--color-text-secondary)]">
                 {t('page.subtitle')}
               </p>
+              <div className="mt-4">
+                <LocaleSelector />
+              </div>
             </div>
-            <div className="flex items-center gap-4">
-              <StarsWarsRobotToggle
-                checked={theme === 'dark'}
-                onChange={toggleTheme}
-                aria-label="Toggle dark mode"
-              />
-              <LocaleSelector />
+            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+              {/* Desktop: Show StarsWarsRobotToggle and LocaleSelector at @768px and above */}
+              <div className="max-md:hidden flex flex-col gap-2 items-center">
+                <StarsWarsRobotToggle
+                  checked={theme === 'dark'}
+                  onChange={toggleTheme}
+                  aria-label="Toggle dark mode"
+                />
+              </div>
+
+              {/* Mobile: Show ThemeToggle and LocaleSelector below @768px */}
+              <div className="md:hidden flex flex-row gap-3">
+                <ThemeToggle aria-label="Toggle dark mode" />
+              </div>
             </div>
           </div>
         </div>

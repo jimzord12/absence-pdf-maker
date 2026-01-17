@@ -1,10 +1,10 @@
 import { el } from 'date-fns/locale';
 import React, { useId, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import type { FieldErrors } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { isWeekend } from '../../../../shared/lib/dates';
 import { Button } from '../../../../shared/ui/Button';
 import type { LeaveRequest } from '../../model/leaveRequest.types';
@@ -64,7 +64,9 @@ const Footer: React.FC<FooterProps> = ({
       </p>
       <div className="mt-2 space-y-1 text-sm text-[color:var(--color-text-secondary)] dark:text-[color:var(--color-text-muted)]">
         <div className="flex justify-between">
-          <span className="text-[color:var(--color-text-secondary)]">{tForms('leave.absence.totalDays')}:</span>
+          <span className="text-[color:var(--color-text-secondary)]">
+            {tForms('leave.absence.totalDays')}:
+          </span>
           <span
             className="font-semibold text-[color:var(--color-text-primary)]"
             aria-label={`Total days in range: ${displayValue(totalDays)}`}
@@ -73,7 +75,9 @@ const Footer: React.FC<FooterProps> = ({
           </span>
         </div>
         <div className="flex justify-between">
-          <span className="text-[color:var(--color-text-secondary)]">{tForms('leave.absence.holidayDays')}:</span>
+          <span className="text-[color:var(--color-text-secondary)]">
+            {tForms('leave.absence.holidayDays')}:
+          </span>
           <span
             className="font-semibold text-[color:var(--color-text-primary)]"
             aria-label={`Holidays in range: ${displayValue(holidayDays)}`}
@@ -82,7 +86,9 @@ const Footer: React.FC<FooterProps> = ({
           </span>
         </div>
         <div className="flex justify-between border-t border-[color:var(--color-border)] dark:border-[color:var(--color-border-dark)] pt-1">
-          <span className="font-semibold text-[color:var(--color-text-secondary)]">{tForms('leave.absence.absenceDays')}:</span>
+          <span className="font-semibold text-[color:var(--color-text-secondary)]">
+            {tForms('leave.absence.absenceDays')}:
+          </span>
           <span
             className="font-bold text-[color:var(--color-text-primary)]"
             aria-label={`Total absence days: ${displayValue(absenceDays)}`}
@@ -91,7 +97,9 @@ const Footer: React.FC<FooterProps> = ({
           </span>
         </div>
         <div className="flex justify-between">
-          <span className="text-[color:var(--color-text-primary)]">{tForms('leave.absence.weekendDays')}:</span>
+          <span className="text-[color:var(--color-text-primary)]">
+            {tForms('leave.absence.weekendDays')}:
+          </span>
           <span
             className="font-semibold text-[color:var(--color-text-secondary)]"
             aria-label={`Weekend days in range: ${displayValue(weekendDays)}`}
@@ -266,7 +274,7 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
       >
         {tCommon('labels.selectDateRange')}
       </span>
-      <div className="flex justify-between gap-2">
+      <div className="flex max-sm:flex-col justify-between gap-2">
         <HolidaysLegend />
         <Button
           variant="primary"
@@ -284,7 +292,7 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
         </Button>
       </div>
       <div
-        className="p-4 border border-[color:var(--color-border)] rounded-lg bg-[color:var(--color-surface)] shadow-sm"
+        className="p-4 border border-[color:var(--color-border)] rounded-lg bg-[color:var(--color-surface)] shadow-sm overflow-scroll"
         role="region"
         aria-label={tCommon('labels.calendar')}
       >

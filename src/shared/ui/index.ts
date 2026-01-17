@@ -28,5 +28,8 @@ export type { AlertProps, AlertVariant } from './Alert';
 export { DeveloperPresence } from './DeveloperPresence';
 export type { DeveloperPresenceProps, DeveloperPresenceSize } from './DeveloperPresence';
 
+export { ThemeToggle } from './ThemeToggle';
+export type { ThemeToggleProps } from './ThemeToggle';
+
 export { StarsWarsRobotToggle } from './StarsWarsRobotToggle';
 export type { StarsWarsRobotToggleProps } from './StarsWarsRobotToggle';

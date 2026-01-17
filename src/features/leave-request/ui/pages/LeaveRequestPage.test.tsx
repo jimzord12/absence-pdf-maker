@@ -202,7 +202,7 @@ vi.mock('../components/ReviewAndGenerate', () => ({
     it('should apply gradient background to page container', () => {
       const { container } = render(<LeaveRequestPage />);
       const mainContainer = container.querySelector('.min-h-screen');
-      expect(mainContainer).toHaveClass('bg-radial');
+      expect(mainContainer).toHaveClass('bg-radial-[at_50%_80%]', 'dark:bg-radial-[at_50%_50%]');
     });
 
     it('should use responsive grid layout with media queries', () => {
@@ -210,9 +210,107 @@ vi.mock('../components/ReviewAndGenerate', () => ({
       const gridContainer = container.querySelector('.grid');
       expect(gridContainer).toHaveClass('grid-cols-1', 'lg:grid-cols-3', 'gap-6');
     });
+
+    it('should stack toggle controls vertically on mobile (flex-col)', () => {
+      const { container } = render(<LeaveRequestPage />);
+
+      // Find the controls container that holds ThemeToggle and LocaleSelector
+      const controlsContainer = container.querySelector('.flex-col');
+      expect(controlsContainer).toBeInTheDocument();
+      expect(controlsContainer).toHaveClass('flex-col', 'items-start', 'gap-4');
+    });
+
+    it('should have sm:flex-row breakpoint for toggle controls', () => {
+      const { container } = render(<LeaveRequestPage />);
+
+      const controlsContainer = container.querySelector('.sm\\:flex-row');
+      expect(controlsContainer).toBeInTheDocument();
+      expect(controlsContainer).toHaveClass('sm:flex-row', 'sm:items-center');
+    });
+
+    it('should stack header section (title + controls) at 500px breakpoint', () => {
+      const { container } = render(<LeaveRequestPage />);
+
+      // Find the header container with flex-col class
+      const headerContainer = container.querySelector('.flex-col');
+      expect(headerContainer).toBeInTheDocument();
+
+      // Should have flex-col by default (mobile)
+      expect(headerContainer).toHaveClass('flex-col');
+
+      // Should have @500 breakpoint classes
+      expect(headerContainer).toHaveClass('@500:flex-row');
+      expect(headerContainer).toHaveClass('@500:items-center');
+      expect(headerContainer).toHaveClass('@500:justify-between');
+    });
+
+    it('should not use StarsWarsRobotToggle component', () => {
+      const { container } = render(<LeaveRequestPage />);
+
+      // StarsWarsRobotToggle should not be present
+      const robotToggle = container.querySelector('[data-testid*="stars-wars"], [data-testid*="robot"]');
+      expect(robotToggle).not.toBeInTheDocument();
+    });
+
+    it('should use ThemeToggle component instead of StarsWarsRobotToggle', () => {
+      render(<LeaveRequestPage />);
+
+      const themeToggle = screen.getByRole('button', { name: /toggle/i });
+      expect(themeToggle).toBeInTheDocument();
+
+      // ThemeToggle should have compact design classes
+      expect(themeToggle).toHaveClass('h-8', 'w-14');
+    });
+
+    it('should prevent layout overflow on small screens', () => {
+      const { container } = render(<LeaveRequestPage />);
+
+      const mainContainer = container.querySelector('.min-h-screen');
+      expect(mainContainer).toBeInTheDocument();
+
+      // Should have proper responsive padding classes
+      expect(mainContainer).toHaveClass('px-4', 'sm:px-6', 'lg:px-8');
+    });
   });
 
-  describe('5. PWA install button rendering and behavior', () => {
+  describe('5. Mobile Layout Integration', () => {
+    it('should have both ThemeToggle and LocaleSelector in controls container', () => {
+      render(<LeaveRequestPage />);
+
+      const themeToggle = screen.getByRole('button', { name: /toggle/i });
+      expect(themeToggle).toBeInTheDocument();
+
+      // LocaleSelector should be present (check for select element)
+      // Note: There are two LocaleSelectors (desktop + mobile), one hidden by CSS
+      const localeSelects = screen.getAllByRole('combobox');
+      expect(localeSelects).toHaveLength(2);
+    });
+
+    it('should maintain responsive behavior across breakpoints', () => {
+      const { container } = render(<LeaveRequestPage />);
+
+      // Mobile first approach - start with flex-col
+      const headerContainer = container.querySelector('.flex-col');
+      expect(headerContainer).toBeInTheDocument();
+
+      // Ensure breakpoint classes are present
+      expect(headerContainer).toHaveClass('@500:flex-row');
+    });
+
+    it('should have gap spacing for vertical layout on mobile', () => {
+      const { container } = render(<LeaveRequestPage />);
+
+      // Header container should have gap
+      const headerContainer = container.querySelector('.flex-col');
+      expect(headerContainer).toHaveClass('gap-4');
+
+      // Controls container should also have gap
+      const controlsContainer = container.querySelector('.flex-col.items-start');
+      expect(controlsContainer).toHaveClass('gap-4');
+    });
+  });
+
+  describe('6. PWA install button rendering and behavior', () => {
     it('should not render install button when canShowInstall is false', () => {
       (usePwaInstall as any).mockReturnValue({
         isInstallable: true,
