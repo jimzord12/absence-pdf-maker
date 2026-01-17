@@ -180,7 +180,10 @@ export const ReviewAndGenerate: React.FC = () => {
       if (
         typeof leaveDraft.leaveAllowance === 'number' &&
         Number.isFinite(leaveDraft.leaveAllowance) &&
-        absenceBreakdown
+        leaveDraft.leaveAllowance > 0 &&
+        absenceBreakdown &&
+        Number.isFinite(absenceBreakdown.absenceDays) &&
+        absenceBreakdown.absenceDays > 0
       ) {
         const remainingLeaveAllowance = Math.max(
           leaveDraft.leaveAllowance - absenceBreakdown.absenceDays,
