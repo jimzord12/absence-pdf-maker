@@ -350,6 +350,7 @@ describe('LeaveRequestPdf', () => {
 
       expect(allText).toContain('ΕΠΙΘΥΜΩ');
       expect(allText).toContain('αναλογία επιδόματος αδείας');
+      expect(allText).toContain('(10 ημέρες)');
     });
 
     it('should render no allowance preference when false', () => {
@@ -576,4 +577,3 @@ describe('LeaveRequestPdf', () => {
     });
   });
 });
-
