@@ -37,6 +37,7 @@ export const ReviewAndGenerate: React.FC = () => {
 
   // Store actions
   const setProfile = useLeaveRequestStore(state => state.setProfile);
+  const setLeaveDraft = useLeaveRequestStore(state => state.setLeaveDraft);
   const setIsGeneratingPdf = useLeaveRequestStore(state => state.setIsGeneratingPdf);
   const clearSignature = useLeaveRequestStore(state => state.clearSignature);
   const toggleSignatureModal = useLeaveRequestStore(state => state.toggleSignatureModal);
@@ -175,6 +176,19 @@ export const ReviewAndGenerate: React.FC = () => {
         downloadLeaveRequestPdf(leaveRequestData, holidays.holidaySet, t),
         minLoadTime,
       ]);
+
+      if (
+        leaveDraft.leaveAllowance !== null &&
+        leaveDraft.leaveAllowance !== undefined &&
+        absenceBreakdown
+      ) {
+        const remainingLeaveAllowance = Math.max(
+          leaveDraft.leaveAllowance - absenceBreakdown.absenceDays,
+          0
+        );
+        setLeaveDraft({ leaveAllowance: remainingLeaveAllowance });
+        triggerForceFormReset();
+      }
 
       showSuccess(t('pdf.generationSuccess', { ns: 'messages' }));
       incrementPdfGenerationCount();
@@ -396,4 +410,3 @@ export const ReviewAndGenerate: React.FC = () => {
     </aside>
   );
 };
-

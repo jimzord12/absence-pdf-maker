@@ -579,6 +579,65 @@ describe('ReviewAndGenerate', () => {
     });
   });
 
+  describe('11. Leave allowance decrement on generation', () => {
+    it('should decrement leave allowance after successful PDF generation', async () => {
+      const user = userEvent.setup();
+      mockCalculateAbsenceDays.mockReturnValue({
+        totalDays: 14,
+        weekendDays: 4,
+        holidayDays: 2,
+        absenceDays: 8,
+      });
+
+      act(() => {
+        useLeaveRequestStore.setState({
+          profile: {
+            fullName: 'John Doe',
+            fathersName: 'Father Doe',
+            email: 'john@example.com',
+            phone: '123-456-7890',
+            identityNumber: 'AB123456',
+            employeeId: 'EMP001',
+            department: 'Engineering',
+            position: 'Developer',
+            companyName: 'Acme Corp',
+          },
+          leaveDraft: {
+            leaveType: 'annual',
+            startDate: new Date('2025-12-01'),
+            endDate: new Date('2025-12-14'),
+            reason: 'Vacation',
+            leaveAllowance: 10,
+          },
+          signature: {
+            signatureDataUrl: 'data:image/png;base64,test',
+          },
+          ui: {
+            isSignatureModalOpen: false,
+            isGeneratingPdf: false,
+            lastGeneratedFileName: '',
+            errorMessage: null,
+            triggerValidation: null,
+            forceFormReset: false,
+          },
+        });
+      });
+
+      renderWithI18n(<ReviewAndGenerate />);
+
+      const generateButton = screen.getByRole('button', { name: /Generate PDF/i });
+      await user.click(generateButton);
+
+      await waitFor(
+        () => {
+          const store = useLeaveRequestStore.getState();
+          expect(store.leaveDraft.leaveAllowance).toBe(2);
+        },
+        { timeout: 6000 }
+      );
+    });
+  });
+
   describe('Error messages from store', () => {
     it('should display errorMessage from store', () => {
       act(() => {
