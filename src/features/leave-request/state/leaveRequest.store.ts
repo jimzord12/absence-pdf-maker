@@ -10,6 +10,10 @@ interface LeaveDraft {
   startDate: Date | null;
   endDate: Date | null;
   reason: string;
+}
+
+// User preferences state contains persistent user settings
+interface UserPreferences {
   leaveAllowance: number | null;
 }
 
@@ -31,6 +35,7 @@ interface Ui {
   errorMessage: string | null;
   triggerValidation: (() => Promise<boolean>) | null;
   forceFormReset: boolean;
+  refreshFormField: (() => void) | null;
 }
 
 // PWA state tracks installation prompts and user preferences
@@ -45,6 +50,7 @@ interface Pwa {
 interface LeaveRequestState {
   profile: Partial<UserProfile>;
   leaveDraft: Partial<LeaveDraft>;
+  userPreferences: UserPreferences;
   signature: Partial<Signature>;
   holidays: Holidays;
   ui: Ui;
@@ -55,6 +61,7 @@ interface LeaveRequestState {
 interface LeaveRequestActions {
   setProfile: (profile: Partial<UserProfile>) => void;
   setLeaveDraft: (draft: Partial<LeaveDraft>) => void;
+  setUserPreferences: (preferences: Partial<UserPreferences>) => void;
   setSignature: (signature: Partial<Signature>) => void;
   setHolidays: (holidays: Holidays) => void;
   setUi: (ui: Partial<Ui>) => void;
@@ -66,6 +73,7 @@ interface LeaveRequestActions {
   setIsGeneratingPdf: (isGenerating: boolean) => void;
   setTriggerValidation: (trigger: (() => Promise<boolean>) | null) => void;
   triggerForceFormReset: () => void;
+  setRefreshFormField: (func: (() => void) | null) => void;
   incrementPdfGenerationCount: () => void;
   dismissPwaInstall: () => void;
   snoozePwaInstall: (hours: number) => void;
@@ -89,6 +97,8 @@ export const initialState: LeaveRequestState = {
     startDate: null,
     endDate: null,
     reason: '',
+  },
+  userPreferences: {
     leaveAllowance: null,
   },
   signature: {
@@ -104,6 +114,7 @@ export const initialState: LeaveRequestState = {
     errorMessage: null,
     triggerValidation: null,
     forceFormReset: false,
+    refreshFormField: null,
   },
   pwa: {
     completedPdfGenerations: 0,
@@ -158,6 +169,9 @@ export const useLeaveRequestStore = create<LeaveRequestState & LeaveRequestActio
 
       setLeaveDraft: draft => set(state => ({ leaveDraft: { ...state.leaveDraft, ...draft } })),
 
+      setUserPreferences: preferences =>
+        set(state => ({ userPreferences: { ...state.userPreferences, ...preferences } })),
+
       setSignature: signature =>
         set(state => ({ signature: { ...state.signature, ...signature } })),
 
@@ -188,8 +202,12 @@ export const useLeaveRequestStore = create<LeaveRequestState & LeaveRequestActio
       setTriggerValidation: trigger =>
         set(state => ({ ui: { ...state.ui, triggerValidation: trigger } })),
 
-      triggerForceFormReset: () =>
-        set(state => ({ ui: { ...state.ui, forceFormReset: true } })),
+      setRefreshFormField: func =>
+        set(state => ({
+          ui: { ...state.ui, refreshFormField: func },
+        })),
+
+      triggerForceFormReset: () => set(state => ({ ui: { ...state.ui, forceFormReset: true } })),
 
       setPwa: pwa => set(state => ({ pwa: { ...state.pwa, ...pwa } })),
 
@@ -220,10 +238,15 @@ export const useLeaveRequestStore = create<LeaveRequestState & LeaveRequestActio
     }),
     {
       name: 'leave-request-storage',
-      partialize: state => ({ profile: state.profile, signature: state.signature, pwa: state.pwa }),
+      partialize: state => ({
+        profile: state.profile,
+        userPreferences: state.userPreferences,
+        signature: state.signature,
+        pwa: state.pwa,
+      }),
       storage: customStorage,
       skipHydration: false,
-      onRehydrateStorage: (state) => {
+      onRehydrateStorage: state => {
         if (import.meta.env.DEV) {
           console.log('[Store] Hydration complete', state);
         }
@@ -236,6 +259,7 @@ export const useLeaveRequestStore = create<LeaveRequestState & LeaveRequestActio
 export type LeaveRequestStore = ReturnType<typeof useLeaveRequestStore.getState>;
 export type ProfileState = LeaveRequestStore['profile'];
 export type LeaveDraftState = LeaveRequestStore['leaveDraft'];
+export type UserPreferencesState = LeaveRequestStore['userPreferences'];
 export type SignatureState = LeaveRequestStore['signature'];
 export type HolidaysState = LeaveRequestStore['holidays'];
 export type UiState = LeaveRequestStore['ui'];

@@ -1,10 +1,10 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   useLeaveRequestStore,
-  type ProfileState,
-  type LeaveDraftState,
-  type SignatureState,
   type HolidaysState,
+  type LeaveDraftState,
+  type ProfileState,
+  type SignatureState,
   type UiState,
 } from './leaveRequest.store';
 
@@ -44,6 +44,7 @@ describe('useLeaveRequestStore', () => {
         errorMessage: null,
         triggerValidation: null,
         forceFormReset: false,
+        refreshFormField: null,
       },
     });
     // Clear console call counts
@@ -135,6 +136,7 @@ describe('useLeaveRequestStore', () => {
         errorMessage: null,
         triggerValidation: null,
         forceFormReset: false,
+        refreshFormField: null,
       };
       expect(ui).toBeDefined();
     });
@@ -296,7 +298,8 @@ describe('useLeaveRequestStore', () => {
     it('should update signature data URL', () => {
       const store = useLeaveRequestStore.getState();
 
-      const dataUrl = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+      const dataUrl =
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
       store.setSignature({ signatureDataUrl: dataUrl });
 
       expect(useLeaveRequestStore.getState().signature.signatureDataUrl).toBe(dataUrl);
@@ -451,7 +454,9 @@ describe('useLeaveRequestStore', () => {
       const store = useLeaveRequestStore.getState();
 
       store.setSignature({ signatureDataUrl: 'data:image/png;base64,data' });
-      expect(useLeaveRequestStore.getState().signature.signatureDataUrl).toBe('data:image/png;base64,data');
+      expect(useLeaveRequestStore.getState().signature.signatureDataUrl).toBe(
+        'data:image/png;base64,data'
+      );
 
       store.clearSignature();
       expect(useLeaveRequestStore.getState().signature.signatureDataUrl).toBe('');
@@ -784,9 +789,14 @@ describe('useLeaveRequestStore', () => {
     it('should handle setting leaveType to all valid values', () => {
       const store = useLeaveRequestStore.getState();
 
-      const validTypes: ('annual' | 'sick' | 'unpaid' | 'other')[] = ['annual', 'sick', 'unpaid', 'other'];
+      const validTypes: ('annual' | 'sick' | 'unpaid' | 'other')[] = [
+        'annual',
+        'sick',
+        'unpaid',
+        'other',
+      ];
 
-      validTypes.forEach((leaveType) => {
+      validTypes.forEach(leaveType => {
         store.setLeaveDraft({ leaveType });
         expect(useLeaveRequestStore.getState().leaveDraft.leaveType).toBe(leaveType);
       });
@@ -910,3 +920,4 @@ describe('useLeaveRequestStore', () => {
     });
   });
 });
+
