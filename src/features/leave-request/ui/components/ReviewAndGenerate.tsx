@@ -177,11 +177,7 @@ export const ReviewAndGenerate: React.FC = () => {
         minLoadTime,
       ]);
 
-      if (
-        leaveDraft.leaveAllowance !== null &&
-        leaveDraft.leaveAllowance !== undefined &&
-        absenceBreakdown
-      ) {
+      if (leaveDraft.leaveAllowance != null && absenceBreakdown) {
         const remainingLeaveAllowance = Math.max(
           leaveDraft.leaveAllowance - absenceBreakdown.absenceDays,
           0
