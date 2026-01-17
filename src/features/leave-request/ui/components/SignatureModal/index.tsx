@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import SignatureCanvas from 'react-signature-canvas';
 import { useTranslation } from 'react-i18next';
+import SignatureCanvas from 'react-signature-canvas';
 
-import { Button, Input, Modal } from '../../../../shared/ui';
-import { useLeaveRequestStore } from '../../state/leaveRequest.store';
+import { Button, Input, Modal } from '../../../../../shared/ui';
+import { useLeaveRequestStore } from '../../../state/leaveRequest.store';
 
 const CANVAS_HEIGHT = 200;
 const SIGNATURE_SCALE_WIDTH = 1.8;
@@ -42,7 +42,9 @@ const scaleSignatureDataUrl = (
 };
 
 export const SignatureModal: React.FC = () => {
-  const { t } = useTranslation('forms') as { t: (key: string, options?: Record<string, unknown>) => string };
+  const { t } = useTranslation('forms') as {
+    t: (key: string, options?: Record<string, unknown>) => string;
+  };
   const sigCanvas = useRef<SignatureCanvas>(null);
   const hasInitializedRef = useRef(false);
   const [hasSignature, setHasSignature] = useState(false);
@@ -137,7 +139,11 @@ export const SignatureModal: React.FC = () => {
         </p>
 
         {/* Signature Method Toggle */}
-        <div className="flex gap-4 mb-4" role="radiogroup" aria-label={t('signature.signatureMethodAria')}>
+        <div
+          className="flex gap-4 mb-4"
+          role="radiogroup"
+          aria-label={t('signature.signatureMethodAria')}
+        >
           <label className="flex items-center gap-2">
             <input
               type="radio"
@@ -146,7 +152,9 @@ export const SignatureModal: React.FC = () => {
               onChange={() => setUseTypedSignature(false)}
               className="w-4 h-4 text-[color:var(--color-primary)] focus:ring-2 focus:ring-[color:var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[color:var(--color-background)]"
             />
-            <span className="text-sm text-[color:var(--color-text-primary)]">{t('signature.drawLabel')}</span>
+            <span className="text-sm text-[color:var(--color-text-primary)]">
+              {t('signature.drawLabel')}
+            </span>
           </label>
           <label className="flex items-center gap-2">
             <input
@@ -156,7 +164,9 @@ export const SignatureModal: React.FC = () => {
               onChange={() => setUseTypedSignature(true)}
               className="w-4 h-4 text-[color:var(--color-primary)] focus:ring-2 focus:ring-[color:var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[color:var(--color-background)]"
             />
-            <span className="text-sm text-[color:var(--color-text-primary)]">{t('signature.typeLabel')}</span>
+            <span className="text-sm text-[color:var(--color-text-primary)]">
+              {t('signature.typeLabel')}
+            </span>
           </label>
         </div>
 
@@ -172,7 +182,7 @@ export const SignatureModal: React.FC = () => {
               }}
             />
           </div>
-         ) : (
+        ) : (
           <Input
             label={t('signature.typeNameLabel')}
             placeholder={t('signature.typeNamePlaceholder')}
@@ -189,7 +199,9 @@ export const SignatureModal: React.FC = () => {
         {/* Signature Preview */}
         {signatureDataUrl && signatureDataUrl.length > 0 && (
           <div className="border border-[color:var(--color-border)] rounded-lg p-3">
-            <p className="text-xs text-[color:var(--color-text-muted)] mb-2">{t('signature.capturedLabel')}</p>
+            <p className="text-xs text-[color:var(--color-text-muted)] mb-2">
+              {t('signature.capturedLabel')}
+            </p>
             {signatureDataUrl.startsWith('text:') ? (
               <p className="text-xl font-medium text-[color:var(--color-text-primary)]">
                 {signatureDataUrl.replace('text:', '')}

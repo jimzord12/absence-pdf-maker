@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { ThemeProvider } from '../../../../app/providers/ThemeProvider';
-import { useThemeStore } from '../../../../shared/state/theme.store';
-import { LeaveRequestForm } from './LeaveRequestForm';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { LeaveRequestForm } from '.';
+import { ThemeProvider } from '../../../../../app/providers/ThemeProvider';
+import { useThemeStore } from '../../../../../shared/state/theme.store';
 
 describe('LeaveRequestForm - Dark Mode Integration', () => {
   beforeEach(() => {
@@ -58,3 +58,4 @@ describe('LeaveRequestForm - Dark Mode Integration', () => {
     });
   });
 });
+

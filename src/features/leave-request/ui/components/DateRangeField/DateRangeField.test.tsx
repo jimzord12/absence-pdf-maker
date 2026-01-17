@@ -1,13 +1,13 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import { FormProvider, useForm } from 'react-hook-form';
 import { act } from 'react';
-import { DateRangeField } from './DateRangeField';
-import type { LeaveRequest } from '../../model/leaveRequest.types';
+import { FormProvider, useForm } from 'react-hook-form';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { DateRangeField } from '.';
+import type { LeaveRequest } from '../../../model/leaveRequest.types';
 
 // Mock the Zustand store
 const mockSetLeaveDraft = vi.fn();
-vi.mock('../../state/leaveRequest.store', () => ({
+vi.mock('../../../state/leaveRequest.store', () => ({
   useLeaveRequestStore: (selector: any) =>
     selector({
       setLeaveDraft: mockSetLeaveDraft,
@@ -644,12 +644,7 @@ describe('DateRangeField', () => {
     });
 
     it('should work with holiday set containing multiple dates', () => {
-      const multipleHolidays = new Set([
-        '2025-12-25',
-        '2026-01-01',
-        '2026-01-06',
-        '2026-02-14',
-      ]);
+      const multipleHolidays = new Set(['2025-12-25', '2026-01-01', '2026-01-06', '2026-02-14']);
 
       render(
         <TestWrapper>
@@ -891,3 +886,4 @@ describe('DateRangeField', () => {
     });
   });
 });
+

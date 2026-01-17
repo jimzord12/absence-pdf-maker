@@ -5,14 +5,14 @@ import 'react-day-picker/style.css';
 import type { FieldErrors } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { isWeekend } from '../../../../shared/lib/dates';
-import { Button } from '../../../../shared/ui/Button';
-import type { LeaveRequest } from '../../model/leaveRequest.types';
-import { calculateAbsenceDays } from '../../services/absenceDays';
-import { isHoliday } from '../../services/holidays/holidays.service';
-import type { Locale } from '../../state/locale.store';
+import { isWeekend } from '../../../../../shared/lib/dates';
+import { Button } from '../../../../../shared/ui/Button';
+import type { LeaveRequest } from '../../../model/leaveRequest.types';
+import { calculateAbsenceDays } from '../../../services/absenceDays';
+import { isHoliday } from '../../../services/holidays/holidays.service';
+import type { Locale } from '../../../state/locale.store';
+import { HolidaysLegend } from '../HolidaysLegend';
 import './DateRangeField.css';
-import { HolidaysLegend } from './HolidaysLegend';
 
 interface DateRangeFieldProps {
   errors?: FieldErrors<LeaveRequest>;
@@ -292,7 +292,7 @@ export const DateRangeField: React.FC<DateRangeFieldProps> = ({ errors, holidayS
         </Button>
       </div>
       <div
-        className="p-4 border border-[color:var(--color-border)] rounded-lg bg-[color:var(--color-surface)] shadow-sm overflow-scroll"
+        className="p-4 border border-[color:var(--color-border)] rounded-lg bg-[color:var(--color-surface)] shadow-sm max-sm:overflow-scroll"
         role="region"
         aria-label={tCommon('labels.calendar')}
       >

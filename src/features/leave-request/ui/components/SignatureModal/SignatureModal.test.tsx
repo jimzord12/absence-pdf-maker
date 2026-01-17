@@ -1,10 +1,10 @@
-import React from 'react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { screen, waitFor, act } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { SignatureModal } from './SignatureModal';
-import { useLeaveRequestStore } from '../../state/leaveRequest.store';
-import { renderWithI18n } from '../../../../test-utils';
+import React from 'react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { SignatureModal } from '.';
+import { renderWithI18n } from '../../../../../test-utils';
+import { useLeaveRequestStore } from '../../../state/leaveRequest.store';
 
 // Create a proper mock for SignatureCanvas
 const mockClear = vi.fn();
@@ -39,8 +39,15 @@ beforeEach(() => {
     leaveDraft: {},
     signature: { signatureDataUrl: '' },
     holidays: { holidaySet: new Set() },
-    ui: { isSignatureModalOpen: false, isGeneratingPdf: false, lastGeneratedFileName: '', errorMessage: null, triggerValidation: null,
-      forceFormReset: false },
+    ui: {
+      isSignatureModalOpen: false,
+      isGeneratingPdf: false,
+      lastGeneratedFileName: '',
+      errorMessage: null,
+      triggerValidation: null,
+      forceFormReset: false,
+      refreshFormField: null,
+    },
   });
 });
 
@@ -51,8 +58,15 @@ afterEach(() => {
     leaveDraft: {},
     signature: { signatureDataUrl: '' },
     holidays: { holidaySet: new Set() },
-    ui: { isSignatureModalOpen: false, isGeneratingPdf: false, lastGeneratedFileName: '', errorMessage: null, triggerValidation: null,
-      forceFormReset: false },
+    ui: {
+      isSignatureModalOpen: false,
+      isGeneratingPdf: false,
+      lastGeneratedFileName: '',
+      errorMessage: null,
+      triggerValidation: null,
+      forceFormReset: false,
+      refreshFormField: null,
+    },
   });
 });
 
@@ -65,8 +79,15 @@ describe('SignatureModal', () => {
         leaveDraft: {},
         signature: { signatureDataUrl: '' },
         holidays: { holidaySet: new Set() },
-        ui: { isSignatureModalOpen: true, isGeneratingPdf: false, lastGeneratedFileName: '', errorMessage: null, triggerValidation: null,
-      forceFormReset: false },
+        ui: {
+          isSignatureModalOpen: true,
+          isGeneratingPdf: false,
+          lastGeneratedFileName: '',
+          errorMessage: null,
+          triggerValidation: null,
+          forceFormReset: false,
+          refreshFormField: null,
+        },
       });
     });
   };
@@ -79,8 +100,15 @@ describe('SignatureModal', () => {
         leaveDraft: {},
         signature: { signatureDataUrl: '' },
         holidays: { holidaySet: new Set() },
-        ui: { isSignatureModalOpen: false, isGeneratingPdf: false, lastGeneratedFileName: '', errorMessage: null, triggerValidation: null,
-      forceFormReset: false },
+        ui: {
+          isSignatureModalOpen: false,
+          isGeneratingPdf: false,
+          lastGeneratedFileName: '',
+          errorMessage: null,
+          triggerValidation: null,
+          forceFormReset: false,
+          refreshFormField: null,
+        },
       });
     });
   };
@@ -149,8 +177,15 @@ describe('SignatureModal', () => {
           leaveDraft: {},
           signature: { signatureDataUrl: testDataUrl },
           holidays: { holidaySet: new Set() },
-          ui: { isSignatureModalOpen: true, isGeneratingPdf: false, lastGeneratedFileName: '', errorMessage: null, triggerValidation: null,
-      forceFormReset: false },
+          ui: {
+            isSignatureModalOpen: true,
+            isGeneratingPdf: false,
+            lastGeneratedFileName: '',
+            errorMessage: null,
+            triggerValidation: null,
+            forceFormReset: false,
+            refreshFormField: null,
+          },
         });
       });
 
@@ -241,8 +276,15 @@ describe('SignatureModal', () => {
           leaveDraft: {},
           signature: { signatureDataUrl: testDataUrl },
           holidays: { holidaySet: new Set() },
-          ui: { isSignatureModalOpen: false, isGeneratingPdf: false, lastGeneratedFileName: '', errorMessage: null, triggerValidation: null,
-      forceFormReset: false },
+          ui: {
+            isSignatureModalOpen: false,
+            isGeneratingPdf: false,
+            lastGeneratedFileName: '',
+            errorMessage: null,
+            triggerValidation: null,
+            forceFormReset: false,
+            refreshFormField: null,
+          },
         });
       });
 
@@ -319,8 +361,15 @@ describe('SignatureModal', () => {
           leaveDraft: {},
           signature: { signatureDataUrl: testDataUrl },
           holidays: { holidaySet: new Set() },
-          ui: { isSignatureModalOpen: true, isGeneratingPdf: false, lastGeneratedFileName: '', errorMessage: null, triggerValidation: null,
-      forceFormReset: false },
+          ui: {
+            isSignatureModalOpen: true,
+            isGeneratingPdf: false,
+            lastGeneratedFileName: '',
+            errorMessage: null,
+            triggerValidation: null,
+            forceFormReset: false,
+            refreshFormField: null,
+          },
         });
       });
 
@@ -329,3 +378,4 @@ describe('SignatureModal', () => {
     });
   });
 });
+

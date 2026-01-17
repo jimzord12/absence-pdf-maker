@@ -1,22 +1,22 @@
 import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { useLeaveRequestStore } from '../../state/leaveRequest.store';
-import { ReviewAndGenerate } from './ReviewAndGenerate';
-import { renderWithI18n } from '../../../../test-utils';
+import { ReviewAndGenerate } from '.';
+import { renderWithI18n } from '../../../../../test-utils';
+import { useLeaveRequestStore } from '../../../state/leaveRequest.store';
 
 // Mock persistence services
 const mockExportProfileToJson = vi.fn();
 const mockImportProfileFromJson = vi.fn();
 
-vi.mock('../../services/persistence', () => ({
+vi.mock('../../../services/persistence', () => ({
   exportProfileToJson: () => mockExportProfileToJson(),
   importProfileFromJson: (file: File) => mockImportProfileFromJson(file),
 }));
 
 // Mock PDF service
 const mockDownloadLeaveRequestPdf = vi.fn();
-vi.mock('../../services/pdf/pdf.service', () => ({
+vi.mock('../../../services/pdf/pdf.service', () => ({
   downloadLeaveRequestPdf: (...args: any[]) => mockDownloadLeaveRequestPdf(...args),
 }));
 
@@ -76,6 +76,7 @@ beforeEach(() => {
       errorMessage: null,
       triggerValidation: null,
       forceFormReset: false,
+      refreshFormField: null,
     },
   });
 
@@ -100,6 +101,7 @@ afterEach(() => {
       errorMessage: null,
       triggerValidation: null,
       forceFormReset: false,
+      refreshFormField: null,
     },
   });
 });
@@ -129,9 +131,9 @@ describe('ReviewAndGenerate', () => {
       renderWithI18n(<ReviewAndGenerate />);
 
       // Use getAllByLabelText and filter by type to avoid conflict with button that has same aria-label
-      const [fileInput] = screen.getAllByLabelText(/Import profile/i).filter(
-        el => el.tagName === 'INPUT',
-      );
+      const [fileInput] = screen
+        .getAllByLabelText(/Import profile/i)
+        .filter(el => el.tagName === 'INPUT');
       expect(fileInput).toBeInTheDocument();
       expect(fileInput).toHaveClass('hidden');
     });
@@ -379,9 +381,9 @@ describe('ReviewAndGenerate', () => {
 
       // Find the button that triggers the file input
       const importButton = screen.getByText(/Import Profile/i);
-      const fileInput = screen.getAllByLabelText(/Import profile/i).filter(
-        el => el.tagName === 'INPUT',
-      )[0];
+      const fileInput = screen
+        .getAllByLabelText(/Import profile/i)
+        .filter(el => el.tagName === 'INPUT')[0];
       const file = new File(['{"profile":{}}'], 'profile.json', { type: 'application/json' });
 
       await user.click(importButton);
@@ -396,9 +398,9 @@ describe('ReviewAndGenerate', () => {
 
       renderWithI18n(<ReviewAndGenerate />);
 
-      const fileInput = screen.getAllByLabelText(/Import profile/i).filter(
-        el => el.tagName === 'INPUT',
-      )[0];
+      const fileInput = screen
+        .getAllByLabelText(/Import profile/i)
+        .filter(el => el.tagName === 'INPUT')[0];
       const file = new File(['{"profile":{}}'], 'profile.json', { type: 'application/json' });
 
       await user.upload(fileInput, file);
@@ -527,13 +529,16 @@ describe('ReviewAndGenerate', () => {
             errorMessage: null,
             triggerValidation: null,
             forceFormReset: false,
+            refreshFormField: null,
           },
         });
       });
 
       renderWithI18n(<ReviewAndGenerate />);
 
-      const loadingMessages = screen.getAllByText(/Please wait while we generate your PDF document\.\.\./i);
+      const loadingMessages = screen.getAllByText(
+        /Please wait while we generate your PDF document\.\.\./i
+      );
       expect(loadingMessages.length).toBeGreaterThanOrEqual(1);
     });
   });
@@ -571,7 +576,8 @@ describe('ReviewAndGenerate', () => {
             errorMessage: null,
             triggerValidation: null,
             forceFormReset: false,
-          }
+            refreshFormField: null,
+          },
         });
       });
 
@@ -600,6 +606,7 @@ describe('ReviewAndGenerate', () => {
             errorMessage: 'Test error',
             triggerValidation: null,
             forceFormReset: false,
+            refreshFormField: null,
           },
         });
       });
@@ -643,3 +650,4 @@ describe('ReviewAndGenerate', () => {
     });
   });
 });
+

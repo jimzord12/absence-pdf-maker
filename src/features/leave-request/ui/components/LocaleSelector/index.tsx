@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Select } from '../../../../shared/ui';
-import type { Locale } from '../../state/locale.store';
-import { useLocaleStore } from '../../state/locale.store';
+import { Select } from '../../../../../shared/ui';
+import type { Locale } from '../../../state/locale.store';
+import { useLocaleStore } from '../../../state/locale.store';
 
 // Locale display labels and flag emojis
 const localeOptions = [
@@ -19,7 +19,10 @@ export const LocaleSelector: React.FC<LocaleSelectorProps> = ({ className = '' }
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <label htmlFor="locale-selector" className="text-sm font-medium text-[color:var(--color-text-primary)]">
+      <label
+        htmlFor="locale-selector"
+        className="text-sm font-medium text-[color:var(--color-text-primary)]"
+      >
         Language:
       </label>
       <Select

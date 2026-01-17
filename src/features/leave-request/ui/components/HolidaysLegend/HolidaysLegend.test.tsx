@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { HolidaysLegend } from './HolidaysLegend';
+import { describe, expect, it } from 'vitest';
+import { HolidaysLegend } from '.';
 
 describe('HolidaysLegend', () => {
   describe('rendering', () => {
@@ -13,7 +13,9 @@ describe('HolidaysLegend', () => {
       render(<HolidaysLegend />);
 
       // Find the color swatch div with aria-hidden
-      const swatch = screen.getByRole('region', { name: 'Holidays legend' }).querySelector('[aria-hidden="true"]');
+      const swatch = screen
+        .getByRole('region', { name: 'Holidays legend' })
+        .querySelector('[aria-hidden="true"]');
       expect(swatch).toBeInTheDocument();
       expect(swatch).toHaveStyle({
         backgroundColor: 'var(--color-holiday-bg)',
@@ -50,7 +52,12 @@ describe('HolidaysLegend', () => {
     it('should have consistent app typography', () => {
       render(<HolidaysLegend />);
       const region = screen.getByRole('region', { name: 'Holidays legend' });
-      expect(region).toHaveClass('text-sm', 'bg-[color:var(--color-surface-hover)]', 'border', 'rounded-md');
+      expect(region).toHaveClass(
+        'text-sm',
+        'bg-[color:var(--color-surface-hover)]',
+        'border',
+        'rounded-md'
+      );
     });
 
     it('should have proper spacing and layout', () => {
@@ -69,9 +76,12 @@ describe('HolidaysLegend', () => {
 
     it('should have aria-hidden on visual indicator', () => {
       render(<HolidaysLegend />);
-      const swatch = screen.getByRole('region', { name: 'Holidays legend' }).querySelector('[aria-hidden="true"]');
+      const swatch = screen
+        .getByRole('region', { name: 'Holidays legend' })
+        .querySelector('[aria-hidden="true"]');
       expect(swatch).toBeInTheDocument();
       expect(swatch).toHaveAttribute('aria-hidden', 'true');
     });
   });
 });
+

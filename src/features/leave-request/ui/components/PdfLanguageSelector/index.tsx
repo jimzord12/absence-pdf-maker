@@ -1,8 +1,8 @@
 import React, { useId } from 'react';
 
-import { Select } from '../../../../shared/ui';
-import type { PdfLanguage } from '../../state/pdfLanguage.store';
-import { usePdfLanguageStore } from '../../state/pdfLanguage.store';
+import { Select } from '../../../../../shared/ui';
+import type { PdfLanguage } from '../../../state/pdfLanguage.store';
+import { usePdfLanguageStore } from '../../../state/pdfLanguage.store';
 
 const pdfLanguageOptions = [
   { value: 'gr', label: '🇬🇷 Ελληνικά (Greek)' },
@@ -20,7 +20,10 @@ export const PdfLanguageSelector: React.FC<LocaleSelectorProps> = ({ className =
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <label htmlFor={pdfLanguageId} className="text-sm font-medium text-[color:var(--color-text-primary)]">
+      <label
+        htmlFor={pdfLanguageId}
+        className="text-sm font-medium text-[color:var(--color-text-primary)]"
+      >
         PDF Language:
       </label>
       <Select
@@ -33,3 +36,4 @@ export const PdfLanguageSelector: React.FC<LocaleSelectorProps> = ({ className =
     </div>
   );
 };
+

@@ -3,12 +3,12 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
-import { useLeaveRequestStore } from '../../state/leaveRequest.store';
-import { LeaveRequestForm } from './LeaveRequestForm';
+import { LeaveRequestForm } from '.';
+import { LeaveRequestSchema } from '../../../model/leaveRequest.schema';
+import { useLeaveRequestStore } from '../../../state/leaveRequest.store';
 
 // Mock the store
-vi.mock('../../state/leaveRequest.store', () => {
+vi.mock('../../../state/leaveRequest.store', () => {
   const mockStore = {
     profile: {
       fullName: '',

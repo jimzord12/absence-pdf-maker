@@ -1,11 +1,11 @@
-import { describe, expect, it, beforeEach, vi } from 'vitest';
-import { renderWithI18n } from '../../../../test-utils';
-import { useLeaveRequestStore } from '../../state/leaveRequest.store';
-import { ReviewAndGenerate } from './ReviewAndGenerate';
-import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
-import type { LeaveRequest } from '../../model/leaveRequest.types';
+import { FormProvider, useForm } from 'react-hook-form';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ReviewAndGenerate } from '.';
+import { renderWithI18n } from '../../../../../test-utils';
+import { LeaveRequestSchema } from '../../../model/leaveRequest.schema';
+import type { LeaveRequest } from '../../../model/leaveRequest.types';
+import { useLeaveRequestStore } from '../../../state/leaveRequest.store';
 
 // Wrapper component to provide form context
 const FormWrapper = ({
@@ -44,6 +44,8 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
         startDate: null,
         endDate: null,
         reason: '',
+      },
+      userPreferences: {
         leaveAllowance: null,
       },
       signature: {
@@ -59,6 +61,7 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
         errorMessage: null,
         triggerValidation: null,
         forceFormReset: false,
+        refreshFormField: null,
       },
     });
     vi.clearAllMocks();
@@ -75,14 +78,10 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
       expect(container.textContent).toContain('—');
     });
 
-    it('should render without leave allowance set (undefined)', () => {
+    it('should render without leave allowance set (null)', () => {
       useLeaveRequestStore.setState({
-        leaveDraft: {
-          leaveType: 'annual',
-          startDate: null,
-          endDate: null,
-          reason: '',
-          leaveAllowance: undefined,
+        userPreferences: {
+          leaveAllowance: null,
         },
       });
 
@@ -102,6 +101,8 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
           startDate: new Date('2025-01-15'),
           endDate: new Date('2025-01-20'),
           reason: 'Vacation',
+        },
+        userPreferences: {
           leaveAllowance: null, // No allowance set
         },
       });
@@ -127,6 +128,8 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
           startDate: new Date('2025-01-15'),
           endDate: new Date('2025-01-20'),
           reason: 'Vacation',
+        },
+        userPreferences: {
           leaveAllowance: null, // Not set
         },
         ui: {
@@ -136,6 +139,7 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
           errorMessage: null,
           triggerValidation: mockTriggerValidation,
           forceFormReset: false,
+          refreshFormField: null,
         },
       });
 
@@ -149,7 +153,7 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
       expect(container.textContent).toContain('—');
     });
 
-    it('should NOT validate when leaveAllowance is undefined', async () => {
+    it('should NOT validate when leaveAllowance is null', async () => {
       const mockTriggerValidation = vi.fn().mockResolvedValue(true);
 
       useLeaveRequestStore.setState({
@@ -158,7 +162,9 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
           startDate: new Date('2025-01-15'),
           endDate: new Date('2025-01-20'),
           reason: 'Vacation',
-          leaveAllowance: undefined, // Not set
+        },
+        userPreferences: {
+          leaveAllowance: null, // Not set
         },
         ui: {
           isSignatureModalOpen: false,
@@ -167,6 +173,7 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
           errorMessage: null,
           triggerValidation: mockTriggerValidation,
           forceFormReset: false,
+          refreshFormField: null,
         },
       });
 
@@ -188,6 +195,8 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
           startDate: new Date('2025-01-15'),
           endDate: new Date('2025-01-24'), // 10 days
           reason: 'Vacation',
+        },
+        userPreferences: {
           leaveAllowance: null, // No allowance set - should NOT validate
         },
       });
@@ -211,6 +220,8 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
           startDate: new Date('2025-01-15'),
           endDate: new Date('2025-01-20'),
           reason: 'Vacation',
+        },
+        userPreferences: {
           leaveAllowance: 25, // Allowance set
         },
       });
@@ -234,6 +245,8 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
           startDate: new Date('2025-01-15'),
           endDate: new Date('2025-01-19'), // 5 days
           reason: 'Vacation',
+        },
+        userPreferences: {
           leaveAllowance: 25, // Allowance is sufficient
         },
       });
@@ -256,6 +269,8 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
           startDate: new Date('2025-01-15'),
           endDate: new Date('2025-02-18'), // Approx 25 days
           reason: 'Vacation',
+        },
+        userPreferences: {
           leaveAllowance: 25, // Exactly the allowance
         },
       });
@@ -280,6 +295,8 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
           startDate: new Date('2025-01-15'),
           endDate: new Date('2025-01-29'), // 15 days
           reason: 'Vacation',
+        },
+        userPreferences: {
           leaveAllowance: 10, // Only 10 days available
         },
       });
@@ -421,3 +438,4 @@ describe('ReviewAndGenerate - Leave Allowance Validation', () => {
     });
   });
 });
+

@@ -3,21 +3,25 @@ import isEqual from 'lodash/isEqual';
 import { useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { LeaveRequestSchema } from '../../model/leaveRequest.schema';
+import { LeaveRequestSchema } from '../../../model/leaveRequest.schema';
 import {
   useLeaveRequestStore,
   type LeaveDraftState,
   type ProfileState,
-} from '../../state/leaveRequest.store';
-import { EmploymentDetailsSection } from '../sections/EmploymentDetailsSection';
-import { LeaveDetailsSection } from '../sections/LeaveDetailsSection';
-import { PersonalDetailsSection } from '../sections/PersonalDetailsSection';
+  type UserPreferencesState,
+} from '../../../state/leaveRequest.store';
+import { EmploymentDetailsSection } from '../../sections/EmploymentDetailsSection';
+import { LeaveDetailsSection } from '../../sections/LeaveDetailsSection';
+import { PersonalDetailsSection } from '../../sections/PersonalDetailsSection';
 
 export const LeaveRequestForm = () => {
   const profile = useLeaveRequestStore(state => state.profile);
   const leaveDraft = useLeaveRequestStore(state => state.leaveDraft);
+  const userPreferences = useLeaveRequestStore(state => state.userPreferences);
   const setProfile = useLeaveRequestStore(state => state.setProfile);
   const setLeaveDraft = useLeaveRequestStore(state => state.setLeaveDraft);
+  const setRefreshFormField = useLeaveRequestStore(state => state.setRefreshFormField);
+  const setUserPreferences = useLeaveRequestStore(state => state.setUserPreferences);
   const setTriggerValidation = useLeaveRequestStore(state => state.setTriggerValidation);
   const forceFormReset = useLeaveRequestStore(state => state.ui.forceFormReset);
   const setUi = useLeaveRequestStore(state => state.setUi);
@@ -25,6 +29,7 @@ export const LeaveRequestForm = () => {
   // Use refs to track previous values and prevent infinite loops
   const prevProfileRef = useRef<ProfileState>(profile);
   const prevLeaveDraftRef = useRef<Partial<LeaveDraftState>>(leaveDraft);
+  const prevUserPreferencesRef = useRef<UserPreferencesState>(userPreferences);
 
   const methods = useForm({
     resolver: zodResolver(LeaveRequestSchema),
@@ -41,7 +46,7 @@ export const LeaveRequestForm = () => {
         position: profile.position || '',
       },
       leaveType: leaveDraft.leaveType || 'annual',
-      leaveAllowance: leaveDraft.leaveAllowance || undefined,
+      leaveAllowance: userPreferences.leaveAllowance || undefined,
       startDate: leaveDraft.startDate || undefined,
       endDate: leaveDraft.endDate || undefined,
       reason: leaveDraft.reason || '',
@@ -56,13 +61,27 @@ export const LeaveRequestForm = () => {
     watch,
     trigger,
     formState: { errors, isDirty },
+    setValue,
   } = methods;
 
   // Register trigger function in store for external validation (e.g., from PDF generator)
   useEffect(() => {
     setTriggerValidation(trigger);
+    setRefreshFormField(() => {
+      const currentAllowance = useLeaveRequestStore.getState().userPreferences.leaveAllowance;
+      setValue('leaveAllowance', currentAllowance, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    });
     return () => setTriggerValidation(null);
-  }, [trigger, setTriggerValidation]);
+  }, [
+    trigger,
+    setTriggerValidation,
+    setRefreshFormField,
+    setValue,
+    userPreferences.leaveAllowance,
+  ]);
 
   // Handle force form reset from store (e.g., after Clear or Import)
   useEffect(() => {
@@ -80,7 +99,7 @@ export const LeaveRequestForm = () => {
           position: profile.position || '',
         },
         leaveType: leaveDraft.leaveType || 'annual',
-        leaveAllowance: leaveDraft.leaveAllowance || undefined,
+        leaveAllowance: userPreferences.leaveAllowance || undefined,
         startDate: leaveDraft.startDate || undefined,
         endDate: leaveDraft.endDate || undefined,
         reason: leaveDraft.reason || '',
@@ -89,21 +108,21 @@ export const LeaveRequestForm = () => {
       prevProfileRef.current = { ...profile };
       prevLeaveDraftRef.current = {
         leaveType: leaveDraft.leaveType,
-        leaveAllowance: leaveDraft.leaveAllowance,
         startDate: leaveDraft.startDate || null,
         endDate: leaveDraft.endDate || null,
         reason: leaveDraft.reason || '',
       };
+      prevUserPreferencesRef.current = { ...userPreferences };
       setUi({ forceFormReset: false });
     }
-  }, [forceFormReset, profile, leaveDraft, reset, setUi]);
+  }, [forceFormReset, profile, leaveDraft, userPreferences, reset, setUi]);
 
   // Sync form changes to store using subscription to avoid extra re-renders
   // Note: React Compiler cannot optimize watch() subscription - this is expected
   useEffect(() => {
     // eslint-disable-next-line react-hooks/incompatible-library
     const subscription = watch(value => {
-      const { profile: formProfile, ...formLeaveDraft } = value;
+      const { profile: formProfile, leaveAllowance, ...formLeaveDraft } = value;
 
       // Sync profile if changed
       if (formProfile && !isEqual(formProfile, prevProfileRef.current)) {
@@ -111,10 +130,9 @@ export const LeaveRequestForm = () => {
         prevProfileRef.current = { ...formProfile };
       }
 
-      // Sync leave draft if changed
+      // Sync leave draft if changed (excluding leaveAllowance)
       const normalizedDraft = {
         leaveType: formLeaveDraft.leaveType,
-        leaveAllowance: formLeaveDraft.leaveAllowance,
         startDate: formLeaveDraft.startDate || null,
         endDate: formLeaveDraft.endDate || null,
         reason: formLeaveDraft.reason || '',
@@ -124,18 +142,31 @@ export const LeaveRequestForm = () => {
         setLeaveDraft({ ...normalizedDraft });
         prevLeaveDraftRef.current = { ...normalizedDraft };
       }
+
+      // Sync user preferences if changed (leaveAllowance)
+      const normalizedPreferences = {
+        leaveAllowance: leaveAllowance ?? null,
+      };
+
+      if (!isEqual(normalizedPreferences, prevUserPreferencesRef.current)) {
+        setUserPreferences({ ...normalizedPreferences });
+        prevUserPreferencesRef.current = { ...normalizedPreferences };
+      }
     });
     return () => subscription.unsubscribe();
-  }, [watch, setProfile, setLeaveDraft]);
+  }, [watch, setProfile, setLeaveDraft, setUserPreferences]);
 
   // Sync store changes back to form (e.g., after import)
   useEffect(() => {
     const currentFormValues = methods.getValues();
-    const { profile: formProfile, ...formLeaveDraft } = currentFormValues;
+    const {
+      profile: formProfile,
+      leaveAllowance: formLeaveAllowance,
+      ...formLeaveDraft
+    } = currentFormValues;
 
     const normalizedStoreDraft = {
       leaveType: leaveDraft.leaveType,
-      leaveAllowance: leaveDraft.leaveAllowance,
       startDate: leaveDraft.startDate || null,
       endDate: leaveDraft.endDate || null,
       reason: leaveDraft.reason || '',
@@ -143,10 +174,17 @@ export const LeaveRequestForm = () => {
 
     const normalizedFormDraft = {
       leaveType: formLeaveDraft.leaveType,
-      leaveAllowance: formLeaveDraft.leaveAllowance,
       startDate: formLeaveDraft.startDate || null,
       endDate: formLeaveDraft.endDate || null,
       reason: formLeaveDraft.reason || '',
+    };
+
+    const normalizedStorePreferences = {
+      leaveAllowance: userPreferences.leaveAllowance,
+    };
+
+    const normalizedFormPreferences = {
+      leaveAllowance: formLeaveAllowance ?? null,
     };
 
     // Only reset if the store values are different from both the form values
@@ -160,8 +198,11 @@ export const LeaveRequestForm = () => {
     const draftChangedOutside =
       !isEqual(normalizedStoreDraft, normalizedFormDraft) &&
       !isEqual(normalizedStoreDraft, prevLeaveDraftRef.current);
+    const preferencesChangedOutside =
+      !isEqual(normalizedStorePreferences, normalizedFormPreferences) &&
+      !isEqual(normalizedStorePreferences, prevUserPreferencesRef.current);
 
-    if ((profileChangedOutside || draftChangedOutside) && !isDirty) {
+    if ((profileChangedOutside || draftChangedOutside || preferencesChangedOutside) && !isDirty) {
       reset({
         profile: {
           fullName: profile.fullName || '',
@@ -175,7 +216,7 @@ export const LeaveRequestForm = () => {
           position: profile.position || '',
         },
         leaveType: leaveDraft.leaveType || 'annual',
-        leaveAllowance: leaveDraft.leaveAllowance || undefined,
+        leaveAllowance: userPreferences.leaveAllowance || undefined,
         startDate: leaveDraft.startDate || undefined,
         endDate: leaveDraft.endDate || undefined,
         reason: leaveDraft.reason || '',
@@ -183,8 +224,9 @@ export const LeaveRequestForm = () => {
       });
       prevProfileRef.current = { ...profile };
       prevLeaveDraftRef.current = { ...normalizedStoreDraft };
+      prevUserPreferencesRef.current = { ...normalizedStorePreferences };
     }
-  }, [profile, leaveDraft, reset, methods, isDirty]);
+  }, [profile, leaveDraft, userPreferences, reset, methods, isDirty]);
 
   return (
     <FormProvider {...methods}>
