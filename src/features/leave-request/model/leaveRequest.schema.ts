@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { isWithInRange } from '../../../shared/utils/numbers';
 
 type TranslationFunction = (key: string, options?: Record<string, unknown>) => string;
 
@@ -22,34 +23,6 @@ const nameRegex = new RegExp('^[' + GREEK_LETTERS + LATIN_LETTERS + ' \\-]+$');
  * - Strips all spaces and country codes before validation
  * - Requires exactly 10 digits after stripping
  */
-
-/**
- * Valid letters for Greek ADT (Old Format)
- * Latin: ABEZHIKMNOPTYX
- * Greek equivalents: ΑΒΕΖΗΙΚΜΝΟΠΤΥΧ (visually similar but different Unicode)
- */
-const ADT_LATIN_LETTERS = 'ABEZHIKMNOPTYX';
-const ADT_GREEK_LETTERS = 'ΑΒΕΖΗΙΚΜΝΟΠΤΥΧ';
-
-/**
- * Validates Greek Identity Number (ADT) format - OLD FORMAT
- * Old ADT: LL-DDDDDD or LLDDDDDD where LL = 2 uppercase letters from ABEZHIKMNOPTYX (or Greek equivalents), optional hyphen, DDDDDD = 6 digits
- */
-const greekAdtOldRegex = new RegExp(`^[${ADT_LATIN_LETTERS}${ADT_GREEK_LETTERS}]{2}-?\\d{6}$`);
-
-/**
- * Validates Greek Identity Number - NEW FORMAT
- * New format: 12-character alphanumeric identifier (EU digital identity aligned)
- * Supports both Latin (A-Z) and Greek (Α-Ω) uppercase letters
- */
-const greekAdtNewRegex = new RegExp(`^[A-Z0-9${GREEK_LETTERS}]{12}$`, 'i');
-
-/**
- * Validates Greek Passport number
- * Passport: 2 letters + 7 digits, no spaces or delimiters (e.g., AB1234567 or ΑΒ1234567)
- * Supports both Latin and Greek letters
- */
-const greekPassportRegex = new RegExp(`^[A-Za-z${GREEK_LETTERS}]{2}\\d{7}$`);
 
 /**
  * Validates if a string is a valid name (Greek or Latin letters)
@@ -115,35 +88,11 @@ export const isValidGreekPhone = (value: string): boolean => {
 };
 
 /**
- * Validates if a string is a valid Greek ADT (old format)
- * Format: LL-DDDDDD (e.g., AB-123456)
- */
-export const isValidGreekAdtOld = (value: string): boolean => {
-  return greekAdtOldRegex.test(value);
-};
-
-/**
- * Validates if a string is a valid Greek ADT (new format)
- * Format: 12 alphanumeric characters (e.g., A1B2C3D4E5F6)
- */
-export const isValidGreekAdtNew = (value: string): boolean => {
-  return greekAdtNewRegex.test(value.toUpperCase());
-};
-
-/**
- * Validates if a string is a valid Greek Passport number
- * Format: 2 letters + 7 digits (e.g., AB1234567)
- */
-export const isValidGreekPassport = (value: string): boolean => {
-  return greekPassportRegex.test(value);
-};
-
-/**
  * Validates if a string is a valid Greek identity number
  * Supports: Old ADT (LL-DDDDDD), New ADT (12 alphanumeric), or Greek Passport (LL1234567)
  */
 export const isValidGreekIdentityNumber = (value: string): boolean => {
-  return isValidGreekAdtOld(value) || isValidGreekAdtNew(value) || isValidGreekPassport(value);
+  return isWithInRange(value.length, { min: 6, max: 12 });
 };
 
 /**
@@ -181,8 +130,12 @@ export const createUserProfileSchema = (t: TranslationFunction) =>
         message: t('validation:invalidIdentityNumber'),
       }),
     employeeId: z.string().optional(),
-    companyName: z.string().min(1, t('validation:required', { field: t('messages:fields.companyName') })),
-    department: z.string().min(1, t('validation:required', { field: t('messages:fields.department') })),
+    companyName: z
+      .string()
+      .min(1, t('validation:required', { field: t('messages:fields.companyName') })),
+    department: z
+      .string()
+      .min(1, t('validation:required', { field: t('messages:fields.department') })),
     position: z.string().min(1, t('validation:required', { field: t('messages:fields.position') })),
   });
 
