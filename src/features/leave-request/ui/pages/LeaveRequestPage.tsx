@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import creatorGithubLogo from '../../../../assets/images/Dimitrios-Stamatakis-github-img.png';
 import { useThemeStore } from '../../../../shared/state/theme.store';
 import { DeveloperPresence, StarsWarsRobotToggle, ThemeToggle } from '../../../../shared/ui';
 import { loadHolidays } from '../../services/holidays/holidays.service';
@@ -78,11 +79,7 @@ export const LeaveRequestPage: React.FC = () => {
         </div>
 
         <div className="mt-12">
-          <DeveloperPresence
-            avatarUrl="src/assets/images/Dimitrios-Stamatakis-github-img.png"
-            name="Dimitrios Stamatakis"
-            size="lg"
-          />
+          <DeveloperPresence avatarUrl={creatorGithubLogo} name="Dimitrios Stamatakis" size="lg" />
         </div>
       </div>
       <SignatureModal />
